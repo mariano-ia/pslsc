@@ -69,7 +69,7 @@ class PSLFixtures extends HTMLElement {
 
   _crest(t) {
     if (t.psl) {
-      return `<img class="fx__crest fx__crest--psl" src="/src/assets/brand/crest-black.png" alt="" width="26" height="28" />`;
+      return `<img class="fx__crest fx__crest--psl" src="/assets/brand/crest-black.png" alt="" width="26" height="28" />`;
     }
     return `<span class="fx__crest fx__crest--ph" aria-hidden="true">${t.abbr}</span>`;
   }
