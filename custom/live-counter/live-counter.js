@@ -1,4 +1,4 @@
-import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=4';
+import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=6';
 // idioma desde el DOM (fuente única que setea i18n.apply()); evita instancias duplicadas del módulo
 const L = (en, es) => (document.documentElement.lang === 'es' ? es : en);
 
@@ -70,6 +70,8 @@ class PSLLiveCounter extends HTMLElement {
       depositsCaptured: 46800,
       founderGrowthPercent: 23,
       firstWhistle: '2027',
+      // días hasta el primer silbato (2027-03-01) — cuenta viva; el count-up anima 0 -> valor
+      daysToWhistle: Math.max(0, Math.ceil((new Date('2027-03-01T00:00:00') - new Date()) / 86400000)),
       league: 'USL',
       updatedAt: new Date().toISOString(),
     };
@@ -116,13 +118,15 @@ class PSLLiveCounter extends HTMLElement {
   }
 
   _render() {
-    this.innerHTML = `
-      <div class="live-counter live-counter--${this.variant}">
-        <div class="live-counter__metrics"></div>
+    // "Updated in real time" no se muestra en la variante stats (destacados de la Home) — se pidió sacarlo.
+    const updated = this.variant === 'stats' ? '' : `
         <p class="live-counter__updated">
           <span class="live-counter__updated-text">${L('Updated in real time', 'Actualizado en tiempo real')}</span>
           <span class="live-counter__updated-tooltip" title="${L('Founding members = people registered on pslsc.com with verified email', 'Miembros fundadores = personas registradas en pslsc.com con email verificado')}">ⓘ</span>
-        </p>
+        </p>`;
+    this.innerHTML = `
+      <div class="live-counter live-counter--${this.variant}">
+        <div class="live-counter__metrics"></div>${updated}
       </div>
     `;
     this._metricsEl = this.querySelector('.live-counter__metrics');
@@ -130,13 +134,19 @@ class PSLLiveCounter extends HTMLElement {
       const cell = document.createElement('div');
       cell.className = 'live-counter__metric';
       cell.dataset.key = m.key;
+      // Flecha "en alza" (aqua, apunta arriba) junto al número — SOLO métricas con `rising: true`
+      // (fundadores/depósitos en la variante stats). Reemplaza al viejo sparkline de barritas.
+      const rise = this.variant === 'stats' && m.rising === true;
+      const riseArrow = rise
+        ? '<span class="live-counter__rise" aria-label="on the rise"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M8 2 L13.5 8.5 H10 V14 H6 V8.5 H2.5 Z"/></svg></span>'
+        : '';
       cell.innerHTML = `
-        <div class="live-counter__value tnum${m.accent ? ' live-counter__value--accent' : ''}" data-format="${m.format}"></div>
+        <div class="live-counter__valrow">
+          <div class="live-counter__value tnum${m.accent ? ' live-counter__value--accent' : ''}" data-format="${m.format}"></div>
+          ${riseArrow}
+        </div>
         <div class="live-counter__label">${L(m.label, m.labelEs || m.label)}</div>
       `;
-      // Sparkline de tendencia — SOLO métricas que declaran `trend` (solo la variante stats lo hace).
-      // Mini-barras ascendentes en aqua, alineadas bajo el número; "crecen" al dispararse el count-up.
-      this._buildSparkline(cell, m);
       this._metricsEl.appendChild(cell);
     });
     // Si la última métrica es de texto relativo (ej. "12 min ago"), su columna deja de ser 1fr
@@ -158,26 +168,6 @@ class PSLLiveCounter extends HTMLElement {
     // el resto se muestra directo.
     this._reveal(true);
     this._observeReveal();
-  }
-
-  // Micro-visualización de tendencia (fila de barritas aqua). Gate: solo si la métrica trae `trend`
-  // (exclusivo de la variante stats). Cada barra guarda su altura relativa en --h y su índice en --i
-  // para el stagger; el estado colapsado (scaleY(0)) y el crecimiento viven en el CSS del componente.
-  _buildSparkline(cell, m) {
-    if (!Array.isArray(m.trend) || m.trend.length === 0) return;
-    const max = Math.max(...m.trend) || 1;
-    const spark = document.createElement('div');
-    spark.className = 'live-counter__spark';
-    spark.setAttribute('aria-hidden', 'true');
-    m.trend.forEach((v, i) => {
-      const bar = document.createElement('span');
-      bar.className = 'live-counter__spark-bar';
-      bar.style.setProperty('--h', Math.max(v / max, 0.08).toFixed(3));
-      bar.style.setProperty('--i', i);
-      spark.appendChild(bar);
-    });
-    // orden en la columna: número → sparkline → label
-    cell.querySelector('.live-counter__label').insertAdjacentElement('beforebegin', spark);
   }
 
   // separación de mils sin decimales (los enteros nunca llevan decimales)
@@ -224,9 +214,6 @@ class PSLLiveCounter extends HTMLElement {
   _runCountUps() {
     const reduce = typeof window !== 'undefined'
       && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    // Las sparklines "crecen" con el mismo disparo de viewport. En reduced-motion el CSS las deja
-    // estáticas (ya a su altura final), así que agregar la clase acá es inofensivo.
-    this._metricsEl.querySelectorAll('.live-counter__spark').forEach((s) => s.classList.add('is-grown'));
     this.config.metrics.filter((m) => this._isCountUp(m)).forEach((m) => {
       const cell = this._metricsEl.querySelector(`[data-key="${m.key}"] .live-counter__value`);
       const target = Number(this._data[m.key]) || 0;

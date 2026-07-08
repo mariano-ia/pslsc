@@ -34,57 +34,6 @@
     linear-gradient(180deg, rgba(12,12,10,.62) 0%, rgba(12,12,10,.35) 32%, rgba(12,12,10,.88) 82%, #0C0C0A 100%);
 }
 
-/* Countdown chip — arriba a la derecha del hero (glass). Reemplaza la vieja línea
-   "236 days to first whistle" del contenido. El número va en aquamarine pleno. */
-.hero__cd {
-  position: absolute;
-  top: clamp(84px, 11vh, 104px);
-  right: var(--gutter);
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-  padding: 13px 17px 12px;
-  border: 1px solid var(--color-line-strong);
-  border-radius: 16px;
-  background: rgba(12, 12, 10, .42);
-  backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
-  text-align: right;
-}
-.hero__cd-top {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font: 500 var(--fs-label)/1 var(--font-label);
-  letter-spacing: var(--ls-kicker);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-.hero__cd-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-aqua);
-  animation: psl-pulse 1.6s ease-in-out infinite;
-}
-.hero__cd-num {
-  font: 800 clamp(34px, 4vw, 52px)/0.86 var(--font-display);
-  letter-spacing: var(--ls-display);
-  color: var(--color-aqua);
-}
-.hero__cd-unit {
-  font: 500 var(--fs-label)/1 var(--font-label);
-  letter-spacing: var(--ls-kicker);
-  text-transform: uppercase;
-  color: var(--color-aqua);
-}
-@media (max-width: 560px) {
-  .hero__cd { top: 80px; padding: 10px 13px; border-radius: 13px; }
-  .hero__cd-num { font-size: 30px; }
-}
-
 .hero__content {
   position: relative;
   width: 100%;
@@ -99,14 +48,6 @@
   font: 500 var(--fs-kicker)/1 var(--font-mono);
   letter-spacing: .24em;
   color: var(--color-sky);
-}
-
-.hero__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-teal);
-  animation: psl-pulse 1.6s ease-in-out infinite;
 }
 
 .hero__headline {
@@ -187,20 +128,18 @@
 /* ============================================================
    Coreografía de entrada AL CARGAR (hero above-the-fold, no scroll-reveal).
    Gateada bajo .psl-motion (la pone motion.js) → sin JS todo queda visible.
-   Cascada ~90ms: eyebrow → countdown → headline → subhead → CTAs → divider.
+   Cascada: eyebrow → headline → subhead → CTAs → divider.
    Solo transform / opacity / clip-path.
    ============================================================ */
 .psl-motion .hero__eyebrow,
 .psl-motion .hero__subhead,
-.psl-motion .hero__ctas,
-.psl-motion .hero__cd {
+.psl-motion .hero__ctas {
   opacity: 0;
   animation: psl-hero-in var(--dur-reveal) var(--ease-out-soft) both;
 }
 .psl-motion .hero__eyebrow { animation-delay: 0ms; }
 .psl-motion .hero__subhead { animation-delay: 270ms; }
 .psl-motion .hero__ctas    { animation-delay: 360ms; }
-.psl-motion .hero__cd      { animation-delay: 620ms; }   /* el chip entra al final */
 
 /* Headline: entra en la cascada (opacity + rise), slot 180ms. Usa el mismo psl-hero-in que el resto
    —robusto, sin depender de clip-path (que en algunos motores/compositores queda clipeado)— y el
@@ -220,13 +159,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__dot,
-  .hero__cd-dot { animation: none; }
   .hero__eyebrow,
   .hero__headline,
   .hero__subhead,
-  .hero__ctas,
-  .hero__cd {
+  .hero__ctas {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

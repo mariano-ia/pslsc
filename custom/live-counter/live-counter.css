@@ -62,35 +62,28 @@ psl-live-counter { display: block; }
 /* ============================================================================
    Mejoras EXCLUSIVAS de la variante stats (Home) — "esto crece".
    Todo va bajo .live-counter--stats: fan / reservation / sponsor quedan idénticas.
-   El sparkline solo existe si la métrica declara `trend` en config (solo stats).
+   La flecha "en alza" solo existe si la métrica declara `rising: true` en config (solo stats).
    ============================================================================ */
 
 /* contexto de posicionamiento para el toast flotante (no cambia el render de la columna) */
 .live-counter--stats .live-counter__metric { position: relative; }
 
-/* Sparkline / mini-barras de tendencia (aqua), alineado bajo el número */
-.live-counter--stats .live-counter__spark {
+/* Flecha "en alza" (aqua, apunta arriba) al lado del número — reemplaza al sparkline.
+   Solo aparece en las métricas en alza (fundadores/depósitos). Un bob sutil = acción subiendo. */
+.live-counter--stats .live-counter__valrow {
   display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 20px;
-  margin-top: 10px;
+  align-items: flex-start;
+  gap: 7px;
 }
-.live-counter--stats .live-counter__spark-bar {
-  width: 4px;
-  height: 100%;
-  border-radius: 2px;
-  background: linear-gradient(180deg, var(--color-aqua), var(--color-aqua-deep));
-  opacity: .9;
-  /* estado colapsado: crece al entrar en viewport (mismo disparo que el count-up) */
-  transform: scaleY(0);
-  transform-origin: bottom center;
-  transition: transform var(--dur-reveal) var(--ease-out-soft);
-  transition-delay: calc(var(--i) * var(--stagger));
+.live-counter--stats .live-counter__rise {
+  display: inline-flex;
+  color: var(--color-aqua);
+  font-size: clamp(15px, 1.7vw, 23px);
+  margin-top: 0.18em;
+  animation: psl-rise-bob 2.2s var(--ease-in-out-soft) infinite;
 }
-.live-counter--stats .live-counter__spark.is-grown .live-counter__spark-bar {
-  transform: scaleY(var(--h));
-}
+.live-counter--stats .live-counter__rise svg { display: block; width: 1em; height: 1em; }
+@keyframes psl-rise-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
 
 /* Toast "+1 Founding member" — sube y se desvanece sobre la métrica de fundadores */
 .live-counter--stats .live-counter__toast {
@@ -112,11 +105,42 @@ psl-live-counter { display: block; }
   100% { opacity: 0; transform: translateY(-19px); }
 }
 
-/* Reduced-motion (regla 3): sparkline estática (ya a su altura final, sin crecer) y sin toast. */
+/* Reduced-motion: sin bob en la flecha y sin toast. */
 @media (prefers-reduced-motion: reduce) {
-  .live-counter--stats .live-counter__spark-bar {
-    transition: none !important;
-    transform: scaleY(var(--h)) !important;
-  }
+  .live-counter--stats .live-counter__rise { animation: none !important; }
   .live-counter--stats .live-counter__toast { display: none !important; }
+}
+
+/* ============================================================================
+   Rework de los destacados: más delicado + con vida.
+   Divisor duro -> hairline que se desvanece · hover que eleva y aclara ·
+   glow sutil en el destacado (días para el primer silbato).
+   ============================================================================ */
+.live-counter--stats .live-counter__metric + .live-counter__metric { border-left: none; }
+.live-counter--stats .live-counter__metric + .live-counter__metric::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 14%;
+  bottom: 14%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--color-line-strong) 24%, var(--color-line-strong) 76%, transparent);
+}
+.live-counter--stats .live-counter__metric { transition: transform 260ms var(--ease-out-soft); }
+.live-counter--stats .live-counter__metric:hover { transform: translateY(-4px); }
+.live-counter--stats .live-counter__metric:hover .live-counter__value:not(.live-counter__value--accent) {
+  color: var(--color-white);
+}
+/* el destacado resalta con un glow aqua sutil (no es sombra sobre el escudo — permitido) */
+.live-counter--stats .live-counter__value--accent { text-shadow: 0 0 26px rgba(170, 246, 230, .3); }
+/* labels un toque más delicados */
+.live-counter--stats .live-counter__label { letter-spacing: .18em; color: var(--color-text-muted); }
+
+@media (max-width: 780px) {
+  /* en 2 columnas el divisor delicado solo aplica a la 2ª y 4ª (como el borde original) */
+  .live-counter--stats .live-counter__metric:nth-child(odd)::before { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .live-counter--stats .live-counter__metric,
+  .live-counter--stats .live-counter__metric:hover { transition: none; transform: none; }
 }

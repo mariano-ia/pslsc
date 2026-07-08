@@ -1,9 +1,28 @@
-/* Bloque 02 · Stats proof band */
+/* Bloque 02 · Stats proof band (destacados) */
 
 .stats {
   border-bottom: 1px solid var(--color-line);
+  position: relative;
+  overflow: hidden;
 }
 
 .stats .psl-container {
-  padding-block: clamp(44px, 6vw, 72px);
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(40px, 5vw, 60px);
+}
+
+/* Ghost text de marca detrás de los números (Cabazon blackletter, gigante y tenue) */
+.stats__ghost {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font: 400 clamp(120px, 24vw, 320px)/0.8 var(--font-detail);
+  letter-spacing: .02em;
+  color: rgba(244, 241, 234, .04);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
 }

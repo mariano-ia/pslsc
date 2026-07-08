@@ -20,13 +20,20 @@
 .nav__brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  align-self: flex-start;   /* el escudo se ancla arriba y SOBRESALE del nav hacia el hero */
   text-decoration: none;
   color: var(--color-text);
 }
 
-/* crest oficial (institucional) */
-.nav__crest { height: 36px; width: auto; display: block; }
+/* crest oficial (institucional) — grande, sobresale por debajo del nav (sin sombra: regla de marca) */
+.nav__crest {
+  height: 106px;
+  width: auto;
+  display: block;
+  margin-top: 3px;
+  transition: height 280ms var(--ease-out-soft, ease);
+}
+.nav.is-scrolled .nav__crest { height: 66px; }
 
 .nav__wordmark { display: flex; align-items: center; line-height: 1; }
 .nav__name { font: 800 16px/1 var(--font-display); letter-spacing: var(--ls-display); }
@@ -70,5 +77,9 @@
 @media (max-width: 900px) {
   .nav__links { display: none; }
   .nav__cta { display: none; }   /* en mobile prioriza el switch; el CTA vive en el hero */
+}
+@media (max-width: 560px) {
+  .nav__crest { height: 72px; }
+  .nav.is-scrolled .nav__crest { height: 50px; }
 }
 
