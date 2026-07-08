@@ -1,0 +1,154 @@
+/**
+ * PSL SC — Sistema de motion compartido (estilos). 🟩 Núcleo.
+ * Acompaña a motion.js. Todo animando solo transform/opacity/clip-path (GPU, sin reflow).
+ * El estado base "oculto" del reveal se activa SOLO cuando .psl-motion está en <html> (lo pone
+ * motion.js): si el JS no corre, el contenido se ve normal (no-JS safe).
+ */
+
+/* ====== REVEAL ====== */
+.psl-motion [data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--reveal-shift, 22px));
+  transition: opacity var(--dur-reveal, 720ms) var(--ease-out-soft, ease),
+              transform var(--dur-reveal, 720ms) var(--ease-out-soft, ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.psl-motion [data-reveal="left"]  { transform: translateX(calc(-1 * var(--reveal-shift, 22px))); }
+.psl-motion [data-reveal="right"] { transform: translateX(var(--reveal-shift, 22px)); }
+.psl-motion [data-reveal="scale"] { transform: scale(.94); }
+.psl-motion [data-reveal="mask"]  {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--dur-reveal, 720ms) var(--ease-out-expo, ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.psl-motion [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 0 0);
+}
+
+/* ====== SPOTLIGHT (halo que sigue el cursor) ====== */
+[data-spotlight] { position: relative; }
+[data-spotlight]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, -20%),
+              rgba(170, 246, 230, .16), transparent 62%);
+  opacity: 0;
+  transition: opacity 320ms ease;
+  z-index: 1;
+}
+.surface-paper [data-spotlight]::after,
+[data-spotlight].on-paper::after {
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, -20%),
+              rgba(14, 140, 121, .12), transparent 62%);
+}
+[data-spotlight]:hover::after { opacity: 1; }
+/* el contenido de la card queda por encima del halo */
+[data-spotlight] > * { position: relative; z-index: 2; }
+
+/* ====== TILT / MAGNETIC (transiciones al soltar) ====== */
+[data-tilt] { transition: transform 300ms var(--ease-out-soft, ease); transform-style: preserve-3d; }
+[data-magnetic] { transition: transform 300ms var(--ease-out-soft, ease); will-change: transform; }
+[data-parallax] { will-change: transform; }
+
+/* ====== NAV — barra de progreso + estado condensado + sección activa ====== */
+.nav__progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--color-aqua), var(--color-red-marine));
+  z-index: 1;
+}
+.nav.is-scrolled {
+  background: rgba(12, 12, 10, .92);
+  box-shadow: 0 1px 24px rgba(0, 0, 0, .34);
+}
+.nav.is-scrolled .nav__inner { height: 58px; }
+.nav__inner { transition: height 280ms var(--ease-out-soft, ease); }
+.nav__links a { position: relative; transition: color 160ms ease; }
+.nav__links a.is-active { color: var(--color-text); }
+.nav__links a.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--color-aqua);
+  border-radius: 2px;
+}
+
+/* ====== GRANO ====== */
+.psl-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 36;
+  pointer-events: none;
+  opacity: .035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* ====== CURSOR GLOW ====== */
+.psl-cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 130px;
+  height: 130px;
+  margin: -65px 0 0 -65px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 60;
+  background: radial-gradient(circle, rgba(170, 246, 230, .11), rgba(170, 246, 230, 0) 68%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+.psl-cursor-glow.is-on { opacity: 1; }
+
+/* ====== COSTURAS ink↔paper ====== */
+.psl-seam--from-ink,
+.psl-seam--from-paper { position: relative; }
+.psl-seam--from-ink::before,
+.psl-seam--from-paper::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 90px;
+  pointer-events: none;
+  z-index: 0;
+}
+/* sección paper después de una ink: sombra oscura que se desvanece desde arriba */
+.psl-seam--from-ink::before {
+  background: linear-gradient(180deg, rgba(12, 12, 10, .16), transparent);
+}
+/* sección ink después de una paper: halo claro que se desvanece desde arriba */
+.psl-seam--from-paper::before {
+  background: linear-gradient(180deg, rgba(244, 241, 234, .07), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .psl-motion [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+  .psl-grain,
+  .psl-cursor-glow { display: none !important; }
+  .nav__inner { transition: none !important; }
+}

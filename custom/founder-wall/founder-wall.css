@@ -46,6 +46,50 @@ psl-founder-wall { display: block; height: 100%; }
 .fwall__row--enter { animation: psl-rise .5s ease both; }
 .fwall__row--highlight { background: rgba(20,195,164,.1); }
 
+/* Fila fantasma "vos" — SOLO Home (gateada por ghost-number en el JS). Sumate no la renderiza.
+   Anclada fuera de .fwall__list: no la tocan los ingresos, el prune ni el filtro por número. */
+.fwall__ghost {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 8px -10px 0;
+  padding: 13px 10px;
+  border: 1px dashed rgba(14, 140, 121, .42);
+  border-radius: 10px;
+  background: rgba(170, 246, 230, .06);
+  opacity: .82;
+}
+.fwall__ghost .fwall__num { color: var(--color-aqua-deep); opacity: .72; }
+.fwall__ghost-name { font: 700 14px/1 var(--font-body); color: var(--color-aqua-deep); }
+.fwall__ghost-cue {
+  font: 500 10.5px/1 var(--font-mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--color-text-on-paper-faint);
+}
+
+/* Ping de ubicación en un ingreso nuevo (aqua, junto a la ciudad) — SOLO Home.
+   Punto fijo + anillo que se expande (psl-ping). El JS lo remueve a los 2.5s. */
+.fwall__pin {
+  position: relative;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--color-aqua-deep);
+  vertical-align: baseline;
+}
+.fwall__pin::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--color-aqua-deep);
+  animation: psl-ping 1.2s var(--ease-out-expo) 2 both;
+}
+
 /* búsqueda por número (variante muro completo, Sumate S04) */
 .fwall__search { padding: 14px 0 4px; }
 .fwall__search-input {
@@ -82,4 +126,5 @@ psl-founder-wall { display: block; height: 100%; }
 @media (prefers-reduced-motion: reduce) {
   .fwall__pulse { animation: none; }
   .fwall__row--enter { animation: none; }
+  .fwall__pin { display: none; }   /* sin ping; la fila fantasma se muestra estática igual */
 }

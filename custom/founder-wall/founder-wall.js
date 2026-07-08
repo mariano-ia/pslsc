@@ -24,6 +24,9 @@ class PSLFounderWall extends HTMLElement {
   connectedCallback() {
     this._maxVisible = Number(this.getAttribute('max-visible') || 6);
     this._searchable = this.hasAttribute('searchable');  // muro completo (Sumate S04): buscar por número
+    // Fila fantasma "vos" + ping de ubicación: features de Home, GATEADAS por el atributo ghost-number.
+    // Sumate reusa el muro con "searchable" y SIN ghost-number → estas features no se activan allí.
+    this._ghostNumber = this.getAttribute('ghost-number');
     this._total = 1249;
     this._secsAgo = 42;
     this._entries = this._seed();
@@ -46,6 +49,10 @@ class PSLFounderWall extends HTMLElement {
     const search = this.querySelector('.fwall__search-input');
     if (search) search.setAttribute('placeholder', L('Find your founder number…', 'Busca tu número de fundador…'));
     if (this._emptyEl) this._emptyEl.textContent = L('No founder with that number is loaded here yet.', 'Todavía no hay ningún fundador con ese número cargado aquí.');
+    const ghostName = this.querySelector('.fwall__ghost-name');
+    if (ghostName) ghostName.textContent = L("You're next", 'Serás vos');
+    const ghostCue = this.querySelector('.fwall__ghost-cue');
+    if (ghostCue) ghostCue.textContent = L('Join', 'Sumate');
   }
 
   _seed() {
@@ -88,6 +95,14 @@ class PSLFounderWall extends HTMLElement {
           </div>` : ''}
         <ul class="fwall__list"></ul>
         <p class="fwall__empty" hidden>${L('No founder with that number is loaded here yet.', 'Todavía no hay ningún fundador con ese número cargado aquí.')}</p>
+        ${this._ghostNumber ? `
+        <div class="fwall__ghost" data-founder-ghost>
+          <span class="fwall__row-left">
+            <span class="fwall__num tnum">#${this._ghostNumber}</span>
+            <span class="fwall__ghost-name" data-es="Serás vos">${L("You're next", 'Serás vos')}</span>
+          </span>
+          <span class="fwall__ghost-cue" data-es="Sumate">${L('Join', 'Sumate')}</span>
+        </div>` : ''}
         <div class="fwall__foot"><span class="fwall__foot-label">${L('LAST JOINED', 'ÚLTIMO INGRESO')}</span> <span class="fwall__ago"></span></div>
       </div>
     `;
@@ -138,6 +153,15 @@ class PSLFounderWall extends HTMLElement {
     if (animate) {
       li.classList.add('fwall__row--highlight');
       setTimeout(() => li.classList.remove('fwall__row--highlight'), 2500);
+      // Ping de ubicación (aqua) junto a la ciudad del ingreso — solo Home (gateado por ghost-number).
+      if (this._ghostNumber) {
+        const cityEl = li.querySelector('.fwall__city');
+        const pin = document.createElement('span');
+        pin.className = 'fwall__pin';
+        pin.setAttribute('aria-hidden', 'true');
+        cityEl.prepend(pin);
+        setTimeout(() => pin.remove(), 2500);
+      }
     }
   }
 

@@ -34,12 +34,29 @@
 }
 
 .proof__timeline {
+  position: relative;
   margin: clamp(36px, 4vw, 52px) 0 0;
   padding: 0;
   list-style: none;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--color-line-strong);
+}
+
+/* eje continuo 2024 → 2027 que se "construye" con el scroll:
+   scaleX = --proof-p (0..1) lo escribe 04-proof.js en cada frame */
+.proof__timeline::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  transform-origin: left center;
+  transform: scaleX(var(--proof-p, 0));
+  background: linear-gradient(90deg, var(--color-aqua-deep), var(--color-aqua));
+  transition: transform 120ms linear;
+  will-change: transform;
 }
 
 .proof__step {
@@ -49,19 +66,6 @@
   transition: opacity 300ms ease;
 }
 .proof__step--last { border-right: none; }
-
-/* barra de progreso superior que se "llena" en el paso activo */
-.proof__step::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: 0;
-  height: 2px;
-  width: 0;
-  background: var(--color-aqua);
-  transition: width 500ms ease;
-}
-.proof__step.is-active::before { width: 100%; }
 
 /* mientras la animación corre, los no-activos bajan un poco de énfasis */
 .proof__timeline:hover .proof__step:not(.is-active),
@@ -85,6 +89,20 @@
 .proof__dot[data-state="now"]  { background: var(--color-sky); }
 .proof__dot[data-state="next"] { background: rgba(239,235,225,.3); }
 
+/* ping sutil cuando el hito se enciende (acumulativo, uno por dot) */
+.proof__dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: inherit;
+  opacity: 0;
+  pointer-events: none;
+}
+.proof__step.is-active .proof__dot::after {
+  animation: psl-ping var(--dur-reveal) var(--ease-out-soft) 1;
+}
+
 .proof__year { font: 500 11px/1 var(--font-mono); letter-spacing: .18em; text-transform: uppercase; }
 .proof__year--done { color: var(--color-teal); }
 .proof__year--now  { color: var(--color-sky); }
@@ -101,4 +119,11 @@
 @media (max-width: 460px) {
   .proof__timeline { grid-template-columns: 1fr; }
   .proof__step { border-right: none; border-bottom: 1px solid var(--color-line); padding-bottom: 26px; }
+}
+
+/* reduced-motion: estado final estático (JS pone --proof-p:1 e is-active en todos), sin ping ni scrub */
+@media (prefers-reduced-motion: reduce) {
+  .proof__timeline::before { transition: none; }
+  .proof__dot::after,
+  .proof__step.is-active .proof__dot::after { animation: none; }
 }

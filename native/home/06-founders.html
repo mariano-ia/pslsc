@@ -5,14 +5,14 @@
 -->
 <section class="founders surface-paper" id="founders">
   <div class="psl-container">
-    <header class="founders__head">
+    <header class="founders__head" data-reveal>
       <span class="psl-kicker" data-es="05 — Miembros Fundadores">05 — Founding members</span>
       <h2 class="psl-h2 founders__title" data-es="Miles estarán en las tribunas. Pocos podrán decir que estuvieron primero.">Thousands will be in the stands. Few will say they were here first.</h2>
     </header>
 
     <div class="founders__grid">
       <!-- "your number" prompt card -->
-      <div class="fnum">
+      <div class="fnum" data-reveal="left" data-reveal-delay="80">
         <span class="fnum__kicker" data-es="PSL SC · Miembro Fundador">PSL SC · Founding Member</span>
         <span class="fnum__number tnum">#1250</span>
         <span class="fnum__title" data-es="El próximo puedes ser tú">You could be next</span>
@@ -22,7 +22,7 @@
       </div>
 
       <!-- live list -->
-      <psl-founder-wall max-visible="6"></psl-founder-wall>
+      <psl-founder-wall max-visible="6" ghost-number="1250" data-reveal="right" data-reveal-delay="160"></psl-founder-wall>
     </div>
   </div>
 </section>

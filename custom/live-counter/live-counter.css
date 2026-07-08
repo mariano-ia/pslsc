@@ -58,3 +58,65 @@ psl-live-counter { display: block; }
   /* en 2 columnas, el divisor izquierdo solo aplica a la 2ª y 4ª */
   .live-counter__metric:nth-child(odd) { border-left: none; padding-left: 0; }
 }
+
+/* ============================================================================
+   Mejoras EXCLUSIVAS de la variante stats (Home) — "esto crece".
+   Todo va bajo .live-counter--stats: fan / reservation / sponsor quedan idénticas.
+   El sparkline solo existe si la métrica declara `trend` en config (solo stats).
+   ============================================================================ */
+
+/* contexto de posicionamiento para el toast flotante (no cambia el render de la columna) */
+.live-counter--stats .live-counter__metric { position: relative; }
+
+/* Sparkline / mini-barras de tendencia (aqua), alineado bajo el número */
+.live-counter--stats .live-counter__spark {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 20px;
+  margin-top: 10px;
+}
+.live-counter--stats .live-counter__spark-bar {
+  width: 4px;
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--color-aqua), var(--color-aqua-deep));
+  opacity: .9;
+  /* estado colapsado: crece al entrar en viewport (mismo disparo que el count-up) */
+  transform: scaleY(0);
+  transform-origin: bottom center;
+  transition: transform var(--dur-reveal) var(--ease-out-soft);
+  transition-delay: calc(var(--i) * var(--stagger));
+}
+.live-counter--stats .live-counter__spark.is-grown .live-counter__spark-bar {
+  transform: scaleY(var(--h));
+}
+
+/* Toast "+1 Founding member" — sube y se desvanece sobre la métrica de fundadores */
+.live-counter--stats .live-counter__toast {
+  position: absolute;
+  left: 0;
+  top: -1.5em;
+  font: 700 var(--fs-label)/1 var(--font-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-aqua);
+  white-space: nowrap;
+  pointer-events: none;
+  animation: psl-lc-toast 1.8s var(--ease-out-soft) forwards;
+}
+@keyframes psl-lc-toast {
+  0%   { opacity: 0; transform: translateY(6px); }
+  16%  { opacity: 1; transform: translateY(0); }
+  68%  { opacity: 1; transform: translateY(-9px); }
+  100% { opacity: 0; transform: translateY(-19px); }
+}
+
+/* Reduced-motion (regla 3): sparkline estática (ya a su altura final, sin crecer) y sin toast. */
+@media (prefers-reduced-motion: reduce) {
+  .live-counter--stats .live-counter__spark-bar {
+    transition: none !important;
+    transform: scaleY(var(--h)) !important;
+  }
+  .live-counter--stats .live-counter__toast { display: none !important; }
+}

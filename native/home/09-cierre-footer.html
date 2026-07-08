@@ -5,11 +5,11 @@
 -->
 <section class="newsletter surface-ink">
   <img class="newsletter__anchor" src="/assets/brand/anchor-aqua.png" alt="" aria-hidden="true" />
-  <div class="newsletter__inner">
-    <span class="psl-kicker" data-es="Quédate cerca">Stay close</span>
-    <h2 class="psl-h2 newsletter__title" data-es="Vive la historia mientras se construye.">Get the story as it&rsquo;s built.</h2>
-    <p class="newsletter__lead" data-es="Nada de spam. Solo novedades reales del club que estás ayudando a construir — primeras camisetas, pruebas de la academia, venta de entradas.">No spam. Just real news about the club you&rsquo;re helping build — first jerseys, tryouts, ticket windows.</p>
-    <form class="newsletter__form" data-newsletter>
+  <div class="newsletter__inner" data-reveal-group="90">
+    <span class="psl-kicker" data-reveal data-es="Quédate cerca">Stay close</span>
+    <h2 class="psl-h2 newsletter__title" data-reveal data-es="Vive la historia mientras se construye.">Get the story as it&rsquo;s built.</h2>
+    <p class="newsletter__lead" data-reveal data-es="Nada de spam. Solo novedades reales del club que estás ayudando a construir — primeras camisetas, pruebas de la academia, venta de entradas.">No spam. Just real news about the club you&rsquo;re helping build — first jerseys, tryouts, ticket windows.</p>
+    <form class="newsletter__form" data-reveal data-newsletter>
       <input type="email" name="email" placeholder="you@email.com" data-es-placeholder="tu@correo.com" aria-label="Email" required class="newsletter__input" />
       <button type="submit" class="psl-btn cta-primary newsletter__btn" data-es="Mantenme al día">Keep me posted</button>
     </form>
@@ -18,22 +18,37 @@
 </section>
 
 <footer class="footer surface-ink">
+  <!-- ghost text de marca (blackletter gigante, apenas visible) — como en el brandbook -->
+  <span class="footer__ghost" aria-hidden="true">Port St Lucie</span>
   <div class="psl-container">
+    <!-- Lockup del tagline oficial: "Anchored in Glory · Pride of the City" con el medallón del ancla -->
+    <div class="ftag" data-reveal>
+      <span class="ftag__kicker">Port Saint Lucie Sports Club</span>
+      <div class="ftag__lockup">
+        <span class="ftag__rule" aria-hidden="true"></span>
+        <span class="ftag__word">Anchored</span>
+        <span class="ftag__seal" aria-hidden="true"><img src="/assets/brand/anchor-black.png" alt="" width="30" height="34" /></span>
+        <span class="ftag__word">in glory</span>
+        <span class="ftag__rule" aria-hidden="true"></span>
+      </div>
+      <span class="ftag__sub">Pride of the City</span>
+    </div>
+
     <div class="footer__top">
-      <a href="home.html" class="footer__brand" aria-label="Port St. Lucie SC — home">
+      <a href="home.html" class="footer__brand" data-reveal aria-label="Port St. Lucie SC — home">
         <img class="footer__crest" src="/assets/brand/crest-aqua.png" alt="" width="44" height="47" />
         <span class="nav__wordmark">
           <span class="nav__name">PORT ST. LUCIE SC</span>
         </span>
       </a>
-      <div class="footer__cols">
-        <div class="footer__col">
+      <div class="footer__cols" data-reveal-group="90">
+        <div class="footer__col" data-reveal>
           <span class="footer__col-title">Club</span>
           <a href="home.html#project" data-es="El proyecto">The project</a>
           <a href="home.html#academy" data-es="Academia">Academy</a>
           <a href="home.html#news" data-es="Novedades">News</a>
         </div>
-        <div class="footer__col">
+        <div class="footer__col" data-reveal>
           <span class="footer__col-title" data-es="Participa">Get in</span>
           <a href="sumate.html" data-es="Hazte Fundador">Become a Founder</a>
           <a href="home.html#jersey" data-es="Tienda">Shop</a>
@@ -42,7 +57,7 @@
         </div>
       </div>
     </div>
-    <div class="footer__bottom">
+    <div class="footer__bottom" data-reveal>
       <span data-es="© 2026 PORT ST. LUCIE SC · TODOS LOS DERECHOS RESERVADOS">© 2026 PORT ST. LUCIE SC · ALL RIGHTS RESERVED</span>
       <span>PORT ST. LUCIE, FL · TREASURE COAST</span>
     </div>

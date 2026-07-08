@@ -36,11 +36,18 @@
   height: auto;
   opacity: .9;
   pointer-events: none;
-  transform: rotate(4deg);
+  /* rotación estática vía propiedad `rotate` para no pisar el transform del float (psl-float usa translateY) */
+  rotate: 4deg;
+  animation: psl-float 6.5s var(--ease-in-out-soft) infinite;
+  will-change: transform;
   filter: drop-shadow(0 8px 24px rgba(0,0,0,.5));
 }
 
 @media (max-width: 860px) {
   .founders__grid { grid-template-columns: 1fr; }
   .fnum { min-height: 340px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fnum__mascot { animation: none; }
 }

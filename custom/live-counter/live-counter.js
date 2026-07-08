@@ -1,4 +1,4 @@
-import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=3';
+import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=4';
 // idioma desde el DOM (fuente única que setea i18n.apply()); evita instancias duplicadas del módulo
 const L = (en, es) => (document.documentElement.lang === 'es' ? es : en);
 
@@ -77,20 +77,42 @@ class PSLLiveCounter extends HTMLElement {
 
   _simulateIncrement() {
     // Solo para demo en ausencia de backend — simula que se suma 1 fundador esporádicamente.
+    // Devuelve true cuando efectivamente se sumó un fundador (lo usa el toast "+1" de la variante stats).
     if (Math.random() < 0.5) {
       this._data.founders += 1;
       this._data.lastJoinedSecondsAgo = 0;
       this._data.updatedAt = new Date().toISOString();
-    } else {
-      this._data.lastJoinedSecondsAgo += this.config.updateFrequencyMs / 1000;
+      return true;
     }
+    this._data.lastJoinedSecondsAgo += this.config.updateFrequencyMs / 1000;
+    return false;
   }
 
   _poll() {
     this._pollHandle = setInterval(() => {
-      this._simulateIncrement();
+      const founderAdded = this._simulateIncrement();
       this._update();
+      // Toast "+1" efímero — SOLO variante stats y una vez que el count-up inicial terminó.
+      if (founderAdded && this.variant === 'stats' && this._countUpDone) this._showFounderToast();
     }, this.config.updateFrequencyMs);
+  }
+
+  // Toast efímero sobre la métrica de fundadores: sube y se desvanece. Bilingüe. Solo variante stats.
+  // En reduced-motion no se muestra (regla 3). Se autolimpia al terminar la animación.
+  _showFounderToast() {
+    const reduce = typeof window !== 'undefined'
+      && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return;
+    const cell = this._metricsEl.querySelector('[data-key="founders"]');
+    if (!cell) return;
+    const toast = document.createElement('span');
+    toast.className = 'live-counter__toast';
+    toast.setAttribute('aria-hidden', 'true');
+    toast.textContent = L('+1 Founding member', '+1 Miembro fundador');
+    cell.appendChild(toast);
+    const cleanup = () => toast.remove();
+    toast.addEventListener('animationend', cleanup);
+    setTimeout(cleanup, 2200); // fallback si no dispara animationend
   }
 
   _render() {
@@ -112,6 +134,9 @@ class PSLLiveCounter extends HTMLElement {
         <div class="live-counter__value tnum${m.accent ? ' live-counter__value--accent' : ''}" data-format="${m.format}"></div>
         <div class="live-counter__label">${L(m.label, m.labelEs || m.label)}</div>
       `;
+      // Sparkline de tendencia — SOLO métricas que declaran `trend` (solo la variante stats lo hace).
+      // Mini-barras ascendentes en aqua, alineadas bajo el número; "crecen" al dispararse el count-up.
+      this._buildSparkline(cell, m);
       this._metricsEl.appendChild(cell);
     });
     // Si la última métrica es de texto relativo (ej. "12 min ago"), su columna deja de ser 1fr
@@ -133,6 +158,26 @@ class PSLLiveCounter extends HTMLElement {
     // el resto se muestra directo.
     this._reveal(true);
     this._observeReveal();
+  }
+
+  // Micro-visualización de tendencia (fila de barritas aqua). Gate: solo si la métrica trae `trend`
+  // (exclusivo de la variante stats). Cada barra guarda su altura relativa en --h y su índice en --i
+  // para el stagger; el estado colapsado (scaleY(0)) y el crecimiento viven en el CSS del componente.
+  _buildSparkline(cell, m) {
+    if (!Array.isArray(m.trend) || m.trend.length === 0) return;
+    const max = Math.max(...m.trend) || 1;
+    const spark = document.createElement('div');
+    spark.className = 'live-counter__spark';
+    spark.setAttribute('aria-hidden', 'true');
+    m.trend.forEach((v, i) => {
+      const bar = document.createElement('span');
+      bar.className = 'live-counter__spark-bar';
+      bar.style.setProperty('--h', Math.max(v / max, 0.08).toFixed(3));
+      bar.style.setProperty('--i', i);
+      spark.appendChild(bar);
+    });
+    // orden en la columna: número → sparkline → label
+    cell.querySelector('.live-counter__label').insertAdjacentElement('beforebegin', spark);
   }
 
   // separación de mils sin decimales (los enteros nunca llevan decimales)
@@ -179,6 +224,9 @@ class PSLLiveCounter extends HTMLElement {
   _runCountUps() {
     const reduce = typeof window !== 'undefined'
       && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Las sparklines "crecen" con el mismo disparo de viewport. En reduced-motion el CSS las deja
+    // estáticas (ya a su altura final), así que agregar la clase acá es inofensivo.
+    this._metricsEl.querySelectorAll('.live-counter__spark').forEach((s) => s.classList.add('is-grown'));
     this.config.metrics.filter((m) => this._isCountUp(m)).forEach((m) => {
       const cell = this._metricsEl.querySelector(`[data-key="${m.key}"] .live-counter__value`);
       const target = Number(this._data[m.key]) || 0;

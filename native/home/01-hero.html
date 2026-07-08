@@ -6,17 +6,33 @@
   la obra es real (JTBD "verificar que el proyecto existe"), en lugar de un countdown.
 -->
 <section class="hero surface-ink" id="hero">
-  <!-- capa de fondo: reemplazar por video/render del estadio (placeholder rayado) -->
-  <div class="hero__bg" aria-hidden="true"></div>
+  <!-- Fondo del hero: video loopeado (vid01→vid02→vid03 concatenados) + poster de fallback.
+       data-parallax: deriva vertical sutil con el scroll; .hero__bg está agrandado en CSS
+       (inset negativo) para que el desplazamiento NO deje huecos en los bordes. -->
+  <div class="hero__bg" aria-hidden="true" data-parallax="0.10">
+    <video class="hero__video" autoplay loop muted playsinline preload="auto"
+           poster="/assets/videos/hero-poster.jpg">
+      <source src="/assets/videos/hero.mp4" type="video/mp4" />
+    </video>
+  </div>
   <div class="hero__scrim" aria-hidden="true"></div>
-  <span class="hero__asset-tag" aria-hidden="true">▦ STADIUM RENDER · 16:9</span>
+
+  <!-- Countdown chip (arriba a la derecha): motion.js escribe los días en [data-countdown-num]. -->
+  <div class="hero__cd" data-countdown="2027-03-01" role="group" aria-label="Countdown to the first whistle">
+    <span class="hero__cd-top">
+      <span class="hero__cd-dot" aria-hidden="true"></span>
+      <span data-es="Primer silbato">First whistle</span>
+    </span>
+    <span class="hero__cd-num tnum" data-countdown-num>236</span>
+    <span class="hero__cd-unit" data-es="días restantes">days to go</span>
+  </div>
 
   <div class="psl-container hero__content">
     <div class="hero__eyebrow">
       <span class="hero__dot" aria-hidden="true"></span>
       <span data-es="PORT ST. LUCIE, FL — DEBUT EN USL LEAGUE ONE 2027">PORT ST. LUCIE, FL — DEBUT USL LEAGUE ONE 2027</span>
     </div>
-    <h1 class="hero__headline"><span class="hero__morph-prefix" data-es="Estás viendo un club">You&rsquo;re watching a club be</span> <span class="hero__morph" aria-label="born."><span class="hero__morph-sizer" aria-hidden="true">imagined.</span><span class="hero__morph-word" data-words="imagined,built,backed,loved,born" data-words-es="imaginarse,construirse,quererse,nacer">born.</span></span></h1>
+    <h1 class="hero__headline"><span class="hero__morph-prefix" data-es="Estás viendo un club">You&rsquo;re watching a club be</span> <span class="hero__morph" aria-label="born."><span class="hero__morph-sizer" aria-hidden="true">imagined.</span><span class="hero__morph-word" data-words="imagined,loved,born" data-words-es="imaginarse,quererse,nacer">born.</span></span></h1>
     <p class="hero__subhead" data-es="El primer club de fútbol profesional de Port St. Lucie — construido en la Treasure Coast, con el ADN del fútbol argentino. No es una promesa: es una obra que ya está en marcha.">
       The first professional football club in Port St. Lucie — built on the Treasure Coast,
       shaped by Argentine football culture. Not a promise. A build already underway.
@@ -26,6 +42,9 @@
       <a href="#project" class="psl-btn cta-secondary" data-es="Conoce el proyecto">See the project</a>
     </div>
   </div>
+
+  <!-- scroll-cue: invita a bajar (loop suave, decorativo) -->
+  <div class="hero__scroll-cue" aria-hidden="true"><span></span></div>
 
   <!-- barra separadora con gradiente de marca (aquamarine → red marine) -->
   <div class="hero__divider" role="presentation"></div>

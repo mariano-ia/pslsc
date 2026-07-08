@@ -25,3 +25,48 @@
 
 @media (max-width: 960px) { .project__grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .project__grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   Motion aplicado (bloque PROJECT). Solo transform/opacity.
+   El reveal/stagger/magnetic/spotlight viven en data-atributos.
+   ============================================================ */
+
+/* 4) Zoom interno de la media al hover de la tarjeta (la .pcard ya tiene overflow:hidden). */
+.project .pcard__media {
+  transition: transform var(--dur-med) var(--ease-out-soft);
+  will-change: transform;
+}
+.project .pcard:hover .pcard__media { transform: scale(1.05); }
+
+/* 5) Detalle en el link: subrayado que se dibuja + la flecha avanza al hover. */
+.project .pcard__link {
+  position: relative;
+  align-self: flex-start;      /* la caja se ajusta al texto para el subrayado */
+  transition: transform var(--dur-fast) var(--ease-out-soft);
+}
+.project .pcard__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-med) var(--ease-out-expo);
+}
+.project .pcard:hover .pcard__link::after,
+.project .pcard__link:hover::after { transform: scaleX(1); }
+.project .pcard:hover .pcard__link,
+.project .pcard__link:hover { transform: translateX(3px); }
+
+/* 6) Reduced-motion: sin zoom ni desplazamientos; el subrayado aparece sin dibujarse. */
+@media (prefers-reduced-motion: reduce) {
+  .project .pcard__media,
+  .project .pcard:hover .pcard__media { transition: none; transform: none; }
+  .project .pcard__link,
+  .project .pcard:hover .pcard__link,
+  .project .pcard__link:hover { transition: none; transform: none; }
+  .project .pcard__link::after { transition: none; }
+}

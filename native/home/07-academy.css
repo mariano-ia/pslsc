@@ -25,9 +25,20 @@
   border-radius: 16px;
   overflow: hidden;
   position: relative;
-  background: repeating-linear-gradient(122deg, #17160F, #17160F 14px, #141309 14px, #141309 28px);
+  background: #141309;
   border: 1px solid var(--color-line);
 }
+/* Capa "imagen": zoom sutil al hover (solo transform, sin conflicto con el reveal del bloque) */
+.academy__media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(122deg, #17160F, #17160F 14px, #141309 14px, #141309 28px);
+  transform: scale(1);
+  transition: transform var(--dur-reveal) var(--ease-out-soft);
+}
+.academy__media:hover::before,
+.academy__media:focus-within::before { transform: scale(1.05); }
 .academy__media::after {
   content: attr(data-tag);
   position: absolute;
@@ -43,4 +54,10 @@
 
 @media (max-width: 860px) {
   .academy__grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .academy__media::before { transition: none; }
+  .academy__media:hover::before,
+  .academy__media:focus-within::before { transform: none; }
 }

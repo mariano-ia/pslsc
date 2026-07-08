@@ -13,9 +13,12 @@ export const LIVE_COUNTER_CONFIG = {
   stats: {
     endpoint: '/api/live-counter?scope=home',
     updateFrequencyMs: 8000,
+    // `trend` (SOLO variante stats): datos demo de tendencia para la micro-visualización ascendente
+    // (mini-barras aqua). Valores relativos, se normalizan al máximo en el componente. Actúa además
+    // como flag de gating: fan/reservation/sponsor no llevan `trend` -> no dibujan sparkline.
     metrics: [
-      { key: 'founders', label: 'Founding Members', labelEs: 'Miembros Fundadores', format: 'integer' },
-      { key: 'deposits2027', label: 'Ticket Deposits', labelEs: 'Depósitos de Entradas', format: 'integer' },
+      { key: 'founders', label: 'Founding Members', labelEs: 'Miembros Fundadores', format: 'integer', trend: [8, 9, 11, 12, 15, 18, 22, 27] },
+      { key: 'deposits2027', label: 'Ticket Deposits', labelEs: 'Depósitos de Entradas', format: 'integer', trend: [4, 5, 5, 7, 8, 11, 14, 18] },
       { key: 'firstWhistle', label: 'First Whistle', labelEs: 'Primer Silbato', format: 'static', accent: true },
       { key: 'league', label: 'League One · Pro', labelEs: 'League One · Pro', format: 'static' },
     ],

@@ -9,11 +9,21 @@
   overflow: hidden;
 }
 
-/* placeholder rayado — reemplazar por media real del estadio */
+/* Fondo del hero — capa de video. inset vertical negativo: la sobredimensiona para que el
+   data-parallax NUNCA deje huecos en los bordes. El poster va como background de fallback
+   (se ve mientras el video carga y en prefers-reduced-motion, donde el video se oculta). */
 .hero__bg {
   position: absolute;
+  inset: -16% 0;
+  background: #0C0C0A url('/assets/videos/hero-poster.jpg') center/cover no-repeat;
+}
+.hero__video {
+  position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(128deg, #171610 0, #171610 13px, #14130E 13px, #14130E 26px);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .hero__scrim {
@@ -24,16 +34,55 @@
     linear-gradient(180deg, rgba(12,12,10,.62) 0%, rgba(12,12,10,.35) 32%, rgba(12,12,10,.88) 82%, #0C0C0A 100%);
 }
 
-.hero__asset-tag {
+/* Countdown chip — arriba a la derecha del hero (glass). Reemplaza la vieja línea
+   "236 days to first whistle" del contenido. El número va en aquamarine pleno. */
+.hero__cd {
   position: absolute;
-  top: 96px;
+  top: clamp(84px, 11vh, 104px);
   right: var(--gutter);
-  font: 500 10px/1 var(--font-mono);
-  letter-spacing: .18em;
-  color: rgba(239,235,225,.34);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 13px 17px 12px;
   border: 1px solid var(--color-line-strong);
-  padding: 7px 10px;
-  border-radius: 4px;
+  border-radius: 16px;
+  background: rgba(12, 12, 10, .42);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  text-align: right;
+}
+.hero__cd-top {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 var(--fs-label)/1 var(--font-label);
+  letter-spacing: var(--ls-kicker);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.hero__cd-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-aqua);
+  animation: psl-pulse 1.6s ease-in-out infinite;
+}
+.hero__cd-num {
+  font: 800 clamp(34px, 4vw, 52px)/0.86 var(--font-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-aqua);
+}
+.hero__cd-unit {
+  font: 500 var(--fs-label)/1 var(--font-label);
+  letter-spacing: var(--ls-kicker);
+  text-transform: uppercase;
+  color: var(--color-aqua);
+}
+@media (max-width: 560px) {
+  .hero__cd { top: 80px; padding: 10px 13px; border-radius: 13px; }
+  .hero__cd-num { font-size: 30px; }
 }
 
 .hero__content {
@@ -84,12 +133,9 @@
   position: absolute;
   left: 0;
   top: 0;
-  color: var(--color-aqua);   /* visible por defecto: sin JS se lee "born." correcto */
+  color: var(--color-aqua);   /* SIEMPRE aquamarine pleno — también mientras scramblea */
   font-weight: 800;
-  transition: opacity 120ms ease;
 }
-/* estados intermedios (mientras cicla): más apagados y peso menor */
-.hero__morph-word.is-cycling { color: var(--color-text-muted); font-weight: 700; }
 
 .hero__subhead {
   margin: 30px 0 0;
@@ -100,15 +146,95 @@
 
 .hero__ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
 
-/* Barra separadora — gradiente de marca aquamarine → red marine (reemplaza el ticker) */
+/* Barra separadora — degradado de marca ANIMADO que fluye (aquamarine ↔ red marine) */
 .hero__divider {
   position: relative;   /* por encima del scrim absoluto */
   z-index: 2;
   height: 5px;
   width: 100%;
-  background: linear-gradient(90deg, var(--color-aqua) 0%, var(--color-red-marine) 100%);
+  background: linear-gradient(90deg,
+    var(--color-aqua), var(--color-red-marine), var(--color-aqua),
+    var(--color-red-marine), var(--color-aqua));
+  background-size: 200% 100%;
+  animation: psl-grad-flow 5s linear infinite;
+}
+
+/* Scroll-cue (estilo "mouse"): pill con un punto que baja en loop. Decorativo. */
+.hero__scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 2;
+  width: 22px;
+  height: 32px;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-pill);
+  pointer-events: none;
+}
+.hero__scroll-cue span {
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  border-radius: 50%;
+  background: var(--color-aqua);
+  animation: psl-scroll-cue 1.9s var(--ease-in-out-soft) infinite;
+}
+
+/* ============================================================
+   Coreografía de entrada AL CARGAR (hero above-the-fold, no scroll-reveal).
+   Gateada bajo .psl-motion (la pone motion.js) → sin JS todo queda visible.
+   Cascada ~90ms: eyebrow → countdown → headline → subhead → CTAs → divider.
+   Solo transform / opacity / clip-path.
+   ============================================================ */
+.psl-motion .hero__eyebrow,
+.psl-motion .hero__subhead,
+.psl-motion .hero__ctas,
+.psl-motion .hero__cd {
+  opacity: 0;
+  animation: psl-hero-in var(--dur-reveal) var(--ease-out-soft) both;
+}
+.psl-motion .hero__eyebrow { animation-delay: 0ms; }
+.psl-motion .hero__subhead { animation-delay: 270ms; }
+.psl-motion .hero__ctas    { animation-delay: 360ms; }
+.psl-motion .hero__cd      { animation-delay: 620ms; }   /* el chip entra al final */
+
+/* Headline: entra en la cascada (opacity + rise), slot 180ms. Usa el mismo psl-hero-in que el resto
+   —robusto, sin depender de clip-path (que en algunos motores/compositores queda clipeado)— y el
+   morph de la última palabra arranca DESPUÉS (delay en 01-hero.js). */
+.psl-motion .hero__headline {
+  opacity: 0;
+  animation: psl-hero-in var(--dur-reveal) var(--ease-out-soft) 180ms both;
+}
+
+/* Divider: se dibuja de izquierda a derecha al cargar (psl-draw-x) Y sigue fluyendo el degradado
+   de marca (psl-grad-flow) — dos animaciones combinadas. */
+.psl-motion .hero__divider {
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: psl-draw-x var(--dur-reveal) var(--ease-out-expo) 450ms both,
+             psl-grad-flow 5s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__dot { animation: none; }
+  .hero__dot,
+  .hero__cd-dot { animation: none; }
+  .hero__eyebrow,
+  .hero__headline,
+  .hero__subhead,
+  .hero__ctas,
+  .hero__cd {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+  /* el divisor queda con su degradado estático (sin flujo ni draw) */
+  .hero__divider { animation: none !important; transform: none !important; }
+  .hero__scroll-cue span { animation: none; }
+  /* sin video en reduced-motion: se muestra el poster (background de .hero__bg) */
+  .hero__video { display: none; }
 }
