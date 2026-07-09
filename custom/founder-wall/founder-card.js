@@ -1,19 +1,19 @@
 /**
  * <psl-founder-card number="42" name="Marco R." joined="June 2025" tier="charter"></psl-founder-card>
  *
- * 🟦 A medida — el carnet digital de fundador. Pieza B del benchmark Piezas Diferenciales.
- * Reutilizado en bloque 05 (Home, featured) y S04 (Sumate, muro completo).
+ * 🟦 A medida — el carnet digital de fundador (formato 9:16, tipo Stories).
  *
- * Decisiones aplicadas:
- * - Formato 9:16 (Stories) — decisión #2 del ranking de 9.
- * - Número de fundador como elemento más grande del carnet, no un dato más — decisión #5 del ranking.
- * - Sin precio ni tier visible como recibo: es una credencial de honor, no una transacción.
- * - Charter Member (primeros 100) vs Early Founder (primeros 500) vs Founding Member (resto).
+ * OJO: este componente NO está montado en ninguna página. La Home usa <psl-founder-id> (el boarding
+ * pass, en /custom/founder-id/) en su lugar. Queda acá por si se decide armar una sección "Your card".
  *
- * ESTADO ACTUAL: el render del carnet acá es client-side (CSS/canvas) para preview en vivo en
- * la página. El benchmark especifica generación SERVER-SIDE vía OG image endpoint para que el
- * share sea consistente entre dispositivos — eso requiere backend y queda documentado como
- * contrato pendiente, no construido en esta etapa (ver comentario en _share()).
+ * Cómo funciona:
+ * - El número de fundador es el elemento más grande del carnet.
+ * - Sin precio ni tier visible como recibo: es una credencial, no una transacción.
+ * - Charter Member (primeros 100) / Early Founder (primeros 500) / Founding Member (resto).
+ *
+ * HANDOFF (WP): el render acá es client-side (CSS/canvas). Si se monta, para que el share se vea
+ * igual en todos los dispositivos conviene generar la imagen SERVER-SIDE (OG image endpoint) —
+ * requiere backend (ver comentario en _share()).
  */
 class PSLFounderCard extends HTMLElement {
   static get observedAttributes() {
@@ -70,8 +70,8 @@ class PSLFounderCard extends HTMLElement {
     return String(n).padStart(4, '0');
   }
 
-  // Contrato pendiente: generar imagen 9:16 vía endpoint server-side, ej. GET /api/founder-card/{number}.png
-  // (renderizado en servidor para consistencia visual entre dispositivos — ver Pieza B del benchmark).
+  // HANDOFF (WP): generar imagen 9:16 vía endpoint server-side, ej. GET /api/founder-card/{number}.png
+  // (renderizado en servidor para consistencia visual entre dispositivos).
   // Hoy usa Web Share API compartiendo el link de la página como fallback de demo.
   async _share() {
     const number = this.getAttribute('number');

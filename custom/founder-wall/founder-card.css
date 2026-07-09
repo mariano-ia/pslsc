@@ -1,4 +1,4 @@
-/* <psl-founder-card> — carnet digital 9:16 (Pieza B). Ver decisiones en founder-card.js */
+/* <psl-founder-card> — carnet digital 9:16 (no montado; ver founder-card.js). */
 
 psl-founder-card {
   display: block;
@@ -56,7 +56,7 @@ psl-founder-card {
 }
 .founder-card--founding .founder-card__tier { color: var(--color-text-faint); }
 
-/* centro: el número es el elemento más grande del carnet — decisión #5 del ranking, Pieza B */
+/* centro: el número es el elemento más grande del carnet */
 .founder-card__center {
   position: relative;
   z-index: 1;

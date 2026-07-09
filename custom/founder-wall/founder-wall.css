@@ -42,7 +42,7 @@ psl-founder-wall { display: block; height: 100%; }
 .fwall__name { font: 600 14px/1 var(--font-body); color: var(--color-text-on-paper); }
 .fwall__city { font: 400 12.5px/1 var(--font-body); color: var(--color-text-on-paper-faint); }
 
-/* nuevo ingreso: rise + highlight teal 2.5s (decisión Pieza B) */
+/* nuevo ingreso: rise + highlight teal 2.5s */
 .fwall__row--enter { animation: psl-rise .5s ease both; }
 .fwall__row--highlight { background: rgba(20,195,164,.1); }
 

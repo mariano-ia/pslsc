@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Port St. Lucie SC — You're watching a club be born.</title>
 
-  <!-- Fuentes de marca (Ferryman, Druk, Druk Text Wide, FF Tisa, Cabazon) -->
+  <!-- Fuentes de marca self-hosted (Ferryman, Druk, Druk Text Wide, Proxima Nova, Cabazon) -->
   <link rel="stylesheet" href="../tokens/fonts.css?v=60" />
 
   <!-- Tokens -->
@@ -65,8 +65,8 @@
       const html = await fetch(`../native/home/${name}.html${bust}`).then((r) => r.text());
       document.querySelector(`[data-block="${name}"]`).innerHTML = html;
     }));
-    // i18n primero (aplica idioma guardado antes de que arranquen las animaciones)
-    // init de scripts nativos que dependen del DOM ya inyectado + sistema de motion
+    // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.
+    // (El sitio es English-only: no hay init de idioma.)
     const [{ initNewsletter }, { initHeroMorph }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
       import('../native/home/09-cierre-footer.js?v=60'),
       import('../native/home/01-hero.js?v=60'),

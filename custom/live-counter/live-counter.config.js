@@ -1,10 +1,10 @@
 /**
  * Configuración por variante del <psl-live-counter>.
- * Fuente: benchmark Piezas Diferenciales, Pieza C — mismos datos, framing distinto por audiencia
- * (decisión #9 del ranking de 9: "presentación diferente de los mismos números para fan vs sponsor").
+ * Misma data, distinto framing según la audiencia (fan vs sponsor).
+ * Máximo 4 métricas por variante. "lastJoined" es la métrica de actividad reciente.
  *
- * Máximo 4 métricas por variante (límite Kickstarter, benchmark Pieza C).
- * "lastJoined" es la 4ª métrica recomendada — prueba de actividad reciente honesta.
+ * HANDOFF (WP): cada variante trae su `endpoint` (ej. /api/live-counter?scope=home). Ese es el
+ * contrato a implementar; hoy los valores salen de _demoData() en live-counter.js.
  */
 
 export const LIVE_COUNTER_CONFIG = {

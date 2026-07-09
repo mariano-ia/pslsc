@@ -49,7 +49,7 @@
 
   /* ====== TIPOGRAFÍA — fuentes de marca (ver fonts.css) ======
      Ferryman: título home. Druk: títulos/números display. Druk Text Wide: kickers/labels.
-     FF Tisa: body (serif). Cabazon: detalle decorativo. */
+     Proxima Nova: body (legible). Cabazon: detalle decorativo. */
   --font-hero:    'Ferryman', Georgia, serif;
   --font-display: 'Druk', 'Arial Narrow', sans-serif;
   --font-label:   'Druk Text Wide', 'Arial Narrow', sans-serif;

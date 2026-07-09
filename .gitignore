@@ -1,3 +1,36 @@
+# ── SO / editor ─────────────────────────────────────────────
 .DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+*.bak
+*.orig
+*.tmp
+*.log
+
+# ── Dependencias / build / deploy ───────────────────────────
 node_modules/
 .vercel
+
+# ── Material de referencia y fuentes (NO se commitean) ──────
+# Son pesados y NO forman parte del sitio. Quedan en el disco local
+# para consulta, pero fuera del repo (el sitio no los carga).
+# NOTA: en .gitignore el "#" solo vale al inicio de línea (no hay comentarios inline).
+
+# brandbook + PDFs de renders (referencia de diseño)
+docs/*.pdf
+# video fuente del giro 360 (los frames webp SÍ se versionan)
+assets/videos/360_shirt.mp4
+
+# ── Fuentes sin uso ─────────────────────────────────────────
+# El body es Proxima Nova, no FF Tisa: estos archivos no se cargan.
+assets/fonts/TisaPro-Regular.otf
+assets/fonts/TisaPro-Medium.otf
+assets/fonts/TisaPro-Bold.otf
+
+# ── Assets de marca sin uso en el sitio ─────────────────────
+# El sitio usa anchor-aqua / anchor-black; el wordmark del nav/footer es texto, no imagen.
+assets/brand/anchor-white.png
+assets/brand/wordmark-sc-aqua.png

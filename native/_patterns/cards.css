@@ -1,8 +1,8 @@
 /**
  * Patrón de tarjeta compartido (.pcard) — reusable en cualquier página.
  * Usado en: Home (03 project, 08 news), Sumate (S02 beneficios), Partners (P02/P03).
- * Fuente: guía de estilo Grupo B — "imagen/render + título corto + 1 línea + link; las tarjetas
- * pesan visualmente igual, ninguna compite con el hero".
+ * Regla del patrón: imagen/render + título corto + 1 línea + link; las tarjetas pesan
+ * visualmente igual, ninguna compite con el hero.
  *
  * Grilla contenedora: cada bloque define su propia grilla (ej. .project__grid), el patrón solo
  * define la tarjeta. Utilidad genérica opcional: .pcard-grid.

@@ -1,20 +1,20 @@
 import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=6';
 
 /**
- * <psl-live-counter variant="fan|reservation|sponsor"></psl-live-counter>
+ * <psl-live-counter variant="stats|fan|reservation|sponsor"></psl-live-counter>
  *
- * 🟦 A medida — bloques 02 (Home) / 06 / S03 / P04. Un solo componente reutilizado
- * con distinta config (ver live-counter.config.js), no 4 piezas separadas.
+ * 🟦 A medida — se usa en la Home (bloque 02, variant="stats") y en Partners (P04, variant="sponsor").
+ * Un solo componente reutilizado con distinta config (ver live-counter.config.js), no piezas separadas.
  *
- * Decisiones aplicadas (benchmark Piezas Diferenciales, Pieza C):
- * - tabular-nums (token global .tnum, ver tokens.css)
- * - máx 4 métricas, "last joined" como prueba de actividad honesta
+ * Criterios de diseño:
+ * - tabular-nums (token global .tnum, ver tokens.css) para que los números no salten
+ * - máx 4 métricas; "last joined" como prueba de actividad honesta
  * - números exactos, nunca redondeados con "+"
- * - odometer para updates frecuentes (<1min), highlight+fade para updates espaciados
+ * - highlight+fade en los updates para que se note que está vivo
  * - mismo dato, distinto framing por variante (fan vs sponsor)
  *
- * Sin backend real todavía: usa datos demo + polling simulado. El contrato de API real
- * está documentado en live-counter.config.js — reemplazar fetchData() cuando exista el endpoint.
+ * HANDOFF (WP): sin backend todavía — usa datos demo + polling simulado. El contrato de API real
+ * está en live-counter.config.js. Reemplazar _demoData() por fetch(this.config.endpoint).
  */
 class PSLLiveCounter extends HTMLElement {
   connectedCallback() {
@@ -74,7 +74,7 @@ class PSLLiveCounter extends HTMLElement {
     }, this.config.updateFrequencyMs);
   }
 
-  // Toast efímero sobre la métrica de fundadores: sube y se desvanece. Bilingüe. Solo variante stats.
+  // Toast efímero sobre la métrica de fundadores: sube y se desvanece. Solo variante stats.
   // En reduced-motion no se muestra (regla 3). Se autolimpia al terminar la animación.
   _showFounderToast() {
     const reduce = typeof window !== 'undefined'

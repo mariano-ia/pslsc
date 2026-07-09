@@ -1,7 +1,7 @@
 /**
  * <psl-founder-id></psl-founder-id>
  *
- * 🟦 A medida — bloque 05 (Founders, Home). EL BOARDING PASS del vuelo PSL·2027 — turquesa de
+ * 🟦 A medida — bloque 06-founders (Home). EL BOARDING PASS del vuelo PSL·2027 — turquesa de
  * marca. Cohesión con <psl-departures-board>: el tablero muestra quiénes abordan; acá generás TU
  * pase de abordar. Default: LUKA (mascota), pasajero #0001. "Make your boarding pass" → cámara
  * (getUserMedia) o subir foto → snapshot al pase → nombre → share como IMAGEN real (canvas
@@ -19,6 +19,10 @@
  *
  * El pase DIY recibe un ASIENTO aleatorio al capturar (sabor boarding pass, no es número de
  * fundador real); el número de fundador REAL se reclama en Sumate (CTA del bloque).
+ *
+ * HANDOFF (WP): este componente usa la CÁMARA. Si el bloque va en <iframe>, el iframe NECESITA el
+ * atributo allow="camera" (si no, el navegador la bloquea) y servirse por HTTPS. No hay endpoint
+ * que cablear: todo corre client-side (la foto nunca se sube).
  */
 const LUKA_SRC = '/assets/images/luka-card.webp';
 const CREST_SRC = '/assets/brand/crest-black.webp';   // crest oscuro: el pase es aqua

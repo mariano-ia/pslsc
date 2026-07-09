@@ -1,7 +1,7 @@
 /**
  * <psl-departures-board></psl-departures-board>
  *
- * 🟦 A medida — bloque 05 (Founders, Home). Tablero de partidas estilo SPLIT-FLAP (Solari de
+ * 🟦 A medida — bloque 06-founders (Home). Tablero de partidas estilo SPLIT-FLAP (Solari de
  * aeropuerto): "this flight is about to take off". Cada fundador es un pasajero abordando el
  * vuelo PSL 2027. Cada carácter vive en su celda con seam horizontal; cuando el contenido cambia,
  * la celda cicla caracteres al azar con un tick de flip antes de asentarse (como las tablas de

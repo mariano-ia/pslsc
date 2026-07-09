@@ -20,7 +20,7 @@ psl-live-counter { display: block; }
   padding-left: clamp(20px, 4vw, 48px);
 }
 
-/* Número — Archivo 900, condensado, tabular-nums (decisión #3 del ranking, Pieza C)
+/* Número — condensado, tabular-nums.
    Mismo tamaño para todos los valores, incluido el texto relativo (ej. "12 min ago") — la columna
    que lo contiene se ensancha en JS (ver _render()) para que nunca parta en varias líneas. */
 .live-counter__value {

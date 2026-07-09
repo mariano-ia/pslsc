@@ -1,18 +1,17 @@
 /**
  * <psl-founder-wall></psl-founder-wall>
  *
- * 🟦 A medida — lista de fundadores en vivo. Pieza B del benchmark Piezas Diferenciales.
- * Layout del diseño aprobado: card blanca con header (contador vivo) + filas (#num, nombre, ciudad)
- * + footer "last joined". Reutilizable en Home (bloque founders) y en la página Sumate (S04).
+ * 🟦 A medida — lista de fundadores en vivo. Card blanca con header (contador vivo) + filas
+ * (#num, nombre, ciudad) + footer "last joined". Hoy se usa en Sumate (S04), con búsqueda por número.
  *
- * Decisiones aplicadas:
- * - Nuevo ingreso entra arriba con slide/rise (psl-rise) + highlight teal, luego se integra.
- * - Contador global sube con el ingreso.
- * - "Last joined Xmin ago" como prueba de actividad honesta (decisión #6 del ranking).
+ * Cómo funciona:
+ * - Cada nuevo ingreso entra arriba con slide/rise (psl-rise) + highlight teal, luego se integra.
+ * - El contador global sube con el ingreso.
+ * - "Last joined Xmin ago" como prueba de actividad reciente.
  * - Muro público: nombre + número + ciudad. Sin email ni datos sensibles.
  *
- * ESTADO ACTUAL: datos demo + simulación de ingresos (sin backend). Contrato de API real: ver
- * live-counter.config.js (mismo scope de founders).
+ * HANDOFF (WP): datos demo + simulación de ingresos (sin backend). Para buscar un número fuera de
+ * la ventana cargada: GET /api/founders?number=… . Contrato general: ver live-counter.config.js.
  */
 const NAME_POOL = ['Sofía L.', 'Mateo F.', 'Julieta V.', 'Thiago B.', 'Emilia C.', 'Benjamín R.', 'Renata D.', 'Bruno M.', 'Antonella P.', 'Facundo T.', 'Isabella N.', 'Santiago G.'];
 const CITY_POOL = ['Port St. Lucie, FL', 'Fort Pierce, FL', 'Stuart, FL', 'Miami, FL', 'Jensen Beach, FL', 'Vero Beach, FL'];

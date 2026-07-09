@@ -1,8 +1,7 @@
 # Tokens — origen de cada decisión
 
-Sistema visual adoptado de **`Diseño ClaudeDesign/Home.dc.html`** (dirección de diseño validada
-por el cliente, jul 2026). Verificado contra el **manual de marca oficial** (`Manual de
-marca/.../PSL-Brandbook.pdf`, sept 2025).
+Sistema visual validado por el cliente (jul 2026) y verificado contra el manual de marca oficial
+(PSL-Brandbook.pdf — material de referencia, no vive en el repo).
 
 ## Colores oficiales (brandbook)
 
@@ -16,12 +15,11 @@ marca/.../PSL-Brandbook.pdf`, sept 2025).
 **Regla de marca crítica:** el escudo NO admite colores no aprobados — el brandbook muestra
 explícitamente un escudo **naranja tachado**. Cualquier acento naranja/terracota queda descartado.
 Tampoco: quitar elementos, alterar proporciones, outline, cambiar opacidad, rotar, ni sombras
-sobre el escudo.
+sobre el escudo. El naranja está prohibido en todo el sitio.
 
-## Mapeo → tokens (colores y fuentes del brandbook)
+## Mapeo → tokens (colores y fuentes)
 
 Color: **aquamarine principal, negro secundario, blanco + red marine acento** (indicación del cliente).
-Estructura/estética tomada del diseño aprobado; color y tipografía del manual de marca.
 
 | Token | Valor | Origen |
 |---|---|---|
@@ -30,30 +28,28 @@ Estructura/estética tomada del diseño aprobado; color y tipografía del manual
 | `--color-ink` | `#0C0C0A` | negro cálido — fondo base oscuro |
 | `--color-paper` | `#FFFFFF` | blanco de marca — secciones claras |
 | `--color-red-marine` | `#FF0033` | Red Marine oficial — acento de urgencia |
-| `--font-hero` | Ferryman | título de la home (H1) |
+| `--font-hero` | Ferryman | título de la home (H1) / heros |
 | `--font-display` | Druk | títulos de sección, números display, títulos de card |
 | `--font-label` (`--font-mono` alias) | Druk Text Wide | kickers, labels, nav, "EST. 2019" |
-| `--font-body` | FF Tisa (TisaPro) | body / párrafos (serif) |
+| `--font-body` | Proxima Nova | body / UI / botones / inputs (legible) |
 | `--font-detail` | Cabazon | detalle decorativo (uso puntual) |
-| `--color-jersey-viewer-bg` | `#0C0C0A` | Pieza A, decisión #1 del ranking |
-| `--ease-jersey-drag`, `--duration-jersey-drag-*` | — | Pieza A, decisión #4 (inercia 400–600ms) |
-| `--fs-counter`, `--font-feature-counter` | — | Pieza C, decisión #3 (tabular-nums) |
 
-Fuentes instaladas vía `@font-face` en `src/tokens/fonts.css` (archivos en `src/assets/fonts/`).
+Fuentes instaladas vía `@font-face` en `tokens/fonts.css` (archivos en `assets/fonts/`).
 
-## Assets de logo (extraídos de PSL-AllLogos.ai → `src/assets/brand/`)
-- `crest-aqua.png` / `crest-black.png` — escudo institucional (nav, footer).
-- `anchor-aqua/white/black.png` — ancla **without shape** (detalles, marcas de agua).
-- `anchor-shape-aqua.png` — ancla **with shape** (detalle).
-- `wordmark-sc-aqua.png` — wordmark "Port St Lucie SC".
+## Assets de marca (`assets/brand/`)
+- `crest-aqua.webp` / `crest-black.webp` — escudo institucional (nav, footer, boarding pass, fixtures).
+- `anchor-aqua.webp` / `anchor-black.webp` — ancla suelta (detalles del footer).
 
-## Assets de marca disponibles
-- `src/assets/crest.png` — escudo oficial (blackletter "Port St Lucie" + ancla, aquamarine/negro)
-- `src/assets/anchor.png` — ancla suelta
-- `src/assets/luca.png` — mascota oficial **Luca** (mono pirata)
-- Tagline oficial: **"Anchored in glory · Pride of the City"**
+## Assets de imagen / video
+- `assets/images/luka-card.webp` — mascota **Luka** (boarding pass del bloque Founders).
+- `assets/images/pslsc_academy.webp` — foto de la academia (bloque Academy).
+- `assets/proof/stadium-aerial.webp` — render aéreo del estadio (bloque Proof).
+- `assets/jersey360/f_00.webp … f_89.webp` — 90 cuadros del giro 360° de la camiseta.
+- `assets/videos/hero.mp4` + `assets/videos/hero-poster.webp` — video de fondo del hero.
+
+Tagline oficial: **"Anchored in glory · Pride of the City"**.
 
 ## Pendiente
 - Reemplazar placeholders de render/foto (`▦ DROP ASSET HERE`) por renders de estadio y fotos
   reales cuando el cliente los entregue.
-- Tipografía custom blackletter del escudo: solo vive en el asset del crest, no se usa como webfont.
+- Tipografía blackletter del escudo: solo vive en el asset del crest, no se usa como webfont.
