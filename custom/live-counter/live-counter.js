@@ -31,6 +31,7 @@ class PSLLiveCounter extends HTMLElement {
 
   disconnectedCallback() {
     clearInterval(this._pollHandle);
+    if (this._wideMql && this._applyRelGrid) this._wideMql.removeEventListener('change', this._applyRelGrid);
   }
 
   // ---- DEMO DATA — reemplazar por fetch(this.config.endpoint) cuando exista el endpoint real ----
@@ -126,10 +127,19 @@ class PSLLiveCounter extends HTMLElement {
     // Si la última métrica es de texto relativo (ej. "12 min ago"), su columna deja de ser 1fr
     // fijo y pasa a "al menos el ancho de su contenido" — así el valor mantiene el mismo tamaño
     // de fuente que sus hermanos sin partirse en dos líneas ni desbordar.
+    // En DESKTOP (grid de N columnas) la columna del relative-time toma el ancho de su contenido.
+    // En tablet/mobile las media queries colapsan a 2/1 col → NO pisar con inline (ganaría y rompería
+    // el responsive, desbordando "12 min ago"). Re-evaluar al cruzar el breakpoint.
     const lastMetric = this.config.metrics[this.config.metrics.length - 1];
     if (lastMetric && lastMetric.format === 'relative-time') {
       const n = this.config.metrics.length;
-      this._metricsEl.style.gridTemplateColumns = `repeat(${n - 1}, 1fr) minmax(max-content, 1fr)`;
+      this._wideMql = window.matchMedia('(min-width: 781px)');
+      this._applyRelGrid = () => {
+        this._metricsEl.style.gridTemplateColumns = this._wideMql.matches
+          ? `repeat(${n - 1}, 1fr) minmax(max-content, 1fr)` : '';
+      };
+      this._applyRelGrid();
+      this._wideMql.addEventListener('change', this._applyRelGrid);
     }
     if (this.config.note) {
       const note = document.createElement('p');

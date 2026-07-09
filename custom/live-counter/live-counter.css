@@ -144,3 +144,10 @@ psl-live-counter { display: block; }
   .live-counter--stats .live-counter__metric,
   .live-counter--stats .live-counter__metric:hover { transition: none; transform: none; }
 }
+
+/* mobile chico: 1 columna — los valores grandes (incl. "12 min ago" nowrap) no entran en 2 cols */
+@media (max-width: 520px) {
+  .live-counter__metrics { grid-template-columns: 1fr; row-gap: var(--space-5); }
+  .live-counter__metric + .live-counter__metric { border-left: none; padding-left: 0; }
+  .live-counter--stats .live-counter__metric + .live-counter__metric::before { display: none; }
+}

@@ -6,25 +6,25 @@
   <title>Be a Founder — Port St. Lucie SC</title>
 
   <!-- Fuentes de marca -->
-  <link rel="stylesheet" href="../tokens/fonts.css?v=17" />
+  <link rel="stylesheet" href="../tokens/fonts.css?v=59" />
   <!-- Tokens -->
-  <link rel="stylesheet" href="../tokens/tokens.css?v=17" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=59" />
 
   <!-- Patrones compartidos -->
-  <link rel="stylesheet" href="../native/_patterns/cards.css?v=17" />
+  <link rel="stylesheet" href="../native/_patterns/cards.css?v=59" />
 
   <!-- Nav compartido (reusa el bloque de Home) -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=17" />
-  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=17" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=59" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=59" />
 
   <!-- Bloques Sumate -->
-  <link rel="stylesheet" href="../native/sumate/s01-hero.css?v=17" />
-  <link rel="stylesheet" href="../native/sumate/s02-benefits.css?v=17" />
-  <link rel="stylesheet" href="../native/sumate/s03-plans.css?v=17" />
-  <link rel="stylesheet" href="../native/sumate/s04-wall.css?v=17" />
-  <link rel="stylesheet" href="../native/sumate/s05-faq.css?v=17" />
-  <link rel="stylesheet" href="../native/sumate/s06-cta.css?v=17" />
-  <link rel="stylesheet" href="../custom/founder-wall/founder-wall.css?v=17" />
+  <link rel="stylesheet" href="../native/sumate/s01-hero.css?v=59" />
+  <link rel="stylesheet" href="../native/sumate/s02-benefits.css?v=59" />
+  <link rel="stylesheet" href="../native/sumate/s03-plans.css?v=59" />
+  <link rel="stylesheet" href="../native/sumate/s04-wall.css?v=59" />
+  <link rel="stylesheet" href="../native/sumate/s05-faq.css?v=59" />
+  <link rel="stylesheet" href="../native/sumate/s06-cta.css?v=59" />
+  <link rel="stylesheet" href="../custom/founder-wall/founder-wall.css?v=59" />
 
   <style>
     html, body { margin: 0; padding: 0; background: var(--color-ink); }
@@ -59,13 +59,12 @@
       const html = await fetch(path + bust).then((r) => r.text());
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
     }));
-    // i18n primero (aplica idioma guardado; el toggle EN/ES vive en la nav compartida)
     // init del form de newsletter del footer (bloque compartido de Home)
-    const { initNewsletter } = await import('../native/home/09-cierre-footer.js?v=17');
+    const { initNewsletter } = await import('../native/home/09-cierre-footer.js?v=59');
     initNewsletter();
   </script>
 
   <!-- Web component del muro -->
-  <script type="module" src="../custom/founder-wall/founder-wall.js?v=17"></script>
+  <script type="module" src="../custom/founder-wall/founder-wall.js?v=59"></script>
 </body>
 </html>

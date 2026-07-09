@@ -20,4 +20,4 @@
 .vcard__title { font: 800 var(--fs-card-title)/1.05 var(--font-display); letter-spacing: var(--ls-display); color: var(--color-text); }
 .vcard__desc { font: 400 14.5px/1.6 var(--font-body); color: var(--color-text-muted); }
 
-@media (max-width: 860px) { .pval__grid { grid-template-columns: 1fr; max-width: 34rem; } }
+@media (max-width: 600px) { .pval__grid { grid-template-columns: 1fr; max-width: 30rem; } }

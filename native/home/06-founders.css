@@ -10,6 +10,8 @@
   gap: 20px;
   align-items: stretch;   /* pase y tablero miden lo mismo */
 }
+/* los items deben poder achicarse bajo su ancho de contenido (si no, el board fuerza overflow) */
+.founders__grid > * { min-width: 0; }
 
 /* el boarding pass (<psl-founder-id>) y el tablero (<psl-departures-board>) tienen su CSS en /custom/ */
 

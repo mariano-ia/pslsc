@@ -134,8 +134,14 @@ psl-departures-board { display: block; }
 
 /* ===== responsive ===== */
 @media (max-width: 640px) {
-  .db { --db-cell: clamp(8.5px, 2.5vw, 12px); }
+  .db { --db-cell: clamp(7px, 2.4vw, 12px); }
   .db__clock { display: none; }
+}
+/* mobile chico: el board entero achica para no cortar la columna STATUS ni desbordar la página */
+@media (max-width: 520px) {
+  .db { --db-cell: clamp(6px, 2.05vw, 11px); padding: 12px 12px 0; }
+  .db__head, .db__cols, .db__row { gap: 7px; }
+  .db__foot-text { font-size: 8.5px; letter-spacing: .1em; }
 }
 
 @media (prefers-reduced-motion: reduce) {

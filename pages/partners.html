@@ -6,26 +6,26 @@
   <title>Build it with us — Port St. Lucie SC Partners</title>
 
   <!-- Fuentes de marca -->
-  <link rel="stylesheet" href="../tokens/fonts.css?v=17" />
+  <link rel="stylesheet" href="../tokens/fonts.css?v=59" />
   <!-- Tokens -->
-  <link rel="stylesheet" href="../tokens/tokens.css?v=17" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=59" />
 
   <!-- Patrones compartidos -->
-  <link rel="stylesheet" href="../native/_patterns/cards.css?v=17" />
+  <link rel="stylesheet" href="../native/_patterns/cards.css?v=59" />
 
   <!-- Nav + footer compartidos (bloques de Home) -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=17" />
-  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=17" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=59" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=59" />
 
   <!-- Bloques Partners -->
-  <link rel="stylesheet" href="../native/partners/p01-hero.css?v=17" />
-  <link rel="stylesheet" href="../native/partners/p02-opportunity.css?v=17" />
-  <link rel="stylesheet" href="../native/partners/p03-value.css?v=17" />
-  <link rel="stylesheet" href="../native/partners/p04-traction.css?v=17" />
-  <link rel="stylesheet" href="../native/partners/p05-contact.css?v=17" />
+  <link rel="stylesheet" href="../native/partners/p01-hero.css?v=59" />
+  <link rel="stylesheet" href="../native/partners/p02-opportunity.css?v=59" />
+  <link rel="stylesheet" href="../native/partners/p03-value.css?v=59" />
+  <link rel="stylesheet" href="../native/partners/p04-traction.css?v=59" />
+  <link rel="stylesheet" href="../native/partners/p05-contact.css?v=59" />
 
   <!-- Pieza a medida -->
-  <link rel="stylesheet" href="../custom/live-counter/live-counter.css?v=17" />
+  <link rel="stylesheet" href="../custom/live-counter/live-counter.css?v=59" />
 
   <style>
     html, body { margin: 0; padding: 0; background: var(--color-ink); }
@@ -57,16 +57,15 @@
       const html = await fetch(path + bust).then((r) => r.text());
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
     }));
-    // i18n primero (aplica idioma guardado; toggle EN/ES en la nav compartida)
     const [{ initPartnerContact }, { initNewsletter }] = await Promise.all([
-      import('../native/partners/p05-contact.js?v=17'),
-      import('../native/home/09-cierre-footer.js?v=17'),
+      import('../native/partners/p05-contact.js?v=59'),
+      import('../native/home/09-cierre-footer.js?v=59'),
     ]);
     initPartnerContact();
     initNewsletter();
   </script>
 
   <!-- Web component del contador -->
-  <script type="module" src="../custom/live-counter/live-counter.js?v=17"></script>
+  <script type="module" src="../custom/live-counter/live-counter.js?v=59"></script>
 </body>
 </html>

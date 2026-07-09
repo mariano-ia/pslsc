@@ -21,7 +21,7 @@
  * fundador real); el número de fundador REAL se reclama en Sumate (CTA del bloque).
  */
 const LUKA_SRC = '/assets/images/luka-card.webp';
-const CREST_SRC = '/assets/brand/crest-black.png';   // crest oscuro: el pase es aqua
+const CREST_SRC = '/assets/brand/crest-black.webp';   // crest oscuro: el pase es aqua
 const CAPTION = "I'm boarding Flight PSL·2027 — claiming my spot as a founding member of Port St. Lucie SC, the Treasure Coast's first pro club. #PSLSC #FoundingClass";
 
 class PSLFounderID extends HTMLElement {

@@ -15,7 +15,7 @@
 .hero__bg {
   position: absolute;
   inset: -16% 0;
-  background: #0C0C0A url('/assets/videos/hero-poster.jpg') center/cover no-repeat;
+  background: #0C0C0A url('/assets/videos/hero-poster.webp') center/cover no-repeat;
 }
 .hero__video {
   position: absolute;

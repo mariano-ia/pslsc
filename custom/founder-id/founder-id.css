@@ -206,7 +206,8 @@ psl-founder-id { display: block; }
 }
 
 @media (max-width: 860px) {
-  .fid { max-width: 400px; margin-inline: auto; width: 100%; }
+  /* apilado: alineado a la izquierda (como el tablero y el CTA de abajo), no centrado */
+  .fid { max-width: 440px; margin-inline: 0; width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

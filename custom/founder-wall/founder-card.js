@@ -46,7 +46,7 @@ class PSLFounderCard extends HTMLElement {
         <div class="founder-card__art" aria-hidden="true"></div>
 
         <div class="founder-card__top">
-          <img class="founder-card__crest" src="/assets/brand/crest-aqua.png" alt="PSL SC" width="40" height="43" />
+          <img class="founder-card__crest" src="/assets/brand/crest-aqua.webp" alt="PSL SC" width="40" height="43" />
           <span class="founder-card__tier">${this._tierLabel()}</span>
         </div>
 
