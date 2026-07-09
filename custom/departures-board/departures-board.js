@@ -59,12 +59,22 @@ class PSLDeparturesBoard extends HTMLElement {
       this._fill(!this._reduce);
       this._startJoins();
     };
-    this._io = new IntersectionObserver((ents) => {
-      if (ents.some((x) => x.isIntersecting)) boot();
-    }, { threshold: 0.25 });
-    this._io.observe(this);
-    // fallback: si el observer no disparó (IO ausente/limitado), el tablero se llena igual
-    this._later(boot, 2500);
+    // la cascada corre EXACTAMENTE cuando el usuario llega scrolleando (sorpresa a la llegada)
+    if (!('IntersectionObserver' in window)) {
+      boot();
+    } else {
+      this._io = new IntersectionObserver((ents) => {
+        if (ents.some((x) => x.isIntersecting)) boot();
+      }, { threshold: 0.15 });
+      this._io.observe(this);
+      // salvaguarda: SOLO si ya está en viewport y el IO no disparó (entornos raros/headless).
+      // Nunca pre-llena un tablero fuera de pantalla — eso mataría la sorpresa de la llegada.
+      this._later(() => {
+        const r = this.getBoundingClientRect();
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        if (!this._filled && r.top < vh && r.bottom > 0) boot();
+      }, 2500);
+    }
   }
 
   disconnectedCallback() {
@@ -207,7 +217,7 @@ class PSLDeparturesBoard extends HTMLElement {
       this._rowsEls.forEach((rowEl, i) => this._setRow(rowEl, this._entries[i], true, i));
       this._later(join, JOIN_EVERY);
     };
-    this._later(join, this._reduce ? JOIN_EVERY : 3600);
+    this._later(join, this._reduce ? JOIN_EVERY : 3000);
   }
 
   _startClock() {

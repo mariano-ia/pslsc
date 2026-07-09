@@ -53,6 +53,31 @@ function setupPeek(root) {
   let revealed = false;
   let phase = 'peek';   // 'peek' → 'cta'
   let labelW = 200;
+  const overlay = window.matchMedia('(min-width: 781px)').matches;   // timeline como overlay (desktop)
+  let timelineShown = false;
+
+  // dibuja la línea de tiempo SOBRE el render: fade-in + eje 2024→2027 que se traza + hitos en secuencia
+  const showTimeline = () => {
+    if (timelineShown) return;
+    timelineShown = true;
+    const stage = peek.closest('.proof__stage');
+    const timeline = stage && stage.querySelector('.proof__timeline');
+    if (!stage || !timeline) return;
+    stage.classList.add('timeline-in');
+    const steps = [...timeline.querySelectorAll('.proof__step')];
+    const n = steps.length;
+    const t0 = performance.now();
+    const dur = 1500;
+    const draw = (now) => {
+      const p = Math.min((now - t0) / dur, 1);
+      timeline.style.setProperty('--proof-p', p.toFixed(4));
+      let active = 0;
+      for (let i = 0; i < n; i++) if (p >= i / n) active = i + 1;
+      steps.forEach((s, i) => s.classList.toggle('is-active', i < active));
+      if (p < 1) requestAnimationFrame(draw);
+    };
+    requestAnimationFrame(draw);
+  };
 
   peek.style.setProperty('--peek-r0', `${R0}px`);
   peek.style.setProperty('--r', `${R0}px`);
@@ -122,8 +147,16 @@ function setupPeek(root) {
       const t = Math.min((now - t0) / dur, 1);
       peek.style.setProperty('--r', `${R0 + (target - R0) * ease(t)}px`);
       if (t < 1) { requestAnimationFrame(tick); return; }
-      // el círculo terminó de abrirse: recién un instante después se encienden las luces
-      setTimeout(() => peek.classList.add('lights-on'), 200);
+      // el círculo terminó de abrirse: se encienden las luces; APENAS terminan de encenderse
+      // (animationend del flicker) aparecen los hitos sobre el render (solo overlay/desktop)
+      setTimeout(() => {
+        peek.classList.add('lights-on');
+        if (!overlay) return;
+        const img = peek.querySelector('.proof__peek-img');
+        const start = () => setTimeout(showTimeline, 100);   // unas pocas ms tras encenderse
+        if (img) img.addEventListener('animationend', start, { once: true });
+        setTimeout(start, 1700);   // fallback si no llega animationend
+      }, 200);
     };
     requestAnimationFrame(tick);
   };
@@ -135,49 +168,20 @@ function setupPeek(root) {
 
 function initProofTimeline(root = document) {
   setupPeek(root);
-  const section = root.querySelector('.proof');
+  const stage = root.querySelector('.proof__stage');
   const timeline = root.querySelector('.proof__timeline');
-  if (!section || !timeline) return;
+  if (!stage || !timeline) return;
   const steps = [...timeline.querySelectorAll('.proof__step')];
-  if (steps.length === 0) return;
-
-  const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
-  const setProgress = (p, activeCount) => {
-    timeline.style.setProperty('--proof-p', p.toFixed(4));
-    steps.forEach((s, i) => s.classList.toggle('is-active', i < activeCount));
-  };
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) {
-    // estado final: eje completo y todos los hitos encendidos, sin scrubbing
-    setProgress(1, steps.length);
-    return;
+  const overlay = window.matchMedia('(min-width: 781px)').matches;
+  // reduced-motion (sin juego de linterna) o mobile (timeline debajo, estática): mostrarla llena de una.
+  // En desktop no-reduced la dispara el reveal del peek (setupPeek → showTimeline).
+  if (reduce || !overlay) {
+    stage.classList.add('timeline-in');
+    timeline.style.setProperty('--proof-p', '1');
+    steps.forEach((s) => s.classList.add('is-active'));
   }
-
-  const n = steps.length;
-  let ticking = false;
-  const update = () => {
-    ticking = false;
-    const rect = section.getBoundingClientRect();
-    const vh = window.innerHeight || document.documentElement.clientHeight;
-    // arranca cuando el top de la sección entra al ~80% del viewport,
-    // completa cuando ese top llega cerca del 30%
-    const startY = vh * 0.8;
-    const endY = vh * 0.3;
-    const denom = startY - endY || 1;
-    const p = clamp((startY - rect.top) / denom, 0, 1);
-    // acumulativo: paso i encendido cuando p >= i/n
-    let activeCount = 0;
-    for (let i = 0; i < n; i++) { if (p >= i / n) activeCount = i + 1; }
-    setProgress(p, activeCount);
-  };
-  const onScroll = () => {
-    if (!ticking) { ticking = true; requestAnimationFrame(update); }
-  };
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll, { passive: true });
-  update();
 }
 
 document.addEventListener('DOMContentLoaded', () => initProofTimeline());

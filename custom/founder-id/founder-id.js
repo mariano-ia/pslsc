@@ -17,8 +17,8 @@
  * elemento se desmonta mientras la cámara está pendiente; permiso denegado → "Upload a photo"
  * (no auto-click); acciones bloqueadas durante el share; cancel del share ≠ fallo real.
  *
- * El pase DIY va SIN asiento estampado (#____): no inventamos números — tu asiento te espera
- * en Sumate (claim real).
+ * El pase DIY recibe un ASIENTO aleatorio al capturar (sabor boarding pass, no es número de
+ * fundador real); el número de fundador REAL se reclama en Sumate (CTA del bloque).
  */
 const LUKA_SRC = '/assets/images/luka-card.webp';
 const CREST_SRC = '/assets/brand/crest-black.png';   // crest oscuro: el pase es aqua
@@ -29,6 +29,7 @@ class PSLFounderID extends HTMLElement {
     this._mode = 'idle';       // idle | live | captured
     this._photo = null;        // dataURL de la foto del usuario
     this._name = '';
+    this._seat = '';           // asiento aleatorio asignado al capturar (como el check-in)
     this._stream = null;
     this._starting = false;    // single-flight de getUserMedia
     this._busy = false;        // share en curso
@@ -41,6 +42,11 @@ class PSLFounderID extends HTMLElement {
   disconnectedCallback() {
     this._stopCamera();
     clearTimeout(this._labelT);
+  }
+
+  // asiento aleatorio de 4 dígitos (sabor boarding pass; NO es un número de fundador real)
+  _randomSeat() {
+    return `#${String(100 + Math.floor(Math.random() * 1900)).padStart(4, '0')}`;
   }
 
   _stopCamera() {
@@ -84,7 +90,7 @@ class PSLFounderID extends HTMLElement {
             </div>
             <div class="fid__field fid__field--seat">
               <span class="fid__label">Seat</span>
-              <span class="fid__value fid__value--seat tnum">${isYou ? '#____' : '#0001'}</span>
+              <span class="fid__value fid__value--seat tnum">${isYou ? this._seat : '#0001'}</span>
             </div>
             <div class="fid__field">
               <span class="fid__label">Flight</span>
@@ -206,6 +212,7 @@ class PSLFounderID extends HTMLElement {
     ctx.drawImage(video, sx, sy, s, s, 0, 0, 900, 900);
     this._photo = c.toDataURL('image/jpeg', 0.9);
     this._stopCamera();
+    this._seat = this._randomSeat();
     this._mode = 'captured';
     this._note = '';
     this._render();
@@ -228,6 +235,7 @@ class PSLFounderID extends HTMLElement {
       c.width = c.height = 900;
       c.getContext('2d').drawImage(img, sx, sy, s, s, 0, 0, 900, 900);
       this._photo = c.toDataURL('image/jpeg', 0.9);
+      this._seat = this._randomSeat();
       this._mode = 'captured';
       this._showUpload = false;
       this._note = '';
@@ -351,7 +359,7 @@ class PSLFounderID extends HTMLElement {
     ctx.fillStyle = INK;
     ctx.font = '800 120px Druk, "Arial Narrow", sans-serif';
     ctx.textAlign = 'right';
-    ctx.fillText(isYou ? '#____' : '#0001', W - PAD, 1074);
+    ctx.fillText(isYou ? this._seat : '#0001', W - PAD, 1074);
     ctx.textAlign = 'left';
 
     // FLIGHT / DEPARTS / CLASS
@@ -388,7 +396,7 @@ class PSLFounderID extends HTMLElement {
     ctx.fillStyle = 'rgba(12,12,10,.6)';
     ctx.font = '500 22px "Druk Text Wide", sans-serif';
     ctx.letterSpacing = '4px';
-    ctx.fillText(isYou ? 'YOUR SEAT IS WAITING — CLAIM IT' : 'FIRST FAN · CLUB MASCOT', PAD, 1372);
+    ctx.fillText(isYou ? 'CLAIM YOUR FOUNDING NUMBER' : 'FIRST FAN · CLUB MASCOT', PAD, 1372);
     ctx.fillStyle = 'rgba(12,12,10,.5)';
     ctx.font = '500 20px "Druk Text Wide", sans-serif';
     ctx.fillText('EST. 2025 · FIRST WHISTLE 2027', PAD, 1420);
@@ -425,20 +433,29 @@ class PSLFounderID extends HTMLElement {
       if (!blob) throw new Error('toBlob returned null');
       const file = new File([blob], 'pslsc-boarding-pass.png', { type: 'image/png' });
 
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      // un solo delivery garantizado (nunca descarga/comparte la imagen dos veces)
+      let delivered = false;
+      const download = () => { if (delivered) return; delivered = true; this._download(blob); };
+      // share de ARCHIVO solo en touch/mobile (ahí el share sheet anda bien y lista IG). En desktop
+      // es inconsistente (a veces entrega Y además rechaza → doble copia): descargamos + copiamos caption.
+      const coarse = window.matchMedia('(pointer: coarse)').matches;
+      const canFileShare = navigator.canShare && navigator.canShare({ files: [file] });
+
+      if (canFileShare && coarse) {
         try {
           await navigator.share({ files: [file], text: CAPTION });
+          delivered = true;
           btn.textContent = 'Shared!';
         } catch (err) {
           if (err && err.name === 'AbortError') {
             btn.textContent = 'Share my pass';        // usuario canceló: sin ruido
           } else {
-            this._download(blob);                     // fallo real → descarga como fallback
+            download();                               // fallo real → descarga como fallback
             btn.textContent = 'Saved!';
           }
         }
       } else {
-        this._download(blob);
+        download();                                   // desktop: descarga el PNG + copia el caption
         let copied = false;
         try { await navigator.clipboard.writeText(CAPTION); copied = true; } catch { /* sin permiso */ }
         btn.textContent = copied ? 'Saved! Caption copied' : 'Saved!';

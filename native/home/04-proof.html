@@ -11,7 +11,8 @@
 
     <!-- Peek: el complejo detrás, capa negra plena adelante con una "linterna" que sigue el mouse.
          Click (o tap) revela todo. Lo activa/anima 04-proof.js (initProofTimeline → setupPeek). -->
-    <div class="proof__peek" data-reveal="scale" data-peek tabindex="0" role="button"
+    <div class="proof__stage" data-reveal="scale">
+      <div class="proof__peek" data-peek tabindex="0" role="button"
          aria-label="Sneak peek — click to reveal the full stadium complex">
       <img class="proof__peek-img" src="/assets/proof/stadium-aerial.jpg"
            alt="Aerial render of the Port St. Lucie SC stadium complex" />
@@ -29,7 +30,7 @@
       <span class="proof__peek-label" aria-hidden="true"></span>
     </div>
 
-    <ol class="proof__timeline" data-reveal>
+      <ol class="proof__timeline">
       <li class="proof__step">
         <span class="proof__dot" data-state="done" aria-hidden="true"></span>
         <span class="proof__year proof__year--done">2024 · Done</span>
@@ -54,6 +55,7 @@
         <h4 class="proof__step-title">First whistle</h4>
         <p class="proof__step-desc">Debut in USL League One. The first pro match in the city.</p>
       </li>
-    </ol>
+      </ol>
+    </div>
   </div>
 </section>

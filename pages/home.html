@@ -6,34 +6,34 @@
   <title>Port St. Lucie SC — You're watching a club be born.</title>
 
   <!-- Fuentes de marca (Ferryman, Druk, Druk Text Wide, FF Tisa, Cabazon) -->
-  <link rel="stylesheet" href="../tokens/fonts.css?v=52" />
+  <link rel="stylesheet" href="../tokens/fonts.css?v=58" />
 
   <!-- Tokens -->
-  <link rel="stylesheet" href="../tokens/tokens.css?v=52" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=58" />
 
   <!-- Patrones compartidos -->
-  <link rel="stylesheet" href="../native/_patterns/cards.css?v=52" />
-  <link rel="stylesheet" href="../native/_patterns/motion.css?v=52" />
+  <link rel="stylesheet" href="../native/_patterns/cards.css?v=58" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=58" />
 
   <!-- Bloques nativos -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=52" />
-  <link rel="stylesheet" href="../native/home/01-hero.css?v=52" />
-  <link rel="stylesheet" href="../native/home/02-stats.css?v=52" />
-  <link rel="stylesheet" href="../native/home/03-project.css?v=52" />
-  <link rel="stylesheet" href="../native/home/04-proof.css?v=52" />
-  <link rel="stylesheet" href="../native/home/04b-fixtures.css?v=52" />
-  <link rel="stylesheet" href="../native/home/05-jersey.css?v=52" />
-  <link rel="stylesheet" href="../native/home/06-founders.css?v=52" />
-  <link rel="stylesheet" href="../native/home/07-academy.css?v=52" />
-  <link rel="stylesheet" href="../native/home/08-news.css?v=52" />
-  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=52" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=58" />
+  <link rel="stylesheet" href="../native/home/01-hero.css?v=58" />
+  <link rel="stylesheet" href="../native/home/02-stats.css?v=58" />
+  <link rel="stylesheet" href="../native/home/03-project.css?v=58" />
+  <link rel="stylesheet" href="../native/home/04-proof.css?v=58" />
+  <link rel="stylesheet" href="../native/home/04b-fixtures.css?v=58" />
+  <link rel="stylesheet" href="../native/home/05-jersey.css?v=58" />
+  <link rel="stylesheet" href="../native/home/06-founders.css?v=58" />
+  <link rel="stylesheet" href="../native/home/07-academy.css?v=58" />
+  <link rel="stylesheet" href="../native/home/08-news.css?v=58" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=58" />
 
   <!-- Piezas a medida -->
-  <link rel="stylesheet" href="../custom/live-counter/live-counter.css?v=52" />
-  <link rel="stylesheet" href="../custom/jersey-viewer/jersey-viewer.css?v=52" />
-  <link rel="stylesheet" href="../custom/departures-board/departures-board.css?v=52" />
-  <link rel="stylesheet" href="../custom/founder-id/founder-id.css?v=52" />
-  <link rel="stylesheet" href="../custom/fixtures/fixtures.css?v=52" />
+  <link rel="stylesheet" href="../custom/live-counter/live-counter.css?v=58" />
+  <link rel="stylesheet" href="../custom/jersey-viewer/jersey-viewer.css?v=58" />
+  <link rel="stylesheet" href="../custom/departures-board/departures-board.css?v=58" />
+  <link rel="stylesheet" href="../custom/founder-id/founder-id.css?v=58" />
+  <link rel="stylesheet" href="../custom/fixtures/fixtures.css?v=58" />
 
   <style>
     html, body { margin: 0; padding: 0; background: var(--color-ink); }
@@ -68,11 +68,11 @@
     // i18n primero (aplica idioma guardado antes de que arranquen las animaciones)
     // init de scripts nativos que dependen del DOM ya inyectado + sistema de motion
     const [{ initNewsletter }, { initHeroMorph }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
-      import('../native/home/09-cierre-footer.js?v=52'),
-      import('../native/home/01-hero.js?v=52'),
-      import('../native/home/04-proof.js?v=52'),
-      import('../native/home/03-project.js?v=52'),
-      import('../native/_patterns/motion.js?v=52'),
+      import('../native/home/09-cierre-footer.js?v=58'),
+      import('../native/home/01-hero.js?v=58'),
+      import('../native/home/04-proof.js?v=58'),
+      import('../native/home/03-project.js?v=58'),
+      import('../native/_patterns/motion.js?v=58'),
     ]);
     initNewsletter();
     initHeroMorph();
@@ -82,10 +82,10 @@
   </script>
 
   <!-- Web components a medida -->
-  <script type="module" src="../custom/live-counter/live-counter.js?v=52"></script>
-  <script type="module" src="../custom/jersey-viewer/jersey-viewer.js?v=52"></script>
-  <script type="module" src="../custom/departures-board/departures-board.js?v=52"></script>
-  <script type="module" src="../custom/founder-id/founder-id.js?v=52"></script>
-  <script type="module" src="../custom/fixtures/fixtures.js?v=52"></script>
+  <script type="module" src="../custom/live-counter/live-counter.js?v=58"></script>
+  <script type="module" src="../custom/jersey-viewer/jersey-viewer.js?v=58"></script>
+  <script type="module" src="../custom/departures-board/departures-board.js?v=58"></script>
+  <script type="module" src="../custom/founder-id/founder-id.js?v=58"></script>
+  <script type="module" src="../custom/fixtures/fixtures.js?v=58"></script>
 </body>
 </html>
