@@ -3,38 +3,56 @@
   Núcleo del JTBD de Marco: "verificar que el proyecto es real". La obra como argumento
   (benchmark Hero: "mostrar la obra ES el argumento"). Render grande = placeholder.
 -->
-<section class="proof surface-ink">
+<section class="proof surface-ink" id="proof">
   <div class="psl-container" data-reveal-group="90">
-    <span class="psl-kicker" data-reveal data-es="02 — Pruebas">02 — Proof</span>
-    <h2 class="psl-h2 proof__title" data-reveal data-es="Esto no es un pitch deck. Es un cronograma de obra.">This isn&rsquo;t a pitch deck. It&rsquo;s a construction schedule.</h2>
-    <p class="proof__lead" data-reveal data-es="Terreno aprobado. Obra iniciada. Un equipo reserva ya compitiendo en la USL Academy League. Cada año de aquí a 2027 tiene fecha.">Land approved. Ground broken. A reserve team already competing in the USL Academy League. Every year between here and 2027 has a date on it.</p>
+    <span class="psl-kicker" data-reveal>02 — Proof</span>
+    <h2 class="psl-h2 proof__title" data-reveal>This isn&rsquo;t a pitch deck. It&rsquo;s a construction schedule.</h2>
+    <p class="proof__lead" data-reveal>Land approved. Ground broken. A reserve team already competing in the USL Academy League. Every year between here and 2027 has a date on it.</p>
 
-    <div class="proof__render" data-reveal="scale" data-tag="▦ STADIUM RENDER · WIDE · DROP ASSET HERE" aria-hidden="true"></div>
+    <!-- Peek: el complejo detrás, capa negra plena adelante con una "linterna" que sigue el mouse.
+         Click (o tap) revela todo. Lo activa/anima 04-proof.js (initProofTimeline → setupPeek). -->
+    <div class="proof__peek" data-reveal="scale" data-peek tabindex="0" role="button"
+         aria-label="Sneak peek — click to reveal the full stadium complex">
+      <img class="proof__peek-img" src="/assets/proof/stadium-aerial.jpg"
+           alt="Aerial render of the Port St. Lucie SC stadium complex" />
+      <!-- reflectores: blooms de luz en las torres, el videoboard y la tribuna — prenden con .lights-on -->
+      <div class="proof__peek-lights" aria-hidden="true">
+        <span class="proof__peek-lamp" style="--x:8%;  --y:4%;  --s:300px; --lamp-o:.95; --lamp-d:0s"></span>
+        <span class="proof__peek-lamp" style="--x:15%; --y:21%; --s:230px; --lamp-o:.8;  --lamp-d:.14s"></span>
+        <span class="proof__peek-lamp proof__peek-lamp--cool" style="--x:50%; --y:19%; --s:250px; --lamp-o:.7;  --lamp-d:.22s"></span>
+        <span class="proof__peek-lamp proof__peek-lamp--wide" style="--x:44%; --y:9%;  --s:440px; --lamp-o:.55; --lamp-d:.06s"></span>
+        <span class="proof__peek-lamp proof__peek-lamp--wide" style="--x:60%; --y:11%; --s:320px; --lamp-o:.5;  --lamp-d:.3s"></span>
+      </div>
+      <div class="proof__peek-flash" aria-hidden="true"></div>
+      <div class="proof__peek-mask" aria-hidden="true"></div>
+      <div class="proof__peek-ring" aria-hidden="true"></div>
+      <span class="proof__peek-label" aria-hidden="true"></span>
+    </div>
 
     <ol class="proof__timeline" data-reveal>
       <li class="proof__step">
         <span class="proof__dot" data-state="done" aria-hidden="true"></span>
-        <span class="proof__year proof__year--done" data-es="2024 · Hecho">2024 · Done</span>
-        <h4 class="proof__step-title" data-es="Terreno aprobado">Land approved</h4>
-        <p class="proof__step-desc" data-es="Predio asegurado en la Treasure Coast. Papeles firmados, no promesas.">Site secured on the Treasure Coast. Paperwork, not vibes.</p>
+        <span class="proof__year proof__year--done">2024 · Done</span>
+        <h4 class="proof__step-title">Land approved</h4>
+        <p class="proof__step-desc">Site secured on the Treasure Coast. Paperwork, not vibes.</p>
       </li>
       <li class="proof__step">
         <span class="proof__dot" data-state="done" aria-hidden="true"></span>
-        <span class="proof__year proof__year--done" data-es="2025 · Hecho">2025 · Done</span>
-        <h4 class="proof__step-title" data-es="Obra iniciada">Ground broken</h4>
-        <p class="proof__step-desc" data-es="Construcción en marcha en el estadio y los campos de entrenamiento.">Construction underway on stadium and training grounds.</p>
+        <span class="proof__year proof__year--done">2025 · Done</span>
+        <h4 class="proof__step-title">Ground broken</h4>
+        <p class="proof__step-desc">Construction underway on stadium and training grounds.</p>
       </li>
       <li class="proof__step">
         <span class="proof__dot" data-state="now" aria-hidden="true"></span>
-        <span class="proof__year proof__year--now" data-es="2026 · Ahora">2026 · Now</span>
-        <h4 class="proof__step-title" data-es="Estructura en pie">Steel rising</h4>
-        <p class="proof__step-desc" data-es="La primera fase de tribunas toma forma. Empieza el armado del plantel.">Phase-one seating bowl takes shape. Squad building begins.</p>
+        <span class="proof__year proof__year--now">2026 · Now</span>
+        <h4 class="proof__step-title">Steel rising</h4>
+        <p class="proof__step-desc">Phase-one seating bowl takes shape. Squad building begins.</p>
       </li>
       <li class="proof__step proof__step--last">
         <span class="proof__dot" data-state="next" aria-hidden="true"></span>
-        <span class="proof__year proof__year--next" data-es="2027 · Sigue">2027 · Next</span>
-        <h4 class="proof__step-title" data-es="Primer silbato">First whistle</h4>
-        <p class="proof__step-desc" data-es="Debut en la USL League One. El primer partido profesional de la ciudad.">Debut in USL League One. The first pro match in the city.</p>
+        <span class="proof__year proof__year--next">2027 · Next</span>
+        <h4 class="proof__step-title">First whistle</h4>
+        <p class="proof__step-desc">Debut in USL League One. The first pro match in the city.</p>
       </li>
     </ol>
   </div>

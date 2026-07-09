@@ -1,28 +1,26 @@
 <!--
-  Bloque 06 · Founders — Home. 🟦 A medida (embebe <psl-founder-wall>).
-  Layout del diseño aprobado: "your number" card (gradiente cálido + Luca) + lista en vivo.
-  El carnet compartible 9:16 (Pieza B) vive en la página Sumate (S04), no acá.
+  Bloque 06 · Founders — Home. 🟦 A medida (embebe <psl-founder-id> + <psl-departures-board>).
+  Carnet de fundador (Luka #0001 default; el usuario hace el suyo con cámara y lo comparte)
+  + tablero split-flap de abordaje. Ver /custom/founder-id/ y /custom/departures-board/
 -->
 <section class="founders surface-paper" id="founders">
   <div class="psl-container">
     <header class="founders__head" data-reveal>
-      <span class="psl-kicker" data-es="05 — Miembros Fundadores">05 — Founding members</span>
-      <h2 class="psl-h2 founders__title" data-es="Miles estarán en las tribunas. Pocos podrán decir que estuvieron primero.">Thousands will be in the stands. Few will say they were here first.</h2>
+      <span class="psl-kicker">05 — Founding members</span>
+      <h2 class="psl-h2 founders__title">Thousands will be in the stands. Few will say they were here first.</h2>
     </header>
 
     <div class="founders__grid">
-      <!-- "your number" prompt card -->
-      <div class="fnum" data-reveal="left" data-reveal-delay="80">
-        <span class="fnum__kicker" data-es="PSL SC · Miembro Fundador">PSL SC · Founding Member</span>
-        <span class="fnum__number tnum">#1250</span>
-        <span class="fnum__title" data-es="El próximo puedes ser tú">You could be next</span>
-        <span class="fnum__desc" data-es="Depósito fundador reembolsable. La ventana cierra antes del primer silbato en 2027.">Refundable founding deposit. Window closes before the first whistle in 2027.</span>
-        <a href="sumate.html#plans" class="psl-btn cta-primary fnum__cta"><span data-es="Reclama tu número">Claim my number</span> <span aria-hidden="true">→</span></a>
-        <img class="fnum__mascot" src="/assets/luca.png" alt="" aria-hidden="true" />
-      </div>
+      <!-- carnet de fundador (hacé el tuyo con la cámara) -->
+      <psl-founder-id data-reveal="left" data-reveal-delay="80"></psl-founder-id>
 
-      <!-- live list -->
-      <psl-founder-wall max-visible="6" ghost-number="1250" data-reveal="right" data-reveal-delay="160"></psl-founder-wall>
+      <!-- tablero de partidas split-flap: "this flight is about to take off" -->
+      <psl-departures-board data-reveal="right" data-reveal-delay="160"></psl-departures-board>
+    </div>
+
+    <!-- CTA único de membresía para los dos artefactos (pase + tablero) -->
+    <div class="founders__cta" data-reveal data-reveal-delay="220">
+      <a href="sumate.html#plans" class="psl-btn cta-primary founders__cta-btn"><span>Become a Founder</span> <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>

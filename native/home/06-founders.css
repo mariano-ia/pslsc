@@ -6,48 +6,20 @@
 
 .founders__grid {
   display: grid;
-  grid-template-columns: 340px 1fr;
+  grid-template-columns: 360px 1fr;
   gap: 20px;
-  align-items: stretch;
+  align-items: stretch;   /* pase y tablero miden lo mismo */
 }
 
-/* "your number" card — gradiente cálido, mascota Luca asomándose */
-.fnum {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(160deg, #15140E 0%, #241a12 100%);
-  color: var(--color-text);
-  border-radius: 16px;
-  padding: 30px 28px;
+/* el boarding pass (<psl-founder-id>) y el tablero (<psl-departures-board>) tienen su CSS en /custom/ */
+
+.founders__cta {
+  margin-top: clamp(24px, 3vw, 36px);
   display: flex;
-  flex-direction: column;
+  justify-content: flex-start;   /* alineado a la izquierda, con el boarding pass */
 }
-.fnum__kicker { font: 500 10px/1 var(--font-mono); letter-spacing: .18em; color: var(--color-sky); text-transform: uppercase; }
-.fnum__number { font: 800 clamp(52px, 7vw, 84px)/0.95 var(--font-display); letter-spacing: var(--ls-display); color: var(--color-aqua); margin-top: auto; }
-.fnum__title { font: 800 20px/1.05 var(--font-display); letter-spacing: var(--ls-display); margin-top: 10px; }
-.fnum__desc { font: 400 13px/1.55 var(--font-body); color: var(--color-text-muted); margin-top: 8px; }
-.fnum__cta { margin-top: 20px; justify-content: center; padding: 14px 18px; font-size: 13.5px; }
-
-.fnum__mascot {
-  position: absolute;
-  right: -34px;
-  bottom: -14px;
-  width: 150px;
-  height: auto;
-  opacity: .9;
-  pointer-events: none;
-  /* rotación estática vía propiedad `rotate` para no pisar el transform del float (psl-float usa translateY) */
-  rotate: 4deg;
-  animation: psl-float 6.5s var(--ease-in-out-soft) infinite;
-  will-change: transform;
-  filter: drop-shadow(0 8px 24px rgba(0,0,0,.5));
-}
+.founders__cta-btn { padding: 17px 30px; font-size: 14px; }
 
 @media (max-width: 860px) {
   .founders__grid { grid-template-columns: 1fr; }
-  .fnum { min-height: 340px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fnum__mascot { animation: none; }
 }

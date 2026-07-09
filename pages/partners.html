@@ -58,8 +58,6 @@
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
     }));
     // i18n primero (aplica idioma guardado; toggle EN/ES en la nav compartida)
-    const { initI18n } = await import('../i18n/i18n.js?v=17');
-    initI18n();
     const [{ initPartnerContact }, { initNewsletter }] = await Promise.all([
       import('../native/partners/p05-contact.js?v=17'),
       import('../native/home/09-cierre-footer.js?v=17'),

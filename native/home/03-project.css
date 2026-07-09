@@ -1,8 +1,8 @@
-/* Bloque 03 · The full project — usa el patrón .pcard (ver native/_patterns/cards.css) */
+/* Bloque 03 · The project — línea de tiempo horizontal que crece con el scroll (superficie crema) */
 
 .project .psl-container { padding-block: var(--section-pad); }
 
-/* head apilado, alineado a la izquierda: kicker → título → bajada (coherente en todas las secciones) */
+/* head apilado: kicker → título → bajada */
 .project__head {
   display: flex;
   flex-direction: column;
@@ -17,56 +17,138 @@
   color: var(--color-text-on-paper-muted);
 }
 
-.project__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
+/* ====== TIMELINE ====== */
+.ptl { position: relative; }
 
-@media (max-width: 960px) { .project__grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .project__grid { grid-template-columns: 1fr; } }
-
-/* ============================================================
-   Motion aplicado (bloque PROJECT). Solo transform/opacity.
-   El reveal/stagger/magnetic/spotlight viven en data-atributos.
-   ============================================================ */
-
-/* 4) Zoom interno de la media al hover de la tarjeta (la .pcard ya tiene overflow:hidden). */
-.project .pcard__media {
-  transition: transform var(--dur-med) var(--ease-out-soft);
-  will-change: transform;
-}
-.project .pcard:hover .pcard__media { transform: scale(1.05); }
-
-/* 5) Detalle en el link: subrayado que se dibuja + la flecha avanza al hover. */
-.project .pcard__link {
-  position: relative;
-  align-self: flex-start;      /* la caja se ajusta al texto para el subrayado */
-  transition: transform var(--dur-fast) var(--ease-out-soft);
-}
-.project .pcard__link::after {
-  content: "";
+/* eje horizontal (track) + relleno que se dibuja de izq→der con --p */
+.ptl__axis {
   position: absolute;
-  left: 0;
-  bottom: -3px;
-  width: 100%;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform var(--dur-med) var(--ease-out-expo);
+  top: 5px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 2px;
+  background: rgba(12, 12, 10, .12);
 }
-.project .pcard:hover .pcard__link::after,
-.project .pcard__link:hover::after { transform: scaleX(1); }
-.project .pcard:hover .pcard__link,
-.project .pcard__link:hover { transform: translateX(3px); }
+.ptl__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--color-aqua-deep);
+  transform-origin: left center;
+  transform: scaleX(1);   /* no-JS: lleno */
+}
+.ptl--scrub .ptl__fill { transform: scaleX(var(--p, 0)); transition: transform .08s linear; }
 
-/* 6) Reduced-motion: sin zoom ni desplazamientos; el subrayado aparece sin dibujarse. */
+/* cabezal de dibujo en el borde del trazo */
+.ptl__head {
+  position: absolute;
+  top: 5px;
+  left: 12.5%;
+  width: 9px;
+  height: 9px;
+  margin: -3.5px 0 0 -4.5px;
+  border-radius: 50%;
+  background: var(--color-aqua-deep);
+  box-shadow: 0 0 10px 2px rgba(14, 140, 121, .5);
+  opacity: 0;
+  display: none;
+}
+.ptl--scrub .ptl__head {
+  display: block;
+  left: calc(12.5% + var(--p, 0) * 75%);
+  transition: left .08s linear, opacity .2s ease;
+}
+
+.ptl__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+/* cada pieza: nodo (dot + conector) sobre el eje + contenedor de texto (sin foto) */
+.ptl__item { position: relative; padding-top: 48px; }
+.ptl__node {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ptl__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--color-aqua-deep);
+  background: var(--color-paper);
+  box-sizing: border-box;
+  transition: background .3s ease, box-shadow .3s ease, transform .3s ease;
+}
+.ptl__item.is-on .ptl__dot {
+  background: var(--color-aqua-deep);
+  box-shadow: 0 0 0 5px rgba(14, 140, 121, .12);
+  transform: scale(1.1);
+}
+.ptl__conn { width: 1px; height: 30px; margin-top: 2px; background: rgba(12, 12, 10, .12); }
+
+/* contenedor de texto — simple, sin media */
+.ptl__card {
+  background: var(--color-paper-card);
+  border: 1px solid var(--color-paper-line);
+  border-radius: var(--radius-md);
+  padding: 20px 20px 22px;
+  height: 100%;
+}
+.ptl--scrub .ptl__card {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .5s var(--ease-out-soft), transform .5s var(--ease-out-soft);
+}
+.ptl--scrub .ptl__item.is-on .ptl__card { opacity: 1; transform: none; }
+
+.ptl__k {
+  font: 500 10px/1 var(--font-mono);
+  letter-spacing: .16em;
+  color: var(--color-teal-ink);
+  text-transform: uppercase;
+}
+.ptl__t {
+  margin: 8px 0 0;
+  font: 800 var(--fs-card-title)/1.08 var(--font-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-text-on-paper);
+}
+.ptl__d {
+  margin: 8px 0 0;
+  font: 400 14px/1.55 var(--font-body);
+  color: var(--color-text-on-paper-muted);
+}
+.ptl__link {
+  display: inline-block;
+  margin-top: 12px;
+  font: 600 13px/1 var(--font-body);
+  letter-spacing: .02em;
+  color: var(--color-text-on-paper);
+  text-decoration: none;
+}
+
+/* pieza final (2027) — contenedor oscuro de acento, como cerraba la grilla vieja */
+.ptl__item--last .ptl__dot { width: 15px; height: 15px; }
+.ptl__item--last.is-on .ptl__dot { animation: psl-pulse 1.8s ease-in-out infinite; }
+.ptl__item--last .ptl__card { background: var(--color-ink-2); border-color: var(--color-ink-2); }
+.ptl__item--last .ptl__k { color: var(--color-aqua); }
+.ptl__item--last .ptl__t { color: var(--color-aqua); }
+.ptl__item--last .ptl__d { color: var(--color-text-muted); }
+.ptl__link--teal { color: var(--color-aqua); }
+
+@media (max-width: 960px) {
+  .ptl__grid { grid-template-columns: repeat(2, 1fr); row-gap: 34px; }
+  /* con 2 columnas el eje/relleno horizontal deja de tener sentido — lo ocultamos */
+  .ptl__axis { display: none; }
+  .ptl__conn { display: none; }
+  .ptl__item { padding-top: 0; }
+}
+@media (max-width: 560px) {
+  .ptl__grid { grid-template-columns: 1fr; }
+}
+
+/* reduced-motion: el JS no activa el scrub (todo visible); solo apagamos el pulso */
 @media (prefers-reduced-motion: reduce) {
-  .project .pcard__media,
-  .project .pcard:hover .pcard__media { transition: none; transform: none; }
-  .project .pcard__link,
-  .project .pcard:hover .pcard__link,
-  .project .pcard__link:hover { transition: none; transform: none; }
-  .project .pcard__link::after { transition: none; }
+  .ptl__item--last.is-on .ptl__dot { animation: none; }
 }

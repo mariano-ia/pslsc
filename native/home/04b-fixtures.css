@@ -16,42 +16,4 @@
   color: var(--color-text-on-paper-muted);
 }
 
-/* ===== Vida del strip (targetea cards generadas por fixtures.js) ===== */
-/* Hover-lift sutil — solo transform/box-shadow (no reflow), no rompe el scroll horizontal */
-.matchday .fx__card {
-  transition:
-    transform var(--dur-fast) var(--ease-out-soft),
-    box-shadow var(--dur-med) var(--ease-out-soft);
-  will-change: transform;
-}
-.matchday .fx__card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 40px rgba(18, 17, 13, .12);
-}
-/* la card destacada mantiene su lift sobre el glow */
-.matchday .fx__card--next:hover {
-  transform: translateY(-4px);
-}
-
-/* Glow que respira alrededor del próximo partido — capa aparte, anima solo opacity */
-.matchday .fx__card--next { position: relative; }
-.matchday .fx__card--next::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  box-shadow: 0 0 0 1px var(--color-aqua), 0 0 26px 2px rgba(170, 246, 230, .55);
-  animation: psl-fx-glow 3.2s var(--ease-in-out-soft) infinite;
-}
-@keyframes psl-fx-glow {
-  0%, 100% { opacity: .4; }
-  50%      { opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .matchday .fx__card { transition: none; }
-  .matchday .fx__card:hover,
-  .matchday .fx__card--next:hover { transform: none; }
-  .matchday .fx__card--next::after { animation: none; opacity: .7; }
-}
+/* El hover-lift de las tarjetas y la sombra del borde viven en /custom/fixtures/fixtures.css */

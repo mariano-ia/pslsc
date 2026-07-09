@@ -1,58 +1,66 @@
 <!--
-  Bloque 03 · The full project — Home. 🟩 Nativo.
-  4 tarjetas de igual peso (guía Grupo B); la 4ª (Debut 2027) es oscura para dar cierre/acento.
-  Imágenes = placeholders rayados (RENDER/PHOTO) hasta recibir assets reales.
+  Bloque 03 · The project — Home. 🟩 Nativo.
+  Línea de tiempo HORIZONTAL que se dibuja con el scroll (crece hacia 2027). Los 4 elementos de las
+  viejas cards viven como momentos sobre la línea, en contenedores simples (sin foto). Superficie
+  crema (igual que las cards). El render fotográfico real va al bloque 04 (Proof).
 -->
 <section class="project surface-paper" id="project">
   <div class="psl-container">
     <header class="project__head">
       <div>
-        <span class="psl-kicker" data-reveal data-es="01 — El proyecto">01 — The project</span>
-        <h2 class="psl-h2 project__title" data-reveal data-reveal-delay="90" data-es="No es un logo y un sueño. Es un club que se arma pieza por pieza.">Not a logo and a dream. A club being assembled, piece by piece.</h2>
+        <span class="psl-kicker" data-reveal>01 — The project</span>
+        <h2 class="psl-h2 project__title" data-reveal data-reveal-delay="90">Not a logo and a dream. A club being assembled, piece by piece.</h2>
       </div>
-      <p class="project__lead" data-reveal data-reveal-delay="180" data-es="Cuatro cimientos levantándose a la vez — para que cuando suene el silbato inicial en 2027, todo ya esté de pie.">Four foundations going up at once — so when the first whistle blows in 2027, everything is already standing.</p>
+      <p class="project__lead" data-reveal data-reveal-delay="180">Every piece rising toward the same point — the first whistle in 2027.</p>
     </header>
 
-    <div class="project__grid" data-reveal-group="90">
-      <article class="pcard" data-reveal data-magnetic="0.12" data-spotlight>
-        <div class="pcard__media" data-tag="RENDER"></div>
-        <div class="pcard__body">
-          <span class="pcard__kicker" data-es="En construcción">Under construction</span>
-          <h3 class="pcard__title" data-es="El estadio">The stadium</h3>
-          <p class="pcard__desc" data-es="Aprobado y creciendo en la Treasure Coast — una casa construida para una primera temporada profesional.">Approved and rising on the Treasure Coast — a home built for a first professional season.</p>
-          <a href="#project" class="pcard__link" data-es="Explora la obra →">Explore the build →</a>
-        </div>
-      </article>
+    <!-- timeline horizontal: se dibuja con el scroll (initProjectTimeline) -->
+    <div class="ptl">
+      <div class="ptl__axis" aria-hidden="true">
+        <span class="ptl__fill"></span>
+        <span class="ptl__head"></span>
+      </div>
+      <div class="ptl__grid">
+        <article class="ptl__item" data-f="0.02">
+          <span class="ptl__node" aria-hidden="true"><span class="ptl__dot"></span><span class="ptl__conn"></span></span>
+          <div class="ptl__card">
+            <span class="ptl__k">Est. 2019</span>
+            <h3 class="ptl__t">The community</h3>
+            <p class="ptl__d">A club the city can call its own — for the people who were here before the first match.</p>
+            <a href="#founders" class="ptl__link">Meet the community →</a>
+          </div>
+        </article>
 
-      <article class="pcard" data-reveal data-magnetic="0.12" data-spotlight>
-        <div class="pcard__media" data-tag="PHOTO"></div>
-        <div class="pcard__body">
-          <span class="pcard__kicker" data-es="Alto rendimiento">High performance</span>
-          <h3 class="pcard__title" data-es="Complejo deportivo">Sport complex</h3>
-          <p class="pcard__desc" data-es="Campos de entrenamiento e instalaciones de academia hechos para el largo plazo, no para el atajo.">Training grounds and academy facilities built for the long run, not the shortcut.</p>
-          <a href="#academy" class="pcard__link" data-es="Conoce el complejo →">See the complex →</a>
-        </div>
-      </article>
+        <article class="ptl__item" data-f="0.35">
+          <span class="ptl__node" aria-hidden="true"><span class="ptl__dot"></span><span class="ptl__conn"></span></span>
+          <div class="ptl__card">
+            <span class="ptl__k">Under construction</span>
+            <h3 class="ptl__t">The stadium</h3>
+            <p class="ptl__d">Approved and rising on the Treasure Coast — a home built for a first professional season.</p>
+            <a href="#proof" class="ptl__link">Explore the build →</a>
+          </div>
+        </article>
 
-      <article class="pcard" data-reveal data-magnetic="0.12" data-spotlight>
-        <div class="pcard__media" data-tag="PHOTO"></div>
-        <div class="pcard__body">
-          <span class="pcard__kicker" data-es="Desde 2019">Est. 2019</span>
-          <h3 class="pcard__title" data-es="La comunidad">The community</h3>
-          <p class="pcard__desc" data-es="Un club que la ciudad puede sentir suyo — para la gente que estuvo antes del primer partido.">A club the city can call its own — for the people who were here before the first match.</p>
-          <a href="#founders" class="pcard__link" data-es="Conoce la comunidad →">Meet the community →</a>
-        </div>
-      </article>
+        <article class="ptl__item" data-f="0.68">
+          <span class="ptl__node" aria-hidden="true"><span class="ptl__dot"></span><span class="ptl__conn"></span></span>
+          <div class="ptl__card">
+            <span class="ptl__k">High performance</span>
+            <h3 class="ptl__t">Sport complex</h3>
+            <p class="ptl__d">Training grounds and academy facilities built for the long run, not the shortcut.</p>
+            <a href="#academy" class="ptl__link">See the complex →</a>
+          </div>
+        </article>
 
-      <article class="pcard pcard--dark" data-reveal data-magnetic="0.12" data-spotlight>
-        <div class="pcard__media pcard__media--dark" data-tag="2027"></div>
-        <div class="pcard__body">
-          <span class="pcard__kicker pcard__kicker--teal" data-es="Temporada debut">Debut season</span>
-          <h3 class="pcard__title" data-es="Primer silbato 2027">First whistle 2027</h3>
-          <p class="pcard__desc" data-es="El primer partido profesional en la historia de la ciudad. O lo viste venir, o no.">The first professional match in the city's history. You either saw it coming — or you didn't.</p>
-          <a href="sumate.html" class="pcard__link pcard__link--teal" data-es="Sé de los primeros →">Be there first →</a>
-        </div>
-      </article>
+        <article class="ptl__item ptl__item--last" data-f="1">
+          <span class="ptl__node" aria-hidden="true"><span class="ptl__dot"></span><span class="ptl__conn"></span></span>
+          <div class="ptl__card">
+            <span class="ptl__k">Debut season</span>
+            <h3 class="ptl__t">First whistle 2027</h3>
+            <p class="ptl__d">The first professional match in the city's history. You either saw it coming — or you didn't.</p>
+            <a href="sumate.html" class="ptl__link ptl__link--teal">Be there first →</a>
+          </div>
+        </article>
+      </div>
     </div>
   </div>
 </section>

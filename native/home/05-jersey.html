@@ -1,21 +1,16 @@
 <!--
-  Bloque 05 · Jersey / Shop — Home. 🟦 A medida (embebe <psl-jersey-viewer>).
-  Layout 2-col del diseño aprobado: copy + precio + CTA a la izquierda, stage rotatorio a la derecha.
-  "Get the first jersey" es la acción disponible HOY (brief: la tienda no es secundaria).
-  El destino de compra es la tienda externa (🟧) — ver /src/external/README.md
+  Bloque 05 · Jersey — Home. 🟦 A medida (embebe <psl-jersey-viewer>).
+  Layout 2-col: copy a la izquierda, stage 360° scroll-scrubbed a la derecha (la camiseta gira con
+  el scroll). Showcase de la primera camiseta del club — sin precio/CTA por ahora.
 -->
 <section class="jersey surface-ink" id="jersey">
   <div class="psl-container jersey__grid">
     <div class="jersey__copy">
-      <span class="psl-kicker" data-es="04 — Disponible hoy">04 — Available today</span>
-      <h2 class="psl-h2 jersey__title" data-es="La primera camiseta en la historia del club.">The first jersey in the club&rsquo;s history.</h2>
-      <p class="jersey__lead" data-es="Edición fundadora — numerada, usada antes de que el club juegue un solo minuto competitivo. La forma más concreta de llevar la ciudad en el pecho, hoy.">Founders edition — numbered, worn before the club ever plays a competitive minute. The most concrete way to wear the city on your chest, today.</p>
+      <span class="psl-kicker">04 — Available today</span>
+      <h2 class="psl-h2 jersey__title">The first jersey in the club&rsquo;s history.</h2>
+      <p class="jersey__lead">Designed and worn before the club ever plays a competitive minute — a kit that exists before the team does. The most concrete way to wear the city on your chest.</p>
       <div class="jersey__buy">
-        <div class="jersey__price">
-          <span class="jersey__price-value tnum">$89</span>
-          <span class="jersey__price-label" data-es="Edición Fundadora · #0001–#2000">Founders Edition · #0001–#2000</span>
-        </div>
-        <a href="#store" class="psl-btn cta-primary" data-external="store"><span data-es="Consigue la primera camiseta">Get the first jersey</span> <span aria-hidden="true">→</span></a>
+        <a href="#store" class="psl-btn cta-primary" data-external="store"><span>Buy now</span> <span aria-hidden="true">→</span></a>
       </div>
     </div>
     <psl-jersey-viewer></psl-jersey-viewer>

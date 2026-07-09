@@ -14,9 +14,6 @@
  * ESTADO ACTUAL: datos demo + simulación de ingresos (sin backend). Contrato de API real: ver
  * live-counter.config.js (mismo scope de founders).
  */
-// idioma desde el DOM (fuente única que setea i18n.apply()); evita instancias duplicadas del módulo
-const L = (en, es) => (document.documentElement.lang === 'es' ? es : en);
-
 const NAME_POOL = ['Sofía L.', 'Mateo F.', 'Julieta V.', 'Thiago B.', 'Emilia C.', 'Benjamín R.', 'Renata D.', 'Bruno M.', 'Antonella P.', 'Facundo T.', 'Isabella N.', 'Santiago G.'];
 const CITY_POOL = ['Port St. Lucie, FL', 'Fort Pierce, FL', 'Stuart, FL', 'Miami, FL', 'Jensen Beach, FL', 'Vero Beach, FL'];
 
@@ -32,27 +29,11 @@ class PSLFounderWall extends HTMLElement {
     this._entries = this._seed();
     this._render();
     this._start();
-    this._onLang = () => this._applyLabels();
-    document.addEventListener('psl:langchange', this._onLang);
   }
 
   disconnectedCallback() {
     clearInterval(this._joinHandle);
     clearInterval(this._tickHandle);
-    document.removeEventListener('psl:langchange', this._onLang);
-  }
-
-  _applyLabels() {
-    this.querySelector('.fwall__head-title span:last-child').textContent = L('Founders joining right now', 'Fundadores uniéndose ahora');
-    this.querySelector('.fwall__foot-label').textContent = L('LAST JOINED', 'ÚLTIMO INGRESO');
-    this._agoEl.textContent = this._fmtAgo(this._secsAgo);
-    const search = this.querySelector('.fwall__search-input');
-    if (search) search.setAttribute('placeholder', L('Find your founder number…', 'Busca tu número de fundador…'));
-    if (this._emptyEl) this._emptyEl.textContent = L('No founder with that number is loaded here yet.', 'Todavía no hay ningún fundador con ese número cargado aquí.');
-    const ghostName = this.querySelector('.fwall__ghost-name');
-    if (ghostName) ghostName.textContent = L("You're next", 'Serás vos');
-    const ghostCue = this.querySelector('.fwall__ghost-cue');
-    if (ghostCue) ghostCue.textContent = L('Join', 'Sumate');
   }
 
   _seed() {
@@ -84,26 +65,26 @@ class PSLFounderWall extends HTMLElement {
         <div class="fwall__head">
           <div class="fwall__head-title">
             <span class="fwall__pulse" aria-hidden="true"></span>
-            <span>${L('Founders joining right now', 'Fundadores uniéndose ahora')}</span>
+            <span>Founders joining right now</span>
           </div>
           <span class="fwall__count tnum"></span>
         </div>
         ${this._searchable ? `
           <div class="fwall__search">
             <input class="fwall__search-input" type="search" inputmode="numeric"
-              placeholder="${L('Find your founder number…', 'Busca tu número de fundador…')}" aria-label="Search by founder number" />
+              placeholder="Find your founder number…" aria-label="Search by founder number" />
           </div>` : ''}
         <ul class="fwall__list"></ul>
-        <p class="fwall__empty" hidden>${L('No founder with that number is loaded here yet.', 'Todavía no hay ningún fundador con ese número cargado aquí.')}</p>
+        <p class="fwall__empty" hidden>No founder with that number is loaded here yet.</p>
         ${this._ghostNumber ? `
         <div class="fwall__ghost" data-founder-ghost>
           <span class="fwall__row-left">
             <span class="fwall__num tnum">#${this._ghostNumber}</span>
-            <span class="fwall__ghost-name" data-es="Serás vos">${L("You're next", 'Serás vos')}</span>
+            <span class="fwall__ghost-name">You're next</span>
           </span>
-          <span class="fwall__ghost-cue" data-es="Sumate">${L('Join', 'Sumate')}</span>
+          <span class="fwall__ghost-cue">Join</span>
         </div>` : ''}
-        <div class="fwall__foot"><span class="fwall__foot-label">${L('LAST JOINED', 'ÚLTIMO INGRESO')}</span> <span class="fwall__ago"></span></div>
+        <div class="fwall__foot"><span class="fwall__foot-label">LAST JOINED</span> <span class="fwall__ago"></span></div>
       </div>
     `;
     this._countEl = this.querySelector('.fwall__count');
@@ -188,8 +169,8 @@ class PSLFounderWall extends HTMLElement {
   }
 
   _fmtAgo(s) {
-    if (s < 60) return L('just now', 'recién');
-    return L(`${Math.floor(s / 60)} min ago`, `hace ${Math.floor(s / 60)} min`);
+    if (s < 60) return 'just now';
+    return `${Math.floor(s / 60)} min ago`;
   }
 }
 

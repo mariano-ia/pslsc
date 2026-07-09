@@ -1,21 +1,98 @@
-/* <psl-fixtures> — strip de partidos. Ver decisiones en fixtures.js. Vive sobre surface-paper. */
+/* <psl-fixtures> — Matchday.
+   Orden: [First Whistle 2027 · el PRIMER EQUIPO, fijo] [Próximo · reserva, turquesa, fijo]
+          [strip "next games" · reserva, scrolleable; las que sobran pasan detrás de una sombra]. */
 
 psl-fixtures { display: block; }
 
-.fx { position: relative; }
+.fx { display: flex; align-items: stretch; gap: 16px; }
+.fx__debut { flex: 0 0 clamp(172px, 20%, 212px); }   /* primer equipo 2027, fijo (1º) */
+.fx__next  { flex: 0 0 clamp(258px, 30%, 320px); }   /* próximo (reserva), turquesa, fijo (2º) */
+.fx__mid   { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
 
-/* flechas ‹ › */
-.fx__controls {
+/* hover en TODAS: se mueven, SIN sombra */
+.fx__debut, .fx__next, .fx__card { transition: transform 200ms var(--ease-out-soft); will-change: transform; }
+.fx__debut:hover, .fx__next:hover, .fx__card:hover { transform: translateY(-5px); }
+
+/* ===== FIRST WHISTLE 2027 — el PRIMER EQUIPO (oscuro, fijo, primero) + CTA ===== */
+.fx__debut {
   display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  margin-bottom: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  background: var(--color-ink);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 22px 20px;
+  color: var(--color-text);
 }
+.fx__debut-tag { font: 500 9.5px/1.3 var(--font-label); letter-spacing: .16em; text-transform: uppercase; color: var(--color-aqua); }
+.fx__debut-year { margin-top: 2px; font: 800 clamp(38px, 4.6vw, 54px)/0.9 var(--font-display); letter-spacing: var(--ls-display); color: var(--color-aqua); }
+.fx__debut-title { font: 800 20px/1.05 var(--font-display); letter-spacing: var(--ls-display); }
+.fx__debut-note { font: 400 13px/1.5 var(--font-body); color: var(--color-text-muted); margin-top: 4px; }
+.fx__debut-cta {
+  margin-top: auto;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 11px 15px;
+  border-radius: var(--radius-pill);
+  background: var(--color-aqua);
+  color: var(--color-black);
+  font: 600 11.5px/1 var(--font-label); letter-spacing: .08em; text-transform: uppercase;
+  text-decoration: none;
+  transition: background 160ms ease, transform 160ms ease;
+}
+.fx__debut-cta:hover { background: #fff; transform: translateX(2px); }
+
+/* ===== PRÓXIMO — reserva, FONDO TURQUESA (fijo, segundo) ===== */
+.fx__next {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--color-aqua);
+  border-radius: var(--radius-md);
+  padding: 22px 22px 20px;
+  color: var(--color-black);
+}
+.fx__next-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.fx__next-tag {
+  display: flex; align-items: center; gap: 7px;
+  font: 700 10px/1 var(--font-label);
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--color-black);
+}
+.fx__next-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-red-marine); animation: psl-pulse 1.6s ease-in-out infinite; }
+.fx__next-cd {
+  font: 700 9.5px/1 var(--font-label);
+  letter-spacing: .1em; text-transform: uppercase;
+  background: var(--color-black); color: var(--color-aqua);
+  padding: 5px 9px; border-radius: var(--radius-pill);
+}
+.fx__next .fx__comp { color: rgba(12, 12, 10, .6); }
+.fx__next-date {
+  font: 800 clamp(18px, 1.8vw, 24px)/1 var(--font-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-black);
+  text-transform: uppercase;
+}
+.fx__next .fx__tname { color: rgba(12, 12, 10, .72); }
+.fx__next .fx__row.is-psl .fx__tname { color: var(--color-black); font-weight: 700; }
+.fx__next .fx__crest--ph { background: rgba(12, 12, 10, .1); border-color: rgba(12, 12, 10, .22); color: rgba(12, 12, 10, .72); }
+.fx__next .fx__vs {
+  margin-left: 36px;
+  font: 700 10px/1 var(--font-label);
+  letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(12, 12, 10, .5);
+}
+.fx__next .fx__foot { border-top: 1px solid rgba(12, 12, 10, .16); }
+.fx__next .fx__venue { color: rgba(12, 12, 10, .66); }
+
+/* ===== MEDIO: título "next games" + flechas, y strip scrolleable ===== */
+.fx__mid-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.fx__mid-title { font: 500 11px/1 var(--font-label); letter-spacing: .18em; text-transform: uppercase; color: var(--color-text-on-paper-faint); }
+.fx__controls { display: flex; gap: 8px; }
 .fx__arrow {
-  width: 40px;
-  height: 40px;
+  width: 40px; height: 40px;
   border-radius: 50%;
-  border: 1px solid var(--color-border-on-paper);
+  border: 1px solid rgba(12, 12, 10, .16);
   background: var(--color-paper-card);
   color: var(--color-text-on-paper);
   font: 400 20px/1 var(--font-body);
@@ -24,62 +101,50 @@ psl-fixtures { display: block; }
 }
 .fx__arrow:hover { border-color: var(--color-aqua-deep); background: #fff; }
 
-/* pista scrolleable */
+/* wrapper posicionado: alto = el del track (para que la sombra se ancle a la card, no crezca de más).
+   Sin flex-grow → toma la altura del contenido (card + padding). */
+.fx__track-wrap { position: relative; min-width: 0; align-self: flex-start; width: 100%; }
 .fx__track {
   display: flex;
   gap: 14px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding: 4px 2px 8px;
-  scrollbar-width: none;           /* sin barra visible: navegación solo por flechas/swipe */
+  /* padding-top/bottom deja aire para el hover-lift (-5px) sin que el overflow lo recorte */
+  padding: 12px 4px 14px;
+  scrollbar-width: none;
   -ms-overflow-style: none;
 }
 .fx__track::-webkit-scrollbar { display: none; }
 
-/* tarjeta de partido */
+/* línea turquesa RECTA de 1px donde se esconden las cards
+   (sobresale ~5px arriba y ~5px abajo → 10px más alta que la card; track pad 12/14 → top 7 / bottom 9). */
+.fx__fade {
+  position: absolute;
+  top: 7px; right: 0; bottom: 9px;
+  width: 1px;
+  background: var(--color-aqua);
+  pointer-events: none;
+}
+
+/* tarjeta del strip — próxima fecha (reserva) */
 .fx__card {
   scroll-snap-align: start;
-  flex: 0 0 clamp(240px, 78vw, 280px);
+  flex: 0 0 clamp(214px, 40%, 248px);
   display: flex;
   flex-direction: column;
   gap: 12px;
   background: var(--color-paper-card);
   border: 1px solid var(--color-paper-line);
   border-radius: var(--radius-md);
-  padding: 20px 20px 18px;
-}
-.fx__card--next {
-  border-color: var(--color-aqua);
-  box-shadow: 0 0 0 1px var(--color-aqua), 0 16px 34px rgba(18,17,13,.08);
+  padding: 18px 18px 16px;
 }
 
-.fx__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .fx__comp {
   font: 500 9.5px/1.3 var(--font-label);
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--color-aqua-deep);
 }
-.fx__comp--teal { color: var(--color-aqua-deep); }
-.fx__badge {
-  font: 600 9px/1 var(--font-label);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  background: var(--color-aqua);
-  color: var(--color-black);
-  padding: 5px 8px;
-  border-radius: var(--radius-pill);
-}
-.fx__result {
-  font: 700 11px/1 var(--font-body);
-  width: 20px; height: 20px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%;
-  color: var(--color-black);
-}
-.fx__result--w { background: var(--color-aqua); }
-.fx__result--d { background: var(--color-neutral-300); }
-.fx__result--l { background: var(--color-red-marine); color: #fff; }
 
 .fx__date {
   font: 700 13px/1 var(--font-body);
@@ -108,33 +173,30 @@ psl-fixtures { display: block; }
   color: var(--color-text-on-paper-muted);
 }
 .fx__row.is-psl .fx__tname { font-weight: 700; color: var(--color-text-on-paper); }
-.fx__score { font: 800 20px/1 var(--font-display); letter-spacing: var(--ls-display); color: var(--color-text-on-paper); }
 
 .fx__foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  margin-top: auto;
   padding-top: 12px;
   border-top: 1px solid var(--color-paper-line);
 }
 .fx__venue { font: 400 11.5px/1.3 var(--font-body); color: var(--color-text-on-paper-faint); }
 .fx__time { font: 700 12px/1 var(--font-body); color: var(--color-aqua-deep); }
-.fx__ft { font: 500 10px/1 var(--font-label); letter-spacing: .1em; text-transform: uppercase; color: var(--color-text-on-paper-faint); }
 
-/* tarjeta de debut 2027 */
-.fx__card--debut {
-  justify-content: center;
-  align-items: flex-start;
-  gap: 6px;
-  background: var(--color-ink);
-  border-color: var(--color-ink);
-  color: var(--color-text);
+/* ===== mobile: apila (primer equipo → próximo → strip) ===== */
+@media (max-width: 860px) {
+  .fx { flex-direction: column; }
+  .fx__debut, .fx__next { flex: none; }
+  .fx__debut-cta { margin-top: 14px; }
+  .fx__card { flex-basis: 76vw; }
 }
-.fx__debut-year { font: 800 clamp(40px, 5vw, 56px)/0.9 var(--font-display); letter-spacing: var(--ls-display); color: var(--color-aqua); }
-.fx__debut-title { font: 800 20px/1.05 var(--font-display); letter-spacing: var(--ls-display); }
-.fx__debut-note { font: 400 13px/1.5 var(--font-body); color: var(--color-text-muted); margin-top: 4px; }
 
 @media (prefers-reduced-motion: reduce) {
+  .fx__debut, .fx__next, .fx__card { transition: none; }
+  .fx__debut:hover, .fx__next:hover, .fx__card:hover { transform: none; }
   .fx__track { scroll-behavior: auto; }
+  .fx__next-dot { animation: none; }
 }

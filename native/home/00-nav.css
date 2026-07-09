@@ -49,34 +49,8 @@
 .nav__right { display: flex; align-items: center; gap: 16px; }
 .nav__cta { padding: 12px 18px; font-size: 12.5px; }
 
-/* switch de idioma EN/ES — pill segmentado */
-.nav__lang {
-  display: inline-flex;
-  padding: 3px;
-  border: 1px solid var(--color-line-strong);
-  border-radius: var(--radius-pill);
-  background: rgba(255,255,255,.03);
-}
-.nav__lang-btn {
-  border: none;
-  background: transparent;
-  color: var(--color-text-faint);
-  font: 600 11px/1 var(--font-label);
-  letter-spacing: .08em;
-  padding: 6px 10px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: color 140ms ease, background 140ms ease;
-}
-.nav__lang-btn:hover { color: var(--color-text); }
-.nav__lang-btn.is-active {
-  background: var(--color-aqua);
-  color: var(--color-black);
-}
-
 @media (max-width: 900px) {
-  .nav__links { display: none; }
-  .nav__cta { display: none; }   /* en mobile prioriza el switch; el CTA vive en el hero */
+  .nav__links { display: none; }   /* mobile: crest + CTA (nav sin menú desplegable) */
 }
 @media (max-width: 560px) {
   .nav__crest { height: 72px; }

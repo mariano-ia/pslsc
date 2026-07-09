@@ -11,26 +11,147 @@
   color: var(--color-text-muted);
 }
 
-.proof__render {
+/* ====== PEEK (linterna sobre el render) ====== */
+.proof__peek {
+  position: relative;
   margin-top: clamp(40px, 5vw, 60px);
-  aspect-ratio: 21/9;
+  aspect-ratio: 16 / 9;
   border-radius: 16px;
   overflow: hidden;
-  position: relative;
-  background: repeating-linear-gradient(122deg, #17160F, #17160F 15px, #141309 15px, #141309 30px);
   border: 1px solid var(--color-line);
+  background: #000;
 }
-.proof__render::after {
-  content: attr(data-tag);
+.proof__peek-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+/* con las luces bajas (tenue) mientras se espía Y durante la expansión del reveal — hasta .lights-on */
+.proof__peek.peek--active:not(.lights-on) .proof__peek-img { filter: brightness(.5) saturate(.9); }
+/* .lights-on lo agrega el JS un instante DESPUÉS de que terminó de abrirse el círculo:
+   se encienden TODAS las luces (flicker de reflector → brillo pleno). Sin fill: reposo = brillo base. */
+.proof__peek.lights-on .proof__peek-img { animation: proof-lights-on 1.3s var(--ease-out-soft); }
+@keyframes proof-lights-on {
+  0%   { filter: brightness(.5) saturate(.9); }
+  10%  { filter: brightness(1.28) saturate(1.06); }
+  16%  { filter: brightness(.55) saturate(.9); }
+  27%  { filter: brightness(1.32) saturate(1.08); }
+  35%  { filter: brightness(.72); }
+  50%  { filter: brightness(1.34) saturate(1.1); }
+  64%  { filter: brightness(.96); }
+  100% { filter: brightness(1) saturate(1); }
+}
+
+/* destello (surge de luz) desde el punto del click */
+.proof__peek-flash {
   position: absolute;
-  left: 20px;
-  bottom: 18px;
-  font: 500 10px/1 var(--font-mono);
-  letter-spacing: .16em;
-  color: var(--color-text-faint);
-  border: 1px solid var(--color-line-strong);
-  padding: 6px 9px;
-  border-radius: 5px;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, .75), rgba(170, 246, 230, .28) 38%, transparent 68%);
+}
+.proof__peek.lights-on .proof__peek-flash { animation: proof-flash .6s ease-out; }
+@keyframes proof-flash { 0% { opacity: 0; } 12% { opacity: .6; } 100% { opacity: 0; } }
+
+/* ====== REFLECTORES: blooms de luz que "prenden" en las torres / videoboard / tribuna ====== */
+.proof__peek-lights { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+.proof__peek-lamp {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--s, 260px);
+  height: var(--s, 260px);
+  margin: calc(var(--s, 260px) / -2) 0 0 calc(var(--s, 260px) / -2);
+  border-radius: 50%;
+  /* luz cálida de reflector */
+  background: radial-gradient(circle, rgba(255, 244, 214, .9), rgba(255, 240, 200, .34) 30%, transparent 68%);
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+.proof__peek-lamp--cool { background: radial-gradient(circle, rgba(222, 248, 255, .85), rgba(170, 246, 230, .3) 34%, transparent 68%); }
+.proof__peek-lamp--wide { background: radial-gradient(circle, rgba(255, 246, 222, .6), rgba(255, 240, 205, .22) 42%, transparent 72%); }
+/* prenden con .lights-on: flicker de reflector, cada uno con su delay; quedan encendidos (both) */
+.proof__peek.lights-on .proof__peek-lamp { animation: proof-lamp-on 1.5s ease-out var(--lamp-d, 0s) both; }
+@keyframes proof-lamp-on {
+  0%   { opacity: 0; }
+  14%  { opacity: .85; }
+  20%  { opacity: .12; }
+  38%  { opacity: 1; }
+  48%  { opacity: .35; }
+  70%  { opacity: .9; }
+  100% { opacity: var(--lamp-o, .7); }
+}
+
+/* capa negra plena con el hueco-linterna. BORDE PLENO (sin blur). Solo con JS (.peek--active). */
+.proof__peek-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: none;
+  background: #000;
+}
+.proof__peek.peek--active .proof__peek-mask {
+  display: block;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
+    transparent calc(var(--r, 120px) - 1px),
+    #000 var(--r, 120px));
+}
+
+/* anillo aqua alrededor de la linterna (sigue el cursor vía --mx/--my/--r) */
+.proof__peek-ring {
+  position: absolute;
+  z-index: 5;
+  left: var(--mx, 50%);
+  top: var(--my, 50%);
+  width: calc(var(--r, 120px) * 2);
+  height: calc(var(--r, 120px) * 2);
+  margin: calc(var(--r, 120px) * -1) 0 0 calc(var(--r, 120px) * -1);
+  border-radius: 50%;
+  border: 2px solid var(--color-aqua);
+  box-shadow: 0 0 18px rgba(170, 246, 230, .4);
+  pointer-events: none;
+  display: none;
+}
+.proof__peek.peek--active .proof__peek-ring { display: block; }
+/* el círculo LATE para llamar la atención; deja de latir apenas el usuario lo mueve (.peek--touched) */
+.proof__peek.peek--active:not(.is-revealed):not(.peek--touched) .proof__peek-ring { animation: proof-peek-pulse 1.25s ease-in-out infinite; }
+.proof__peek.is-revealed .proof__peek-ring { opacity: 0; transition: opacity .5s ease; }
+@keyframes proof-peek-pulse {
+  0%, 100% { transform: scale(1);    box-shadow: 0 0 20px rgba(170, 246, 230, .4),  inset 0 0 24px rgba(170, 246, 230, .1); }
+  50%      { transform: scale(1.07); box-shadow: 0 0 38px rgba(170, 246, 230, .75), inset 0 0 40px rgba(170, 246, 230, .2); }
+}
+
+/* la linterna ES el cursor: lo ocultamos mientras se espía; vuelve al revelar */
+.proof__peek.peek--active:not(.is-revealed) { cursor: none; }
+
+/* etiqueta que acompaña a la linterna: invita a espiar y, tras explorar, muta (scramble) al CTA.
+   sigue al cursor (--lx clamp horizontal en JS; flip arriba/abajo cerca del borde inferior). */
+.proof__peek-label {
+  position: absolute;
+  z-index: 6;
+  left: var(--lx, 50%);
+  top: var(--my, 50%);
+  transform: translate(-50%, calc(var(--peek-r0, 120px) + 20px));
+  font: 600 12px/1.2 var(--font-label);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--color-aqua);
+  text-shadow: 0 1px 14px rgba(0, 0, 0, .85);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .4s ease, color .4s ease, text-shadow .4s ease;
+}
+.proof__peek.peek--active:not(.is-revealed) .proof__peek-label { opacity: 1; }
+.proof__peek.peek--label-above .proof__peek-label {
+  transform: translate(-50%, calc(-100% - var(--peek-r0, 120px) - 20px));
+}
+/* fase CTA: la etiqueta se enciende (glow aqua) para leerse como acción */
+.proof__peek.peek--ready .proof__peek-label {
+  color: #fff;
+  text-shadow: 0 0 16px rgba(170, 246, 230, .9), 0 1px 14px rgba(0, 0, 0, .85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proof__peek.peek--active:not(.is-revealed) .proof__peek-ring { animation: none !important; }
 }
 
 .proof__timeline {

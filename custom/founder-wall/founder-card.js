@@ -15,9 +15,6 @@
  * share sea consistente entre dispositivos — eso requiere backend y queda documentado como
  * contrato pendiente, no construido en esta etapa (ver comentario en _share()).
  */
-// idioma desde el DOM (fuente única que setea i18n.apply())
-const L = (en, es) => (document.documentElement.lang === 'es' ? es : en);
-
 class PSLFounderCard extends HTMLElement {
   static get observedAttributes() {
     return ['number', 'name', 'joined', 'tier'];
@@ -25,12 +22,6 @@ class PSLFounderCard extends HTMLElement {
 
   connectedCallback() {
     this._render();
-    this._onLang = () => this._render();
-    document.addEventListener('psl:langchange', this._onLang);
-  }
-
-  disconnectedCallback() {
-    document.removeEventListener('psl:langchange', this._onLang);
   }
 
   attributeChangedCallback() {
@@ -39,9 +30,9 @@ class PSLFounderCard extends HTMLElement {
 
   _tierLabel() {
     const tier = this.getAttribute('tier') || 'founding';
-    if (tier === 'charter') return L('Charter Member', 'Miembro Charter');
-    if (tier === 'early') return L('Early Founder', 'Fundador Temprano');
-    return L('Founding Member', 'Miembro Fundador');
+    if (tier === 'charter') return 'Charter Member';
+    if (tier === 'early') return 'Early Founder';
+    return 'Founding Member';
   }
 
   _render() {
@@ -66,10 +57,10 @@ class PSLFounderCard extends HTMLElement {
 
         <div class="founder-card__meta">
           <span class="founder-card__club">Port St. Lucie SC · 2027</span>
-          ${joined ? `<span class="founder-card__joined">${L('Joined', 'Se unió')} ${joined}</span>` : ''}
+          ${joined ? `<span class="founder-card__joined">Joined ${joined}</span>` : ''}
         </div>
 
-        <button class="founder-card__share" type="button">${L('Share my card', 'Comparte tu carnet')}</button>
+        <button class="founder-card__share" type="button">Share my card</button>
       </div>
     `;
     this.querySelector('.founder-card__share').addEventListener('click', () => this._share());
@@ -84,10 +75,7 @@ class PSLFounderCard extends HTMLElement {
   // Hoy usa Web Share API compartiendo el link de la página como fallback de demo.
   async _share() {
     const number = this.getAttribute('number');
-    const text = L(
-      `I'm founding member #${number} of @pslsc — the first professional club in the Treasure Coast. #PSLSC #FoundingMember`,
-      `Soy el miembro fundador #${number} de @pslsc — el primer club profesional de la Treasure Coast. #PSLSC #FoundingMember`,
-    );
+    const text = `I'm founding member #${number} of @pslsc — the first professional club in the Treasure Coast. #PSLSC #FoundingMember`;
     if (navigator.share) {
       try {
         await navigator.share({ text, url: location.href });
@@ -96,9 +84,9 @@ class PSLFounderCard extends HTMLElement {
       }
     } else {
       await navigator.clipboard.writeText(`${text} ${location.href}`);
-      this.querySelector('.founder-card__share').textContent = L('Copied!', '¡Copiado!');
+      this.querySelector('.founder-card__share').textContent = 'Copied!';
       setTimeout(() => {
-        this.querySelector('.founder-card__share').textContent = L('Share my card', 'Comparte tu carnet');
+        this.querySelector('.founder-card__share').textContent = 'Share my card';
       }, 1500);
     }
   }

@@ -1,19 +1,16 @@
 /**
- * Hero — última palabra del titular con efecto SCRAMBLE / decode en SECUENCIA (bilingüe EN/ES).
+ * Hero — última palabra del titular con efecto SCRAMBLE / decode en SECUENCIA.
  *
  * El efecto construye la 1ª palabra a partir de caracteres aleatorios (resuelve de izquierda a
  * derecha), la sostiene un instante, VUELVE A CORRER y construye la siguiente, y termina en la
- * última ("born." / "nacer."), que se queda fija. Reimplementación vanilla del componente
+ * última ("born."), que se queda fija. Reimplementación vanilla del componente
  * TextScramble (React/framer-motion): mismo algoritmo (progress·len > i ⇒ carácter fijo), sin
  * dependencias, portable a WordPress. La palabra está SIEMPRE en aquamarine pleno (sin atenuar).
- * Respeta prefers-reduced-motion (muestra directo la palabra final). Se reinicia al cambiar de idioma.
+ * Respeta prefers-reduced-motion (muestra directo la palabra final).
  *
  * Anti-salto: el "sizer" CSS reserva el ancho de la palabra más larga, así el titular nunca reflowea
  * mientras los caracteres flickerean (van dentro de ese ancho reservado).
  */
-// idioma desde el DOM (fuente única que setea i18n.apply()); evita instancias duplicadas del módulo
-const getLang = () => (document.documentElement.lang === 'es' ? 'es' : 'en');
-
 function initHeroMorph(root = document) {
   const el = root.querySelector('.hero__morph-word');
   if (!el) return;
@@ -23,8 +20,8 @@ function initHeroMorph(root = document) {
   let timers = [];
   const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
 
-  const wordsFor = (lang) => {
-    const raw = lang === 'es' ? (el.dataset.wordsEs || el.dataset.words) : el.dataset.words;
+  const wordsFor = () => {
+    const raw = el.dataset.words;
     return (raw || 'born').split(',').map((w) => `${w.trim()}.`);
   };
 
@@ -58,7 +55,7 @@ function initHeroMorph(root = document) {
 
   const run = () => {
     clearTimers();
-    const words = wordsFor(getLang());        // p.ej. ['imagined.', 'built.', 'born.']
+    const words = wordsFor();        // p.ej. ['imagined.', 'built.', 'born.']
     const finalWord = words[words.length - 1];
 
     // el sizer reserva el ancho de la palabra más larga (absorbe el jitter, sin reflow)
@@ -84,7 +81,6 @@ function initHeroMorph(root = document) {
   };
 
   run();
-  document.addEventListener('psl:langchange', run);
 }
 
 document.addEventListener('DOMContentLoaded', () => initHeroMorph());

@@ -1,6 +1,4 @@
 import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=6';
-// idioma desde el DOM (fuente única que setea i18n.apply()); evita instancias duplicadas del módulo
-const L = (en, es) => (document.documentElement.lang === 'es' ? es : en);
 
 /**
  * <psl-live-counter variant="fan|reservation|sponsor"></psl-live-counter>
@@ -29,34 +27,10 @@ class PSLLiveCounter extends HTMLElement {
     this._data = this._demoData();
     this._render();
     this._poll();
-    // labels bilingües: actualizar textos al cambiar de idioma (sin re-render, no pierde el estado)
-    this._onLang = () => this._applyLabels();
-    document.addEventListener('psl:langchange', this._onLang);
   }
 
   disconnectedCallback() {
     clearInterval(this._pollHandle);
-    document.removeEventListener('psl:langchange', this._onLang);
-  }
-
-  _applyLabels() {
-    this.config.metrics.forEach((m) => {
-      const label = this._metricsEl.querySelector(`[data-key="${m.key}"] .live-counter__label`);
-      if (label) label.textContent = L(m.label, m.labelEs || m.label);
-    });
-    if (this.config.note) {
-      const note = this.querySelector('.live-counter__note');
-      if (note && this.config.noteEs) note.textContent = L(this.config.note, this.config.noteEs);
-    }
-    const updated = this.querySelector('.live-counter__updated-text');
-    if (updated) updated.textContent = L('Updated in real time', 'Actualizado en tiempo real');
-    // valores que dependen del idioma (tiempo relativo): refrescar sin animación
-    this.config.metrics.forEach((m) => {
-      if (m.format === 'relative-time' || m.format === 'static') {
-        const cell = this._metricsEl.querySelector(`[data-key="${m.key}"] .live-counter__value`);
-        if (cell) cell.textContent = this._format(m);
-      }
-    });
   }
 
   // ---- DEMO DATA — reemplazar por fetch(this.config.endpoint) cuando exista el endpoint real ----
@@ -110,7 +84,7 @@ class PSLLiveCounter extends HTMLElement {
     const toast = document.createElement('span');
     toast.className = 'live-counter__toast';
     toast.setAttribute('aria-hidden', 'true');
-    toast.textContent = L('+1 Founding member', '+1 Miembro fundador');
+    toast.textContent = '+1 Founding member';
     cell.appendChild(toast);
     const cleanup = () => toast.remove();
     toast.addEventListener('animationend', cleanup);
@@ -121,8 +95,8 @@ class PSLLiveCounter extends HTMLElement {
     // "Updated in real time" no se muestra en la variante stats (destacados de la Home) — se pidió sacarlo.
     const updated = this.variant === 'stats' ? '' : `
         <p class="live-counter__updated">
-          <span class="live-counter__updated-text">${L('Updated in real time', 'Actualizado en tiempo real')}</span>
-          <span class="live-counter__updated-tooltip" title="${L('Founding members = people registered on pslsc.com with verified email', 'Miembros fundadores = personas registradas en pslsc.com con email verificado')}">ⓘ</span>
+          <span class="live-counter__updated-text">Updated in real time</span>
+          <span class="live-counter__updated-tooltip" title="Founding members = people registered on pslsc.com with verified email">ⓘ</span>
         </p>`;
     this.innerHTML = `
       <div class="live-counter live-counter--${this.variant}">
@@ -145,7 +119,7 @@ class PSLLiveCounter extends HTMLElement {
           <div class="live-counter__value tnum${m.accent ? ' live-counter__value--accent' : ''}" data-format="${m.format}"></div>
           ${riseArrow}
         </div>
-        <div class="live-counter__label">${L(m.label, m.labelEs || m.label)}</div>
+        <div class="live-counter__label">${m.label}</div>
       `;
       this._metricsEl.appendChild(cell);
     });
@@ -160,7 +134,7 @@ class PSLLiveCounter extends HTMLElement {
     if (this.config.note) {
       const note = document.createElement('p');
       note.className = 'live-counter__note';
-      note.textContent = L(this.config.note, this.config.noteEs || this.config.note);
+      note.textContent = this.config.note;
       this.querySelector('.live-counter').appendChild(note);
     }
 
@@ -276,11 +250,11 @@ class PSLLiveCounter extends HTMLElement {
   }
 
   _relativeTime(seconds) {
-    if (seconds < 60) return L('Just now', 'Recién');
+    if (seconds < 60) return 'Just now';
     const min = Math.floor(seconds / 60);
-    if (min < 60) return L(`${min} min ago`, `hace ${min} min`);
+    if (min < 60) return `${min} min ago`;
     const hr = Math.floor(min / 60);
-    return L(`${hr}h ago`, `hace ${hr}h`);
+    return `${hr}h ago`;
   }
 }
 
