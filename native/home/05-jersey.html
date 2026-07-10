@@ -1,7 +1,7 @@
 <!--
   Bloque 05 · Jersey — Home. 🟦 A medida (embebe <psl-jersey-viewer>).
   Layout 2-col: copy a la izquierda, stage 360° scroll-scrubbed a la derecha (la camiseta gira con
-  el scroll). Showcase de la primera camiseta del club — sin precio/CTA por ahora.
+  el scroll). Showcase de la primera camiseta del club, con CTA a la tienda externa.
 -->
 <section class="jersey surface-ink" id="jersey">
   <div class="psl-container jersey__grid">
@@ -10,7 +10,8 @@
       <h2 class="psl-h2 jersey__title">The first jersey in the club&rsquo;s history.</h2>
       <p class="jersey__lead">Designed and worn before the club ever plays a competitive minute — a kit that exists before the team does. The most concrete way to wear the city on your chest.</p>
       <div class="jersey__buy">
-        <a href="#store" class="psl-btn cta-primary" data-external="store"><span>Buy now</span> <span aria-hidden="true">→</span></a>
+        <!-- tienda oficial externa (otro dominio) -> abrir en pestaña nueva -->
+        <a href="https://shop.myuniformsoccerlocker.com/clubs/port-st-lucie-sc" class="psl-btn cta-primary" data-external="store" target="_blank" rel="noopener"><span>Buy now</span> <span aria-hidden="true">→</span></a>
       </div>
     </div>
     <psl-jersey-viewer></psl-jersey-viewer>

@@ -9,10 +9,21 @@
   overflow: hidden;
 }
 
+/* Fondo del hero — capa de video (construcción del estadio al atardecer). inset vertical negativo:
+   sobredimensiona la capa para que el data-parallax no deje huecos en los bordes.
+   El poster va como background de fallback (se ve mientras el video carga y en reduced-motion). */
 .phero__bg {
   position: absolute;
+  inset: -16% 0;
+  background: #0C0C0A url('/assets/videos/partners-hero-poster.webp') center/cover no-repeat;
+}
+.phero__video {
+  position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(122deg, #17160F 0, #17160F 15px, #141309 15px, #141309 30px);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .phero__scrim {
   position: absolute;
@@ -21,18 +32,6 @@
     radial-gradient(120% 90% at 70% 20%, rgba(170,246,230,.10), transparent 60%),
     linear-gradient(180deg, rgba(12,12,10,.55) 0%, rgba(12,12,10,.3) 34%, rgba(12,12,10,.9) 84%, #0C0C0A 100%);
 }
-.phero__asset-tag {
-  position: absolute;
-  top: 96px;
-  right: var(--gutter);
-  font: 500 10px/1 var(--font-mono);
-  letter-spacing: .18em;
-  color: rgba(239,235,225,.34);
-  border: 1px solid var(--color-line-strong);
-  padding: 7px 10px;
-  border-radius: 4px;
-}
-
 .phero__content {
   position: relative;
   z-index: 1;
@@ -71,14 +70,30 @@
 }
 .phero__ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
 
+/* barra separadora — degradado de marca ANIMADO que fluye (mismo que el hero de la Home) */
 .phero__divider {
   position: relative;
   z-index: 2;
   height: 5px;
   width: 100%;
-  background: linear-gradient(90deg, var(--color-aqua) 0%, var(--color-red-marine) 100%);
+  background: linear-gradient(90deg,
+    var(--color-aqua), var(--color-red-marine), var(--color-aqua),
+    var(--color-red-marine), var(--color-aqua));
+  background-size: 200% 100%;
+  animation: psl-grad-flow 5s linear infinite;
+}
+
+/* Divider: se dibuja de izq→der al cargar Y sigue fluyendo — como en la Home (gateado por .psl-motion) */
+.psl-motion .phero__divider {
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: psl-draw-x var(--dur-reveal) var(--ease-out-expo) 450ms both,
+             psl-grad-flow 5s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .phero__dot { animation: none; }
+  /* sin video en reduced-motion: se muestra el poster (background de .phero__bg) */
+  .phero__video { display: none; }
+  .phero__divider { animation: none !important; transform: none !important; }
 }

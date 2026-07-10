@@ -41,22 +41,55 @@ vercel.json        config del deploy de preview (Vercel) — no aplica a WordPre
 
 ---
 
-## 2. Integración por iframe (LO IMPORTANTE)
+## 2. Integración por bloque HTML (LO IMPORTANTE — validado en producción 2026-07-10)
 
-En preview, `pages/home.html` arma la página completa haciendo `fetch()` de cada bloque de
-`native/home/` y pegándolos. **Ese ensamblado por fetch es SOLO para previsualizar — no se traspasa.**
+> El modelo de **iframe** que describía esta sección quedó descartado. El sitio de USL corre en
+> **WordPress VIP** y está muy restringido, así que cada sección se pega como un **bloque "HTML"**
+> del constructor visual (Custom HTML). La nav y las noticias son **nativas del template**, no nuestras.
 
-En WordPress la idea es servir el prototipo como archivos estáticos y embeberlo en iframes. Dos formas,
-elegí según el caso:
+Los 19 bloques (nav y news no: son del template) se compilan con **`tools/build-blocks.py`** a
+`dist/blocks/*.html`, cada uno paste-ready para un widget HTML. **Empezá por `dist/UPLOAD.md`** —
+tiene el paso a paso (subir assets, poner ASSET_BASE + permalinks, regenerar, pegar). Lo esencial:
 
-- **Página entera en un iframe** (lo más simple): el `src` del iframe apunta a `pages/home.html`
-  (o `sumate.html` / `partners.html`) ya hosteado. Adentro el fetch funciona porque los archivos se
-  sirven juntos (mismo origen).
-- **Bloque suelto en un iframe** (si querés intercalar contenido nativo de WP): servís un HTML mínimo
-  que incluya `tokens/fonts.css` + `tokens/tokens.css` + el `.css`/`.html`/`.js` de ese bloque, y lo
-  embebés. Los bloques son autocontenidos, así que esto funciona sin el fetch.
+- **Todo el CSS cuelga de `.pslsc`** (namespaceado por el compilador). No pisa el template, y un reset
+  scopeado impide que el template pise el bloque. Verificado en las dos direcciones.
+- **Fuentes y assets hosteados** una vez en `ASSET_BASE` (carpeta `dist/upload/`), referenciados por URL.
+  Fuentes subseteadas a WOFF2 (1,16 MB → 127 KB). Cada bloque queda en 17–54 KB.
+  (El primer piloto `06 · Founders` se validó en el sitio real con TODO embebido; ese enfoque no escala
+  a los bloques con video/360, por eso el sitio entero usa assets hosteados.)
+- **Full-bleed sin `alignfull`**: el theme no lo soporta, así que `.pslsc--bleed` se sale del contenedor
+  usando `--psl-vw` (ancho real, sin la barra de scroll).
 
-### Checklist del iframe (importante, no saltear)
+### ⚠️ LA TRAMPA: WordPress corrompe el JavaScript que pega en un bloque HTML
+
+WordPress procesa el **contenido** de las etiquetas `<script>` como si fuera HTML. En cuanto ve un `<`
+seguido más adelante de un `&` (p. ej. `if (a < b && c)`), cree que abrió una etiqueta y escapa los
+`&`: `&&` se convierte en `&#038;&#038;` → **SyntaxError, y muere todo el script**. También inyecta
+`decoding="async"` en cualquier `<img` que encuentre dentro de un template literal de JS.
+
+**Solución (ya aplicada por el compilador):** el JS NO va como texto adentro del `<script>`. Va como
+**data URI en el atributo `src`** — los filtros de WP no tocan los atributos:
+```html
+<script type="module" src="data:text/javascript;charset=utf-8,...(el JS aquí)..."></script>
+```
+Regla para Santi: **nunca pegar JS como texto dentro de un `<script>` en este WordPress.** Ni siquiera
+en un comentario HTML conviene escribir `<` junto a `&` o la palabra "script" entre signos.
+
+### Otras cosas confirmadas del entorno (WP VIP)
+
+- Los `<script>` **no** se borran ni se bloquean (no hay CSP restrictiva, no hay KSES agresivo).
+- Los `type="module"` inline **sí** se ejecutan.
+- El tamaño no trunca (una sonda de 218 KB pasó entera).
+
+### Si un bloque necesitara servir el JS afuera (no hizo falta acá)
+
+El JS ya viaja como data URI en el `src`, así que no hace falta. Si en el futuro se quisiera un `.js`
+hosteado aparte, tiene que ir en el **mismo dominio** de WP (los `type="module"` y `@font-face`
+cross-origin exigen `Access-Control-Allow-Origin`).
+
+---
+
+### (Obsoleto) Checklist del iframe — se conserva por si algún día se sirve una página entera
 
 1. **Altura automática.** Un iframe NO crece solo con su contenido. Hay que informar la altura del
    contenido al padre. Snippet listo (poné el script dentro de cada página embebida y el listener en
@@ -130,10 +163,14 @@ recomprimido. Las fuentes son self-hosted. Formatos:
 - **Logos** `assets/brand/`: `crest-aqua.webp`, `crest-black.webp`, `anchor-aqua.webp`,
   `anchor-black.webp` (con transparencia).
 - **Fotos**: `assets/images/pslsc_academy.webp` (foto academia), `assets/images/luka-card.webp`
-  (mascota Luka para el boarding pass), `assets/proof/stadium-aerial.webp` (render del estadio).
+  (mascota Luka para el boarding pass), `assets/proof/stadium-aerial.webp` (render del estadio, Home 04)
+  y `assets/proof/stadium-iso-night.webp` (render aéreo nocturno, hero de Partners — sale de
+  `docs/PSL-Renders.pdf` p.2).
 - **Camiseta 360°**: `assets/jersey360/f_00.webp … f_89.webp` (90 cuadros; los usa el jersey-viewer).
   El video fuente `assets/videos/360_shirt.mp4` queda de referencia (no se carga en la página).
-- **Video hero**: `assets/videos/hero.mp4` (H.264, muteado, loop) + `hero-poster.webp`.
+- **Videos hero** (H.264, muteados, en loop, faststart, sin pista de audio):
+  `assets/videos/hero.mp4` + `hero-poster.webp` (Home) y `assets/videos/founder-hero.mp4` +
+  `founder-hero-poster.webp` (bandera del club flameando — hero de Sumate). 1280×720.
 
 Las `<img>` de contenido ya llevan `width`/`height` (evita saltos de layout / CLS), `loading="lazy"`
 y `decoding="async"`.
@@ -174,12 +211,18 @@ está documentado en su `.js`.
 | 09 | Newsletter + Footer | ink | Form de suscripción (`09-cierre-footer.js`) — ver contrato abajo. |
 
 ### SUMATE (`pages/sumate.html`) — página "Become a Founder"
-S01 hero · S02 beneficios · **S03 planes** (alta de fundador) · **S04 muro buscable**
-(`<psl-founder-wall searchable>`) · S05 FAQ (`<details>` nativo, sin JS) · S06 CTA final.
+S01 hero (video de fondo `founder-hero.mp4`) · S02 beneficios · **S03 planes** (alta de fundador) ·
+S05 FAQ (`<details>` nativo, sin JS) · S06 CTA final. Los bloques usan `[data-reveal]` (motion.js) —
+la página carga `_patterns/motion.css/js` igual que la Home.
+> S04 (muro buscable, `<psl-founder-wall>`) se **sacó de la página** por pedido del cliente
+> (2026-07-10). El bloque `s04-wall.*` y el componente siguen en el repo por si vuelve.
 
 ### PARTNERS (`pages/partners.html`)
-P01 hero · P02 oportunidad · P03 "Three ways this pays back" · **P04 tracción**
-(`<psl-live-counter variant="sponsor">`) · **P05 contacto** (form + descarga del partner deck).
+P01 hero (render aéreo `assets/proof/stadium-iso-night.webp` + divider animado) ·
+**P02 oportunidad** (misma timeline scroll-scrubbed de la Home: reusa `.ptl` de
+`native/home/03-project.css` + `initProjectTimeline` de `03-project.js` — la página carga ambos) ·
+P03 "Three ways this pays back" · **P04 tracción** (`<psl-live-counter variant="sponsor">`) ·
+**P05 contacto** (form + descarga del partner deck).
 
 ### Navegación entre páginas
 El **nav y el footer son bloques compartidos** (van iguales en las 3 páginas). Sus links usan
@@ -197,7 +240,8 @@ Hoy corren con datos demo; **conectar el endpoint real reemplazando la función 
 - **`<psl-live-counter variant="stats|fan|reservation|sponsor">`** — banda de métricas.
   Contrato: `GET /api/live-counter?scope=…`. Schema completo en `custom/live-counter/live-counter.config.js`.
   Reemplazar `_demoData()` por `fetch(this.config.endpoint)`. Las métricas enteras hacen count-up 0→valor
-  al entrar en viewport.
+  al entrar en viewport. La línea "Updated in real time ⓘ" es opt-in por variante
+  (`showUpdated: true` en la config); `stats` y `sponsor` la tienen apagada, igual que el pie `note`.
 
 - **`<psl-fixtures>`** (Matchday) — partidos del equipo reserva.
   Contrato: `GET /api/fixtures?team=reserve` → `[{ competition, kickoff:ISO, venue, home:{name,abbr},
@@ -219,9 +263,10 @@ Hoy corren con datos demo; **conectar el endpoint real reemplazando la función 
   (`assets/jersey360/`) que se dibuja en canvas según el scroll. No necesita backend. Para cambiar el kit:
   reemplazar la secuencia manteniendo nombres y relación de aspecto (recorte 4:5).
 
-- **`<psl-founder-wall searchable>`** (Sumate S04) — muro público de fundadores: nombre + #número + ciudad
+- **`<psl-founder-wall searchable>`** — muro público de fundadores: nombre + #número + ciudad
   (sin email). Buscable por número. Contrato: `GET /api/founders?number=…` para buscar fuera de la ventana
-  cargada. Detalle en `custom/founder-wall/founder-wall.js`.
+  cargada. Detalle en `custom/founder-wall/founder-wall.js`. **Hoy no está montado en ninguna página**
+  (el bloque S04 de Sumate se sacó — ver §6); queda disponible por si se re-monta.
 
 - **`<psl-founder-card>`** — carnet 9:16 compartible (versión previa al boarding pass). **Existe pero no
   está montado en ninguna página** (la Home usa `<psl-founder-id>` en su lugar). Si se monta, la generación

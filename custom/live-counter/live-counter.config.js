@@ -34,6 +34,7 @@ export const LIVE_COUNTER_CONFIG = {
       { key: 'lastJoined', label: 'Last Joined', format: 'relative-time' },
     ],
     note: 'Founder Window closes with the first match in 2027',
+    showUpdated: true,
   },
 
   // Bloques 06 / S03 (Reservá tu lugar / Cómo sumarte) — mismo dato, foco en la acción de reservar.
@@ -45,6 +46,7 @@ export const LIVE_COUNTER_CONFIG = {
       { key: 'lastJoined', label: 'Last Reserved', format: 'relative-time' },
     ],
     note: 'Refundable deposit — Founder Window closes with the first match in 2027',
+    showUpdated: true,
   },
 
   // Bloque P04 (Partners) — para sponsor/inversor: formato tipo pitch deck, growth framing.
@@ -57,8 +59,7 @@ export const LIVE_COUNTER_CONFIG = {
       { key: 'depositsCaptured', label: 'Deposits Captured', labelEs: 'Depósitos Captados', format: 'currency' },
       { key: 'lastJoined', label: 'Last Joined', labelEs: 'Último Ingreso', format: 'relative-time' },
     ],
-    note: 'Founding member growth, month-over-month',
-    noteEs: 'Crecimiento de miembros fundadores, mes a mes',
+    // sin `note` ni `showUpdated`: el bloque cierra en las métricas (pedido del cliente).
   },
 };
 

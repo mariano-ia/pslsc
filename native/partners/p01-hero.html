@@ -5,10 +5,16 @@
   CTAs del wireframe: Request the partner deck / Talk to our team.
 -->
 <section class="phero surface-ink" id="top">
-  <!-- fondo: render del estadio aprobado (placeholder) -->
-  <div class="phero__bg" aria-hidden="true"></div>
+  <!-- fondo: video de la construcción del estadio (estructura de acero al atardecer) + poster de
+       fallback. data-parallax: deriva sutil con el scroll; .phero__bg va sobredimensionado en CSS
+       para que el desplazamiento no deje huecos en los bordes. -->
+  <div class="phero__bg" aria-hidden="true" data-parallax="0.10">
+    <video class="phero__video" autoplay loop muted playsinline preload="auto"
+           poster="/assets/videos/partners-hero-poster.webp">
+      <source src="/assets/videos/partners-hero.mp4" type="video/mp4" />
+    </video>
+  </div>
   <div class="phero__scrim" aria-hidden="true"></div>
-  <span class="phero__asset-tag" aria-hidden="true">▦ STADIUM RENDER · APPROVED · 16:9</span>
 
   <div class="psl-container phero__content">
     <div class="phero__eyebrow">

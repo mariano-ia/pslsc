@@ -1,0 +1,78 @@
+<!-- ============================================================================
+     SONDA DE DIAGNÓSTICO — pegar en un bloque HTML, PUBLICAR, y mirar la PÁGINA PUBLICADA.
+     En la previa del editor los scripts sí corren; eso no dice nada. Reporta solo, no cambia nada.
+     ============================================================================ -->
+
+<style>
+  .pslprobe { font: 14px/1.5 ui-monospace, Menlo, Consolas, monospace; background:#0C0C0A; color:#F4F1EA;
+              padding:20px; border-radius:10px; margin:24px 0; }
+  .pslprobe h3 { font: 700 16px/1.3 ui-monospace, monospace; margin:0 0 14px; color:#AAF6E6; }
+  .pslprobe p  { margin:6px 0; }
+  .pslprobe .ok   { color:#AAF6E6; }
+  .pslprobe .bad  { color:#FF6B81; }
+  .pslprobe .warn { display:block; background:#FF0033; color:#fff; font-weight:700;
+                    padding:10px 12px; border-radius:6px; margin:0 0 16px; }
+  .pslprobe .css-ok { display:block; margin:10px 0 18px; padding:8px 12px; border-radius:6px;
+                      background:#AAF6E6; color:#0C0C0A; font-weight:700; }
+
+  /* Truco: si las etiquetas <script> SOBREVIVIERON al guardado, las mostramos como texto.
+     Si no se ve ningún recuadro rojo, es que WordPress las BORRÓ. */
+  .pslprobe-src script { display:block; white-space:pre-wrap; word-break:break-all;
+                         background:#2a0d12; color:#ffb3c0; border:1px solid #FF0033;
+                         padding:8px; margin:6px 0; border-radius:6px; max-height:90px; overflow:auto; }
+</style>
+
+<div class="pslprobe">
+  <h3>PSL · Sonda de diagnóstico</h3>
+
+  <span class="warn">⚠ Esto hay que mirarlo en la PÁGINA PUBLICADA (y con el caché purgado).
+    En la previa del editor los scripts corren igual y el resultado engaña.</span>
+
+  <span class="css-ok">1. El &lt;style&gt; sobrevivió (si ves esta barra aqua, el CSS entra bien)</span>
+
+  <p id="pslp1" class="bad">2. ❌ script CLÁSICO inline: NO se ejecutó</p>
+  <p id="pslp2" class="bad">3. ❌ script MODULE inline (una línea, sin comentarios): NO se ejecutó</p>
+  <p id="pslp3" class="bad">4. ❌ script MODULE inline (con comentarios // y saltos de línea): NO se ejecutó</p>
+  <p id="pslp4">5. Etiquetas presentes: —</p>
+  <p id="pslp5">6. Contexto: —</p>
+
+  <div class="pslprobe-src">
+    <p style="color:#F4F1EA">7. Abajo se muestra el código de las etiquetas &lt;script&gt; <b>si siguen presentes</b>.<br>
+       Si no aparece ningún recuadro rojo, WordPress las borró al guardar.<br>
+       Si aparecen pero tienen <code>&lt;br&gt;</code> o <code>&lt;/p&gt;</code> adentro, el JS fue mutilado.</p>
+
+    <script>document.getElementById('pslp1').innerHTML = '2. ✅ script CLÁSICO inline: <b>SÍ se ejecutó</b>'; document.getElementById('pslp1').className = 'ok';</script>
+
+    <script type="module">document.getElementById('pslp2').innerHTML = '3. ✅ script MODULE inline (una línea): <b>SÍ se ejecutó</b>'; document.getElementById('pslp2').className = 'ok';</script>
+
+    <script type="module">
+      // Este comentario existe a propósito: si un plugin borra los saltos de línea,
+      // esta línea se come al resto del script y el test 4 falla mientras el 3 pasa.
+      const el = document.getElementById('pslp3');
+      el.innerHTML = '4. ✅ script MODULE inline (con comentarios): <b>SÍ se ejecutó</b>';
+      el.className = 'ok';
+    </script>
+
+    <script>
+      /* Este va AL FINAL a propósito: un script clásico corre mientras se parsea el HTML,
+         así que solo ve las etiquetas que ya pasaron. Puesto acá, las ve a todas.
+         Si un plugin de caché reescribió type="module", acá aparece su type inventado. */
+      (function () {
+        var tags = document.querySelectorAll('.pslprobe-src script');
+        var types = [];
+        for (var i = 0; i < tags.length; i++) types.push(tags[i].getAttribute('type') || 'clásico');
+        var d = document.getElementById('pslp4');
+        d.innerHTML = '5. Etiquetas &lt;script&gt; presentes: <b>' + tags.length + '</b> · sus type=: <b>' +
+                      types.join(' | ') + '</b>';
+        d.className = 'ok';
+
+        var c = document.getElementById('pslp5');
+        var enIframe = (window.top !== window.self);
+        c.innerHTML = '6. Contexto: <b>' + (enIframe ? 'DENTRO DE UN IFRAME (previa del editor) — no sirve'
+                                                     : 'página real') +
+                      '</b> · customElements: <b>' + (('customElements' in window) ? 'soportado' : 'NO') + '</b>';
+        c.className = enIframe ? 'bad' : 'ok';
+      })();
+    </script>
+  </div>
+</div>

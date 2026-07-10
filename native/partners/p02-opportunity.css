@@ -1,4 +1,6 @@
-/* Bloque P02 · La oportunidad — Partners. Usa .pcard (native/_patterns/cards.css) */
+/* Bloque P02 · La oportunidad — Partners.
+   La timeline (.ptl) viene de native/home/03-project.css (bloque compartido con la Home);
+   acá solo vive el head de la sección, espejado del head de "01 — The project". */
 
 .popp .psl-container { padding-block: var(--section-pad); }
 
@@ -8,15 +10,10 @@
   align-items: flex-start;
   margin-bottom: clamp(36px, 5vw, 60px);
 }
-.popp__title { max-width: 20ch; font-size: clamp(32px, 4.6vw, 60px); }
+.popp__title { max-width: 26ch; font-size: clamp(34px, 5vw, 64px); }
 .popp__lead {
   margin-top: 22px;
   max-width: 46ch;
   font: 400 var(--fs-body-lg)/1.6 var(--font-body);
   color: var(--color-text-on-paper-muted);
 }
-
-.popp__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-
-@media (max-width: 960px) { .popp__grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .popp__grid { grid-template-columns: 1fr; } }

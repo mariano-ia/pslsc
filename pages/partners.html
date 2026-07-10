@@ -6,26 +6,29 @@
   <title>Build it with us — Port St. Lucie SC Partners</title>
 
   <!-- Fuentes de marca -->
-  <link rel="stylesheet" href="../tokens/fonts.css?v=59" />
+  <link rel="stylesheet" href="../tokens/fonts.css?v=65" />
   <!-- Tokens -->
-  <link rel="stylesheet" href="../tokens/tokens.css?v=59" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=65" />
 
   <!-- Patrones compartidos -->
-  <link rel="stylesheet" href="../native/_patterns/cards.css?v=59" />
+  <link rel="stylesheet" href="../native/_patterns/cards.css?v=65" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=65" />
 
   <!-- Nav + footer compartidos (bloques de Home) -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=59" />
-  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=59" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=65" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=65" />
+  <!-- Timeline compartida con la Home (P02 reusa .ptl de 03-project) -->
+  <link rel="stylesheet" href="../native/home/03-project.css?v=65" />
 
   <!-- Bloques Partners -->
-  <link rel="stylesheet" href="../native/partners/p01-hero.css?v=59" />
-  <link rel="stylesheet" href="../native/partners/p02-opportunity.css?v=59" />
-  <link rel="stylesheet" href="../native/partners/p03-value.css?v=59" />
-  <link rel="stylesheet" href="../native/partners/p04-traction.css?v=59" />
-  <link rel="stylesheet" href="../native/partners/p05-contact.css?v=59" />
+  <link rel="stylesheet" href="../native/partners/p01-hero.css?v=65" />
+  <link rel="stylesheet" href="../native/partners/p02-opportunity.css?v=65" />
+  <link rel="stylesheet" href="../native/partners/p03-value.css?v=65" />
+  <link rel="stylesheet" href="../native/partners/p04-traction.css?v=65" />
+  <link rel="stylesheet" href="../native/partners/p05-contact.css?v=65" />
 
   <!-- Pieza a medida -->
-  <link rel="stylesheet" href="../custom/live-counter/live-counter.css?v=59" />
+  <link rel="stylesheet" href="../custom/live-counter/live-counter.css?v=65" />
 
   <style>
     html, body { margin: 0; padding: 0; background: var(--color-ink); }
@@ -57,15 +60,24 @@
       const html = await fetch(path + bust).then((r) => r.text());
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
     }));
-    const [{ initPartnerContact }, { initNewsletter }] = await Promise.all([
-      import('../native/partners/p05-contact.js?v=59'),
-      import('../native/home/09-cierre-footer.js?v=59'),
+    // p05: form de contacto · footer: newsletter · 03-project: timeline de P02 · motion: reveals + nav
+    const [{ initPartnerContact }, { initNewsletter }, { initProjectTimeline }, { initMotion }] = await Promise.all([
+      import('../native/partners/p05-contact.js?v=65'),
+      import('../native/home/09-cierre-footer.js?v=65'),
+      import('../native/home/03-project.js?v=65'),
+      import('../native/_patterns/motion.js?v=65'),
     ]);
     initPartnerContact();
     initNewsletter();
+    initProjectTimeline();
+    initMotion();
+
+    // Aterrizaje con #ancla desde otra página: los bloques se inyectan DESPUÉS del load, así que
+    // el navegador no encontró el ancla — la buscamos ahora (el scroll es suave vía CSS, motion.css).
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
   </script>
 
   <!-- Web component del contador -->
-  <script type="module" src="../custom/live-counter/live-counter.js?v=59"></script>
+  <script type="module" src="../custom/live-counter/live-counter.js?v=65"></script>
 </body>
 </html>

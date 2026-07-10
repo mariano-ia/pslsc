@@ -9,11 +9,21 @@
   overflow: hidden;
 }
 
-/* placeholder rayado — reemplazar por render/foto de hinchada/estadio */
+/* Fondo del hero — capa de video (bandera del club flameando sobre la obra). inset vertical
+   negativo: la sobredimensiona para que el data-parallax NUNCA deje huecos en los bordes.
+   El poster va como background de fallback (se ve mientras el video carga y en reduced-motion). */
 .sumate-hero__bg {
   position: absolute;
+  inset: -16% 0;
+  background: #0C0C0A url('/assets/videos/founder-hero-poster.webp') center/cover no-repeat;
+}
+.sumate-hero__video {
+  position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(128deg, #171610 0, #171610 13px, #14130E 13px, #14130E 26px);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .sumate-hero__scrim {
   position: absolute;
@@ -65,15 +75,54 @@
 
 .sumate-hero__ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
 
-/* barra separadora — gradiente de marca, consistente con la Home */
+/* barra separadora — degradado de marca ANIMADO que fluye (mismo que el hero de la Home) */
 .sumate-hero__divider {
   position: relative;
   z-index: 2;
   height: 5px;
   width: 100%;
-  background: linear-gradient(90deg, var(--color-aqua) 0%, var(--color-red-marine) 100%);
+  background: linear-gradient(90deg,
+    var(--color-aqua), var(--color-red-marine), var(--color-aqua),
+    var(--color-red-marine), var(--color-aqua));
+  background-size: 200% 100%;
+  animation: psl-grad-flow 5s linear infinite;
+}
+
+/* ============================================================
+   Coreografía de entrada AL CARGAR (misma cascada del hero de la Home).
+   Gateada bajo .psl-motion (la pone motion.js) → sin JS todo queda visible.
+   ============================================================ */
+.psl-motion .sumate-hero__eyebrow,
+.psl-motion .sumate-hero__headline,
+.psl-motion .sumate-hero__subhead,
+.psl-motion .sumate-hero__ctas {
+  opacity: 0;
+  animation: psl-hero-in var(--dur-reveal) var(--ease-out-soft) both;
+}
+.psl-motion .sumate-hero__eyebrow  { animation-delay: 0ms; }
+.psl-motion .sumate-hero__headline { animation-delay: 180ms; }
+.psl-motion .sumate-hero__subhead  { animation-delay: 270ms; }
+.psl-motion .sumate-hero__ctas     { animation-delay: 360ms; }
+
+/* Divider: se dibuja de izq→der al cargar Y sigue fluyendo el degradado — como en la Home */
+.psl-motion .sumate-hero__divider {
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: psl-draw-x var(--dur-reveal) var(--ease-out-expo) 450ms both,
+             psl-grad-flow 5s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .sumate-hero__dot { animation: none; }
+  /* sin video en reduced-motion: se muestra el poster (background de .sumate-hero__bg) */
+  .sumate-hero__video { display: none; }
+  .sumate-hero__eyebrow,
+  .sumate-hero__headline,
+  .sumate-hero__subhead,
+  .sumate-hero__ctas {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .sumate-hero__divider { animation: none !important; transform: none !important; }
 }

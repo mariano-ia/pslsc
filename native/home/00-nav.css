@@ -1,5 +1,9 @@
 /* Nav — header compartido */
 
+/* El ensamblador de preview inyecta la nav dentro de un div wrapper; sin esto, el sticky queda
+   atrapado en ese wrapper (que mide lo mismo que la nav) y nunca se pega al scrollear. */
+[data-block="00-nav"] { display: contents; }
+
 .nav {
   position: sticky;
   top: 0;
@@ -9,7 +13,11 @@
   border-bottom: 1px solid var(--color-line);
 }
 
+/* position + z-index: el crest SOBRESALE por debajo del nav y la barra de progreso (.nav__progress,
+   absolute, z-index 1) le pasaba por encima. Al posicionar el inner, su contenido queda arriba. */
 .nav__inner {
+  position: relative;
+  z-index: 2;
   height: 70px;
   display: flex;
   align-items: center;

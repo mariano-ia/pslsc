@@ -51,7 +51,6 @@ psl-live-counter { display: block; }
   color: var(--color-text-faint);
   text-transform: uppercase;
 }
-.live-counter__updated-tooltip { cursor: help; margin-left: 6px; }
 
 @media (max-width: 780px) {
   .live-counter__metrics { grid-template-columns: repeat(2, 1fr); row-gap: var(--space-5); }

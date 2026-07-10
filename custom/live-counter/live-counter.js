@@ -93,11 +93,11 @@ class PSLLiveCounter extends HTMLElement {
   }
 
   _render() {
-    // "Updated in real time" no se muestra en la variante stats (destacados de la Home) — se pidió sacarlo.
-    const updated = this.variant === 'stats' ? '' : `
+    // La línea "Updated in real time" es opt-in por variante (`showUpdated` en la config).
+    // stats (Home) y sponsor (Partners) la tienen apagada por pedido del cliente.
+    const updated = !this.config.showUpdated ? '' : `
         <p class="live-counter__updated">
           <span class="live-counter__updated-text">Updated in real time</span>
-          <span class="live-counter__updated-tooltip" title="Founding members = people registered on pslsc.com with verified email">ⓘ</span>
         </p>`;
     this.innerHTML = `
       <div class="live-counter live-counter--${this.variant}">

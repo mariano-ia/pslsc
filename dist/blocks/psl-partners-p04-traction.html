@@ -1,0 +1,408 @@
+<!-- PSL SC - bloque partners/p04-traction. Pegar en un widget HTML de WordPress.
+     Assets y fuentes hosteados en __PSL_ASSET_BASE__/ (ver dist/UPLOAD.md).
+     El JS va como data: URI en el src (WordPress corrompe el JS que va como texto). -->
+<style>
+@font-face{font-family:'Ferryman';font-weight:800;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Ferryman-ExtraBold.woff2) format('woff2');}
+@font-face{font-family:'Ferryman';font-weight:700;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Ferryman-Bold.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:500;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Druk-Medium.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:700;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Druk-Bold.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:800;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Druk-Heavy.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:900;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Druk-Super.woff2) format('woff2');}
+@font-face{font-family:'Druk Text Wide';font-weight:500;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/DrukTextWide-Medium.woff2) format('woff2');}
+@font-face{font-family:'Druk Text Wide';font-weight:800;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/DrukTextWide-Heavy.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:400;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/ProximaNova-Regular.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:600;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/ProximaNova-Semibold.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:700;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/ProximaNova-Bold.woff2) format('woff2');}
+@font-face{font-family:'Cabazon';font-weight:400;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Cabazon-Regular.woff2) format('woff2');}
+.pslsc, .pslsc *, .pslsc *::before, .pslsc *::after { box-sizing: border-box; }
+.pslsc { width:100%; font-family:var(--font-body); color:var(--color-text); line-height:normal; -webkit-font-smoothing:antialiased; }
+.pslsc h1,.pslsc h2,.pslsc h3,.pslsc h4,.pslsc h5,.pslsc h6,.pslsc p,.pslsc ul,.pslsc ol,.pslsc li,.pslsc figure,.pslsc blockquote,.pslsc dl,.pslsc dd { margin:0; padding:0; color:inherit; font:inherit; text-transform:none; }
+.pslsc ul,.pslsc ol { list-style:none; }
+.pslsc a { color:inherit; text-decoration:none; }
+.pslsc img,.pslsc video,.pslsc canvas,.pslsc svg { display:block; max-width:100%; }
+.pslsc button,.pslsc input,.pslsc textarea,.pslsc select { font:inherit; color:inherit; }
+.pslsc ::selection { background:var(--color-aqua); color:var(--color-black); }
+.pslsc--bleed { width:var(--psl-vw,100vw); max-width:var(--psl-vw,100vw); margin-left:calc(50% - var(--psl-vw,100vw)/2); margin-right:calc(50% - var(--psl-vw,100vw)/2); }
+.pslsc .psl-diag { font:12px/1.5 ui-monospace,Menlo,monospace; margin-top:16px; padding:9px 12px; border-radius:6px; background:#FF0033; color:#fff; word-break:break-word; }
+.pslsc .psl-diag.is-ok { background:rgba(14,140,121,.12); color:var(--color-aqua-deep); }
+.pslsc{--color-aqua:        #AAF6E6;   
+  --color-aqua-deep:   #0E8C79;   
+  --color-black:       #000000;
+  --color-white:       #FFFFFF;
+  --color-red-marine:  #FF0033;   
+
+  
+  --color-ink:      #0C0C0A;   
+  --color-ink-2:    #131118;   
+  --color-ink-3:    #16150F;   
+  --color-paper:      #F4F1EA;   
+  --color-paper-2:    #EDE8DE;   
+  --color-paper-card: #FFFFFF;   
+  --color-paper-line: rgba(0,0,0,.09);
+
+  
+  --color-text:            #F4F1EA;   
+  --color-text-muted:      rgba(244,241,234,.68);
+  --color-text-faint:      rgba(244,241,234,.5);
+  --color-text-on-paper:       #0C0C0A;
+  --color-text-on-paper-muted: rgba(12,12,10,.62);
+  --color-text-on-paper-faint: rgba(12,12,10,.45);
+
+  
+  --color-line:        rgba(244,241,234,.1);
+  --color-line-strong: rgba(244,241,234,.16);
+
+  
+  --color-bg: var(--color-ink);
+  --color-bg-elevated: var(--color-ink-2);
+  --color-border: var(--color-line);
+  --color-whatsapp: #25d366;
+  --color-jersey-viewer-bg: #0C0C0A;
+  
+  --color-teal: var(--color-aqua);
+  --color-teal-bright: var(--color-aqua);
+  --color-teal-ink: var(--color-aqua-deep);
+  --color-sky: var(--color-aqua);
+
+  
+  --font-hero:    'Ferryman', Georgia, serif;
+  --font-display: 'Druk', 'Arial Narrow', sans-serif;
+  --font-label:   'Druk Text Wide', 'Arial Narrow', sans-serif;
+  --font-body:    'Proxima Nova', system-ui, sans-serif;   
+  --font-detail:  'Cabazon', 'Druk', serif;
+  --font-mono:    var(--font-label);   
+
+  
+  --ls-display: 0.02em;
+
+  
+  --fs-hero:  clamp(52px, 8.6vw, 138px);
+  --fs-h2:    clamp(34px, 5.4vw, 72px);
+  --fs-h3:    clamp(20px, 2vw, 26px);
+  --fs-card-title: 21px;
+  --fs-body-lg: clamp(15px, 1.4vw, 19px);
+  --fs-body:  16px;
+  --fs-small: 13.5px;
+
+  
+  --fs-kicker: 11px;
+  --fs-label:  10.5px;
+  --ls-kicker: .14em;
+  --ls-label:  .12em;
+
+  
+  --fs-counter: clamp(40px, 5vw, 72px);
+  --font-feature-counter: 'tabular-nums';
+
+  --lh-tight: .9;
+  --lh-normal: 1.6;
+
+  
+  --container: 1320px;
+  --gutter: clamp(22px, 5vw, 56px);
+  --section-pad: clamp(84px, 11vw, 150px);   
+
+  
+  --space-1: 0.25rem;  --space-2: 0.5rem;  --space-3: 1rem;
+  --space-4: 1.5rem;   --space-5: 2.5rem;  --space-6: 4rem;
+
+  
+  --radius-sm: 5px;  --radius-md: 14px;  --radius-lg: 18px;  --radius-pill: 100px;
+
+  
+  --ease-jersey-drag: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-jersey-drag-min: 400ms;
+  --duration-jersey-drag-max: 600ms;
+  --duration-wall-slide-in: 300ms;
+  --ease-wall-slide-in: ease-out;
+  --duration-wall-highlight: 2500ms;
+  --duration-counter-highlight: 1500ms;
+
+  
+  --ease-out-soft:    cubic-bezier(.22, .61, .36, 1);   
+  --ease-out-expo:    cubic-bezier(.16, 1, .3, 1);      
+  --ease-in-out-soft: cubic-bezier(.65, 0, .35, 1);
+  --dur-fast:   240ms;
+  --dur-med:    460ms;
+  --dur-reveal: 720ms;   
+  --reveal-shift: 22px;  
+  --stagger: 80ms;       
+
+  
+  --z-sticky-cta: 40;  --z-nav: 50;  --z-modal: 200;}
+
+
+
+@keyframes psl-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.82)} }
+
+@keyframes psl-marq  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+@keyframes psl-rise  { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+@keyframes psl-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+
+@keyframes psl-hero-in   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+@keyframes psl-float     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+
+@keyframes psl-draw-x    { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+
+@keyframes psl-scroll-cue{ 0%{opacity:0;transform:translateY(-4px)} 35%{opacity:1} 100%{opacity:0;transform:translateY(10px)} }
+
+@keyframes psl-ping      { 0%{transform:scale(.5);opacity:.8} 100%{transform:scale(2.6);opacity:0} }
+
+@keyframes psl-sheen     { 0%{background-position:-140% 0} 60%,100%{background-position:140% 0} }
+
+@keyframes psl-grad-flow { 0%{background-position:0% 50%} 100%{background-position:-200% 50%} }
+.pslsc *, .pslsc *::before, .pslsc *::after{box-sizing: border-box;}
+.pslsc .psl-container{max-width: var(--container);
+  margin: 0 auto;
+  padding-inline: var(--gutter);}
+.pslsc .surface-ink{background: var(--color-ink);   color: var(--color-text);}
+.pslsc .surface-paper{background: var(--color-paper); color: var(--color-text-on-paper);}
+.pslsc .surface-aqua{background: var(--color-aqua);  color: var(--color-black);}
+.pslsc .psl-kicker{font: 500 var(--fs-kicker)/1 var(--font-label);
+  letter-spacing: var(--ls-kicker);
+  color: var(--color-aqua);
+  text-transform: uppercase;}
+.pslsc .surface-paper .psl-kicker{color: var(--color-aqua-deep);}
+.pslsc .psl-h2{margin: 18px 0 0;
+  font: 800 var(--fs-h2)/0.98 var(--font-display);
+  letter-spacing: var(--ls-display);
+  text-transform: none;
+  text-wrap: balance;}
+.pslsc .psl-btn{display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font: 600 14px/1 var(--font-body);   
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 15px 26px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: transform 140ms ease, background 160ms ease, border-color 160ms ease;}
+.pslsc .psl-btn:hover{transform: translateY(-1px);}
+.pslsc .cta-primary{background: var(--color-aqua); color: var(--color-black);}
+.pslsc .cta-primary:hover{background: var(--color-white);}
+.pslsc .cta-secondary{background: transparent; color: currentColor; border: 1px solid rgba(244,241,234,.28);}
+.pslsc .surface-paper .cta-secondary{border-color: rgba(0,0,0,.22);}
+.pslsc .tnum{font-variant-numeric: var(--font-feature-counter);}
+.pslsc .psl-motion [data-reveal]{opacity: 0;
+  transform: translateY(var(--reveal-shift, 22px));
+  transition: opacity var(--dur-reveal, 720ms) var(--ease-out-soft, ease),
+              transform var(--dur-reveal, 720ms) var(--ease-out-soft, ease);
+  transition-delay: var(--reveal-delay, 0ms);}
+.pslsc .psl-motion [data-reveal="left"]{transform: translateX(calc(-1 * var(--reveal-shift, 22px)));}
+.pslsc .psl-motion [data-reveal="right"]{transform: translateX(var(--reveal-shift, 22px));}
+.pslsc .psl-motion [data-reveal="scale"]{transform: scale(.94);}
+.pslsc .psl-motion [data-reveal="mask"]{opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--dur-reveal, 720ms) var(--ease-out-expo, ease);
+  transition-delay: var(--reveal-delay, 0ms);}
+.pslsc .psl-motion [data-reveal].is-revealed{opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 0 0);}
+.pslsc [data-spotlight]{position: relative;}
+.pslsc [data-spotlight]::after{content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, -20%),
+              rgba(170, 246, 230, .16), transparent 62%);
+  opacity: 0;
+  transition: opacity 320ms ease;
+  z-index: 1;}
+.pslsc .surface-paper [data-spotlight]::after, .pslsc [data-spotlight].on-paper::after{background: radial-gradient(240px circle at var(--mx, 50%) var(--my, -20%),
+              rgba(14, 140, 121, .12), transparent 62%);}
+.pslsc [data-spotlight]:hover::after{opacity: 1;}
+.pslsc [data-spotlight] > *{position: relative; z-index: 2;}
+.pslsc [data-tilt]{transition: transform 300ms var(--ease-out-soft, ease); transform-style: preserve-3d;}
+.pslsc [data-magnetic]{transition: transform 300ms var(--ease-out-soft, ease); will-change: transform;}
+.pslsc [data-parallax]{will-change: transform;}
+.pslsc .nav__progress{position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--color-aqua), var(--color-red-marine));
+  z-index: 1;}
+.pslsc .nav.is-scrolled{background: rgba(12, 12, 10, .92);
+  box-shadow: 0 1px 24px rgba(0, 0, 0, .34);}
+.pslsc .nav.is-scrolled .nav__inner{height: 58px;}
+.pslsc .nav__inner{transition: height 280ms var(--ease-out-soft, ease);}
+.pslsc .nav__links a{position: relative; transition: color 160ms ease;}
+.pslsc .nav__links a.is-active{color: var(--color-text);}
+.pslsc .nav__links a.is-active::after{content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--color-aqua);
+  border-radius: 2px;}
+.pslsc .psl-grain{position: fixed;
+  inset: 0;
+  z-index: 36;
+  pointer-events: none;
+  opacity: .035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;}
+.pslsc .psl-cursor-glow{position: fixed;
+  top: 0;
+  left: 0;
+  width: 130px;
+  height: 130px;
+  margin: -65px 0 0 -65px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 60;
+  background: radial-gradient(circle, rgba(170, 246, 230, .11), rgba(170, 246, 230, 0) 68%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 400ms ease;}
+.pslsc .psl-cursor-glow.is-on{opacity: 1;}
+.pslsc .psl-seam--from-ink, .pslsc .psl-seam--from-paper{position: relative;}
+.pslsc .psl-seam--from-ink::before, .pslsc .psl-seam--from-paper::before{content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 90px;
+  pointer-events: none;
+  z-index: 0;}
+.pslsc .psl-seam--from-ink::before{background: linear-gradient(180deg, rgba(12, 12, 10, .16), transparent);}
+.pslsc .psl-seam--from-paper::before{background: linear-gradient(180deg, rgba(244, 241, 234, .07), transparent);}
+
+
+@media (prefers-reduced-motion: reduce) {.pslsc .psl-motion [data-reveal]{opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;}
+.pslsc .psl-grain, .pslsc .psl-cursor-glow{display: none !important;}
+.pslsc .nav__inner{transition: none !important;}}
+.pslsc .ptraction .psl-container{padding-block: var(--section-pad);}
+.pslsc .ptraction__head{max-width: 40rem; margin-bottom: clamp(36px, 4vw, 52px);}
+.pslsc .ptraction__title{font-size: clamp(30px, 4.4vw, 58px);}
+.pslsc .ptraction__lead{margin: 18px 0 0;
+  max-width: 52ch;
+  font: 400 var(--fs-body-lg)/1.6 var(--font-body);
+  color: var(--color-text-on-paper-muted);}
+.pslsc .ptraction .live-counter__value{color: var(--color-text-on-paper);}
+.pslsc .ptraction .live-counter__value--accent{color: var(--color-aqua-deep);}
+.pslsc .ptraction .live-counter__value--highlight{color: var(--color-aqua-deep);}
+.pslsc .ptraction .live-counter__label{color: var(--color-text-on-paper-muted);}
+.pslsc .ptraction .live-counter__metric + .live-counter__metric{border-left-color: var(--color-paper-line);}
+.pslsc .ptraction .live-counter__note, .pslsc .ptraction .live-counter__updated{color: var(--color-text-on-paper-faint);}
+.pslsc psl-live-counter{display: block;}
+.pslsc .live-counter__metrics{display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(20px, 4vw, 48px);}
+.pslsc .live-counter__metric{display: flex;
+  flex-direction: column;
+  gap: 8px;}
+.pslsc .live-counter__metric + .live-counter__metric{border-left: 1px solid var(--color-line-strong);
+  padding-left: clamp(20px, 4vw, 48px);}
+.pslsc .live-counter__value{font: 800 var(--fs-counter)/0.95 var(--font-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-text);
+  transition: color 200ms ease;
+  white-space: nowrap;}
+.pslsc .live-counter__value--accent{color: var(--color-teal);}
+.pslsc .live-counter__value--highlight{color: var(--color-teal-bright);}
+.pslsc .live-counter__label{font: 500 var(--fs-label)/1.4 var(--font-mono);
+  letter-spacing: var(--ls-label);
+  color: var(--color-text-faint);
+  text-transform: uppercase;}
+.pslsc .live-counter__note, .pslsc .live-counter__updated{margin-top: var(--space-4);
+  font: 500 var(--fs-label)/1.5 var(--font-mono);
+  letter-spacing: .12em;
+  color: var(--color-text-faint);
+  text-transform: uppercase;}
+
+
+@media (max-width: 780px) {.pslsc .live-counter__metrics{grid-template-columns: repeat(2, 1fr); row-gap: var(--space-5);}
+.pslsc .live-counter__metric:nth-child(odd){border-left: none; padding-left: 0;}}
+.pslsc .live-counter--stats .live-counter__metric{position: relative;}
+.pslsc .live-counter--stats .live-counter__valrow{display: flex;
+  align-items: flex-start;
+  gap: 7px;}
+.pslsc .live-counter--stats .live-counter__rise{display: inline-flex;
+  color: var(--color-aqua);
+  font-size: clamp(15px, 1.7vw, 23px);
+  margin-top: 0.18em;
+  animation: psl-rise-bob 2.2s var(--ease-in-out-soft) infinite;}
+.pslsc .live-counter--stats .live-counter__rise svg{display: block; width: 1em; height: 1em;}
+
+@keyframes psl-rise-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+.pslsc .live-counter--stats .live-counter__toast{position: absolute;
+  left: 0;
+  top: -1.5em;
+  font: 700 var(--fs-label)/1 var(--font-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-aqua);
+  white-space: nowrap;
+  pointer-events: none;
+  animation: psl-lc-toast 1.8s var(--ease-out-soft) forwards;}
+
+@keyframes psl-lc-toast {
+  0%   { opacity: 0; transform: translateY(6px); }
+  16%  { opacity: 1; transform: translateY(0); }
+  68%  { opacity: 1; transform: translateY(-9px); }
+  100% { opacity: 0; transform: translateY(-19px); }
+}
+
+
+
+@media (prefers-reduced-motion: reduce) {.pslsc .live-counter--stats .live-counter__rise{animation: none !important;}
+.pslsc .live-counter--stats .live-counter__toast{display: none !important;}}
+.pslsc .live-counter--stats .live-counter__metric + .live-counter__metric{border-left: none;}
+.pslsc .live-counter--stats .live-counter__metric + .live-counter__metric::before{content: "";
+  position: absolute;
+  left: 0;
+  top: 14%;
+  bottom: 14%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--color-line-strong) 24%, var(--color-line-strong) 76%, transparent);}
+.pslsc .live-counter--stats .live-counter__metric{transition: transform 260ms var(--ease-out-soft);}
+.pslsc .live-counter--stats .live-counter__metric:hover{transform: translateY(-4px);}
+.pslsc .live-counter--stats .live-counter__metric:hover .live-counter__value:not(.live-counter__value--accent){color: var(--color-white);}
+.pslsc .live-counter--stats .live-counter__value--accent{text-shadow: 0 0 26px rgba(170, 246, 230, .3);}
+.pslsc .live-counter--stats .live-counter__label{letter-spacing: .18em; color: var(--color-text-muted);}
+
+
+@media (max-width: 780px) {.pslsc .live-counter--stats .live-counter__metric:nth-child(odd)::before{display: none;}}
+
+@media (prefers-reduced-motion: reduce) {.pslsc .live-counter--stats .live-counter__metric, .pslsc .live-counter--stats .live-counter__metric:hover{transition: none; transform: none;}}
+
+
+
+@media (max-width: 520px) {.pslsc .live-counter__metrics{grid-template-columns: 1fr; row-gap: var(--space-5);}
+.pslsc .live-counter__metric + .live-counter__metric{border-left: none; padding-left: 0;}
+.pslsc .live-counter--stats .live-counter__metric + .live-counter__metric::before{display: none;}}
+</style>
+
+<div class="pslsc pslsc--bleed">
+<section class="ptraction surface-paper" id="traction">
+  <div class="psl-container">
+    <header class="ptraction__head">
+      <span class="psl-kicker">03 — Traction</span>
+      <h2 class="psl-h2 ptraction__title">The audience is already here.</h2>
+      <p class="ptraction__lead">Real numbers, updated in real time — the same wall a fan sees, read as a growth curve.</p>
+    </header>
+    <psl-live-counter variant="sponsor"></psl-live-counter>
+  </div>
+</section>
+<p class="psl-diag" id="psl-diag">&#10060; El script del bloque no se ejecuto (o fue removido)</p>
+</div>
+
+<script src="data:text/javascript;charset=utf-8,%0A(function(){%0A  function el(){return document.getElementById('psl-diag');}%0A  window.addEventListener('error',function(e){%0A    var d=el(); if(!d) return;%0A    d.textContent='\u274C El JS del bloque fallo: '+(e.message||'error')+'  ('+(e.lineno||'?')+')';%0A    d.className='psl-diag';%0A  },true);%0A  window.__pslDiag=function(){%0A    var d=el(); if(!d) return;%0A    d.textContent='\u2705 JS OK - ancho util '+document.documentElement.clientWidth+'px';%0A    d.className='psl-diag is-ok';%0A  };%0A})();%0A"></script>
+<script type="module" src="data:text/javascript;charset=utf-8,/**%0A * Configuración por variante del %3Cpsl-live-counter%3E.%0A * Misma data, distinto framing según la audiencia (fan vs sponsor).%0A * Máximo 4 métricas por variante. %22lastJoined%22 es la métrica de actividad reciente.%0A *%0A * HANDOFF (WP): cada variante trae su `endpoint` (ej. /api/live-counter?scope=home). Ese es el%0A * contrato a implementar; hoy los valores salen de _demoData() en live-counter.js.%0A */%0A%0Aconst LIVE_COUNTER_CONFIG = {%0A  // Home · Stats proof band — layout del diseño aprobado: 2 métricas vivas + 2 hitos fijos.%0A  // 2027 va en acento teal (accent:true). Formato %22static%22 = valor fijo del contrato, no anima.%0A  stats: {%0A    endpoint: '/api/live-counter?scope=home',%0A    updateFrequencyMs: 8000,%0A    // `rising: true` (SOLO variante stats) marca una métrica %22en alza%22: dibuja una flechita aqua%0A    // apuntando para arriba al lado del número. fan/reservation/sponsor no la usan.%0A    metrics: [%0A      { key: 'founders', label: 'Founding Members', labelEs: 'Miembros Fundadores', format: 'integer', rising: true },%0A      { key: 'deposits2027', label: 'Ticket Deposits', labelEs: 'Depósitos de Entradas', format: 'integer', rising: true },%0A      { key: 'daysToWhistle', label: 'Days to first whistle', labelEs: 'Días para el primer silbato', format: 'integer', accent: true },%0A      { key: 'league', label: 'League One · Pro', labelEs: 'League One · Pro', format: 'static' },%0A    ],%0A  },%0A%0A  // Bloque 02 (Home) — para Marco: número grande + label simple = prueba social.%0A  fan: {%0A    endpoint: '/api/live-counter?scope=home',  // contrato esperado más abajo%0A    updateFrequencyMs: 30000, // espaciado -%3E usa highlight+fade, no odometer continuo%0A    metrics: [%0A      { key: 'founders', label: 'Founding Members', format: 'integer' },%0A      { key: 'deposits2027', label: '2027 Deposits', format: 'integer' },%0A      { key: 'founderWindow', label: 'Founder Window', format: 'text' },%0A      { key: 'lastJoined', label: 'Last Joined', format: 'relative-time' },%0A    ],%0A    note: 'Founder Window closes with the first match in 2027',%0A    showUpdated: true,%0A  },%0A%0A  // Bloques 06 / S03 (Reservá tu lugar / Cómo sumarte) — mismo dato, foco en la acción de reservar.%0A  reservation: {%0A    endpoint: '/api/live-counter?scope=reservations',%0A    updateFrequencyMs: 30000,%0A    metrics: [%0A      { key: 'deposits2027', label: '2027 Deposits', format: 'integer' },%0A      { key: 'lastJoined', label: 'Last Reserved', format: 'relative-time' },%0A    ],%0A    note: 'Refundable deposit — Founder Window closes with the first match in 2027',%0A    showUpdated: true,%0A  },%0A%0A  // Bloque P04 (Partners) — para sponsor/inversor: formato tipo pitch deck, growth framing.%0A  sponsor: {%0A    endpoint: '/api/live-counter?scope=partners',%0A    updateFrequencyMs: 30000,%0A    metrics: [%0A      { key: 'founderGrowthPercent', label: 'Founding Member Growth', labelEs: 'Crecimiento de Fundadores', format: 'growth-percent' },%0A      { key: 'monthlyReach', label: 'Monthly Reach', labelEs: 'Alcance Mensual', format: 'integer' },%0A      { key: 'depositsCaptured', label: 'Deposits Captured', labelEs: 'Depósitos Captados', format: 'currency' },%0A      { key: 'lastJoined', label: 'Last Joined', labelEs: 'Último Ingreso', format: 'relative-time' },%0A    ],%0A    // sin `note` ni `showUpdated`: el bloque cierra en las métricas (pedido del cliente).%0A  },%0A};%0A%0A/**%0A * Contrato de datos esperado del endpoint (a implementar por el developer WordPress).%0A * GET {endpoint} -%3E 200 OK%0A * {%0A *   %22founders%22: 1248,%0A *   %22deposits2027%22: 312,%0A *   %22founderWindow%22: %22Closes 2027%22,%0A *   %22lastJoinedSecondsAgo%22: 720,%0A *   %22monthlyReach%22: 18400,%0A *   %22depositsCaptured%22: 46800,%0A *   %22founderGrowthPercent%22: 23,%0A *   %22firstWhistle%22: %222027%22,%0A *   %22league%22: %22USL%22,%0A *   %22updatedAt%22: %222026-06-30T10:40:00Z%22%0A * }%0A * Métrica %22Updated in real time%22 se calcula en cliente a partir de updatedAt, no se hardcodea.%0A */%0A%0A%0A%0A/**%0A * %3Cpsl-live-counter variant=%22stats|fan|reservation|sponsor%22%3E%3C/psl-live-counter%3E%0A *%0A * 🟦 A medida — se usa en la Home (bloque 02, variant=%22stats%22) y en Partners (P04, variant=%22sponsor%22).%0A * Un solo componente reutilizado con distinta config (ver live-counter.config.js), no piezas separadas.%0A *%0A * Criterios de diseño:%0A * - tabular-nums (token global .tnum, ver tokens.css) para que los números no salten%0A * - máx 4 métricas; %22last joined%22 como prueba de actividad honesta%0A * - números exactos, nunca redondeados con %22+%22%0A * - highlight+fade en los updates para que se note que está vivo%0A * - mismo dato, distinto framing por variante (fan vs sponsor)%0A *%0A * HANDOFF (WP): sin backend todavía — usa datos demo + polling simulado. El contrato de API real%0A * está en live-counter.config.js. Reemplazar _demoData() por fetch(this.config.endpoint).%0A */%0Aclass PSLLiveCounter extends HTMLElement {%0A  connectedCallback() {%0A    this.variant = this.getAttribute('variant') || 'stats';%0A    this.config = LIVE_COUNTER_CONFIG[this.variant];%0A    if (!this.config) {%0A      console.warn(`psl-live-counter: variante desconocida %22${this.variant}%22`);%0A      return;%0A    }%0A    this._data = this._demoData();%0A    this._render();%0A    this._poll();%0A  }%0A%0A  disconnectedCallback() {%0A    clearInterval(this._pollHandle);%0A    if (this._wideMql %26%26 this._applyRelGrid) this._wideMql.removeEventListener('change', this._applyRelGrid);%0A  }%0A%0A  // ---- DEMO DATA — reemplazar por fetch(this.config.endpoint) cuando exista el endpoint real ----%0A  _demoData() {%0A    return {%0A      founders: 1248,%0A      deposits2027: 312,%0A      founderWindow: 'Closes 2027',%0A      lastJoinedSecondsAgo: 720,%0A      monthlyReach: 18400,%0A      depositsCaptured: 46800,%0A      founderGrowthPercent: 23,%0A      firstWhistle: '2027',%0A      // días hasta el primer silbato (2027-03-01) — cuenta viva; el count-up anima 0 -%3E valor%0A      daysToWhistle: Math.max(0, Math.ceil((new Date('2027-03-01T00:00:00') - new Date()) / 86400000)),%0A      league: 'USL',%0A      updatedAt: new Date().toISOString(),%0A    };%0A  }%0A%0A  _simulateIncrement() {%0A    // Solo para demo en ausencia de backend — simula que se suma 1 fundador esporádicamente.%0A    // Devuelve true cuando efectivamente se sumó un fundador (lo usa el toast %22+1%22 de la variante stats).%0A    if (Math.random() %3C 0.5) {%0A      this._data.founders += 1;%0A      this._data.lastJoinedSecondsAgo = 0;%0A      this._data.updatedAt = new Date().toISOString();%0A      return true;%0A    }%0A    this._data.lastJoinedSecondsAgo += this.config.updateFrequencyMs / 1000;%0A    return false;%0A  }%0A%0A  _poll() {%0A    this._pollHandle = setInterval(() =%3E {%0A      const founderAdded = this._simulateIncrement();%0A      this._update();%0A      // Toast %22+1%22 efímero — SOLO variante stats y una vez que el count-up inicial terminó.%0A      if (founderAdded %26%26 this.variant === 'stats' %26%26 this._countUpDone) this._showFounderToast();%0A    }, this.config.updateFrequencyMs);%0A  }%0A%0A  // Toast efímero sobre la métrica de fundadores: sube y se desvanece. Solo variante stats.%0A  // En reduced-motion no se muestra (regla 3). Se autolimpia al terminar la animación.%0A  _showFounderToast() {%0A    const reduce = typeof window !== 'undefined'%0A      %26%26 window.matchMedia %26%26 window.matchMedia('(prefers-reduced-motion: reduce)').matches;%0A    if (reduce) return;%0A    const cell = this._metricsEl.querySelector('[data-key=%22founders%22]');%0A    if (!cell) return;%0A    const toast = document.createElement('span');%0A    toast.className = 'live-counter__toast';%0A    toast.setAttribute('aria-hidden', 'true');%0A    toast.textContent = '+1 Founding member';%0A    cell.appendChild(toast);%0A    const cleanup = () =%3E toast.remove();%0A    toast.addEventListener('animationend', cleanup);%0A    setTimeout(cleanup, 2200); // fallback si no dispara animationend%0A  }%0A%0A  _render() {%0A    // La línea %22Updated in real time%22 es opt-in por variante (`showUpdated` en la config).%0A    // stats (Home) y sponsor (Partners) la tienen apagada por pedido del cliente.%0A    const updated = !this.config.showUpdated ? '' : `%0A        %3Cp class=%22live-counter__updated%22%3E%0A          %3Cspan class=%22live-counter__updated-text%22%3EUpdated in real time%3C/span%3E%0A        %3C/p%3E`;%0A    this.innerHTML = `%0A      %3Cdiv class=%22live-counter live-counter--${this.variant}%22%3E%0A        %3Cdiv class=%22live-counter__metrics%22%3E%3C/div%3E${updated}%0A      %3C/div%3E%0A    `;%0A    this._metricsEl = this.querySelector('.live-counter__metrics');%0A    this.config.metrics.forEach((m) =%3E {%0A      const cell = document.createElement('div');%0A      cell.className = 'live-counter__metric';%0A      cell.dataset.key = m.key;%0A      // Flecha %22en alza%22 (aqua, apunta arriba) junto al número — SOLO métricas con `rising: true`%0A      // (fundadores/depósitos en la variante stats). Reemplaza al viejo sparkline de barritas.%0A      const rise = this.variant === 'stats' %26%26 m.rising === true;%0A      const riseArrow = rise%0A        ? '%3Cspan class=%22live-counter__rise%22 aria-label=%22on the rise%22%3E%3Csvg viewBox=%220 0 16 16%22 width=%221em%22 height=%221em%22 fill=%22currentColor%22 aria-hidden=%22true%22%3E%3Cpath d=%22M8 2 L13.5 8.5 H10 V14 H6 V8.5 H2.5 Z%22/%3E%3C/svg%3E%3C/span%3E'%0A        : '';%0A      cell.innerHTML = `%0A        %3Cdiv class=%22live-counter__valrow%22%3E%0A          %3Cdiv class=%22live-counter__value tnum${m.accent ? ' live-counter__value--accent' : ''}%22 data-format=%22${m.format}%22%3E%3C/div%3E%0A          ${riseArrow}%0A        %3C/div%3E%0A        %3Cdiv class=%22live-counter__label%22%3E${m.label}%3C/div%3E%0A      `;%0A      this._metricsEl.appendChild(cell);%0A    });%0A    // Si la última métrica es de texto relativo (ej. %2212 min ago%22), su columna deja de ser 1fr%0A    // fijo y pasa a %22al menos el ancho de su contenido%22 — así el valor mantiene el mismo tamaño%0A    // de fuente que sus hermanos sin partirse en dos líneas ni desbordar.%0A    // En DESKTOP (grid de N columnas) la columna del relative-time toma el ancho de su contenido.%0A    // En tablet/mobile las media queries colapsan a 2/1 col → NO pisar con inline (ganaría y rompería%0A    // el responsive, desbordando %2212 min ago%22). Re-evaluar al cruzar el breakpoint.%0A    const lastMetric = this.config.metrics[this.config.metrics.length - 1];%0A    if (lastMetric %26%26 lastMetric.format === 'relative-time') {%0A      const n = this.config.metrics.length;%0A      this._wideMql = window.matchMedia('(min-width: 781px)');%0A      this._applyRelGrid = () =%3E {%0A        this._metricsEl.style.gridTemplateColumns = this._wideMql.matches%0A          ? `repeat(${n - 1}, 1fr) minmax(max-content, 1fr)` : '';%0A      };%0A      this._applyRelGrid();%0A      this._wideMql.addEventListener('change', this._applyRelGrid);%0A    }%0A    if (this.config.note) {%0A      const note = document.createElement('p');%0A      note.className = 'live-counter__note';%0A      note.textContent = this.config.note;%0A      this.querySelector('.live-counter').appendChild(note);%0A    }%0A%0A    // Render inicial: las métricas enteras arrancan en 0 y hacen count-up al entrar en viewport;%0A    // el resto se muestra directo.%0A    this._reveal(true);%0A    this._observeReveal();%0A  }%0A%0A  // separación de mils sin decimales (los enteros nunca llevan decimales)%0A  _fmtInt(n) { return Math.round(n).toLocaleString('en-US'); }%0A%0A  _isCountUp(m) { return m.format === 'integer'; }%0A%0A  _reveal(initial = false) {%0A    this.config.metrics.forEach((m) =%3E {%0A      const cell = this._metricsEl.querySelector(`[data-key=%22${m.key}%22] .live-counter__value`);%0A      if (initial %26%26 this._isCountUp(m)) {%0A        cell.textContent = '0';   // parte de 0; el count-up lo lleva al valor%0A        return;%0A      }%0A      const formatted = this._format(m);%0A      if (initial || cell.textContent === '') {%0A        cell.textContent = formatted;%0A        return;%0A      }%0A      if (cell.textContent !== formatted) this._animateChange(cell, formatted);%0A    });%0A  }%0A%0A  // Dispara el count-up cuando el componente entra en viewport (una sola vez).%0A  // Basado en getBoundingClientRect + scroll/load, sin depender de IntersectionObserver.%0A  _observeReveal() {%0A    const maybe = () =%3E {%0A      if (this._countUpDone) return;%0A      const r = this.getBoundingClientRect();%0A      const vh = window.innerHeight || document.documentElement.clientHeight;%0A      if (r.top %3C vh * 0.85 %26%26 r.bottom %3E 0) {%0A        this._countUpDone = true;%0A        window.removeEventListener('scroll', maybe);%0A        this._runCountUps();%0A      }%0A    };%0A    this._maybeReveal = maybe;%0A    window.addEventListener('scroll', maybe, { passive: true });%0A    requestAnimationFrame(maybe);   // chequeo inicial por si ya está en viewport%0A  }%0A%0A  // Anima 0 -%3E valor para cada métrica entera. Rápido, easeOut. tabular-nums + alineado a la%0A  // izquierda evitan cualquier salto de layout mientras crece la cantidad de dígitos.%0A  _runCountUps() {%0A    const reduce = typeof window !== 'undefined'%0A      %26%26 window.matchMedia %26%26 window.matchMedia('(prefers-reduced-motion: reduce)').matches;%0A    this.config.metrics.filter((m) =%3E this._isCountUp(m)).forEach((m) =%3E {%0A      const cell = this._metricsEl.querySelector(`[data-key=%22${m.key}%22] .live-counter__value`);%0A      const target = Number(this._data[m.key]) || 0;%0A      if (reduce) { cell.textContent = this._fmtInt(target); return; }%0A      const DURATION = 1200;%0A      const t0 = performance.now();%0A      const easeOut = (t) =%3E 1 - Math.pow(1 - t, 3);%0A      const tick = (now) =%3E {%0A        const t = Math.min((now - t0) / DURATION, 1);%0A        cell.textContent = this._fmtInt(target * easeOut(t));%0A        if (t %3C 1) requestAnimationFrame(tick);%0A        else cell.textContent = this._fmtInt(target);%0A      };%0A      requestAnimationFrame(tick);%0A    });%0A  }%0A%0A  // Update en vivo (polling): refleja incrementos.%0A  _update() {%0A    this.config.metrics.forEach((m) =%3E {%0A      const cell = this._metricsEl.querySelector(`[data-key=%22${m.key}%22] .live-counter__value`);%0A      // durante/antes del count-up inicial no pisar el valor animado de las métricas enteras%0A      if (this._isCountUp(m) %26%26 !this._countUpDone) return;%0A      const formatted = this._format(m);%0A      if (cell.textContent === formatted) return;%0A      // Métricas con count-up: actualizar el número en silencio (que cambie ES la prueba de %22vivo%22;%0A      // el flash teal se percibía como glitch al cargar). El resto sí usa highlight+fade.%0A      if (this._isCountUp(m)) cell.textContent = formatted;%0A      else this._animateChange(cell, formatted);%0A    });%0A  }%0A%0A  _animateChange(cell, newValue) {%0A    // Updates espaciados (%3E=30s en este config) -%3E highlight+fade, no odometer continuo.%0A    // (odometer reservado para updates por WebSocket cada segundo-minuto, fuera del alcance demo).%0A    cell.textContent = newValue;%0A    cell.classList.remove('live-counter__value--highlight');%0A    void cell.offsetWidth; // reflow para reiniciar la animación%0A    cell.classList.add('live-counter__value--highlight');%0A    setTimeout(() =%3E cell.classList.remove('live-counter__value--highlight'), 1500);%0A  }%0A%0A  // Cada métrica formatea su propio valor leyendo data[m.key] (o un derivado), nunca un campo fijo.%0A  _format(m) {%0A    const data = this._data;%0A    switch (m.format) {%0A      case 'integer':%0A        return Number(data[m.key]).toLocaleString('en-US');%0A      case 'currency':%0A        return `$${Number(data[m.key]).toLocaleString('en-US')}`;%0A      case 'growth-percent':%0A        return `+${data[m.key]}%25`;%0A      case 'relative-time':%0A        return this._relativeTime(data.lastJoinedSecondsAgo);%0A      case 'static':%0A      case 'text':%0A      default:%0A        return data[m.key];%0A    }%0A  }%0A%0A  _relativeTime(seconds) {%0A    if (seconds %3C 60) return 'Just now';%0A    const min = Math.floor(seconds / 60);%0A    if (min %3C 60) return `${min} min ago`;%0A    const hr = Math.floor(min / 60);%0A    return `${hr}h ago`;%0A  }%0A}%0A%0Aif(!customElements.get('psl-live-counter'))customElements.define('psl-live-counter',PSLLiveCounter);%0A%0A%0A%0A%0Afunction pslVw(){document.documentElement.style.setProperty('--psl-vw',document.documentElement.clientWidth+'px');}%0ApslVw(); addEventListener('resize',pslVw,{passive:true});%0Afunction pslBoot(){  if(window.__pslDiag) window.__pslDiag(); }%0Aif(document.readyState==='loading') document.addEventListener('DOMContentLoaded',pslBoot); else pslBoot();%0A"></script>

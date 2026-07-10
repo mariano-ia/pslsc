@@ -20,7 +20,7 @@
  */
 const NAMES = ['SOFIA L.', 'MATEO F.', 'JULIETA V.', 'THIAGO B.', 'EMILIA C.', 'BENJAMIN R.', 'RENATA D.', 'BRUNO M.', 'ANTONELLA P.', 'FACUNDO T.', 'ISABELLA N.', 'SANTIAGO G.'];
 const SEED = [
-  { name: 'VALENTINA G.', from: 'PSL' },
+  { name: 'MARTINA S.',   from: 'PSL' },
   { name: 'MARCO R.',     from: 'FPR' },
   { name: 'LUCAS P.',     from: 'PSL' },
   { name: 'CAMILA S.',    from: 'SUA' },

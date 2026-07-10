@@ -34,3 +34,8 @@ assets/fonts/TisaPro-Bold.otf
 # El sitio usa anchor-aqua / anchor-black; el wordmark del nav/footer es texto, no imagen.
 assets/brand/anchor-white.png
 assets/brand/wordmark-sc-aqua.png
+
+# Preview local servido (artefacto de prueba, regenerable)
+dist/_preview/
+__pycache__/
+*.pyc

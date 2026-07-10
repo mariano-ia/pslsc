@@ -6,25 +6,24 @@
   <title>Be a Founder — Port St. Lucie SC</title>
 
   <!-- Fuentes de marca -->
-  <link rel="stylesheet" href="../tokens/fonts.css?v=59" />
+  <link rel="stylesheet" href="../tokens/fonts.css?v=65" />
   <!-- Tokens -->
-  <link rel="stylesheet" href="../tokens/tokens.css?v=59" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=65" />
 
   <!-- Patrones compartidos -->
-  <link rel="stylesheet" href="../native/_patterns/cards.css?v=59" />
+  <link rel="stylesheet" href="../native/_patterns/cards.css?v=65" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=65" />
 
   <!-- Nav compartido (reusa el bloque de Home) -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=59" />
-  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=59" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=65" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=65" />
 
   <!-- Bloques Sumate -->
-  <link rel="stylesheet" href="../native/sumate/s01-hero.css?v=59" />
-  <link rel="stylesheet" href="../native/sumate/s02-benefits.css?v=59" />
-  <link rel="stylesheet" href="../native/sumate/s03-plans.css?v=59" />
-  <link rel="stylesheet" href="../native/sumate/s04-wall.css?v=59" />
-  <link rel="stylesheet" href="../native/sumate/s05-faq.css?v=59" />
-  <link rel="stylesheet" href="../native/sumate/s06-cta.css?v=59" />
-  <link rel="stylesheet" href="../custom/founder-wall/founder-wall.css?v=59" />
+  <link rel="stylesheet" href="../native/sumate/s01-hero.css?v=65" />
+  <link rel="stylesheet" href="../native/sumate/s02-benefits.css?v=65" />
+  <link rel="stylesheet" href="../native/sumate/s03-plans.css?v=65" />
+  <link rel="stylesheet" href="../native/sumate/s05-faq.css?v=65" />
+  <link rel="stylesheet" href="../native/sumate/s06-cta.css?v=65" />
 
   <style>
     html, body { margin: 0; padding: 0; background: var(--color-ink); }
@@ -37,19 +36,18 @@
   <div data-block="s01-hero"></div>
   <div data-block="s02-benefits"></div>
   <div data-block="s03-plans"></div>
-  <div data-block="s04-wall"></div>
   <div data-block="s05-faq"></div>
   <div data-block="s06-cta"></div>
   <div data-block="footer"></div>
 
   <script type="module">
     // Nav se toma del bloque compartido de Home; el resto son bloques de /sumate.
+    // (S04 founders wall quedó fuera de la página; el componente <psl-founder-wall> sigue en /custom.)
     const blocks = [
       { slot: '00-nav',       path: '../native/home/00-nav.html' },
       { slot: 's01-hero',     path: '../native/sumate/s01-hero.html' },
       { slot: 's02-benefits', path: '../native/sumate/s02-benefits.html' },
       { slot: 's03-plans',    path: '../native/sumate/s03-plans.html' },
-      { slot: 's04-wall',     path: '../native/sumate/s04-wall.html' },
       { slot: 's05-faq',      path: '../native/sumate/s05-faq.html' },
       { slot: 's06-cta',      path: '../native/sumate/s06-cta.html' },
       { slot: 'footer',       path: '../native/home/09-cierre-footer.html' },
@@ -59,12 +57,17 @@
       const html = await fetch(path + bust).then((r) => r.text());
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
     }));
-    // init del form de newsletter del footer (bloque compartido de Home)
-    const { initNewsletter } = await import('../native/home/09-cierre-footer.js?v=59');
+    // init del form de newsletter del footer + sistema de motion (reveals, nav reactiva, grano)
+    const [{ initNewsletter }, { initMotion }] = await Promise.all([
+      import('../native/home/09-cierre-footer.js?v=65'),
+      import('../native/_patterns/motion.js?v=65'),
+    ]);
     initNewsletter();
-  </script>
+    initMotion();
 
-  <!-- Web component del muro -->
-  <script type="module" src="../custom/founder-wall/founder-wall.js?v=59"></script>
+    // Aterrizaje con #ancla desde otra página: los bloques se inyectan DESPUÉS del load, así que
+    // el navegador no encontró el ancla — la buscamos ahora (el scroll es suave vía CSS, motion.css).
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  </script>
 </body>
 </html>

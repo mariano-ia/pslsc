@@ -403,7 +403,8 @@ class PSLFounderID extends HTMLElement {
     ctx.fillText(isYou ? 'CLAIM YOUR FOUNDING NUMBER' : 'FIRST FAN · CLUB MASCOT', PAD, 1372);
     ctx.fillStyle = 'rgba(12,12,10,.5)';
     ctx.font = '500 20px "Druk Text Wide", sans-serif';
-    ctx.fillText('EST. 2025 · FIRST WHISTLE 2027', PAD, 1420);
+    // Est. 2019 = año de marca, único en todo el sitio (ver la timeline en native/home/03-project.html)
+    ctx.fillText('EST. 2019 · FIRST WHISTLE 2027', PAD, 1420);
     ctx.letterSpacing = '0px';
     let bx = W - PAD - 240;
     for (let i = 0; i < 34; i++) {

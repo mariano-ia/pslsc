@@ -38,7 +38,7 @@ class PSLFounderWall extends HTMLElement {
   _seed() {
     // primeras filas nombradas (reconocibles) + relleno hasta max-visible con el pool
     const named = [
-      { num: 1249, name: 'Valentina G.', city: 'Port St. Lucie, FL' },
+      { num: 1249, name: 'Martina S.', city: 'Port St. Lucie, FL' },
       { num: 1248, name: 'Marco R.', city: 'Fort Pierce, FL' },
       { num: 1247, name: 'Lucas P.', city: 'Port St. Lucie, FL' },
       { num: 1246, name: 'Camila S.', city: 'Stuart, FL' },

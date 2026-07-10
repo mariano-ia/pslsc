@@ -5,6 +5,15 @@
  * motion.js): si el JS no corre, el contenido se ve normal (no-JS safe).
  */
 
+/* ====== SMOOTH ANCHORS ======
+   Scroll suave hacia #anclas en todo el sitio (los links de nav/CTAs usan "pagina.html#ancla":
+   si ya estás en esa página el navegador solo scrollea, y este scroll es el que se anima).
+   scroll-padding-top compensa la nav sticky para que el ancla no aterrice tapada. */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 76px;
+}
+
 /* ====== REVEAL ====== */
 .psl-motion [data-reveal] {
   opacity: 0;
@@ -142,6 +151,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   .psl-motion [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
