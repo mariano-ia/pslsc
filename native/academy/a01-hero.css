@@ -11,8 +11,9 @@
 
 /* Fondo — foto real de la academia. inset vertical negativo: la sobredimensiona para que el
    data-parallax NUNCA deje huecos en los bordes al desplazarse. */
-.acad-hero__bg { position: absolute; inset: -14% 0; background: #0C0C0A; }
-.acad-hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+/* poster de fallback como background: se ve mientras el video carga y en reduced-motion */
+.acad-hero__bg { position: absolute; inset: -14% 0; background: #0C0C0A url('/assets/images/pslsc_academy.webp') center/cover no-repeat; }
+.acad-hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .acad-hero__scrim {
   position: absolute;
   inset: 0;
@@ -98,6 +99,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .acad-hero__dot { animation: none; }
+  /* sin video en reduced-motion: se muestra el poster (background de .acad-hero__bg) */
+  .acad-hero__video { display: none; }
   .acad-hero__eyebrow,
   .acad-hero__headline,
   .acad-hero__subhead,
