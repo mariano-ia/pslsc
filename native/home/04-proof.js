@@ -35,17 +35,44 @@ function scrambleLabel(el, word, done) {
 }
 
 /**
- * Peek del render: capa negra plena sobre el render con una "linterna" (hueco radial) que sigue el
- * mouse y una etiqueta que la acompaña. La etiqueta invita a espiar ("espiá el estadio") y, cuando el
- * usuario ya recorrió un par de barridos (o pasó un tiempo), MUTA con scramble al CTA
+ * Mobile (≤780): el peek NO juega a la linterna. El render aparece revelado (visible) pero con las
+ * luces bajas y, cuando entra en el viewport con el scroll, se ENCIENDEN los reflectores (mismo
+ * flicker + brillo que el reveal de desktop). Sin tap, sin capa negra. Un IntersectionObserver lo
+ * dispara una sola vez. Ya no es interactivo, así que le sacamos el rol de botón.
+ */
+function setupMobileLights(peek) {
+  peek.classList.add('peek--auto');
+  peek.removeAttribute('tabindex');
+  peek.removeAttribute('role');
+  peek.removeAttribute('aria-label');
+  let lit = false;
+  const lightUp = () => {
+    if (lit) return;
+    lit = true;
+    peek.classList.add('lights-on');
+  };
+  if (!('IntersectionObserver' in window)) { lightUp(); return; }
+  const io = new IntersectionObserver((entries, obs) => {
+    if (entries.some((e) => e.isIntersecting)) { lightUp(); obs.disconnect(); }
+  }, { threshold: 0.4 });
+  io.observe(peek);
+}
+
+/**
+ * Peek del render (DESKTOP): capa negra plena sobre el render con una "linterna" (hueco radial) que
+ * sigue el mouse y una etiqueta que la acompaña. La etiqueta invita a espiar ("espiá el estadio") y,
+ * cuando el usuario ya recorrió un par de barridos (o pasó un tiempo), MUTA con scramble al CTA
  * ("hacé click y miralo entero"). Click/tap/Enter hace crecer el hueco hasta revelar todo.
- * No-JS y prefers-reduced-motion = render visible sin capa. En touch la linterna queda centrada y la
- * etiqueta sube al CTA tras un momento.
+ * No-JS y prefers-reduced-motion = render visible sin capa. En touch (tablet ≥781) la linterna queda
+ * centrada y la etiqueta sube al CTA tras un momento. En mobile (≤780) → setupMobileLights.
  */
 function setupPeek(root) {
   const peek = root.querySelector('.proof__peek');
   if (!peek) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const overlay = window.matchMedia('(min-width: 781px)').matches;   // timeline como overlay (desktop)
+  if (!overlay) { setupMobileLights(peek); return; }   // mobile: render revelado + luces al scrollear
 
   const R0 = 120;
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -53,7 +80,6 @@ function setupPeek(root) {
   let revealed = false;
   let phase = 'peek';   // 'peek' → 'cta'
   let labelW = 200;
-  const overlay = window.matchMedia('(min-width: 781px)').matches;   // timeline como overlay (desktop)
   let timelineShown = false;
 
   // dibuja la línea de tiempo SOBRE el render: fade-in + eje 2024→2027 que se traza + hitos en secuencia

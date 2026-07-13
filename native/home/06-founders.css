@@ -24,4 +24,6 @@
 
 @media (max-width: 860px) {
   .founders__grid { grid-template-columns: 1fr; }
+  /* mobile: solo la creación del boarding pass — el tablero de partidas no se muestra */
+  .founders__grid psl-departures-board { display: none; }
 }

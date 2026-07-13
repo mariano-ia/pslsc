@@ -22,8 +22,10 @@
   background: #000;
 }
 .proof__peek-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-/* con las luces bajas (tenue) mientras se espía Y durante la expansión del reveal — hasta .lights-on */
-.proof__peek.peek--active:not(.lights-on) .proof__peek-img { filter: brightness(.5) saturate(.9); }
+/* con las luces bajas (tenue) mientras se espía Y durante la expansión del reveal — hasta .lights-on.
+   peek--auto = modo mobile: el render se ve entero (sin linterna) pero apagado hasta entrar en viewport. */
+.proof__peek.peek--active:not(.lights-on) .proof__peek-img,
+.proof__peek.peek--auto:not(.lights-on) .proof__peek-img { filter: brightness(.5) saturate(.9); }
 /* .lights-on lo agrega el JS un instante DESPUÉS de que terminó de abrirse el círculo:
    se encienden TODAS las luces (flicker de reflector → brillo pleno). Sin fill: reposo = brillo base. */
 .proof__peek.lights-on .proof__peek-img { animation: proof-lights-on 1.3s var(--ease-out-soft); }
