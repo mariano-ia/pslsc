@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Academy — Port St. Lucie SC</title>
+
+  <!-- Fuentes de marca -->
+  <link rel="stylesheet" href="../tokens/fonts.css?v=66" />
+  <!-- Tokens -->
+  <link rel="stylesheet" href="../tokens/tokens.css?v=66" />
+
+  <!-- Patrones compartidos -->
+  <link rel="stylesheet" href="../native/_patterns/cards.css?v=66" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=66" />
+
+  <!-- Nav + footer compartidos (reusan los bloques de Home) -->
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=66" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=66" />
+
+  <!-- Bloques Academy -->
+  <link rel="stylesheet" href="../native/academy/a01-hero.css?v=66" />
+  <link rel="stylesheet" href="../native/academy/a02-pathway.css?v=66" />
+  <link rel="stylesheet" href="../native/academy/a03-method.css?v=66" />
+  <link rel="stylesheet" href="../native/academy/a04-proof.css?v=66" />
+  <link rel="stylesheet" href="../native/academy/a05-parents.css?v=66" />
+  <link rel="stylesheet" href="../native/academy/a06-faq.css?v=66" />
+  <link rel="stylesheet" href="../native/academy/a07-tryouts.css?v=66" />
+
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--color-ink); }
+    body { font-family: var(--font-body); color: var(--color-text); overflow-x: hidden; }
+    ::selection { background: var(--color-aqua); color: var(--color-black); }
+  </style>
+</head>
+<body>
+  <div data-block="00-nav"></div>
+  <div data-block="a01-hero"></div>
+  <div data-block="a02-pathway"></div>
+  <div data-block="a03-method"></div>
+  <div data-block="a04-proof"></div>
+  <div data-block="a05-parents"></div>
+  <div data-block="a06-faq"></div>
+  <div data-block="a07-tryouts"></div>
+  <div data-block="footer"></div>
+
+  <script type="module">
+    // Nav y footer se toman de los bloques compartidos de Home; el resto son bloques de /academy.
+    const blocks = [
+      { slot: '00-nav',     path: '../native/home/00-nav.html' },
+      { slot: 'a01-hero',   path: '../native/academy/a01-hero.html' },
+      { slot: 'a02-pathway',path: '../native/academy/a02-pathway.html' },
+      { slot: 'a03-method', path: '../native/academy/a03-method.html' },
+      { slot: 'a04-proof',  path: '../native/academy/a04-proof.html' },
+      { slot: 'a05-parents',path: '../native/academy/a05-parents.html' },
+      { slot: 'a06-faq',    path: '../native/academy/a06-faq.html' },
+      { slot: 'a07-tryouts',path: '../native/academy/a07-tryouts.html' },
+      { slot: 'footer',     path: '../native/home/09-cierre-footer.html' },
+    ];
+    const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
+    await Promise.all(blocks.map(async ({ slot, path }) => {
+      const html = await fetch(path + bust).then((r) => r.text());
+      document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
+    }));
+
+    // init: form de tryouts (mockeado) + form de newsletter del footer + sistema de motion
+    const [{ initTryouts }, { initNewsletter }, { initMotion }] = await Promise.all([
+      import('../native/academy/a07-tryouts.js?v=66'),
+      import('../native/home/09-cierre-footer.js?v=66'),
+      import('../native/_patterns/motion.js?v=66'),
+    ]);
+    initTryouts();
+    initNewsletter();
+    initMotion();
+
+    // Aterrizaje con #ancla desde otra página (ej. Home → academy.html#tryouts): los bloques se
+    // inyectan DESPUÉS del load, así que buscamos el ancla ahora (scroll suave vía CSS, motion.css).
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  </script>
+</body>
+</html>

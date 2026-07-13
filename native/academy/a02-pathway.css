@@ -1,0 +1,101 @@
+/* Bloque A02 · The Pathway — escalera de 4 peldaños (sobre superficie clara) */
+
+.pathway .psl-container { padding-block: var(--section-pad); }
+
+.pathway__head { max-width: 60ch; margin-bottom: clamp(40px, 5vw, 66px); }
+.pathway__title { font-size: clamp(32px, 4.8vw, 62px); max-width: 20ch; }
+.pathway__lead {
+  margin: 20px 0 0;
+  max-width: 52ch;
+  font: 400 var(--fs-body-lg)/1.6 var(--font-body);
+  color: var(--color-text-on-paper-muted);
+}
+
+/* ===== La escalera: 4 columnas con un rail horizontal detrás de los nodos ===== */
+.pathway__ladder {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.pathway__rung {
+  position: relative;
+  padding-top: 46px;   /* espacio para el nodo + rail */
+}
+
+/* rail que conecta los nodos (arranca en el centro de cada nodo, hacia la derecha) */
+.pathway__rung::before {
+  content: "";
+  position: absolute;
+  top: 17px; left: 34px; right: -12px;
+  height: 2px;
+  background: var(--color-paper-line);
+}
+.pathway__rung:last-child::before { display: none; }
+
+.pathway__node {
+  position: absolute;
+  top: 0; left: 0;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--color-paper-card);
+  border: 2px solid var(--color-aqua-deep);
+  box-shadow: 0 0 0 5px rgba(14,140,121,.10);
+}
+.pathway__node--top { border-color: var(--color-red-marine); box-shadow: 0 0 0 5px rgba(255,0,51,.10); }
+.pathway__num { font: 700 12px/1 var(--font-label); letter-spacing: .06em; color: var(--color-text-on-paper); }
+
+.pathway__stage {
+  display: block;
+  font: 500 var(--fs-kicker)/1 var(--font-label);
+  letter-spacing: var(--ls-kicker);
+  text-transform: uppercase;
+  color: var(--color-aqua-deep);
+  margin-bottom: 10px;
+}
+.pathway__rung-title {
+  margin: 0 0 8px;
+  font: 800 clamp(19px, 1.9vw, 24px)/1.05 var(--font-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-text-on-paper);
+}
+.pathway__desc {
+  margin: 0 0 16px;
+  font: 400 var(--fs-body)/1.5 var(--font-body);
+  color: var(--color-text-on-paper-muted);
+}
+
+.pathway__chip {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  font: 600 11px/1 var(--font-label);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.pathway__chip--feeder { background: rgba(0,0,0,.06); color: var(--color-text-on-paper-muted); }
+.pathway__chip--live   { background: rgba(14,140,121,.14); color: var(--color-aqua-deep); }
+.pathway__chip--next   { background: rgba(255,0,51,.12); color: var(--color-red-marine); }
+
+/* Tablet: 2 columnas (rail solo entre pares) */
+@media (max-width: 860px) {
+  .pathway__ladder { grid-template-columns: repeat(2, 1fr); gap: 20px 24px; }
+  .pathway__rung:nth-child(2n)::before { display: none; }
+}
+
+/* Mobile: 1 columna, rail vertical uniendo los nodos de arriba a abajo */
+@media (max-width: 540px) {
+  .pathway__ladder { grid-template-columns: 1fr; gap: 28px; }
+  .pathway__rung { padding-top: 0; padding-left: 52px; }
+  .pathway__rung::before {
+    display: block;
+    top: 34px; left: 16px; right: auto; bottom: -28px;
+    width: 2px; height: auto;
+  }
+  .pathway__rung:last-child::before { display: none; }
+}

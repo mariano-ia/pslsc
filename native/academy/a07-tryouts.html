@@ -1,0 +1,85 @@
+<!--
+  Bloque A07 · Tryouts — Academy. 🟦 A medida (form). EL FIX del CTA "Academy tryouts".
+  Izquierda: cómo funciona el tryout (ventana de fechas, qué traer, cómo sigue). Derecha: form de
+  captura liviano (mockeado, mismo criterio que ticket-deposit: mínima fricción). Ancla #tryouts.
+  HANDOFF · PLACEHOLDER: la ventana de fechas y los años de nacimiento son de muestra. El submit está
+  MOCKEADO en a07-tryouts.js (saveLead) — cablear al backend real (contrato sugerido:
+  POST /api/academy/tryout-request { playerFirstName, birthYear, position, email, phone, consent }).
+-->
+<section class="tryouts surface-ink" id="tryouts">
+  <div class="psl-container tryouts__grid">
+    <!-- IZQUIERDA · cómo funciona -->
+    <div class="tryouts__intro" data-reveal-group="80">
+      <span class="psl-kicker" data-reveal>Tryouts · 2026–27</span>
+      <h2 class="psl-h2 tryouts__title" data-reveal>Come and play. Let&rsquo;s see what your kid&rsquo;s got.</h2>
+      <p class="tryouts__lead" data-reveal>
+        Open tryouts for the 2026–27 season. Leave your details and we&rsquo;ll email you the date, time
+        and location for your kid&rsquo;s age group.
+      </p>
+
+      <ul class="tryouts__how" data-reveal>
+        <li class="tryouts__step"><span class="tryouts__step-n" aria-hidden="true">1</span><span>Register below — takes a minute.</span></li>
+        <li class="tryouts__step"><span class="tryouts__step-n" aria-hidden="true">2</span><span>We email you the tryout date and where to show up.</span></li>
+        <li class="tryouts__step"><span class="tryouts__step-n" aria-hidden="true">3</span><span>Your kid plays. We watch. Everyone gets a fair look.</span></li>
+      </ul>
+
+      <p class="tryouts__bring"><strong>Bring:</strong> boots, shin guards, a ball if you have one, and water.</p>
+    </div>
+
+    <!-- DERECHA · form de captura -->
+    <div class="tryouts__card" data-reveal="right">
+      <form class="tform" data-tryout novalidate>
+        <p class="tform__title">Request a tryout spot</p>
+
+        <div class="tform__field">
+          <label class="tform__label" for="tf-name">Player&rsquo;s first name</label>
+          <input class="tform__input" id="tf-name" name="playerFirstName" type="text" autocomplete="off" required />
+        </div>
+
+        <div class="tform__row">
+          <div class="tform__field">
+            <label class="tform__label" for="tf-year">Birth year</label>
+            <select class="tform__input" id="tf-year" name="birthYear" required>
+              <option value="" selected disabled>Select</option>
+              <option>2019</option><option>2018</option><option>2017</option><option>2016</option>
+              <option>2015</option><option>2014</option><option>2013</option><option>2012</option>
+              <option>2011</option><option>2010</option><option>2009</option><option>2008</option>
+              <option>2007</option>
+            </select>
+          </div>
+          <div class="tform__field">
+            <label class="tform__label" for="tf-pos">Position</label>
+            <select class="tform__input" id="tf-pos" name="position" required>
+              <option value="" selected disabled>Select</option>
+              <option>Goalkeeper</option>
+              <option>Defender</option>
+              <option>Midfielder</option>
+              <option>Forward</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="tform__field">
+          <label class="tform__label" for="tf-email">Parent / guardian email</label>
+          <input class="tform__input" id="tf-email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required />
+        </div>
+
+        <div class="tform__field">
+          <label class="tform__label" for="tf-phone">Phone <span class="tform__opt">(optional)</span></label>
+          <input class="tform__input" id="tf-phone" name="phone" type="tel" autocomplete="tel" />
+        </div>
+
+        <label class="tform__check">
+          <input type="checkbox" name="consent" required />
+          <span>I&rsquo;m the parent or guardian and agree to be contacted about tryouts.</span>
+        </label>
+
+        <button type="submit" class="psl-btn cta-primary tform__submit"><span>Request a tryout spot</span> <span aria-hidden="true">→</span></button>
+        <p class="tform__fineprint">Free. No commitment. We only use this to contact you about tryouts.</p>
+
+        <div class="tform__msg" data-tryout-msg role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,59 @@
+/* Bloque A05 · For parents — capa práctica (sobre superficie oscura) */
+
+.parents { border-top: 1px solid var(--color-line); }
+.parents .psl-container { padding-block: var(--section-pad); }
+
+.parents__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(36px, 6vw, 80px);
+  align-items: start;
+}
+
+.parents__title { font-size: clamp(30px, 4.4vw, 56px); max-width: 16ch; }
+.parents__lead {
+  margin: 22px 0 0;
+  max-width: 42ch;
+  font: 400 var(--fs-body-lg)/1.6 var(--font-body);
+  color: var(--color-text-muted);
+}
+.parents__giveback {
+  margin: 22px 0 0;
+  max-width: 44ch;
+  padding-left: 18px;
+  border-left: 2px solid var(--color-aqua);
+  font: 400 var(--fs-body)/1.6 var(--font-body);
+  color: var(--color-text);
+}
+.parents__cta { margin-top: 30px; }
+
+/* lista de ítems prácticos */
+.parents__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--color-line);
+}
+.pitem {
+  display: grid;
+  grid-template-columns: minmax(9rem, 12rem) 1fr;
+  gap: 16px 24px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--color-line);
+}
+.pitem__term {
+  font: 800 clamp(15px, 1.5vw, 18px)/1.2 var(--font-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-aqua);
+}
+.pitem__desc {
+  font: 400 var(--fs-body)/1.5 var(--font-body);
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 860px) {
+  .parents__grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .pitem { grid-template-columns: 1fr; gap: 6px; }
+}

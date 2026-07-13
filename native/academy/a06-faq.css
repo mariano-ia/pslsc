@@ -1,0 +1,51 @@
+/* Bloque A06 · FAQ — acordeón nativo (<details>/<summary>) sobre superficie clara */
+
+.afaq__inner { padding-block: var(--section-pad); }
+
+.afaq__head { margin-bottom: clamp(32px, 4vw, 48px); }
+.afaq__title { font-size: clamp(30px, 4.4vw, 58px); max-width: 20ch; }
+
+.afaq__list {
+  max-width: 46rem;
+  border-top: 1px solid var(--color-paper-line);
+}
+.afaq__item { border-bottom: 1px solid var(--color-paper-line); }
+
+.afaq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 0;
+  cursor: pointer;
+  list-style: none;
+  font: 700 clamp(17px, 1.6vw, 21px)/1.35 var(--font-body);
+  color: var(--color-text-on-paper);
+}
+.afaq__q::-webkit-details-marker { display: none; }
+
+/* ícono +/- */
+.afaq__icon { position: relative; flex-shrink: 0; width: 20px; height: 20px; }
+.afaq__icon::before,
+.afaq__icon::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 14px; height: 2px;
+  background: var(--color-aqua-deep);
+  transform: translate(-50%, -50%);
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+.afaq__icon::after { transform: translate(-50%, -50%) rotate(90deg); }
+.afaq__item[open] .afaq__icon::after { transform: translate(-50%, -50%) rotate(0); opacity: 0; }
+
+.afaq__a {
+  padding: 0 40px 26px 0;
+  max-width: 60ch;
+  font: 400 var(--fs-body-lg)/1.6 var(--font-body);
+  color: var(--color-text-on-paper-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .afaq__icon::before, .afaq__icon::after { transition: none; }
+}

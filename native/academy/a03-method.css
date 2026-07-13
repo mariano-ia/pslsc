@@ -1,0 +1,55 @@
+/* Bloque A03 · The method — statement + pilares (sobre superficie oscura) */
+
+.method { border-top: 1px solid var(--color-line); }
+.method .psl-container { padding-block: var(--section-pad); }
+
+.method__head { max-width: 62ch; margin-bottom: clamp(40px, 5vw, 60px); }
+.method__title { font-size: clamp(30px, 4.6vw, 60px); max-width: 22ch; }
+.method__lead {
+  margin: 22px 0 0;
+  max-width: 58ch;
+  font: 400 var(--fs-body-lg)/1.6 var(--font-body);
+  color: var(--color-text-muted);
+}
+
+.method__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.method__card {
+  padding: 26px 24px 28px;
+  border-radius: var(--radius-md);
+  background: var(--color-ink-2);
+  border: 1px solid var(--color-line);
+  transition: transform 200ms var(--ease-out-soft), border-color 200ms ease;
+}
+.method__card:hover { transform: translateY(-3px); border-color: var(--color-line-strong); }
+
+.method__index {
+  display: block;
+  font: 700 13px/1 var(--font-label);
+  letter-spacing: .12em;
+  color: var(--color-aqua);
+  margin-bottom: 20px;
+}
+.method__card-title {
+  margin: 0 0 10px;
+  font: 800 clamp(18px, 1.7vw, 22px)/1.08 var(--font-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-text);
+}
+.method__card-desc {
+  margin: 0;
+  font: 400 var(--fs-body)/1.55 var(--font-body);
+  color: var(--color-text-muted);
+}
+.method__card-desc em { color: var(--color-aqua); font-style: normal; }
+
+@media (max-width: 860px) {
+  .method__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 460px) {
+  .method__grid { grid-template-columns: 1fr; }
+}

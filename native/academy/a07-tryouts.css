@@ -1,0 +1,128 @@
+/* Bloque A07 · Tryouts — intro + form de captura (sobre superficie oscura) */
+
+.tryouts { border-top: 1px solid var(--color-line); }
+.tryouts .psl-container { padding-block: var(--section-pad); }
+
+.tryouts__grid {
+  display: grid;
+  grid-template-columns: 1fr 460px;
+  gap: clamp(36px, 6vw, 72px);
+  align-items: start;
+}
+
+/* ----- intro ----- */
+.tryouts__title { font-size: clamp(30px, 4.4vw, 56px); max-width: 15ch; }
+.tryouts__lead {
+  margin: 22px 0 0;
+  max-width: 44ch;
+  font: 400 var(--fs-body-lg)/1.6 var(--font-body);
+  color: var(--color-text-muted);
+}
+.tryouts__how { list-style: none; margin: 30px 0 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+.tryouts__step { display: flex; align-items: flex-start; gap: 14px; font: 400 var(--fs-body)/1.5 var(--font-body); color: var(--color-text); }
+.tryouts__step-n {
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: rgba(170,246,230,.14);
+  color: var(--color-aqua);
+  font: 700 13px/1 var(--font-label);
+}
+.tryouts__bring {
+  margin: 28px 0 0;
+  font: 400 var(--fs-body)/1.5 var(--font-body);
+  color: var(--color-text-muted);
+}
+.tryouts__bring strong { color: var(--color-text); font-weight: 700; }
+
+/* ----- form card ----- */
+.tryouts__card {
+  background: var(--color-ink-2);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-lg);
+  padding: clamp(24px, 3vw, 34px);
+}
+.tform__title {
+  margin: 0 0 22px;
+  font: 800 clamp(19px, 2vw, 24px)/1.1 var(--font-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-text);
+}
+.tform__field { margin-bottom: 16px; }
+.tform__row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.tform__label {
+  display: block;
+  margin-bottom: 7px;
+  font: 600 12px/1.2 var(--font-body);
+  letter-spacing: .02em;
+  color: var(--color-text-muted);
+}
+.tform__opt { color: var(--color-text-faint); font-weight: 400; text-transform: none; letter-spacing: 0; }
+.tform__input {
+  width: 100%;
+  padding: 13px 14px;
+  background: var(--color-ink-3);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font: 400 15px/1.2 var(--font-body);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.tform__input::placeholder { color: var(--color-text-faint); }
+.tform__input:focus {
+  outline: none;
+  border-color: var(--color-aqua);
+  box-shadow: 0 0 0 3px rgba(170,246,230,.16);
+}
+/* chevron para los <select> */
+select.tform__input {
+  background-image: linear-gradient(45deg, transparent 50%, var(--color-aqua) 50%), linear-gradient(135deg, var(--color-aqua) 50%, transparent 50%);
+  background-position: calc(100% - 20px) calc(1.15em), calc(100% - 15px) calc(1.15em);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 40px;
+}
+.tform__input:invalid { color: var(--color-text-faint); }   /* placeholder-color en selects sin elegir */
+.tform__input option { color: var(--color-text); background: var(--color-ink-2); }
+
+.tform__check {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin: 20px 0 4px;
+  font: 400 var(--fs-small)/1.45 var(--font-body);
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+.tform__check input {
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  margin-top: 1px;
+  accent-color: var(--color-aqua);
+}
+
+.tform__submit { width: 100%; justify-content: center; margin-top: 18px; }
+.tform__fineprint {
+  margin: 14px 0 0;
+  text-align: center;
+  font: 400 12px/1.4 var(--font-body);
+  color: var(--color-text-faint);
+}
+
+/* mensaje de estado (éxito / error del submit mockeado) */
+.tform__msg { margin-top: 14px; font: 500 14px/1.5 var(--font-body); }
+.tform__msg[data-state="ok"]  { color: var(--color-aqua); }
+.tform__msg[data-state="err"] { color: var(--color-red-marine); }
+.tform.is-done .tform__submit,
+.tform.is-done .tform__fineprint { display: none; }
+
+@media (max-width: 860px) {
+  .tryouts__grid { grid-template-columns: 1fr; }
+  .tryouts__card { max-width: 520px; }
+}
+@media (max-width: 420px) {
+  .tform__row { grid-template-columns: 1fr; gap: 0; }
+}
