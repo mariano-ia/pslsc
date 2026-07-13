@@ -20,9 +20,9 @@
 
   <!-- Bloques Academy -->
   <link rel="stylesheet" href="../native/academy/a01-hero.css?v=66" />
-  <link rel="stylesheet" href="../native/academy/a02-pathway.css?v=66" />
+  <!-- The pathway reusa el estilo del bloque "01 — The project" de la Home -->
+  <link rel="stylesheet" href="../native/home/03-project.css?v=66" />
   <link rel="stylesheet" href="../native/academy/a03-method.css?v=66" />
-  <link rel="stylesheet" href="../native/academy/a04-proof.css?v=66" />
   <link rel="stylesheet" href="../native/academy/a05-parents.css?v=66" />
   <link rel="stylesheet" href="../native/academy/a06-faq.css?v=66" />
   <link rel="stylesheet" href="../native/academy/a07-tryouts.css?v=66" />
@@ -38,7 +38,6 @@
   <div data-block="a01-hero"></div>
   <div data-block="a02-pathway"></div>
   <div data-block="a03-method"></div>
-  <div data-block="a04-proof"></div>
   <div data-block="a05-parents"></div>
   <div data-block="a06-faq"></div>
   <div data-block="a07-tryouts"></div>
@@ -51,7 +50,6 @@
       { slot: 'a01-hero',   path: '../native/academy/a01-hero.html' },
       { slot: 'a02-pathway',path: '../native/academy/a02-pathway.html' },
       { slot: 'a03-method', path: '../native/academy/a03-method.html' },
-      { slot: 'a04-proof',  path: '../native/academy/a04-proof.html' },
       { slot: 'a05-parents',path: '../native/academy/a05-parents.html' },
       { slot: 'a06-faq',    path: '../native/academy/a06-faq.html' },
       { slot: 'a07-tryouts',path: '../native/academy/a07-tryouts.html' },
@@ -63,12 +61,15 @@
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
     }));
 
-    // init: form de tryouts (mockeado) + form de newsletter del footer + sistema de motion
-    const [{ initTryouts }, { initNewsletter }, { initMotion }] = await Promise.all([
+    // init: pathway scroll-scrub (reusa 03-project.js) + form de tryouts (mockeado) +
+    // form de newsletter del footer + sistema de motion
+    const [{ initProjectTimeline }, { initTryouts }, { initNewsletter }, { initMotion }] = await Promise.all([
+      import('../native/home/03-project.js?v=66'),
       import('../native/academy/a07-tryouts.js?v=66'),
       import('../native/home/09-cierre-footer.js?v=66'),
       import('../native/_patterns/motion.js?v=66'),
     ]);
+    initProjectTimeline();
     initTryouts();
     initNewsletter();
     initMotion();
