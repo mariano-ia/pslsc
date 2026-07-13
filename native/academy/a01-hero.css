@@ -2,7 +2,8 @@
 
 .acad-hero {
   position: relative;
-  min-height: 78vh;
+  min-height: 100vh;
+  min-height: 100svh;   /* pantalla completa; svh evita el salto por la barra del navegador en mobile */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
