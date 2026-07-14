@@ -62,7 +62,7 @@ header.site{position:sticky;top:0;z-index:50;background:rgba(250,250,247,.86);
   backdrop-filter:saturate(160%) blur(12px);border-bottom:1px solid var(--line)}
 .hd{display:flex;align-items:center;justify-content:space-between;height:74px}
 .brand{display:flex;align-items:center;gap:.7rem;cursor:pointer}
-.brand img{height:44px;width:auto}
+.brand img{height:58px;width:auto}
 .brand .bt{line-height:1.05}
 .brand .bt b{display:block;font-family:var(--display);font-weight:900;font-size:.95rem;letter-spacing:.02em}
 .brand .bt span{display:block;font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
@@ -289,7 +289,7 @@ body.notes-on .note b{color:#3f3110}
 
 <header class="site">
   <div class="wrap hd">
-    <a class="brand" onclick="backToShop()"><img src="/shop/assets/crest.webp" alt="Port St. Lucie SC crest"><span class="bt"><b>PORT ST. LUCIE SC</b><span>Treasure Coast · Est. 2027</span></span></a>
+    <a class="brand" onclick="backToShop()" aria-label="Port St. Lucie SC"><img src="/shop/assets/crest.webp" alt="Port St. Lucie SC"></a>
     <button class="cartbtn" onclick="openCart()" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M2.5 3.5h2.3l2.05 10.5a1.2 1.2 0 0 0 1.18.96h8.3a1.2 1.2 0 0 0 1.18-.93L20 7.5H6.2"/><circle cx="9.2" cy="19" r="1.35"/><circle cx="16.6" cy="19" r="1.35"/></svg><span class="cartcount" id="cartcount">0</span></button>
   </div>
 </header>
@@ -369,7 +369,7 @@ body.notes-on .note b{color:#3f3110}
   <div class="wrap">
     <div class="fgrid">
       <div>
-        <a class="brand" onclick="backToShop()"><img src="/shop/assets/crest.webp" alt="" style="height:48px"><span class="bt"><b style="color:#fff">PORT ST. LUCIE SC</b><span>Treasure Coast · Est. 2027</span></span></a>
+        <a class="brand" onclick="backToShop()" aria-label="Port St. Lucie SC"><img src="/shop/assets/crest.webp" alt="Port St. Lucie SC" style="height:54px"></a>
         <p class="ftag">The first professional soccer club of the Treasure Coast. Built from zero, with you.</p>
       </div>
       <div><h5>Shop</h5><ul>
