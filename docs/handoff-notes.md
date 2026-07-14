@@ -34,6 +34,7 @@ assets/            brand/ (logos WebP) · fonts/ (tipografías) · images/ · pr
 pages/             home · sumate · partners · academy .html  → SOLO para preview (ver §2 y §9)
 tools/             build-blocks.py → compila los bloques para WordPress (ver §2). README propio.
 dist/              SALIDA para WordPress: blocks/ (pegar), upload/ (hostear), UPLOAD.md (instructivo).
+shop/              tienda oficial — mockup A MEDIDA (HTML autocontenido). NO va por bloques (ver §10 y shop/README.md)
 docs/              esta guía + auditoria-2026-07-10.md (revisión del prototipo)
 external/          contrato del link a la tienda externa (no se construye acá)
 vercel.json        config del deploy de preview (Vercel) — no aplica a WordPress
@@ -257,3 +258,23 @@ python3 -m http.server 4321
 Al editar CSS/JS, subir el `?v=N` en `pages/*.html` para saltear el caché del navegador.
 Nada de esto (el server, el `?v=`, el fetch de bloques) se traspasa a WordPress — es andamiaje de preview.
 Para ver los **bloques ya compilados** funcionando, ver `dist/README.md`.
+La **tienda** se ve en `http://localhost:4321/shop/` (ver §10).
+
+---
+
+## 10. Tienda (`shop/`) — a medida, NO por bloques
+
+La tienda oficial es un mockup **a medida**: un único HTML autocontenido en `shop/index.html`.
+**No se compila a bloques ni pasa por `tools/build-blocks.py`** — se construye aparte. Detalle completo
+en **`shop/README.md`**. Lo esencial para el handoff:
+
+- **Autocontenida**: CSS/JS inline y **fuentes de marca embebidas** (Druk, Proxima, Cabazon, Ferryman).
+  Alineada a `tokens/tokens.css` (misma paleta y tipografías; el hero usa Ferryman como la home).
+- **Assets** en `shop/assets/` (crest, mascot en WebP con alpha, 4 fotos de categoría en WebP). Rutas
+  absolutas `/shop/assets/…`.
+- **A cablear**: el catálogo/imágenes salen de un dataset **demo** de Soccer Locker (`…s3…`) — reemplazar
+  por el real; el carrito/checkout son mock. El link "Become a Founder" apunta a la **URL de preview de
+  Vercel** — cambiar por el permalink real. El newsletter es mock.
+- **Relación con el sitio**: el nav del sitio ("Shop") y el "Buy now" de la camiseta salen hoy a la
+  tienda externa de Soccer Locker (`shop.myuniformsoccerlocker.com/...`). Definir si esta tienda a medida
+  la reemplaza.

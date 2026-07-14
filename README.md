@@ -12,13 +12,15 @@ se pega como un **bloque HTML** en el constructor visual.
 | Entender el proyecto entero (estructura, componentes, contratos de API) | [`docs/handoff-notes.md`](docs/handoff-notes.md) |
 | Ver los bloques ya compilados | [`dist/`](dist/) — `blocks/` (pegar) · `upload/` (hostear) |
 | Regenerar los bloques desde el fuente | [`tools/README.md`](tools/README.md) |
+| La **tienda** (mockup a medida, NO va por bloques) | [`shop/`](shop/) — ver [`shop/README.md`](shop/README.md) |
 | La revisión/auditoría del prototipo | [`docs/auditoria-2026-07-10.md`](docs/auditoria-2026-07-10.md) |
 
 ## Ver el sitio localmente
 
 ```bash
 python3 -m http.server 4321
-# → http://localhost:4321/pages/home.html   (sumate · partners · academy)
+# sitio:   http://localhost:4321/pages/home.html   (sumate · partners · academy)
+# tienda:  http://localhost:4321/shop/
 ```
 
 Las páginas de `pages/` arman el sitio completo para previsualizar (hacen `fetch` de los bloques de
@@ -35,7 +37,12 @@ assets/     imágenes (WebP), videos (H.264), fuentes, camiseta 360
 pages/      SOLO preview: arman las páginas completas
 tools/      build-blocks.py → compila los bloques para WordPress
 dist/       SALIDA para WordPress: blocks/ (pegar) · upload/ (hostear) · UPLOAD.md (instructivo)
+shop/       tienda oficial — mockup A MEDIDA (HTML autocontenido). NO va por bloques (ver shop/README.md)
 docs/       handoff-notes.md (la guía completa) + auditoría
 ```
+
+> **Dos entregables distintos:** el **sitio** (home/sumate/partners/academy) se arma pegando los
+> **bloques** de `dist/blocks/` en WordPress. La **tienda** (`shop/`) es una página **a medida** — un
+> HTML autocontenido, no se compila a bloques.
 
 Detalle completo de cada carpeta y de cómo se integra en WordPress: **[`docs/handoff-notes.md`](docs/handoff-notes.md)**.
