@@ -1,4 +1,4 @@
-<!-- PSL SC - bloque sumate/s02-benefits. Pegar en un widget HTML de WordPress.
+<!-- PSL SC - bloque academy/a06-faq. Pegar en un widget HTML de WordPress.
      Assets y fuentes hosteados en __PSL_ASSET_BASE__/ (ver dist/UPLOAD.md).
      El JS va como data: URI en el src (WordPress corrompe el JS que va como texto). -->
 <style>
@@ -288,127 +288,79 @@
     transition: none !important;}
 .pslsc .psl-grain, .pslsc .psl-cursor-glow{display: none !important;}
 .pslsc .nav__inner{transition: none !important;}}
-.pslsc .pcard-grid{display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;}
-.pslsc .pcard{display: flex;
-  flex-direction: column;
-  background: var(--color-paper-card);
-  border: 1px solid var(--color-paper-line);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  transition: transform 200ms ease, box-shadow 200ms ease;}
-.pslsc .pcard:hover{transform: translateY(-3px); box-shadow: 0 16px 30px rgba(18,17,13,.08);}
-.pslsc .pcard--dark{background: var(--color-ink-2);
-  border-color: var(--color-ink-2);
-  color: var(--color-text);}
-.pslsc .pcard__media{aspect-ratio: 4/3;
-  position: relative;
-  background: repeating-linear-gradient(135deg, #E7E1D4, #E7E1D4 11px, #E1DACB 11px, #E1DACB 22px);}
-.pslsc .pcard__media--dark{background: repeating-linear-gradient(135deg, #1C1B15, #1C1B15 11px, #191811 11px, #191811 22px);}
-.pslsc .pcard__media::before{content: attr(data-tag);
+.pslsc .afaq__inner{padding-block: var(--section-pad);}
+.pslsc .afaq__head{margin-bottom: clamp(32px, 4vw, 48px);}
+.pslsc .afaq__title{font-size: clamp(30px, 4.4vw, 58px); max-width: 20ch;}
+.pslsc .afaq__list{max-width: 46rem;
+  border-top: 1px solid var(--color-paper-line);}
+.pslsc .afaq__item{border-bottom: 1px solid var(--color-paper-line);}
+.pslsc .afaq__q{display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 0;
+  cursor: pointer;
+  list-style: none;
+  font: 700 clamp(17px, 1.6vw, 21px)/1.35 var(--font-body);
+  color: var(--color-text-on-paper);}
+.pslsc .afaq__q::-webkit-details-marker{display: none;}
+.pslsc .afaq__icon{position: relative; flex-shrink: 0; width: 20px; height: 20px;}
+.pslsc .afaq__icon::before, .pslsc .afaq__icon::after{content: "";
   position: absolute;
-  top: 12px;
-  left: 12px;
-  font: 500 9px/1 var(--font-mono);
-  letter-spacing: .14em;
-  color: rgba(18,17,13,.4);
-  border: 1px solid rgba(18,17,13,.16);
-  padding: 5px 7px;
-  border-radius: 4px;}
-.pslsc .pcard__media--dark::before{color: var(--color-sky);
-  border-color: rgba(169,214,222,.3);}
-.pslsc .pcard__icon{width: 40px;
-  height: 40px;
-  margin-bottom: 4px;}
-.pslsc .pcard__body{padding: 22px 20px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;}
-.pslsc .pcard__kicker{font: 500 10px/1 var(--font-mono);
-  letter-spacing: .16em;
-  color: var(--color-teal-ink);
-  text-transform: uppercase;}
-.pslsc .pcard__kicker--teal{color: var(--color-teal);}
-.pslsc .pcard__title{margin: 2px 0 0; font: 800 var(--fs-card-title)/1.08 var(--font-display); letter-spacing: var(--ls-display);}
-.pslsc .pcard__desc{margin: 0; font: 400 14px/1.55 var(--font-body); color: var(--color-text-on-paper-muted); flex: 1;}
-.pslsc .pcard--dark .pcard__desc{color: var(--color-text-muted);}
-.pslsc .pcard__link{margin-top: 8px; font: 600 13px/1 var(--font-body); letter-spacing: .02em; color: var(--color-text-on-paper); text-decoration: none;}
-.pslsc .pcard__link--teal{color: var(--color-teal);}
+  top: 50%; left: 50%;
+  width: 14px; height: 2px;
+  background: var(--color-aqua-deep);
+  transform: translate(-50%, -50%);
+  transition: transform 220ms ease, opacity 220ms ease;}
+.pslsc .afaq__icon::after{transform: translate(-50%, -50%) rotate(90deg);}
+.pslsc .afaq__item[open] .afaq__icon::after{transform: translate(-50%, -50%) rotate(0); opacity: 0;}
+.pslsc .afaq__a{padding: 0 40px 26px 0;
+  max-width: 60ch;
+  font: 400 var(--fs-body-lg)/1.6 var(--font-body);
+  color: var(--color-text-on-paper-muted);}
 
 
-@media (max-width: 960px) {.pslsc .pcard-grid{grid-template-columns: repeat(2, 1fr);}}
-
-@media (max-width: 560px) {.pslsc .pcard-grid{grid-template-columns: 1fr;}}
-.pslsc .benefits .psl-container{padding-block: var(--section-pad);}
-.pslsc .benefits__head{margin-bottom: clamp(36px, 5vw, 60px);}
-.pslsc .benefits__title{max-width: 26ch; font-size: clamp(32px, 4.6vw, 60px);}
-.pslsc .benefits__grid{display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;}
-.pslsc .pcard--benefit .pcard__body{padding: 28px 24px 26px; gap: 10px;}
-.pslsc .pcard--benefit .pcard__icon{color: var(--color-aqua-deep);}
-.pslsc .pcard--benefit .pcard__link--teal{color: var(--color-aqua-deep);}
-
-
-@media (max-width: 960px) {.pslsc .benefits__grid{grid-template-columns: repeat(2, 1fr);}}
-
-@media (max-width: 560px) {.pslsc .benefits__grid{grid-template-columns: 1fr;}}
+@media (prefers-reduced-motion: reduce) {.pslsc .afaq__icon::before, .pslsc .afaq__icon::after{transition: none;}}
 </style>
 
 <div class="pslsc pslsc--bleed">
-<section class="benefits surface-paper" id="benefits">
-  <div class="psl-container">
-    <header class="benefits__head">
-      <span class="psl-kicker" data-reveal>What being a Founder means</span>
-      <h2 class="psl-h2 benefits__title" data-reveal data-reveal-delay="90">Not perks. Proof you were here first.</h2>
+<section class="afaq surface-paper" id="faq">
+  <div class="psl-container afaq__inner">
+    <header class="afaq__head">
+      <span class="psl-kicker" data-reveal>Before the tryout</span>
+      <h2 class="psl-h2 afaq__title" data-reveal data-reveal-delay="90">The questions parents actually ask.</h2>
     </header>
 
-    <div class="benefits__grid" data-reveal-group="90">
-      <article class="pcard pcard--benefit" data-reveal>
-        <div class="pcard__body">
-          <svg class="pcard__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M7 8a4 4 0 100 8c2 0 3-1.5 5-4s3-4 5-4a4 4 0 110 8c-2 0-3-1.5-5-4S9 8 7 8z" stroke="currentColor" stroke-width="1.6"/>
-          </svg>
-          <h3 class="pcard__title">For life</h3>
-          <p class="pcard__desc">Founder status for the lifetime of the club — it never expires, never renews.</p>
-        </div>
-      </article>
+    <div class="afaq__list" data-reveal-group="70">
+      <details class="afaq__item" data-reveal>
+        <summary class="afaq__q"><span>What ages can try out?</span><span class="afaq__icon" aria-hidden="true"></span></summary>
+        <div class="afaq__a">Boys and girls from the youngest squads up to U-19. If you&rsquo;re not sure which group fits, just register — we&rsquo;ll place your kid by age and level at the tryout.</div>
+      </details>
 
-      <article class="pcard pcard--benefit" data-reveal>
-        <div class="pcard__body">
-          <svg class="pcard__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M9 4L7 20M17 4l-2 16M4 9h16M3 15h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
-          <h3 class="pcard__title">Your number</h3>
-          <p class="pcard__desc">A permanent founder number, assigned the moment you join. The lower it is, the earlier you were.</p>
-        </div>
-      </article>
+      <details class="afaq__item" data-reveal>
+        <summary class="afaq__q"><span>What does it cost? Is financial aid available?</span><span class="afaq__icon" aria-hidden="true"></span></summary>
+        <div class="afaq__a">Pricing is clear and up front — no surprise fees. And there&rsquo;s financial aid, because no kid should miss out over money. Ask us at the tryout; the conversation stays private.</div>
+      </details>
 
-      <article class="pcard pcard--benefit" data-reveal>
-        <div class="pcard__body">
-          <svg class="pcard__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="3" y="4" width="18" height="16" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
-            <path d="M3 9h18M3 14h18M9 4v5m0 5v6M15 9v5" stroke="currentColor" stroke-width="1.6"/>
-          </svg>
-          <h3 class="pcard__title">On the wall</h3>
-          <p class="pcard__desc">Your name goes on the founders wall — public, permanent, alongside everyone who believed early.</p>
-        </div>
-      </article>
+      <details class="afaq__item" data-reveal>
+        <summary class="afaq__q"><span>Where and when do you train?</span><span class="afaq__icon" aria-hidden="true"></span></summary>
+        <div class="afaq__a">On Treasure Coast grounds close to home, near the site where the stadium is going up. You&rsquo;ll get the exact location and weekly schedule when you register for tryouts.</div>
+      </details>
 
-      <article class="pcard pcard--benefit" data-reveal>
-        <div class="pcard__body">
-          <svg class="pcard__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/>
-            <path d="M7 15h4M14 9h4M14 12h4M7 9h3v3H7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-          </svg>
-          <h3 class="pcard__title">Your card</h3>
-          <p class="pcard__desc">A digital founder card with your number — built to share, in one tap.</p>
-          
-          <a href="__URL_HOME__#founders" class="pcard__link pcard__link--teal">See your card →</a>
-        </div>
-      </article>
+      <details class="afaq__item" data-reveal>
+        <summary class="afaq__q"><span>My kid already plays for another club — can they still try out?</span><span class="afaq__icon" aria-hidden="true"></span></summary>
+        <div class="afaq__a">Yes. Come see what we do and how we develop players — no commitment to register. Plenty of our players came from somewhere else first.</div>
+      </details>
+
+      <details class="afaq__item" data-reveal>
+        <summary class="afaq__q"><span>Is there really a path to the first team?</span><span class="afaq__icon" aria-hidden="true"></span></summary>
+        <div class="afaq__a">It&rsquo;s the whole point. Academy → reserve → the 2027 first team is one ladder, and the reserve is already competing. We also help players onto the US college and pro roads.</div>
+      </details>
+
+      <details class="afaq__item" data-reveal>
+        <summary class="afaq__q"><span>What should we bring to the tryout?</span><span class="afaq__icon" aria-hidden="true"></span></summary>
+        <div class="afaq__a">Boots, shin guards, a ball if you have one, and water. That&rsquo;s it. We&rsquo;ll email you the details and the date once you&rsquo;re on the list.</div>
+      </details>
     </div>
   </div>
 </section>

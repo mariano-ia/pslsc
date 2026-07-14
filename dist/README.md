@@ -8,7 +8,7 @@ Salida del compilador `tools/build-blocks.py`. Cada bloque del sitio, listo para
 | Carpeta / archivo | Qué es |
 |---|---|
 | **`UPLOAD.md`** | **Empezá acá.** Paso a paso: subir assets, configurar, pegar. |
-| `blocks/` | Los **19 bloques finales** (paste-ready). Uno por sección. Nav y News quedan fuera (nativas del template). |
+| `blocks/` | Los **25 bloques finales** (paste-ready). Uno por sección. Nav y News quedan fuera (nativas del template). |
 | `upload/` | Fuentes + imágenes + videos. Se suben **una vez** a `ASSET_BASE`. |
 | `_pilot/` | Sondas de diagnóstico (`psl-diagnostico.html`, `psl-test-tamano.html`) usadas para validar el flujo en el sitio real. Referencia. |
 
@@ -27,7 +27,7 @@ Lo genera `tools/build-blocks.py`. Por cada bloque:
 
 ## Estado
 
-- Los 19 bloques verificados en headless: aislamiento, render, montaje de componentes, full-bleed y
+- Los 25 bloques verificados en headless: aislamiento, render, montaje de componentes, full-bleed y
   **inmunidad a los filtros de WordPress** (el data URI sobrevive intacto).
 - El bloque 06-founders está **andando en el sitio real** (`portstluciesc.com/blocks-test/`).
 

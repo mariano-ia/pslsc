@@ -40,6 +40,8 @@ BLOCKS = [
     ("sumate", "s05-faq"), ("sumate", "s06-cta"),
     ("partners", "p01-hero"), ("partners", "p02-opportunity"), ("partners", "p03-value"),
     ("partners", "p04-traction"), ("partners", "p05-contact"),
+    ("academy", "a01-hero"), ("academy", "a02-pathway"), ("academy", "a03-method"),
+    ("academy", "a05-parents"), ("academy", "a06-faq"), ("academy", "a07-tryouts"),
 ]
 
 # Fuentes hosteadas (family, weight, archivo .woff2 en ASSET_BASE fonts/)
@@ -182,12 +184,28 @@ REPORTER = """
 })();
 """
 
-def boot_js(needs_motion):
-    mot = "document.querySelectorAll('.pslsc').forEach(function(r){if(!r.dataset.pslBooted){r.dataset.pslBooted='1';initMotion(r);}});" if needs_motion else ""
+# ─────────────────────────────────────────────────────────────── JS propio de bloque
+def block_js(path):
+    """JS de un bloque que NO es web component (scramble del hero, scrubbing de la timeline,
+       linterna de proof, forms). Saca el `export` y el auto-init de DOMContentLoaded (el boot lo
+       llama scopeado al bloque), reescribe assets. Devuelve (código, nombre-del-init)."""
+    src = read(path)
+    m = re.search(r"export\s*\{\s*(\w+)", src)
+    init = m.group(1) if m else None
+    src = re.sub(r"export\s+\{[^}]+\};", "", src)
+    src = re.sub(r"document\.addEventListener\('DOMContentLoaded'[^;]*;", "", src)
+    return rewrite_assets(src), init
+
+def boot_js(needs_motion, inits):
+    # cada init(root) se llama por cada .pslsc del DOM, una sola vez (data-psl-booted)
+    calls = (["initMotion(r);"] if needs_motion else []) + [f"{i}(r);" for i in inits]
+    per_root = "".join(calls)
+    body = (f"document.querySelectorAll('.pslsc').forEach(function(r){{"
+            f"if(r.dataset.pslBooted)return;r.dataset.pslBooted='1';{per_root}}});") if per_root else ""
     return f"""
 function pslVw(){{document.documentElement.style.setProperty('--psl-vw',document.documentElement.clientWidth+'px');}}
 pslVw(); addEventListener('resize',pslVw,{{passive:true}});
-function pslBoot(){{ {mot} if(window.__pslDiag) window.__pslDiag(); }}
+function pslBoot(){{ {body} if(window.__pslDiag) window.__pslDiag(); }}
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',pslBoot); else pslBoot();
 """
 
@@ -215,23 +233,36 @@ def build_block(page, name):
     uses_ptl   = bool(re.search(r"\bptl\b", html)) and name != "03-project"
     needs_motion = bool(re.search(r"data-(reveal|parallax|tilt|spotlight|magnetic|countdown)", html))
 
-    # CSS: tokens + motion + propio + deps compartidas + CSS de cada componente embebido
-    css_files = ["tokens/tokens.css", "native/_patterns/motion.css", f"native/{page}/{name}.css"]
-    if uses_pcard: css_files.insert(2, "native/_patterns/cards.css")
-    if uses_ptl:   css_files.insert(2, "native/home/03-project.css")
+    # CSS: tokens + motion + deps compartidas + propio (si tiene) + CSS de cada componente.
+    # Algunos bloques no tienen CSS propio (ej. a02-pathway reusa .ptl de 03-project).
+    css_files = ["tokens/tokens.css", "native/_patterns/motion.css"]
+    if uses_pcard: css_files.append("native/_patterns/cards.css")
+    if uses_ptl:   css_files.append("native/home/03-project.css")
+    own_css = f"native/{page}/{name}.css"
+    if os.path.exists(os.path.join(REPO, own_css)): css_files.append(own_css)
     for c in comps:
         if c in COMPONENT_CSS: css_files.append("custom/" + COMPONENT_CSS[c])
     css = "\n".join(namespace_css(read(f)) for f in css_files)
 
-    # JS: motion (si hace falta) + componentes + boot
+    # JS de bloque propio (native/{page}/{name}.js) + compartido (la timeline .ptl reusa
+    # 03-project.js igual que su CSS). Cada uno aporta su init, que el boot llama scopeado.
+    block_mods = []
+    own_js = f"native/{page}/{name}.js"
+    if os.path.exists(os.path.join(REPO, own_js)):
+        block_mods.append(block_js(own_js))
+    if uses_ptl:
+        block_mods.append(block_js("native/home/03-project.js"))
+    block_inits = [i for _, i in block_mods if i]
+
+    # JS: motion (si hace falta) + componentes + JS de bloque + boot
     js_parts = []
-    if needs_motion or comps:
-        if needs_motion: js_parts.append(motion_js())
-        for c in comps:
-            if c in COMPONENTS: js_parts.append(component_js(c))
-        js_parts.append(boot_js(needs_motion))
-    else:
-        js_parts.append(boot_js(False))
+    if needs_motion:
+        js_parts.append(motion_js())
+    for c in comps:
+        if c in COMPONENTS: js_parts.append(component_js(c))
+    for code, _ in block_mods:
+        js_parts.append(code)
+    js_parts.append(boot_js(needs_motion, block_inits))
     js = "\n".join(js_parts)
 
     html = rewrite_links(rewrite_assets(html))

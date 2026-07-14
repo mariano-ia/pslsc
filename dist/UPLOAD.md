@@ -1,6 +1,6 @@
 # Publicar los bloques en WordPress — paso a paso
 
-Los 19 bloques del sitio, listos para pegar en widgets **HTML** del constructor visual.
+Los 25 bloques del sitio, listos para pegar en widgets **HTML** del constructor visual.
 Validado en el WordPress real de USL (WP VIP) con el bloque más complejo del sitio.
 
 Nav y News **no** están acá: son nativas del template de USL.
@@ -45,6 +45,8 @@ en los bloques ya pegados en WordPress). Son únicos y greppables:
 
 `__PSL_ASSET_BASE__` aparece en cada bloque (fuentes + imágenes); los `__URL_*__` solo en los bloques
 que enlazan a otras páginas (nav-CTAs, footer). Ningún bloque queda sin al menos el asset base.
+(La página Academy no tiene su propio `__URL_*__` porque nada enlaza a ella entre bloques compilados;
+el link a Academy vive en la nav, que es del template.)
 
 > Equivalente: en vez del find-and-replace, se pueden poner esos valores en `ASSET_BASE` y `PERMALINKS`
 > arriba de `tools/build-blocks.py` y correr `python3 tools/build-blocks.py` — regenera todo con las
@@ -69,6 +71,9 @@ Qué bloque va en qué página:
 | Home | 01-hero · 02-stats · 03-project · 04-proof · 04b-fixtures · 05-jersey · 06-founders · 07-academy · 09-cierre-footer |
 | Become a Founder | s01-hero · s02-benefits · s03-plans · s05-faq · s06-cta |
 | Partners | p01-hero · p02-opportunity · p03-value · p04-traction · p05-contact |
+| Academy | a01-hero · a02-pathway · a03-method · a05-parents · a06-faq · a07-tryouts |
+
+Nav (00) y News (08) no están en la lista: son bloques nativos del template de USL.
 
 ---
 

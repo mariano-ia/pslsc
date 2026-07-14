@@ -2,7 +2,7 @@
 
 ## `build-blocks.py` — el compilador
 
-Genera los 19 bloques del sitio en `dist/blocks/`, cada uno paste-ready para un widget HTML de
+Genera los 25 bloques del sitio en `dist/blocks/`, cada uno paste-ready para un widget HTML de
 WordPress. Es manifest-driven: detecta de cada bloque qué CSS, JS, componentes y assets necesita.
 
 ```

@@ -1,0 +1,462 @@
+<!-- PSL SC - bloque academy/a07-tryouts. Pegar en un widget HTML de WordPress.
+     Assets y fuentes hosteados en __PSL_ASSET_BASE__/ (ver dist/UPLOAD.md).
+     El JS va como data: URI en el src (WordPress corrompe el JS que va como texto). -->
+<style>
+@font-face{font-family:'Ferryman';font-weight:800;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Ferryman-ExtraBold.woff2) format('woff2');}
+@font-face{font-family:'Ferryman';font-weight:700;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Ferryman-Bold.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:500;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Druk-Medium.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:700;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Druk-Bold.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:800;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Druk-Heavy.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:900;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Druk-Super.woff2) format('woff2');}
+@font-face{font-family:'Druk Text Wide';font-weight:500;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/DrukTextWide-Medium.woff2) format('woff2');}
+@font-face{font-family:'Druk Text Wide';font-weight:800;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/DrukTextWide-Heavy.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:400;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/ProximaNova-Regular.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:600;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/ProximaNova-Semibold.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:700;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/ProximaNova-Bold.woff2) format('woff2');}
+@font-face{font-family:'Cabazon';font-weight:400;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Cabazon-Regular.woff2) format('woff2');}
+.pslsc, .pslsc *, .pslsc *::before, .pslsc *::after { box-sizing: border-box; }
+.pslsc { width:100%; font-family:var(--font-body); color:var(--color-text); line-height:normal; -webkit-font-smoothing:antialiased; }
+.pslsc h1,.pslsc h2,.pslsc h3,.pslsc h4,.pslsc h5,.pslsc h6,.pslsc p,.pslsc ul,.pslsc ol,.pslsc li,.pslsc figure,.pslsc blockquote,.pslsc dl,.pslsc dd { margin:0; padding:0; color:inherit; font:inherit; text-transform:none; }
+.pslsc ul,.pslsc ol { list-style:none; }
+.pslsc a { color:inherit; text-decoration:none; }
+.pslsc img,.pslsc video,.pslsc canvas,.pslsc svg { display:block; max-width:100%; }
+.pslsc button,.pslsc input,.pslsc textarea,.pslsc select { font:inherit; color:inherit; }
+.pslsc ::selection { background:var(--color-aqua); color:var(--color-black); }
+.pslsc--bleed { width:var(--psl-vw,100vw); max-width:var(--psl-vw,100vw); margin-left:calc(50% - var(--psl-vw,100vw)/2); margin-right:calc(50% - var(--psl-vw,100vw)/2); }
+.pslsc .psl-diag { font:12px/1.5 ui-monospace,Menlo,monospace; margin-top:16px; padding:9px 12px; border-radius:6px; background:#FF0033; color:#fff; word-break:break-word; }
+.pslsc .psl-diag.is-ok { background:rgba(14,140,121,.12); color:var(--color-aqua-deep); }
+.pslsc{--color-aqua:        #AAF6E6;   
+  --color-aqua-deep:   #0E8C79;   
+  --color-black:       #000000;
+  --color-white:       #FFFFFF;
+  --color-red-marine:  #FF0033;   
+
+  
+  --color-ink:      #0C0C0A;   
+  --color-ink-2:    #131118;   
+  --color-ink-3:    #16150F;   
+  --color-paper:      #F4F1EA;   
+  --color-paper-2:    #EDE8DE;   
+  --color-paper-card: #FFFFFF;   
+  --color-paper-line: rgba(0,0,0,.09);
+
+  
+  --color-text:            #F4F1EA;   
+  --color-text-muted:      rgba(244,241,234,.68);
+  --color-text-faint:      rgba(244,241,234,.5);
+  --color-text-on-paper:       #0C0C0A;
+  --color-text-on-paper-muted: rgba(12,12,10,.62);
+  --color-text-on-paper-faint: rgba(12,12,10,.45);
+
+  
+  --color-line:        rgba(244,241,234,.1);
+  --color-line-strong: rgba(244,241,234,.16);
+
+  
+  --color-bg: var(--color-ink);
+  --color-bg-elevated: var(--color-ink-2);
+  --color-border: var(--color-line);
+  --color-whatsapp: #25d366;
+  --color-jersey-viewer-bg: #0C0C0A;
+  
+  --color-teal: var(--color-aqua);
+  --color-teal-bright: var(--color-aqua);
+  --color-teal-ink: var(--color-aqua-deep);
+  --color-sky: var(--color-aqua);
+
+  
+  --font-hero:    'Ferryman', Georgia, serif;
+  --font-display: 'Druk', 'Arial Narrow', sans-serif;
+  --font-label:   'Druk Text Wide', 'Arial Narrow', sans-serif;
+  --font-body:    'Proxima Nova', system-ui, sans-serif;   
+  --font-detail:  'Cabazon', 'Druk', serif;
+  --font-mono:    var(--font-label);   
+
+  
+  --ls-display: 0.02em;
+
+  
+  --fs-hero:  clamp(52px, 8.6vw, 138px);
+  --fs-h2:    clamp(34px, 5.4vw, 72px);
+  --fs-h3:    clamp(20px, 2vw, 26px);
+  --fs-card-title: 21px;
+  --fs-body-lg: clamp(15px, 1.4vw, 19px);
+  --fs-body:  16px;
+  --fs-small: 13.5px;
+
+  
+  --fs-kicker: 11px;
+  --fs-label:  10.5px;
+  --ls-kicker: .14em;
+  --ls-label:  .12em;
+
+  
+  --fs-counter: clamp(40px, 5vw, 72px);
+  --font-feature-counter: 'tabular-nums';
+
+  --lh-tight: .9;
+  --lh-normal: 1.6;
+
+  
+  --container: 1320px;
+  --gutter: clamp(22px, 5vw, 56px);
+  --section-pad: clamp(84px, 11vw, 150px);   
+
+  
+  --space-1: 0.25rem;  --space-2: 0.5rem;  --space-3: 1rem;
+  --space-4: 1.5rem;   --space-5: 2.5rem;  --space-6: 4rem;
+
+  
+  --radius-sm: 5px;  --radius-md: 14px;  --radius-lg: 18px;  --radius-pill: 100px;
+
+  
+  --ease-jersey-drag: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-jersey-drag-min: 400ms;
+  --duration-jersey-drag-max: 600ms;
+  --duration-wall-slide-in: 300ms;
+  --ease-wall-slide-in: ease-out;
+  --duration-wall-highlight: 2500ms;
+  --duration-counter-highlight: 1500ms;
+
+  
+  --ease-out-soft:    cubic-bezier(.22, .61, .36, 1);   
+  --ease-out-expo:    cubic-bezier(.16, 1, .3, 1);      
+  --ease-in-out-soft: cubic-bezier(.65, 0, .35, 1);
+  --dur-fast:   240ms;
+  --dur-med:    460ms;
+  --dur-reveal: 720ms;   
+  --reveal-shift: 22px;  
+  --stagger: 80ms;       
+
+  
+  --z-sticky-cta: 40;  --z-nav: 50;  --z-modal: 200;}
+
+
+
+@keyframes psl-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.82)} }
+
+@keyframes psl-marq  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+@keyframes psl-rise  { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+@keyframes psl-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+
+@keyframes psl-hero-in   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+@keyframes psl-float     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+
+@keyframes psl-draw-x    { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+
+@keyframes psl-scroll-cue{ 0%{opacity:0;transform:translateY(-4px)} 35%{opacity:1} 100%{opacity:0;transform:translateY(10px)} }
+
+@keyframes psl-ping      { 0%{transform:scale(.5);opacity:.8} 100%{transform:scale(2.6);opacity:0} }
+
+@keyframes psl-sheen     { 0%{background-position:-140% 0} 60%,100%{background-position:140% 0} }
+
+@keyframes psl-grad-flow { 0%{background-position:0% 50%} 100%{background-position:-200% 50%} }
+.pslsc *, .pslsc *::before, .pslsc *::after{box-sizing: border-box;}
+.pslsc .psl-container{max-width: var(--container);
+  margin: 0 auto;
+  padding-inline: var(--gutter);}
+.pslsc .surface-ink{background: var(--color-ink);   color: var(--color-text);}
+.pslsc .surface-paper{background: var(--color-paper); color: var(--color-text-on-paper);}
+.pslsc .surface-aqua{background: var(--color-aqua);  color: var(--color-black);}
+.pslsc .psl-kicker{font: 500 var(--fs-kicker)/1 var(--font-label);
+  letter-spacing: var(--ls-kicker);
+  color: var(--color-aqua);
+  text-transform: uppercase;}
+.pslsc .surface-paper .psl-kicker{color: var(--color-aqua-deep);}
+.pslsc .psl-h2{margin: 18px 0 0;
+  font: 800 var(--fs-h2)/0.98 var(--font-display);
+  letter-spacing: var(--ls-display);
+  text-transform: none;
+  text-wrap: balance;}
+.pslsc .psl-btn{display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font: 600 14px/1 var(--font-body);   
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 15px 26px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: transform 140ms ease, background 160ms ease, border-color 160ms ease;}
+.pslsc .psl-btn:hover{transform: translateY(-1px);}
+.pslsc .cta-primary{background: var(--color-aqua); color: var(--color-black);}
+.pslsc .cta-primary:hover{background: var(--color-white);}
+.pslsc .cta-secondary{background: transparent; color: currentColor; border: 1px solid rgba(244,241,234,.28);}
+.pslsc .surface-paper .cta-secondary{border-color: rgba(0,0,0,.22);}
+.pslsc .tnum{font-variant-numeric: var(--font-feature-counter);}
+.pslsc .psl-motion [data-reveal]{opacity: 0;
+  transform: translateY(var(--reveal-shift, 22px));
+  transition: opacity var(--dur-reveal, 720ms) var(--ease-out-soft, ease),
+              transform var(--dur-reveal, 720ms) var(--ease-out-soft, ease);
+  transition-delay: var(--reveal-delay, 0ms);}
+.pslsc .psl-motion [data-reveal="left"]{transform: translateX(calc(-1 * var(--reveal-shift, 22px)));}
+.pslsc .psl-motion [data-reveal="right"]{transform: translateX(var(--reveal-shift, 22px));}
+.pslsc .psl-motion [data-reveal="scale"]{transform: scale(.94);}
+.pslsc .psl-motion [data-reveal="mask"]{opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--dur-reveal, 720ms) var(--ease-out-expo, ease);
+  transition-delay: var(--reveal-delay, 0ms);}
+.pslsc .psl-motion [data-reveal].is-revealed{opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 0 0);}
+.pslsc [data-spotlight]{position: relative;}
+.pslsc [data-spotlight]::after{content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, -20%),
+              rgba(170, 246, 230, .16), transparent 62%);
+  opacity: 0;
+  transition: opacity 320ms ease;
+  z-index: 1;}
+.pslsc .surface-paper [data-spotlight]::after, .pslsc [data-spotlight].on-paper::after{background: radial-gradient(240px circle at var(--mx, 50%) var(--my, -20%),
+              rgba(14, 140, 121, .12), transparent 62%);}
+.pslsc [data-spotlight]:hover::after{opacity: 1;}
+.pslsc [data-spotlight] > *{position: relative; z-index: 2;}
+.pslsc [data-tilt]{transition: transform 300ms var(--ease-out-soft, ease); transform-style: preserve-3d;}
+.pslsc [data-magnetic]{transition: transform 300ms var(--ease-out-soft, ease); will-change: transform;}
+.pslsc [data-parallax]{will-change: transform;}
+.pslsc .nav__progress{position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--color-aqua), var(--color-red-marine));
+  z-index: 1;}
+.pslsc .nav.is-scrolled{background: rgba(12, 12, 10, .92);
+  box-shadow: 0 1px 24px rgba(0, 0, 0, .34);}
+.pslsc .nav.is-scrolled .nav__inner{height: 58px;}
+.pslsc .nav__inner{transition: height 280ms var(--ease-out-soft, ease);}
+.pslsc .nav__links a{position: relative; transition: color 160ms ease;}
+.pslsc .nav__links a.is-active{color: var(--color-text);}
+.pslsc .nav__links a.is-active::after{content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--color-aqua);
+  border-radius: 2px;}
+.pslsc .psl-grain{position: fixed;
+  inset: 0;
+  z-index: 36;
+  pointer-events: none;
+  opacity: .035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;}
+.pslsc .psl-cursor-glow{position: fixed;
+  top: 0;
+  left: 0;
+  width: 130px;
+  height: 130px;
+  margin: -65px 0 0 -65px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 60;
+  background: radial-gradient(circle, rgba(170, 246, 230, .11), rgba(170, 246, 230, 0) 68%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 400ms ease;}
+.pslsc .psl-cursor-glow.is-on{opacity: 1;}
+.pslsc .psl-seam--from-ink, .pslsc .psl-seam--from-paper{position: relative;}
+.pslsc .psl-seam--from-ink::before, .pslsc .psl-seam--from-paper::before{content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 90px;
+  pointer-events: none;
+  z-index: 0;}
+.pslsc .psl-seam--from-ink::before{background: linear-gradient(180deg, rgba(12, 12, 10, .16), transparent);}
+.pslsc .psl-seam--from-paper::before{background: linear-gradient(180deg, rgba(244, 241, 234, .07), transparent);}
+
+
+@media (prefers-reduced-motion: reduce) {.pslsc .psl-motion [data-reveal]{opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;}
+.pslsc .psl-grain, .pslsc .psl-cursor-glow{display: none !important;}
+.pslsc .nav__inner{transition: none !important;}}
+.pslsc .tryouts{border-top: 1px solid var(--color-line);}
+.pslsc .tryouts .psl-container{padding-block: var(--section-pad);}
+.pslsc .tryouts__grid{display: grid;
+  grid-template-columns: 1fr 460px;
+  gap: clamp(36px, 6vw, 72px);
+  align-items: start;}
+.pslsc .tryouts__title{font-size: clamp(30px, 4.4vw, 56px); max-width: 15ch;}
+.pslsc .tryouts__lead{margin: 22px 0 0;
+  max-width: 44ch;
+  font: 400 var(--fs-body-lg)/1.6 var(--font-body);
+  color: var(--color-text-muted);}
+.pslsc .tryouts__how{list-style: none; margin: 30px 0 0; padding: 0; display: flex; flex-direction: column; gap: 16px;}
+.pslsc .tryouts__step{display: flex; align-items: flex-start; gap: 14px; font: 400 var(--fs-body)/1.5 var(--font-body); color: var(--color-text);}
+.pslsc .tryouts__step-n{flex-shrink: 0;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: rgba(170,246,230,.14);
+  color: var(--color-aqua);
+  font: 700 13px/1 var(--font-label);}
+.pslsc .tryouts__bring{margin: 28px 0 0;
+  font: 400 var(--fs-body)/1.5 var(--font-body);
+  color: var(--color-text-muted);}
+.pslsc .tryouts__bring strong{color: var(--color-text); font-weight: 700;}
+.pslsc .tryouts__card{background: var(--color-ink-2);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-lg);
+  padding: clamp(24px, 3vw, 34px);}
+.pslsc .tform__title{margin: 0 0 22px;
+  font: 800 clamp(19px, 2vw, 24px)/1.1 var(--font-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-text);}
+.pslsc .tform__field{margin-bottom: 16px;}
+.pslsc .tform__row{display: grid; grid-template-columns: 1fr 1fr; gap: 14px;}
+.pslsc .tform__label{display: block;
+  margin-bottom: 7px;
+  font: 600 12px/1.2 var(--font-body);
+  letter-spacing: .02em;
+  color: var(--color-text-muted);}
+.pslsc .tform__opt{color: var(--color-text-faint); font-weight: 400; text-transform: none; letter-spacing: 0;}
+.pslsc .tform__input{width: 100%;
+  padding: 13px 14px;
+  background: var(--color-ink-3);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font: 400 15px/1.2 var(--font-body);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+  -webkit-appearance: none;
+  appearance: none;}
+.pslsc .tform__input::placeholder{color: var(--color-text-faint);}
+.pslsc .tform__input:focus{outline: none;
+  border-color: var(--color-aqua);
+  box-shadow: 0 0 0 3px rgba(170,246,230,.16);}
+.pslsc select.tform__input{background-image: linear-gradient(45deg, transparent 50%, var(--color-aqua) 50%), linear-gradient(135deg, var(--color-aqua) 50%, transparent 50%);
+  background-position: calc(100% - 20px) calc(1.15em), calc(100% - 15px) calc(1.15em);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 40px;}
+.pslsc .tform__input:invalid{color: var(--color-text-faint);}
+.pslsc .tform__input option{color: var(--color-text); background: var(--color-ink-2);}
+.pslsc .tform__check{display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin: 20px 0 4px;
+  font: 400 var(--fs-small)/1.45 var(--font-body);
+  color: var(--color-text-muted);
+  cursor: pointer;}
+.pslsc .tform__check input{flex-shrink: 0;
+  width: 18px; height: 18px;
+  margin-top: 1px;
+  accent-color: var(--color-aqua);}
+.pslsc .tform__submit{width: 100%; justify-content: center; margin-top: 18px;}
+.pslsc .tform__fineprint{margin: 14px 0 0;
+  text-align: center;
+  font: 400 12px/1.4 var(--font-body);
+  color: var(--color-text-faint);}
+.pslsc .tform__msg{margin-top: 14px; font: 500 14px/1.5 var(--font-body);}
+.pslsc .tform__msg[data-state="ok"]{color: var(--color-aqua);}
+.pslsc .tform__msg[data-state="err"]{color: var(--color-red-marine);}
+.pslsc .tform.is-done .tform__submit, .pslsc .tform.is-done .tform__fineprint{display: none;}
+
+
+@media (max-width: 860px) {.pslsc .tryouts__grid{grid-template-columns: 1fr;}
+.pslsc .tryouts__card{max-width: 520px;}}
+
+@media (max-width: 420px) {.pslsc .tform__row{grid-template-columns: 1fr; gap: 0;}}
+</style>
+
+<div class="pslsc pslsc--bleed">
+<section class="tryouts surface-ink" id="tryouts">
+  <div class="psl-container tryouts__grid">
+    
+    <div class="tryouts__intro" data-reveal-group="80">
+      <span class="psl-kicker" data-reveal>Tryouts · 2026–27</span>
+      <h2 class="psl-h2 tryouts__title" data-reveal>Come and play. Let&rsquo;s see what your kid&rsquo;s got.</h2>
+      <p class="tryouts__lead" data-reveal>
+        Open tryouts for the 2026–27 season. Leave your details and we&rsquo;ll email you the date, time
+        and location for your kid&rsquo;s age group.
+      </p>
+
+      <ul class="tryouts__how" data-reveal>
+        <li class="tryouts__step"><span class="tryouts__step-n" aria-hidden="true">1</span><span>Register below — takes a minute.</span></li>
+        <li class="tryouts__step"><span class="tryouts__step-n" aria-hidden="true">2</span><span>We email you the tryout date and where to show up.</span></li>
+        <li class="tryouts__step"><span class="tryouts__step-n" aria-hidden="true">3</span><span>Your kid plays. We watch. Everyone gets a fair look.</span></li>
+      </ul>
+
+      <p class="tryouts__bring"><strong>Bring:</strong> boots, shin guards, a ball if you have one, and water.</p>
+    </div>
+
+    
+    <div class="tryouts__card" data-reveal="right">
+      <form class="tform" data-tryout novalidate>
+        <p class="tform__title">Request a tryout spot</p>
+
+        <div class="tform__field">
+          <label class="tform__label" for="tf-name">Player&rsquo;s first name</label>
+          <input class="tform__input" id="tf-name" name="playerFirstName" type="text" autocomplete="off" required />
+        </div>
+
+        <div class="tform__row">
+          <div class="tform__field">
+            <label class="tform__label" for="tf-year">Birth year</label>
+            <select class="tform__input" id="tf-year" name="birthYear" required>
+              <option value="" selected disabled>Select</option>
+              <option>2019</option><option>2018</option><option>2017</option><option>2016</option>
+              <option>2015</option><option>2014</option><option>2013</option><option>2012</option>
+              <option>2011</option><option>2010</option><option>2009</option><option>2008</option>
+              <option>2007</option>
+            </select>
+          </div>
+          <div class="tform__field">
+            <label class="tform__label" for="tf-pos">Position</label>
+            <select class="tform__input" id="tf-pos" name="position" required>
+              <option value="" selected disabled>Select</option>
+              <option>Goalkeeper</option>
+              <option>Defender</option>
+              <option>Midfielder</option>
+              <option>Forward</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="tform__field">
+          <label class="tform__label" for="tf-email">Parent / guardian email</label>
+          <input class="tform__input" id="tf-email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required />
+        </div>
+
+        <div class="tform__field">
+          <label class="tform__label" for="tf-phone">Phone <span class="tform__opt">(optional)</span></label>
+          <input class="tform__input" id="tf-phone" name="phone" type="tel" autocomplete="tel" />
+        </div>
+
+        <label class="tform__check">
+          <input type="checkbox" name="consent" required />
+          <span>I&rsquo;m the parent or guardian and agree to be contacted about tryouts.</span>
+        </label>
+
+        <button type="submit" class="psl-btn cta-primary tform__submit"><span>Request a tryout spot</span> <span aria-hidden="true">→</span></button>
+        <p class="tform__fineprint">Free. No commitment. We only use this to contact you about tryouts.</p>
+
+        <div class="tform__msg" data-tryout-msg role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</section>
+<p class="psl-diag" id="psl-diag">&#10060; El script del bloque no se ejecuto (o fue removido)</p>
+</div>
+
+<script src="data:text/javascript;charset=utf-8,%0A(function(){%0A  function el(){return document.getElementById('psl-diag');}%0A  window.addEventListener('error',function(e){%0A    var d=el(); if(!d) return;%0A    d.textContent='\u274C El JS del bloque fallo: '+(e.message||'error')+'  ('+(e.lineno||'?')+')';%0A    d.className='psl-diag';%0A  },true);%0A  window.__pslDiag=function(){%0A    var d=el(); if(!d) return;%0A    d.textContent='\u2705 JS OK - ancho util '+document.documentElement.clientWidth+'px';%0A    d.className='psl-diag is-ok';%0A  };%0A})();%0A"></script>
+<script type="module" src="data:text/javascript;charset=utf-8,/**%0A * PSL SC — Sistema de motion compartido. 🟩 Núcleo.%0A *%0A * Dirigido por data-atributos, sin dependencias, portable a WordPress (encolar global con type=module).%0A * Cada bloque se %22declara%22 con atributos en su HTML; este módulo los activa. En el preview, el%0A * ensamblador llama initMotion() después de inyectar los bloques; en WP corre solo en DOMContentLoaded.%0A *%0A * API de data-atributos:%0A *   [data-reveal]                 → aparece (fade+rise) al entrar en viewport. Variantes:%0A *                                   data-reveal=%22left|right|scale|mask%22. data-reveal-delay=%22120%22 (ms).%0A *   [data-reveal-group=%2290%22]      → aplica stagger (90ms) a sus hijos directos [data-reveal]%0A *                                   (o a los [data-reveal-item] descendientes si existen).%0A *   [data-parallax=%220.15%22]        → parallax vertical sutil ligado al scroll.%0A *   [data-tilt=%226%22]               → inclinación 3D siguiendo el puntero (grados máx).%0A *   [data-spotlight]              → halo aqua que sigue el cursor (usa ::after en motion.css).%0A *   [data-magnetic=%220.3%22]         → el elemento se %22imanta%22 hacia el cursor.%0A *   [data-countdown=%222027-03-01%22] → escribe los días restantes en [data-countdown-num] (o en sí mismo).%0A *%0A * Piezas globales (una sola vez): nav reactiva (progreso + sección activa),%0A * grano, cursor-glow, costuras ink↔paper. Todo respeta prefers-reduced-motion y pointer coarse.%0A */%0A%0Aconst reduce = () =%3E window.matchMedia('(prefers-reduced-motion: reduce)').matches;%0Aconst finePointer = () =%3E window.matchMedia('(hover: hover) and (pointer: fine)').matches;%0Aconst rafThrottle = (fn) =%3E {%0A  let scheduled = 0;%0A  return () =%3E { if (!scheduled) scheduled = requestAnimationFrame(() =%3E { scheduled = 0; fn(); }); };%0A};%0A%0A/* ---------- Reveal (IntersectionObserver) ---------- */%0Alet revealObserver = null;%0Afunction ensureRevealObserver() {%0A  if (revealObserver) return revealObserver;%0A  revealObserver = new IntersectionObserver((entries) =%3E {%0A    entries.forEach((e) =%3E {%0A      if (!e.isIntersecting) return;%0A      const el = e.target;%0A      el.classList.add('is-revealed');%0A      revealObserver.unobserve(el);%0A      // Al terminar la aparición liberamos el elemento: quitamos [data-reveal] para que su estado%0A      // %22revelado%22 (transform:none) deje de pisar los :hover con transform (lift/zoom de las cards).%0A      const delay = parseFloat(getComputedStyle(el).getPropertyValue('--reveal-delay')) || 0;%0A      setTimeout(() =%3E {%0A        el.removeAttribute('data-reveal');%0A        el.classList.remove('is-revealed');%0A        el.style.removeProperty('--reveal-delay');%0A      }, delay + 900);%0A    });%0A  }, { rootMargin: '0px 0px -8%25 0px', threshold: 0.06 });%0A  return revealObserver;%0A}%0Afunction initReveal(root) {%0A  if (reduce()) {%0A    // sin motion: liberamos el atributo (nada oculto, y los :hover con transform quedan libres)%0A    root.querySelectorAll('[data-reveal]').forEach((el) =%3E el.removeAttribute('data-reveal'));%0A    return;%0A  }%0A  const obs = ensureRevealObserver();%0A  // grupos: reparten el delay incremental entre sus items (los items ya llevan [data-reveal] en el HTML)%0A  root.querySelectorAll('[data-reveal-group]').forEach((g) =%3E {%0A    if (g.dataset.revGroupBound) return;%0A    g.dataset.revGroupBound = '1';%0A    const step = parseInt(g.dataset.revealGroup, 10) || 80;%0A    const explicit = g.querySelectorAll('[data-reveal-item]');%0A    const items = explicit.length ? explicit : g.querySelectorAll(':scope %3E [data-reveal]');%0A    items.forEach((it, i) =%3E it.style.setProperty('--reveal-delay', `${i * step}ms`));%0A  });%0A  root.querySelectorAll('[data-reveal]').forEach((el) =%3E {%0A    if (el.dataset.revBound) return;%0A    el.dataset.revBound = '1';%0A    if (el.dataset.revealDelay) el.style.setProperty('--reveal-delay', `${el.dataset.revealDelay}ms`);%0A    obs.observe(el);%0A  });%0A}%0A%0A/* ---------- Parallax vertical ---------- */%0Aconst parallaxEls = [];%0Alet parallaxWired = false;%0Afunction initParallax(root) {%0A  if (reduce()) return;%0A  root.querySelectorAll('[data-parallax]').forEach((el) =%3E {%0A    if (el.dataset.pxBound) return;%0A    el.dataset.pxBound = '1';%0A    parallaxEls.push({ el, k: parseFloat(el.dataset.parallax) || 0.15 });%0A  });%0A  if (!parallaxEls.length || parallaxWired) return;%0A  parallaxWired = true;%0A  const update = () =%3E {%0A    const vh = window.innerHeight;%0A    parallaxEls.forEach(({ el, k }) =%3E {%0A      const r = el.getBoundingClientRect();%0A      const center = r.top + r.height / 2;%0A      const off = (center - vh / 2) * -k;%0A      el.style.transform = `translate3d(0, ${off.toFixed(1)}px, 0)`;%0A    });%0A  };%0A  const onScroll = rafThrottle(update);%0A  window.addEventListener('scroll', onScroll, { passive: true });%0A  window.addEventListener('resize', onScroll, { passive: true });%0A  update();%0A}%0A%0A/* ---------- Tilt 3D ---------- */%0Afunction initTilt(root) {%0A  if (reduce() || !finePointer()) return;%0A  root.querySelectorAll('[data-tilt]').forEach((el) =%3E {%0A    if (el.dataset.tiltBound) return;%0A    el.dataset.tiltBound = '1';%0A    const max = parseFloat(el.dataset.tilt) || 6;%0A    el.addEventListener('pointermove', (e) =%3E {%0A      const r = el.getBoundingClientRect();%0A      const px = (e.clientX - r.left) / r.width - 0.5;%0A      const py = (e.clientY - r.top) / r.height - 0.5;%0A      el.style.transform = `perspective(820px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg)`;%0A    });%0A    el.addEventListener('pointerleave', () =%3E { el.style.transform = ''; });%0A  });%0A}%0A%0A/* ---------- Spotlight (cursor-follow) ---------- */%0Afunction initSpotlight(root) {%0A  if (!finePointer()) return;%0A  root.querySelectorAll('[data-spotlight]').forEach((el) =%3E {%0A    if (el.dataset.spotBound) return;%0A    el.dataset.spotBound = '1';%0A    el.addEventListener('pointermove', (e) =%3E {%0A      const r = el.getBoundingClientRect();%0A      el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width * 100).toFixed(1)}%25`);%0A      el.style.setProperty('--my', `${((e.clientY - r.top) / r.height * 100).toFixed(1)}%25`);%0A    });%0A  });%0A}%0A%0A/* ---------- Magnético ---------- */%0Afunction initMagnetic(root) {%0A  if (reduce() || !finePointer()) return;%0A  root.querySelectorAll('[data-magnetic]').forEach((el) =%3E {%0A    if (el.dataset.magBound) return;%0A    el.dataset.magBound = '1';%0A    const s = parseFloat(el.dataset.magnetic) || 0.3;%0A    el.addEventListener('pointermove', (e) =%3E {%0A      const r = el.getBoundingClientRect();%0A      const mx = e.clientX - (r.left + r.width / 2);%0A      const my = e.clientY - (r.top + r.height / 2);%0A      el.style.transform = `translate(${(mx * s).toFixed(1)}px, ${(my * s).toFixed(1)}px)`;%0A    });%0A    el.addEventListener('pointerleave', () =%3E { el.style.transform = ''; });%0A  });%0A}%0A%0A/* ---------- Countdown (días para el primer silbato) ---------- */%0Afunction initCountdown(root) {%0A  root.querySelectorAll('[data-countdown]').forEach((el) =%3E {%0A    if (el.dataset.cdBound) return;%0A    el.dataset.cdBound = '1';%0A    const target = new Date(`${el.dataset.countdown}T00:00:00`);%0A    const numEl = el.querySelector('[data-countdown-num]') || el;%0A    const days = Math.max(0, Math.ceil((target.getTime() - Date.now()) / 86400000));%0A    numEl.textContent = days.toLocaleString('en-US');%0A  });%0A}%0A%0A/* ---------- Nav reactiva (condensa + barra de progreso + sección activa) ---------- */%0A%0A/* ---------- Grano (textura sutil, global) ---------- */%0A%0A/* ---------- Cursor glow (halo aqua que sigue el puntero, solo desktop) ---------- */%0A%0A/* ---------- Costuras ink↔paper (suaviza el corte entre superficies) ---------- */%0A%0A/* ---------- Init ---------- */%0Afunction initMotion(root){root.classList.add('psl-motion');initReveal(root);initParallax(root);initTilt(root);initSpotlight(root);initMagnetic(root);initCountdown(root);}%0A%0A%0A%0A%0A%0A/**%0A * Tryouts — captura de solicitud de prueba (Academy).%0A * MOCKEADO: no hay backend. Valida en cliente y simula el alta (saveLead) mostrando confirmación.%0A * Contrato real sugerido (WordPress): POST /api/academy/tryout-request%0A *   { playerFirstName, birthYear, position, email, phone, consent } → { ok: true }%0A * Reemplazar el cuerpo de saveLead() por el fetch real cuando exista el endpoint.%0A */%0A%0Aconst EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;%0A%0A/** Mock del alta. Devuelve una promesa que resuelve ok. Acá va el fetch real en handoff. */%0Afunction saveLead(payload) {%0A  // eslint-disable-next-line no-console%0A  console.log('[tryout-request MOCK]', payload);%0A  return new Promise((resolve) =%3E setTimeout(() =%3E resolve({ ok: true }), 500));%0A}%0A%0Afunction initTryouts(root = document) {%0A  const form = root.querySelector('form[data-tryout]');%0A  if (!form) return;%0A  const msg = form.querySelector('[data-tryout-msg]');%0A  const submit = form.querySelector('.tform__submit');%0A%0A  const setMsg = (text, state) =%3E {%0A    if (!msg) return;%0A    msg.textContent = text;%0A    if (state) msg.setAttribute('data-state', state); else msg.removeAttribute('data-state');%0A  };%0A%0A  form.addEventListener('submit', async (e) =%3E {%0A    e.preventDefault();%0A    if (form.classList.contains('is-done')) return;%0A%0A    const data = new FormData(form);%0A    const payload = {%0A      playerFirstName: (data.get('playerFirstName') || '').toString().trim(),%0A      birthYear: (data.get('birthYear') || '').toString(),%0A      position: (data.get('position') || '').toString(),%0A      email: (data.get('email') || '').toString().trim(),%0A      phone: (data.get('phone') || '').toString().trim(),%0A      consent: data.get('consent') === 'on',%0A    };%0A%0A    // validación mínima (mensaje humano, no técnico)%0A    let firstInvalid = null;%0A    const fail = (sel, text) =%3E { if (!firstInvalid) { firstInvalid = form.querySelector(sel); setMsg(text, 'err'); } };%0A    if (!payload.playerFirstName) fail('%23tf-name', 'Add the player’s first name.');%0A    else if (!payload.birthYear)  fail('%23tf-year', 'Pick a birth year.');%0A    else if (!payload.position)   fail('%23tf-pos', 'Pick a position.');%0A    else if (!EMAIL_RE.test(payload.email)) fail('%23tf-email', 'Enter a valid email so we can reach you.');%0A    else if (!payload.consent)    fail('input[name=%22consent%22]', 'Please confirm you’re the parent or guardian.');%0A    if (firstInvalid) { firstInvalid.focus(); return; }%0A%0A    // envío (mockeado)%0A    if (submit) submit.setAttribute('disabled', 'true');%0A    setMsg('Sending…', null);%0A    try {%0A      await saveLead(payload);%0A      form.classList.add('is-done');%0A      setMsg(`You’re on the list. We’ll email the 2026–27 tryout details to ${payload.email}.`, 'ok');%0A    } catch {%0A      if (submit) submit.removeAttribute('disabled');%0A      setMsg('Something went wrong. Try again in a moment.', 'err');%0A    }%0A  });%0A}%0A%0A%0A%0A%0A%0A%0Afunction pslVw(){document.documentElement.style.setProperty('--psl-vw',document.documentElement.clientWidth+'px');}%0ApslVw(); addEventListener('resize',pslVw,{passive:true});%0Afunction pslBoot(){ document.querySelectorAll('.pslsc').forEach(function(r){if(r.dataset.pslBooted)return;r.dataset.pslBooted='1';initMotion(r);initTryouts(r);}); if(window.__pslDiag) window.__pslDiag(); }%0Aif(document.readyState==='loading') document.addEventListener('DOMContentLoaded',pslBoot); else pslBoot();%0A"></script>

@@ -1,4 +1,4 @@
-<!-- PSL SC - bloque sumate/s02-benefits. Pegar en un widget HTML de WordPress.
+<!-- PSL SC - bloque academy/a03-method. Pegar en un widget HTML de WordPress.
      Assets y fuentes hosteados en __PSL_ASSET_BASE__/ (ver dist/UPLOAD.md).
      El JS va como data: URI en el src (WordPress corrompe el JS que va como texto). -->
 <style>
@@ -288,126 +288,78 @@
     transition: none !important;}
 .pslsc .psl-grain, .pslsc .psl-cursor-glow{display: none !important;}
 .pslsc .nav__inner{transition: none !important;}}
-.pslsc .pcard-grid{display: grid;
+.pslsc .method{border-top: 1px solid var(--color-line);}
+.pslsc .method .psl-container{padding-block: var(--section-pad);}
+.pslsc .method__head{max-width: 62ch; margin-bottom: clamp(40px, 5vw, 60px);}
+.pslsc .method__title{font-size: clamp(30px, 4.6vw, 60px); max-width: 22ch;}
+.pslsc .method__lead{margin: 22px 0 0;
+  max-width: 58ch;
+  font: 400 var(--fs-body-lg)/1.6 var(--font-body);
+  color: var(--color-text-muted);}
+.pslsc .method__grid{display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;}
-.pslsc .pcard{display: flex;
-  flex-direction: column;
-  background: var(--color-paper-card);
-  border: 1px solid var(--color-paper-line);
+  gap: 18px;}
+.pslsc .method__card{padding: 26px 24px 28px;
   border-radius: var(--radius-md);
-  overflow: hidden;
-  transition: transform 200ms ease, box-shadow 200ms ease;}
-.pslsc .pcard:hover{transform: translateY(-3px); box-shadow: 0 16px 30px rgba(18,17,13,.08);}
-.pslsc .pcard--dark{background: var(--color-ink-2);
-  border-color: var(--color-ink-2);
+  background: var(--color-ink-2);
+  border: 1px solid var(--color-line);
+  transition: transform 200ms var(--ease-out-soft), border-color 200ms ease;}
+.pslsc .method__card:hover{transform: translateY(-3px); border-color: var(--color-line-strong);}
+.pslsc .method__index{display: block;
+  font: 700 13px/1 var(--font-label);
+  letter-spacing: .12em;
+  color: var(--color-aqua);
+  margin-bottom: 20px;}
+.pslsc .method__card-title{margin: 0 0 10px;
+  font: 800 clamp(18px, 1.7vw, 22px)/1.08 var(--font-display);
+  letter-spacing: var(--ls-display);
   color: var(--color-text);}
-.pslsc .pcard__media{aspect-ratio: 4/3;
-  position: relative;
-  background: repeating-linear-gradient(135deg, #E7E1D4, #E7E1D4 11px, #E1DACB 11px, #E1DACB 22px);}
-.pslsc .pcard__media--dark{background: repeating-linear-gradient(135deg, #1C1B15, #1C1B15 11px, #191811 11px, #191811 22px);}
-.pslsc .pcard__media::before{content: attr(data-tag);
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  font: 500 9px/1 var(--font-mono);
-  letter-spacing: .14em;
-  color: rgba(18,17,13,.4);
-  border: 1px solid rgba(18,17,13,.16);
-  padding: 5px 7px;
-  border-radius: 4px;}
-.pslsc .pcard__media--dark::before{color: var(--color-sky);
-  border-color: rgba(169,214,222,.3);}
-.pslsc .pcard__icon{width: 40px;
-  height: 40px;
-  margin-bottom: 4px;}
-.pslsc .pcard__body{padding: 22px 20px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;}
-.pslsc .pcard__kicker{font: 500 10px/1 var(--font-mono);
-  letter-spacing: .16em;
-  color: var(--color-teal-ink);
-  text-transform: uppercase;}
-.pslsc .pcard__kicker--teal{color: var(--color-teal);}
-.pslsc .pcard__title{margin: 2px 0 0; font: 800 var(--fs-card-title)/1.08 var(--font-display); letter-spacing: var(--ls-display);}
-.pslsc .pcard__desc{margin: 0; font: 400 14px/1.55 var(--font-body); color: var(--color-text-on-paper-muted); flex: 1;}
-.pslsc .pcard--dark .pcard__desc{color: var(--color-text-muted);}
-.pslsc .pcard__link{margin-top: 8px; font: 600 13px/1 var(--font-body); letter-spacing: .02em; color: var(--color-text-on-paper); text-decoration: none;}
-.pslsc .pcard__link--teal{color: var(--color-teal);}
+.pslsc .method__card-desc{margin: 0;
+  font: 400 var(--fs-body)/1.55 var(--font-body);
+  color: var(--color-text-muted);}
+.pslsc .method__card-desc em{color: var(--color-aqua); font-style: normal;}
 
 
-@media (max-width: 960px) {.pslsc .pcard-grid{grid-template-columns: repeat(2, 1fr);}}
+@media (max-width: 860px) {.pslsc .method__grid{grid-template-columns: repeat(2, 1fr);}}
 
-@media (max-width: 560px) {.pslsc .pcard-grid{grid-template-columns: 1fr;}}
-.pslsc .benefits .psl-container{padding-block: var(--section-pad);}
-.pslsc .benefits__head{margin-bottom: clamp(36px, 5vw, 60px);}
-.pslsc .benefits__title{max-width: 26ch; font-size: clamp(32px, 4.6vw, 60px);}
-.pslsc .benefits__grid{display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;}
-.pslsc .pcard--benefit .pcard__body{padding: 28px 24px 26px; gap: 10px;}
-.pslsc .pcard--benefit .pcard__icon{color: var(--color-aqua-deep);}
-.pslsc .pcard--benefit .pcard__link--teal{color: var(--color-aqua-deep);}
-
-
-@media (max-width: 960px) {.pslsc .benefits__grid{grid-template-columns: repeat(2, 1fr);}}
-
-@media (max-width: 560px) {.pslsc .benefits__grid{grid-template-columns: 1fr;}}
+@media (max-width: 460px) {.pslsc .method__grid{grid-template-columns: 1fr;}}
 </style>
 
 <div class="pslsc pslsc--bleed">
-<section class="benefits surface-paper" id="benefits">
+<section class="method surface-ink" id="method">
   <div class="psl-container">
-    <header class="benefits__head">
-      <span class="psl-kicker" data-reveal>What being a Founder means</span>
-      <h2 class="psl-h2 benefits__title" data-reveal data-reveal-delay="90">Not perks. Proof you were here first.</h2>
+    <header class="method__head" data-reveal-group="80">
+      <span class="psl-kicker" data-reveal>How we develop</span>
+      <h2 class="psl-h2 method__title" data-reveal>We don&rsquo;t run a rec league. We develop footballers.</h2>
+      <p class="method__lead" data-reveal>
+        The owners grew up in Argentine football — and they brought the way it&rsquo;s taught with them.
+        Technical, ball-first development, run on a real USL calendar, pointed at a real destination.
+      </p>
     </header>
 
-    <div class="benefits__grid" data-reveal-group="90">
-      <article class="pcard pcard--benefit" data-reveal>
-        <div class="pcard__body">
-          <svg class="pcard__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M7 8a4 4 0 100 8c2 0 3-1.5 5-4s3-4 5-4a4 4 0 110 8c-2 0-3-1.5-5-4S9 8 7 8z" stroke="currentColor" stroke-width="1.6"/>
-          </svg>
-          <h3 class="pcard__title">For life</h3>
-          <p class="pcard__desc">Founder status for the lifetime of the club — it never expires, never renews.</p>
-        </div>
+    <div class="method__grid" data-reveal-group="90">
+      <article class="method__card" data-reveal>
+        <span class="method__index" aria-hidden="true">01</span>
+        <h3 class="method__card-title">Argentine DNA</h3>
+        <p class="method__card-desc">Ball at the feet, decisions under pressure, the street-football instinct. We teach players to <em>read</em> the game, not just run it.</p>
       </article>
 
-      <article class="pcard pcard--benefit" data-reveal>
-        <div class="pcard__body">
-          <svg class="pcard__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M9 4L7 20M17 4l-2 16M4 9h16M3 15h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
-          <h3 class="pcard__title">Your number</h3>
-          <p class="pcard__desc">A permanent founder number, assigned the moment you join. The lower it is, the earlier you were.</p>
-        </div>
+      <article class="method__card" data-reveal>
+        <span class="method__index" aria-hidden="true">02</span>
+        <h3 class="method__card-title">Real structure</h3>
+        <p class="method__card-desc">A proper season on the USL Academy League calendar — coaching, training load, video and recovery. Not weekend pickup with a whistle.</p>
       </article>
 
-      <article class="pcard pcard--benefit" data-reveal>
-        <div class="pcard__body">
-          <svg class="pcard__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="3" y="4" width="18" height="16" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
-            <path d="M3 9h18M3 14h18M9 4v5m0 5v6M15 9v5" stroke="currentColor" stroke-width="1.6"/>
-          </svg>
-          <h3 class="pcard__title">On the wall</h3>
-          <p class="pcard__desc">Your name goes on the founders wall — public, permanent, alongside everyone who believed early.</p>
-        </div>
+      <article class="method__card" data-reveal>
+        <span class="method__index" aria-hidden="true">03</span>
+        <h3 class="method__card-title">A pathway that pays off</h3>
+        <p class="method__card-desc">A visible route to the reserve and the 2027 first team — and the US college and pro roads for the ones who go further.</p>
       </article>
 
-      <article class="pcard pcard--benefit" data-reveal>
-        <div class="pcard__body">
-          <svg class="pcard__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/>
-            <path d="M7 15h4M14 9h4M14 12h4M7 9h3v3H7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-          </svg>
-          <h3 class="pcard__title">Your card</h3>
-          <p class="pcard__desc">A digital founder card with your number — built to share, in one tap.</p>
-          
-          <a href="__URL_HOME__#founders" class="pcard__link pcard__link--teal">See your card →</a>
-        </div>
+      <article class="method__card" data-reveal>
+        <span class="method__index" aria-hidden="true">04</span>
+        <h3 class="method__card-title">Player first, result later</h3>
+        <p class="method__card-desc">At youth level we build footballers who last, not trophies that fade. Win the kid&rsquo;s development, and the results come.</p>
       </article>
     </div>
   </div>
