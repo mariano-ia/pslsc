@@ -47,6 +47,7 @@
 .scard__media {
   display: block;
   width: 100%;
+  height: auto;                     /* pisa el height="1125" del <img>, si no aspect-ratio se ignora */
   aspect-ratio: 4 / 5;
   object-fit: cover;
   background: var(--color-ink);
