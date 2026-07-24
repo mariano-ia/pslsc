@@ -23,6 +23,7 @@ native/            bloques "nativos" (HTML + CSS, a veces + JS). 1 archivo = 1 b
   sumate/          s01-hero … s06-cta          → la página "Become a Founder"
   partners/        p01-hero … p05-contact      → la página Partners
   academy/         a01-hero … a07-tryouts      → la página Academy
+  staff/           st01-staff                 → la página Staff (equipo de liderazgo)
 custom/            componentes web a medida (Web Components <psl-*>). Cada uno es autocontenido.
   live-counter/    <psl-live-counter>       — banda de métricas / contadores
   fixtures/        <psl-fixtures>           — Matchday (partidos del equipo reserva)
@@ -31,7 +32,7 @@ custom/            componentes web a medida (Web Components <psl-*>). Cada uno e
   departures-board/ <psl-departures-board>  — tablero split-flap tipo aeropuerto
   founder-wall/    <psl-founder-wall> + <psl-founder-card>  — muro/carnet (NO montados hoy; ver §7)
 assets/            brand/ (logos WebP) · fonts/ (tipografías) · images/ · proof/ · jersey360/ · videos/
-pages/             home · sumate · partners · academy .html  → SOLO para preview (ver §2 y §9)
+pages/             home · sumate · partners · academy · staff .html  → SOLO para preview (ver §2 y §9)
 tools/             build-blocks.py → compila los bloques para WordPress (ver §2). README propio.
 dist/              SALIDA para WordPress: blocks/ (pegar), upload/ (hostear), UPLOAD.md (instructivo).
 shop/              tienda oficial — mockup A MEDIDA (HTML autocontenido). NO va por bloques (ver §10 y shop/README.md)
@@ -177,6 +178,17 @@ P03 "Three ways this pays back" · **P04 tracción** (`<psl-live-counter variant
 ### ACADEMY (`pages/academy.html`)
 A01 hero (video `hero_academy.mp4`) · **A02 pathway** (reusa la misma timeline `.ptl` +
 `initProjectTimeline`) · A03 método · A05 parents · A06 FAQ · **A07 tryouts** (form `a07-tryouts.js`).
+
+### STAFF (`pages/staff.html`) — equipo de liderazgo
+ST01 (`native/staff/st01-staff.*`): header oscuro ("Leadership") + dos grupos en superficie clara
+(Executive Leadership · Sporting Leadership). Cada persona es una tarjeta `<details>` nativa: foto
+4:5 + nombre + rol en el `<summary>`, y la bio se abre al click (el `+` rota a `×`). **Cero JS**
+(acordeón nativo; el bloque no arrastra `motion.js`). La grilla usa `align-items:start`, así abrir
+una tarjeta no estira a las vecinas. Fotos en `assets/staff/*.webp` (6, del mismo photoshoot).
+**Sean McDaniel** no tiene foto de origen → placeholder de marca con iniciales; reemplazar el `div`
+`.scard__media--ph` por un `<img class="scard__media">` cuando exista la foto. En WordPress: crear
+la página, pegar el bloque compilado y **agregar "Staff" al menú del template de USL** (la nav no
+sale de estos bloques). Contenido (nombres/roles/bios) tomado del sitio en producción.
 
 ### Navegación entre páginas
 El **nav y el footer** (00 / 09) van iguales en todas las páginas. Sus links usan `archivo.html#ancla`;
