@@ -1,0 +1,531 @@
+<!-- PSL SC - bloque staff/st01-staff. Pegar en un widget HTML de WordPress.
+     Assets y fuentes hosteados en __PSL_ASSET_BASE__/ (ver dist/UPLOAD.md).
+     El JS va como data: URI en el src (WordPress corrompe el JS que va como texto). -->
+<style>
+@font-face{font-family:'Ferryman';font-weight:800;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Ferryman-ExtraBold.woff2) format('woff2');}
+@font-face{font-family:'Ferryman';font-weight:700;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Ferryman-Bold.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:500;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Druk-Medium.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:700;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Druk-Bold.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:800;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Druk-Heavy.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:900;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Druk-Super.woff2) format('woff2');}
+@font-face{font-family:'Druk Text Wide';font-weight:500;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/DrukTextWide-Medium.woff2) format('woff2');}
+@font-face{font-family:'Druk Text Wide';font-weight:800;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/DrukTextWide-Heavy.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:400;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/ProximaNova-Regular.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:600;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/ProximaNova-Semibold.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:700;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/ProximaNova-Bold.woff2) format('woff2');}
+@font-face{font-family:'Cabazon';font-weight:400;font-style:normal;font-display:swap;src:url(__PSL_ASSET_BASE__/fonts/Cabazon-Regular.woff2) format('woff2');}
+.pslsc, .pslsc *, .pslsc *::before, .pslsc *::after { box-sizing: border-box; }
+.pslsc { width:100%; font-family:var(--font-body); color:var(--color-text); line-height:normal; -webkit-font-smoothing:antialiased; }
+.pslsc h1,.pslsc h2,.pslsc h3,.pslsc h4,.pslsc h5,.pslsc h6,.pslsc p,.pslsc ul,.pslsc ol,.pslsc li,.pslsc figure,.pslsc blockquote,.pslsc dl,.pslsc dd { margin:0; padding:0; color:inherit; font:inherit; text-transform:none; }
+.pslsc ul,.pslsc ol { list-style:none; }
+.pslsc a { color:inherit; text-decoration:none; }
+.pslsc img,.pslsc video,.pslsc canvas,.pslsc svg { display:block; max-width:100%; }
+.pslsc button,.pslsc input,.pslsc textarea,.pslsc select { font:inherit; color:inherit; }
+.pslsc ::selection { background:var(--color-aqua); color:var(--color-black); }
+.pslsc--bleed { width:var(--psl-vw,100vw); max-width:var(--psl-vw,100vw); margin-left:calc(50% - var(--psl-vw,100vw)/2); margin-right:calc(50% - var(--psl-vw,100vw)/2); }
+.pslsc .psl-diag { font:12px/1.5 ui-monospace,Menlo,monospace; margin-top:16px; padding:9px 12px; border-radius:6px; background:#FF0033; color:#fff; word-break:break-word; }
+.pslsc .psl-diag.is-ok { background:rgba(14,140,121,.12); color:var(--color-aqua-deep); }
+.pslsc{--color-aqua:        #AAF6E6;   
+  --color-aqua-deep:   #0E8C79;   
+  --color-black:       #000000;
+  --color-white:       #FFFFFF;
+  --color-red-marine:  #FF0033;   
+
+  
+  --color-ink:      #0C0C0A;   
+  --color-ink-2:    #131118;   
+  --color-ink-3:    #16150F;   
+  --color-paper:      #F4F1EA;   
+  --color-paper-2:    #EDE8DE;   
+  --color-paper-card: #FFFFFF;   
+  --color-paper-line: rgba(0,0,0,.09);
+
+  
+  --color-text:            #F4F1EA;   
+  --color-text-muted:      rgba(244,241,234,.68);
+  --color-text-faint:      rgba(244,241,234,.5);
+  --color-text-on-paper:       #0C0C0A;
+  --color-text-on-paper-muted: rgba(12,12,10,.62);
+  --color-text-on-paper-faint: rgba(12,12,10,.45);
+
+  
+  --color-line:        rgba(244,241,234,.1);
+  --color-line-strong: rgba(244,241,234,.16);
+
+  
+  --color-bg: var(--color-ink);
+  --color-bg-elevated: var(--color-ink-2);
+  --color-border: var(--color-line);
+  --color-whatsapp: #25d366;
+  --color-jersey-viewer-bg: #0C0C0A;
+  
+  --color-teal: var(--color-aqua);
+  --color-teal-bright: var(--color-aqua);
+  --color-teal-ink: var(--color-aqua-deep);
+  --color-sky: var(--color-aqua);
+
+  
+  --font-hero:    'Ferryman', Georgia, serif;
+  --font-display: 'Druk', 'Arial Narrow', sans-serif;
+  --font-label:   'Druk Text Wide', 'Arial Narrow', sans-serif;
+  --font-body:    'Proxima Nova', system-ui, sans-serif;   
+  --font-detail:  'Cabazon', 'Druk', serif;
+  --font-mono:    var(--font-label);   
+
+  
+  --ls-display: 0.02em;
+
+  
+  --fs-hero:  clamp(52px, 8.6vw, 138px);
+  --fs-h2:    clamp(34px, 5.4vw, 72px);
+  --fs-h3:    clamp(20px, 2vw, 26px);
+  --fs-card-title: 21px;
+  --fs-body-lg: clamp(15px, 1.4vw, 19px);
+  --fs-body:  16px;
+  --fs-small: 13.5px;
+
+  
+  --fs-kicker: 11px;
+  --fs-label:  10.5px;
+  --ls-kicker: .14em;
+  --ls-label:  .12em;
+
+  
+  --fs-counter: clamp(40px, 5vw, 72px);
+  --font-feature-counter: 'tabular-nums';
+
+  --lh-tight: .9;
+  --lh-normal: 1.6;
+
+  
+  --container: 1320px;
+  --gutter: clamp(22px, 5vw, 56px);
+  --section-pad: clamp(84px, 11vw, 150px);   
+
+  
+  --space-1: 0.25rem;  --space-2: 0.5rem;  --space-3: 1rem;
+  --space-4: 1.5rem;   --space-5: 2.5rem;  --space-6: 4rem;
+
+  
+  --radius-sm: 5px;  --radius-md: 14px;  --radius-lg: 18px;  --radius-pill: 100px;
+
+  
+  --ease-jersey-drag: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-jersey-drag-min: 400ms;
+  --duration-jersey-drag-max: 600ms;
+  --duration-wall-slide-in: 300ms;
+  --ease-wall-slide-in: ease-out;
+  --duration-wall-highlight: 2500ms;
+  --duration-counter-highlight: 1500ms;
+
+  
+  --ease-out-soft:    cubic-bezier(.22, .61, .36, 1);   
+  --ease-out-expo:    cubic-bezier(.16, 1, .3, 1);      
+  --ease-in-out-soft: cubic-bezier(.65, 0, .35, 1);
+  --dur-fast:   240ms;
+  --dur-med:    460ms;
+  --dur-reveal: 720ms;   
+  --reveal-shift: 22px;  
+  --stagger: 80ms;       
+
+  
+  --z-sticky-cta: 40;  --z-nav: 50;  --z-modal: 200;}
+
+
+
+@keyframes psl-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.82)} }
+
+@keyframes psl-marq  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+@keyframes psl-rise  { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+@keyframes psl-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+
+@keyframes psl-hero-in   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+@keyframes psl-float     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+
+@keyframes psl-draw-x    { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+
+@keyframes psl-scroll-cue{ 0%{opacity:0;transform:translateY(-4px)} 35%{opacity:1} 100%{opacity:0;transform:translateY(10px)} }
+
+@keyframes psl-ping      { 0%{transform:scale(.5);opacity:.8} 100%{transform:scale(2.6);opacity:0} }
+
+@keyframes psl-sheen     { 0%{background-position:-140% 0} 60%,100%{background-position:140% 0} }
+
+@keyframes psl-grad-flow { 0%{background-position:0% 50%} 100%{background-position:-200% 50%} }
+.pslsc *, .pslsc *::before, .pslsc *::after{box-sizing: border-box;}
+.pslsc .psl-container{max-width: var(--container);
+  margin: 0 auto;
+  padding-inline: var(--gutter);}
+.pslsc .surface-ink{background: var(--color-ink);   color: var(--color-text);}
+.pslsc .surface-paper{background: var(--color-paper); color: var(--color-text-on-paper);}
+.pslsc .surface-aqua{background: var(--color-aqua);  color: var(--color-black);}
+.pslsc .psl-kicker{font: 500 var(--fs-kicker)/1 var(--font-label);
+  letter-spacing: var(--ls-kicker);
+  color: var(--color-aqua);
+  text-transform: uppercase;}
+.pslsc .surface-paper .psl-kicker{color: var(--color-aqua-deep);}
+.pslsc .psl-h2{margin: 18px 0 0;
+  font: 800 var(--fs-h2)/0.98 var(--font-display);
+  letter-spacing: var(--ls-display);
+  text-transform: none;
+  text-wrap: balance;}
+.pslsc .psl-btn{display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font: 600 14px/1 var(--font-body);   
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 15px 26px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: transform 140ms ease, background 160ms ease, border-color 160ms ease;}
+.pslsc .psl-btn:hover{transform: translateY(-1px);}
+.pslsc .cta-primary{background: var(--color-aqua); color: var(--color-black);}
+.pslsc .cta-primary:hover{background: var(--color-white);}
+.pslsc .cta-secondary{background: transparent; color: currentColor; border: 1px solid rgba(244,241,234,.28);}
+.pslsc .surface-paper .cta-secondary{border-color: rgba(0,0,0,.22);}
+.pslsc .tnum{font-variant-numeric: var(--font-feature-counter);}
+.pslsc .psl-motion [data-reveal]{opacity: 0;
+  transform: translateY(var(--reveal-shift, 22px));
+  transition: opacity var(--dur-reveal, 720ms) var(--ease-out-soft, ease),
+              transform var(--dur-reveal, 720ms) var(--ease-out-soft, ease);
+  transition-delay: var(--reveal-delay, 0ms);}
+.pslsc .psl-motion [data-reveal="left"]{transform: translateX(calc(-1 * var(--reveal-shift, 22px)));}
+.pslsc .psl-motion [data-reveal="right"]{transform: translateX(var(--reveal-shift, 22px));}
+.pslsc .psl-motion [data-reveal="scale"]{transform: scale(.94);}
+.pslsc .psl-motion [data-reveal="mask"]{opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--dur-reveal, 720ms) var(--ease-out-expo, ease);
+  transition-delay: var(--reveal-delay, 0ms);}
+.pslsc .psl-motion [data-reveal].is-revealed{opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 0 0);}
+.pslsc [data-spotlight]{position: relative;}
+.pslsc [data-spotlight]::after{content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, -20%),
+              rgba(170, 246, 230, .16), transparent 62%);
+  opacity: 0;
+  transition: opacity 320ms ease;
+  z-index: 1;}
+.pslsc .surface-paper [data-spotlight]::after, .pslsc [data-spotlight].on-paper::after{background: radial-gradient(240px circle at var(--mx, 50%) var(--my, -20%),
+              rgba(14, 140, 121, .12), transparent 62%);}
+.pslsc [data-spotlight]:hover::after{opacity: 1;}
+.pslsc [data-spotlight] > *{position: relative; z-index: 2;}
+.pslsc [data-tilt]{transition: transform 300ms var(--ease-out-soft, ease); transform-style: preserve-3d;}
+.pslsc [data-magnetic]{transition: transform 300ms var(--ease-out-soft, ease); will-change: transform;}
+.pslsc [data-parallax]{will-change: transform;}
+.pslsc .nav__progress{position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--color-aqua), var(--color-red-marine));
+  z-index: 1;}
+.pslsc .nav.is-scrolled{background: rgba(12, 12, 10, .92);
+  box-shadow: 0 1px 24px rgba(0, 0, 0, .34);}
+.pslsc .nav.is-scrolled .nav__inner{height: 58px;}
+.pslsc .nav__inner{transition: height 280ms var(--ease-out-soft, ease);}
+.pslsc .nav__links a{position: relative; transition: color 160ms ease;}
+.pslsc .nav__links a.is-active{color: var(--color-text);}
+.pslsc .nav__links a.is-active::after{content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--color-aqua);
+  border-radius: 2px;}
+.pslsc .psl-grain{position: fixed;
+  inset: 0;
+  z-index: 36;
+  pointer-events: none;
+  opacity: .035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;}
+.pslsc .psl-cursor-glow{position: fixed;
+  top: 0;
+  left: 0;
+  width: 130px;
+  height: 130px;
+  margin: -65px 0 0 -65px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 60;
+  background: radial-gradient(circle, rgba(170, 246, 230, .11), rgba(170, 246, 230, 0) 68%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 400ms ease;}
+.pslsc .psl-cursor-glow.is-on{opacity: 1;}
+.pslsc .psl-seam--from-ink, .pslsc .psl-seam--from-paper{position: relative;}
+.pslsc .psl-seam--from-ink::before, .pslsc .psl-seam--from-paper::before{content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 90px;
+  pointer-events: none;
+  z-index: 0;}
+.pslsc .psl-seam--from-ink::before{background: linear-gradient(180deg, rgba(12, 12, 10, .16), transparent);}
+.pslsc .psl-seam--from-paper::before{background: linear-gradient(180deg, rgba(244, 241, 234, .07), transparent);}
+
+
+@media (prefers-reduced-motion: reduce) {.pslsc .psl-motion [data-reveal]{opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;}
+.pslsc .psl-grain, .pslsc .psl-cursor-glow{display: none !important;}
+.pslsc .nav__inner{transition: none !important;}}
+.pslsc .staff--head .psl-container{padding-block: clamp(64px, 9vw, 120px) clamp(28px, 4vw, 44px);}
+.pslsc .staff__title{margin-top: 12px; max-width: 14ch;}
+.pslsc .staff__intro{margin: 20px 0 0;
+  max-width: 48ch;
+  font: 400 var(--fs-body-lg)/1.6 var(--font-body);
+  color: var(--color-text-muted);}
+.pslsc .staff--body{border-top: 1px solid var(--color-line);}
+.pslsc .staff--body .psl-container{padding-block: clamp(40px, 5vw, 64px) var(--section-pad);}
+.pslsc .staff__group + .staff__group{margin-top: clamp(44px, 6vw, 84px);}
+.pslsc .staff__grouplabel{display: block;}
+.pslsc .staff__grid{display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(18px, 2.2vw, 30px);
+  align-items: start;               
+  margin-top: 26px;}
+
+@media (max-width: 960px) {.pslsc .staff__grid{grid-template-columns: repeat(2, 1fr);}}
+
+@media (max-width: 560px) {.pslsc .staff__grid{grid-template-columns: 1fr;}}
+.pslsc .scard{background: var(--color-paper-card);
+  border: 1px solid var(--color-paper-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;}
+.pslsc .scard[open]{box-shadow: 0 16px 30px rgba(18, 17, 13, .08);}
+.pslsc .scard__summary{display: block;
+  cursor: pointer;
+  list-style: none;}
+.pslsc .scard__summary::-webkit-details-marker{display: none;}
+.pslsc .scard__summary:focus-visible{outline: 2px solid var(--color-aqua-deep); outline-offset: 2px;}
+.pslsc .scard__media{display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  background: var(--color-ink);}
+.pslsc .scard__media--ph{display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  background:
+    radial-gradient(120% 90% at 50% 8%, rgba(170, 246, 230, .16), transparent 60%),
+    var(--color-ink);}
+.pslsc .scard__initials{font: 800 clamp(46px, 7vw, 80px)/1 var(--font-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-aqua);}
+.pslsc .scard__bar{display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px 17px 16px;}
+.pslsc .scard__name{font: 800 var(--fs-card-title)/1.1 var(--font-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-text-on-paper);}
+.pslsc .scard__role{margin-top: 5px;
+  font: 500 var(--fs-kicker)/1.3 var(--font-label);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--color-aqua-deep);}
+.pslsc .scard__toggle{position: relative;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  transition: transform .2s ease;}
+.pslsc .scard__toggle::before, .pslsc .scard__toggle::after{content: "";
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+  background: var(--color-text-on-paper);}
+.pslsc .scard__toggle::after{transform: rotate(90deg);}
+.pslsc .scard[open] .scard__toggle{transform: rotate(45deg);}
+.pslsc .scard__bio{display: grid;
+  gap: 12px;
+  padding: 0 17px 20px;}
+.pslsc .scard__bio p{font: 400 var(--fs-body)/1.6 var(--font-body);
+  color: var(--color-text-on-paper-muted);}
+
+
+@media (prefers-reduced-motion: reduce) {.pslsc .scard__toggle{transition: none;}}
+</style>
+
+<div class="pslsc pslsc--bleed">
+<section class="staff staff--head surface-ink">
+  <div class="psl-container">
+    <span class="psl-kicker">Port St. Lucie SC</span>
+    <h2 class="psl-h2 staff__title">Leadership</h2>
+    <p class="staff__intro">The people building Port St. Lucie SC — from the executive team to the sporting side.</p>
+  </div>
+</section>
+
+<section class="staff staff--body surface-paper">
+  <div class="psl-container">
+
+    <div class="staff__group">
+      <span class="psl-kicker staff__grouplabel">Executive Leadership</span>
+      <div class="staff__grid">
+
+        <details class="scard">
+          <summary class="scard__summary">
+            <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/gustavo-suarez.webp" alt="Gustavo Suárez" width="900" height="1125" loading="lazy" decoding="async" />
+            <div class="scard__bar">
+              <div class="scard__id">
+                <p class="scard__name">Gustavo Suárez</p>
+                <p class="scard__role">Founder &amp; CEO</p>
+              </div>
+              <span class="scard__toggle" aria-hidden="true"></span>
+            </div>
+          </summary>
+          <div class="scard__bio">
+            <p>Entrepreneur and investor with over 20 years of experience leading sports, real estate, and business ventures across Latin America and the United States. Founder and CEO of Port Saint Lucie SC, he spearheads the creation of an ecosystem that connects sports, real estate, and community development in Florida.</p>
+            <p>With a deep connection to sports and hands-on experience managing teams and athletic organizations, he combines human leadership, strategic vision, and an unshakable belief that sports can transform lives and drive progress.</p>
+          </div>
+        </details>
+
+        <details class="scard">
+          <summary class="scard__summary">
+            <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/agostina-galimberti.webp" alt="Agostina Galimberti" width="900" height="1125" loading="lazy" decoding="async" />
+            <div class="scard__bar">
+              <div class="scard__id">
+                <p class="scard__name">Agostina Galimberti</p>
+                <p class="scard__role">President | Co-Founder</p>
+              </div>
+              <span class="scard__toggle" aria-hidden="true"></span>
+            </div>
+          </summary>
+          <div class="scard__bio">
+            <p>Argentinian entrepreneur based in Florida, with experience in sports innovation, technology, and international business development. Co-founder of Port Saint Lucie SC and founder of a sports technology project, she leads the club's strategic growth in the United States and builds partnerships with institutions, brands, and investors.</p>
+            <p>A former field hockey player in Argentina, Australia, and Europe, she continues the legacy of her mother, a former player for the Argentine National Hockey Team. Her athletic background shaped her discipline, resilience, and leadership — values she now applies to every project she drives.</p>
+            <p>Her work blends global vision, creative thinking, and bold execution, integrating sports, real estate, and technology with a lasting social and community impact.</p>
+          </div>
+        </details>
+
+        <details class="scard">
+          <summary class="scard__summary">
+            <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/paulo-suarez.webp" alt="Paulo Suárez" width="900" height="1125" loading="lazy" decoding="async" />
+            <div class="scard__bar">
+              <div class="scard__id">
+                <p class="scard__name">Paulo Suárez</p>
+                <p class="scard__role">Co-Founder | Managing Partner USA</p>
+              </div>
+              <span class="scard__toggle" aria-hidden="true"></span>
+            </div>
+          </summary>
+          <div class="scard__bio">
+            <p>Entrepreneur with broad experience in business development, human leadership, infrastructure, and sports. Co-founder and Managing Partner of Port Saint Lucie SC, and founder of a sports technology project, he leads the club's expansion in the United States and contributes his expertise in construction, team management, and investment oversight within the family business group.</p>
+            <p>Currently managing a service franchise in Florida, he combines strategic vision, people-focused leadership, and strong execution — bridging sports, real estate, and business development into one integrated ecosystem.</p>
+          </div>
+        </details>
+
+        <details class="scard">
+          <summary class="scard__summary">
+            <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/diego-delledonne.webp" alt="Diego Delledonne" width="900" height="1125" loading="lazy" decoding="async" />
+            <div class="scard__bar">
+              <div class="scard__id">
+                <p class="scard__name">Diego Delledonne</p>
+                <p class="scard__role">Chief Operating Officer</p>
+              </div>
+              <span class="scard__toggle" aria-hidden="true"></span>
+            </div>
+          </summary>
+          <div class="scard__bio">
+            <p>Soccer executive with more than a decade of experience leading the professional first division at San Lorenzo de Almagro, one of Argentina's traditional top five clubs. From 2013 to 2023, he oversaw the department that bridges sport, business, and people — coordinating first-team operations, managing transfers, and strengthening institutional relationships.</p>
+            <p>He represented San Lorenzo de Almagro before FIFA at the 2014 Club World Cup and played a pivotal role in the professionalization and stabilization of the soccer department during challenging times. Recognized for his strategic vision and people-centered leadership, Diego believes true success in soccer lies in building sustainable processes, fostering credibility, and achieving balance between sporting performance and institutional growth.</p>
+          </div>
+        </details>
+
+        
+        <details class="scard">
+          <summary class="scard__summary">
+            <div class="scard__media scard__media--ph" role="img" aria-label="Sean McDaniel">
+              <span class="scard__initials">SM</span>
+            </div>
+            <div class="scard__bar">
+              <div class="scard__id">
+                <p class="scard__name">Sean McDaniel</p>
+                <p class="scard__role">Chief Revenue Officer</p>
+              </div>
+              <span class="scard__toggle" aria-hidden="true"></span>
+            </div>
+          </summary>
+          <div class="scard__bio">
+            <p>Sean McDaniel is an experienced sports executive with more than 15 years in professional soccer management, operations, and commercial strategy. He previously served as President and General Manager of Chattanooga Red Wolves SC, where he played a key role in launching the club's professional program and driving significant revenue growth.</p>
+            <p>He also contributed to operations for the FIFA Club World Cup 2025, gaining experience in high-level international event management and coordinating with key stakeholders to ensure operational excellence.</p>
+            <p>At Port St. Lucie SC, McDaniel leads the club's commercial strategy, focusing on partnerships, revenue development, and building a sustainable business model that supports the club's long-term vision.</p>
+          </div>
+        </details>
+
+      </div>
+    </div>
+
+    <div class="staff__group">
+      <span class="psl-kicker staff__grouplabel">Sporting Leadership</span>
+      <div class="staff__grid">
+
+        <details class="scard">
+          <summary class="scard__summary">
+            <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/bernardo-romeo.webp" alt="Bernardo Romeo" width="900" height="1125" loading="lazy" decoding="async" />
+            <div class="scard__bar">
+              <div class="scard__id">
+                <p class="scard__name">Bernardo Romeo</p>
+                <p class="scard__role">Sporting Director</p>
+              </div>
+              <span class="scard__toggle" aria-hidden="true"></span>
+            </div>
+          </summary>
+          <div class="scard__bio">
+            <p>Former professional soccer player and experienced executive with proven leadership in club management and national team structures. After a successful playing career in Argentina and Europe — including stints at Hamburger SV in Germany and RCD Mallorca and CA Osasuna in Spain — Romeo transitioned into sporting management roles at the highest level.</p>
+            <p>He served as Sporting Director at San Lorenzo de Almagro, where he was part of the leadership team that guided the club to multiple titles, including its first CONMEBOL Libertadores. He later played a key role within Argentina's national team structures, particularly at the youth level, contributing to talent identification, player development pathways, and the strengthening of competitive environments.</p>
+            <p>With experience supporting elite player development — including within the generation that featured Lionel Messi — Romeo brings a deep understanding of long-term sporting structure and high-performance standards.</p>
+          </div>
+        </details>
+
+        <details class="scard">
+          <summary class="scard__summary">
+            <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/juan-ignacio-brown.webp" alt="Juan Ignacio Brown" width="900" height="1125" loading="lazy" decoding="async" />
+            <div class="scard__bar">
+              <div class="scard__id">
+                <p class="scard__name">Juan Ignacio Brown</p>
+                <p class="scard__role">Academy Director</p>
+              </div>
+              <span class="scard__toggle" aria-hidden="true"></span>
+            </div>
+          </summary>
+          <div class="scard__bio">
+            <p>Former professional soccer player and experienced coach with a global career across South America, Europe, and the Middle East. After playing for Estudiantes de La Plata and several clubs in Argentina, Portugal, and Bolivia, he transitioned to coaching, first at Estudiantes' youth academy and later as Technical Secretary at San Lorenzo de Almagro.</p>
+            <p>He worked with Argentina's youth national teams alongside Javier Mascherano, Pablo Aimar, and Diego Placente before joining Saudi Arabia's Al-Hilal, where he led the team to the Saudi Professional League title (2017–2018). Brown also managed Al-Wehda, Ismaily SC, Al-Shabab, and Brown de Adrogué. In 2024, he became Head Coach of Al-Safa in the Saudi First Division.</p>
+            <p>Son of José Luis Brown, Soccer World Cup champion in 1986, Juan Ignacio continues a legacy of leadership, discipline, and passion for soccer.</p>
+          </div>
+        </details>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+<p class="psl-diag" id="psl-diag">&#10060; El script del bloque no se ejecuto (o fue removido)</p>
+</div>
+
+<script src="data:text/javascript;charset=utf-8,%0A(function(){%0A  function el(){return document.getElementById('psl-diag');}%0A  window.addEventListener('error',function(e){%0A    var d=el(); if(!d) return;%0A    d.textContent='\u274C El JS del bloque fallo: '+(e.message||'error')+'  ('+(e.lineno||'?')+')';%0A    d.className='psl-diag';%0A  },true);%0A  window.__pslDiag=function(){%0A    var d=el(); if(!d) return;%0A    d.textContent='\u2705 JS OK - ancho util '+document.documentElement.clientWidth+'px';%0A    d.className='psl-diag is-ok';%0A  };%0A})();%0A"></script>
+<script type="module" src="data:text/javascript;charset=utf-8,%0Afunction pslVw(){document.documentElement.style.setProperty('--psl-vw',document.documentElement.clientWidth+'px');}%0ApslVw(); addEventListener('resize',pslVw,{passive:true});%0Afunction pslBoot(){  if(window.__pslDiag) window.__pslDiag(); }%0Aif(document.readyState==='loading') document.addEventListener('DOMContentLoaded',pslBoot); else pslBoot();%0A"></script>

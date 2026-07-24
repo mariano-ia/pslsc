@@ -42,6 +42,7 @@ BLOCKS = [
     ("partners", "p04-traction"), ("partners", "p05-contact"),
     ("academy", "a01-hero"), ("academy", "a02-pathway"), ("academy", "a03-method"),
     ("academy", "a05-parents"), ("academy", "a06-faq"), ("academy", "a07-tryouts"),
+    ("staff", "st01-staff"),
 ]
 
 # Fuentes hosteadas (family, weight, archivo .woff2 en ASSET_BASE fonts/)
