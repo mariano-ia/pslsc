@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff — Port St. Lucie SC</title>
+
+  <!-- Fuentes de marca -->
+  <link rel="stylesheet" href="../tokens/fonts.css?v=66" />
+  <!-- Tokens -->
+  <link rel="stylesheet" href="../tokens/tokens.css?v=66" />
+
+  <!-- Patrones compartidos -->
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=66" />
+
+  <!-- Nav + footer compartidos (reusan los bloques de Home) -->
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=66" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=66" />
+
+  <!-- Bloque Staff -->
+  <link rel="stylesheet" href="../native/staff/st01-staff.css?v=66" />
+
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--color-ink); }
+    body { font-family: var(--font-body); color: var(--color-text); overflow-x: hidden; }
+    ::selection { background: var(--color-aqua); color: var(--color-black); }
+  </style>
+</head>
+<body>
+  <div data-block="00-nav"></div>
+  <div data-block="st01-staff"></div>
+  <div data-block="footer"></div>
+
+  <script type="module">
+    // Nav y footer se toman de los bloques compartidos de Home; el staff es un bloque de /staff.
+    const blocks = [
+      { slot: '00-nav',     path: '../native/home/00-nav.html' },
+      { slot: 'st01-staff', path: '../native/staff/st01-staff.html' },
+      { slot: 'footer',     path: '../native/home/09-cierre-footer.html' },
+    ];
+    const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
+    await Promise.all(blocks.map(async ({ slot, path }) => {
+      const html = await fetch(path + bust).then((r) => r.text());
+      document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
+    }));
+
+    // init: form de newsletter del footer (mockeado) + sistema de motion (nav/footer).
+    // El bloque staff no tiene JS propio (acordeón nativo <details>).
+    const [{ initNewsletter }, { initMotion }] = await Promise.all([
+      import('../native/home/09-cierre-footer.js?v=66'),
+      import('../native/_patterns/motion.js?v=66'),
+    ]);
+    initNewsletter();
+    initMotion();
+
+    // Aterrizaje con #ancla desde otra página: los bloques se inyectan después del load.
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  </script>
+</body>
+</html>
