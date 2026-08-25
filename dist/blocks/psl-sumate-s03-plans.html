@@ -289,6 +289,15 @@
 .pslsc .psl-grain, .pslsc .psl-cursor-glow{display: none !important;}
 .pslsc .nav__inner{transition: none !important;}}
 .pslsc .plans .psl-container{padding-block: var(--section-pad);}
+.pslsc .plans{position: relative;}
+.pslsc .plans::after{content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(100% - 2 * var(--gutter)), calc(var(--container) - 2 * var(--gutter)));
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-line-strong) 18%, var(--color-line-strong) 82%, transparent);}
 .pslsc .plans__head{max-width: 40rem; margin-bottom: clamp(40px, 5vw, 60px);}
 .pslsc .plans__title{font-size: clamp(30px, 4.4vw, 58px);}
 .pslsc .plans__lead{margin: 20px 0 0;
@@ -354,6 +363,24 @@
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12l4 4L19 7' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/11px no-repeat;
           mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12l4 4L19 7' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/11px no-repeat;}
 .pslsc .plan__cta{width: 100%; justify-content: center;}
+.pslsc .plans__split{display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+  gap: clamp(48px, 7vw, 110px);
+  align-items: center;}
+.pslsc .plans__split .plans__head{margin-bottom: 0;}
+.pslsc .plans__title-accent{color: var(--color-aqua);}
+.pslsc .plans__note{margin: clamp(24px, 3vw, 34px) 0 0;
+  padding-top: clamp(20px, 2.6vw, 28px);
+  border-top: 1px solid var(--color-line);
+  max-width: 52ch; 
+  font: 400 14px/1.6 var(--font-body);
+  color: var(--color-text-faint);}
+.pslsc .plans__grid--solo{grid-template-columns: 1fr;}
+.pslsc .plans__grid--solo .plan{padding: clamp(30px, 2.6vw, 40px) clamp(26px, 2.4vw, 36px);}
+
+
+@media (max-width: 960px) {.pslsc .plans__split{grid-template-columns: 1fr; gap: clamp(36px, 6vw, 56px);}
+.pslsc .plans__grid--solo{max-width: 30rem; margin-inline: auto; width: 100%;}}
 .pslsc .plans__foot{margin: clamp(28px, 4vw, 40px) 0 0;
   text-align: center;
   font: 400 13px/1.5 var(--font-body);
@@ -361,71 +388,49 @@
 
 
 @media (max-width: 860px) {.pslsc .plans__grid{grid-template-columns: 1fr; max-width: 30rem; margin-inline: auto;}
-.pslsc .plan--featured{order: -1;}}
+.pslsc .plan--featured{order: -1;}
+.pslsc .plan--wide{grid-template-columns: 1fr; gap: 24px;}
+.pslsc .plan--wide .plan__top{border-right: 0;
+    padding-right: 0;
+    border-bottom: 1px solid var(--color-line);
+    padding-bottom: 22px;}
+.pslsc .plan--wide .plan__price-amount{font-size: clamp(52px, 14vw, 72px);}
+.pslsc .plan--wide .plan__features{grid-template-columns: 1fr;}
+.pslsc .plan--wide .plan__cta{width: 100%; align-self: stretch;}}
 </style>
 
 <div class="pslsc pslsc--bleed">
 <section class="plans surface-ink" id="plans">
-  <div class="psl-container">
+  <div class="psl-container plans__split">
+    
     <header class="plans__head">
       <span class="psl-kicker" data-reveal>How to join</span>
-      <h2 class="psl-h2 plans__title" data-reveal data-reveal-delay="90">Three ways in. All of them make you a Founder.</h2>
-      <p class="plans__lead" data-reveal data-reveal-delay="180">Start free, or lock your seat with a deposit you get back. The deposit is refundable until the first match in 2027 — no strings.</p>
+      <h2 class="psl-h2 plans__title" data-reveal data-reveal-delay="90">One price. One seat. <span class="plans__title-accent">Yours forever.</span></h2>
+      <p class="plans__lead" data-reveal data-reveal-delay="180">While the club takes shape, the founding deposit is one flat price: $35 reserves your seat for the 2027 debut — and it&rsquo;s fully refundable until the first whistle. One deposit, one season pass.</p>
+      <p class="plans__note" data-reveal data-reveal-delay="260">Bringing people with you? Place one deposit per seat — each deposit lets you purchase one season pass. Deposits are held, not spent: full refund on request any time before the first whistle in 2027.</p>
     </header>
 
-    <div class="plans__grid" data-reveal-group="110">
-      
-      <article class="plan" data-reveal>
+    
+    <div class="plans__grid plans__grid--solo">
+      <article class="plan plan--featured" data-reveal="right" data-reveal-delay="200">
+        <span class="plan__badge">Founding price</span>
         <div class="plan__top">
-          <span class="plan__name">Free</span>
-          <span class="plan__price"><span class="plan__price-amount tnum">$0</span></span>
-          <span class="plan__price-note">Founding member, today</span>
+          <span class="plan__name">Ticket deposit</span>
+          <span class="plan__price"><span class="plan__price-amount tnum">$35</span><span class="plan__price-unit">refundable deposit</span></span>
+          <span class="plan__price-note">Reserves 1 season pass for 2027</span>
         </div>
         <ul class="plan__features">
-          <li>Founding member number</li>
+          <li>Founding member number, for life</li>
           <li>Your name on the founders wall</li>
           <li>Digital founder card to share</li>
+          <li>Priority on season tickets</li>
+          <li>Charter pricing locked in</li>
           <li>Club newsletter &amp; early news</li>
         </ul>
         
-        <a href="#join" class="psl-btn cta-secondary plan__cta" data-signup="free">Join free</a>
-      </article>
-
-      
-      <article class="plan plan--featured" data-reveal>
-        <span class="plan__badge">Recommended</span>
-        <div class="plan__top">
-          <span class="plan__name">Founder</span>
-          <span class="plan__price"><span class="plan__price-amount tnum">$25</span><span class="plan__price-unit">refundable deposit</span></span>
-          <span class="plan__price-note">Reserve your seat for 2027</span>
-        </div>
-        <ul class="plan__features">
-          <li>Everything in Free</li>
-          <li>Refundable 2027 ticket deposit</li>
-          <li>Priority on season tickets</li>
-          <li>Charter pricing locked in</li>
-        </ul>
         <a href="#join" class="psl-btn cta-primary plan__cta" data-signup="founder">Reserve your seat</a>
       </article>
-
-      
-      <article class="plan" data-reveal>
-        <div class="plan__top">
-          <span class="plan__name">Premium</span>
-          <span class="plan__price"><span class="plan__price-amount tnum">$150</span></span>
-          <span class="plan__price-note">The full founding kit</span>
-        </div>
-        <ul class="plan__features">
-          <li>Everything in Founder</li>
-          <li>Founders edition jersey included</li>
-          <li>Your name engraved at the stadium</li>
-          <li>Early access to launch events</li>
-        </ul>
-        <a href="#join" class="psl-btn cta-secondary plan__cta" data-signup="premium">Become a Premium Founder</a>
-      </article>
     </div>
-
-    <p class="plans__foot" data-reveal data-reveal-delay="120">Deposits are held, not spent. Full refund on request any time before the first whistle in 2027.</p>
   </div>
 </section>
 <p class="psl-diag" id="psl-diag">&#10060; El script del bloque no se ejecuto (o fue removido)</p>
