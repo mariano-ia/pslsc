@@ -164,7 +164,7 @@ está documentado en su `.js`. **Nav (00) y News (08) son del template de USL** 
 | 09 | Newsletter + Footer | ink | Form de suscripción (`09-cierre-footer.js`) — ver §7. |
 
 ### SUMATE (`pages/sumate.html`) — página "Become a Founder"
-S01 hero (video `founder-hero.mp4`) · S02 beneficios · **S03 planes** (alta de fundador) ·
+S01 hero (video `founder-hero.mp4`) · S02 beneficios · **S03 precio único $35** (alta de fundador) ·
 S05 FAQ (`<details>` nativo, sin JS) · S06 CTA final.
 > S04 (muro buscable, `<psl-founder-wall>`) se **sacó de la página** por pedido del cliente (2026-07-10).
 > El bloque `s04-wall.*` y el componente siguen en el repo por si vuelve (no se compilan).
@@ -173,7 +173,7 @@ S05 FAQ (`<details>` nativo, sin JS) · S06 CTA final.
 P01 hero (video `partners-hero.mp4` + divider animado) · **P02 oportunidad** (reusa la timeline
 scroll-scrubbed de la Home: `.ptl` de `03-project.css` + `initProjectTimeline` de `03-project.js`) ·
 P03 "Three ways this pays back" · **P04 tracción** (`<psl-live-counter variant="sponsor">`) ·
-**P05 contacto** (form + descarga del partner deck).
+**P05 contacto** (form de contacto; el botón de descarga del partner deck se sacó el 2026-08-25).
 
 ### ACADEMY (`pages/academy.html`)
 A01 hero (video `hero_academy.mp4`) · **A02 pathway** (reusa la misma timeline `.ptl` +
@@ -241,19 +241,22 @@ Hoy corren con datos demo; **conectar el endpoint real reemplazando la función 
 
 - **Newsletter** (Home 09 / footer): `native/home/09-cierre-footer.js` → `POST { email }` al endpoint de suscripción.
 - **Contacto Partners** (P05): `native/partners/p05-contact.js` → `POST /api/partner-contact { name, company, email, message }`.
-  El "partner deck" es un link a un PDF (hoy baja al form; poner el `href` real cuando exista el PDF).
+  (El botón "Download the partner deck" se sacó por pedido del cliente, 2026-08-25 — está en el
+  historial de git si vuelve. El CTA del hero "Request the partner deck" sigue bajando al form.)
 - **Tryouts** (Academy A07): `native/academy/a07-tryouts.js` → `POST /api/academy/tryout-request`.
-- **Alta de fundador** (Sumate S03): cada plan lleva `data-signup="free|founder|premium"`.
-  Cablear a `POST /api/founder-signup { plan, name, email, city }` → `201 { founderNumber, tier }`.
-  `free` no cobra; los pagos son **seña reembolsable hasta 2027**. Hoy los 3 CTA scrollean a `#join`
-  (deferido) hasta que exista el flujo real.
+- **Alta de fundador** (Sumate S03): un solo plan vigente (2026-08, hasta nuevo aviso): seña de
+  ticket de **$35** ("Founding price"). El CTA lleva `data-signup="founder"`.
+  Cablear a `POST /api/founder-signup { plan: "founder", name, email, city, depositAmount: 35 }`
+  → `201 { founderNumber, tier }`. La seña es **reembolsable hasta 2027** y **1 depósito = 1 season
+  pass** (para varios asientos, varios depósitos — ver FAQ S05). Hoy el CTA scrollea a `#join`
+  (deferido) hasta que exista el flujo real. Los planes anteriores (Free $0 / Founder $25 /
+  Premium $150) quedan en el historial de git por si vuelven.
 
 ---
 
 ## 8. Pendientes / deuda técnica
 
 - **Formularios sin backend** (ver §7): los cuatro forms necesitan su endpoint. Es lo más importante.
-- **Partner deck**: falta el PDF; el link "Download the partner deck" baja al form de contacto mientras tanto.
 - **`<psl-founder-wall>` / `<psl-founder-card>`**: existen pero sin sección montada. Definir si vuelven.
 - **Nav en mobile**: la nav es del template de USL, así que su responsive lo maneja el theme.
 - Revisión completa del prototipo (contraste, código muerto, etc.) en `docs/auditoria-2026-07-10.md`.
