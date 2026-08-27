@@ -1,4 +1,36 @@
-/* Bloque · Matchday (fixtures) — wrapper. El strip tiene su CSS en /custom/fixtures/ */
+/* Bloque 04b — divider entre 04 Proof y 05 Jersey (los dos surface-ink).
+   El CSS del módulo Matchday está archivado al pie, igual que su HTML. Ver 04b-fixtures.html. */
+
+/* Sin padding propio: el aire ya lo dan el padding-bottom de Proof y el padding-top de Jersey
+   (--section-pad cada uno), así que la línea cae centrada en ese gap negro sin sumar altura.
+
+   05-jersey.css ya trae `border-top: 1px solid var(--color-line)` (10% blanco) y cae pegado justo
+   abajo de esta regla — no lo tocamos, porque en WordPress cada bloque se pega por separado y no
+   podemos depender de selectores entre bloques. Dos consecuencias de ese vecino:
+
+   1. La línea va en el MISMO tono (blanco cálido), no en aqua. Probé aqua y las dos filas de 1px
+      quedan de distinto color: se lee como una línea sucia de dos tonos, no como una. En el mismo
+      tono se funden en una sola regla limpia.
+   2. Va más marcada que --color-line-strong (16%): a ese valor el seam queda idéntico a no tener
+      divider, porque el hairline de jersey ya aportaba casi lo mismo. */
+.divider { display: block; }
+.divider .psl-container { padding-block: 0; }
+
+.divider__rule {
+  display: block;
+  height: 1px;
+  /* se desvanece en las puntas: remate deliberado, no un borde de sección que corta de lado a lado */
+  background: linear-gradient(to right,
+    transparent,
+    rgba(244, 241, 234, .30) 18%,
+    rgba(244, 241, 234, .30) 82%,
+    transparent);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────────────────────────
+   ARCHIVADO — CSS del módulo Matchday (wrapper del bloque; el strip tiene su CSS en
+   /custom/fixtures/fixtures.css, que sigue vivo y sin tocar). Para restaurar: descomentar esto y
+   borrar las reglas .divider de arriba.
 
 .matchday .psl-container { padding-block: var(--section-pad); }
 
@@ -16,4 +48,5 @@
   color: var(--color-text-on-paper-muted);
 }
 
-/* El hover-lift de las tarjetas y la sombra del borde viven en /custom/fixtures/fixtures.css */
+   (El hover-lift de las tarjetas y la sombra del borde viven en /custom/fixtures/fixtures.css)
+   ─────────────────────────────────────────────────────────────────────────────────────────── */

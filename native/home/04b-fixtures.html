@@ -1,8 +1,21 @@
 <!--
-  Bloque · Matchday (fixtures) — Home. 🟦 A medida (embebe <psl-fixtures>).
-  Va después del bloque 04 Proof: muestra los partidos del equipo reserva que ya compite en la
-  USL Academy League, navegables con flechas. Ver /custom/fixtures/
+  Bloque · 04b — Home.
+
+  EL MÓDULO MATCHDAY ESTÁ ARCHIVADO (2026-08-27), NO BORRADO. Queda comentado acá abajo, entero y
+  listo para volver: el código vivo sigue en /custom/fixtures/ (fixtures.js + fixtures.css) con el
+  fixture real cargado. Motivo: la temporada 2026 de la USL Academy League cierra el 3 de octubre y
+  al equipo reserva le quedaban sólo dos fechas, así que un carrusel de "próximos partidos" con una
+  tarjeta y media perdía sentido. Ver docs/handoff-notes.md §7.
+
+  EN SU LUGAR va un divider: 04 Proof y 05 Jersey son los dos `surface-ink`, y sin este bloque en el
+  medio (que era el único respiro claro de la zona) se pegan en una sola mancha negra larga.
+
+  PARA RESTAURAR: descomentar el <section class="matchday"> y borrar el <section class="divider">.
+  En 04b-fixtures.css hacer lo mismo (el CSS del matchday está archivado igual). Después correr
+  `python3 tools/build-blocks.py`.
 -->
+
+<!--
 <section class="matchday surface-paper" id="matches">
   <div class="psl-container">
     <header class="matchday__head" data-reveal-group="90">
@@ -13,5 +26,14 @@
       <p class="matchday__lead" data-reveal>The reserve team already competes every week in the USL Academy League. The first team debuts in 2027 — but the pitch is already in use.</p>
     </header>
     <psl-fixtures data-reveal data-reveal-delay="140"></psl-fixtures>
+  </div>
+</section>
+-->
+
+<!-- aria-hidden y no role="separator": la línea no aporta información, el corte entre secciones
+     ya es estructural. Anunciarla sería ruido para un lector de pantalla. -->
+<section class="divider surface-ink" aria-hidden="true">
+  <div class="psl-container">
+    <span class="divider__rule"></span>
   </div>
 </section>
