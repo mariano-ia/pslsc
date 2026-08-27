@@ -139,6 +139,14 @@ psl-fixtures { display: block; }
   padding: 18px 18px 16px;
 }
 
+/* fallback cuando el calendario no tiene más fechas por delante que la del "próximo" */
+.fx__empty {
+  margin: 12px 4px 0;
+  max-width: 34ch;
+  font: 400 13px/1.55 var(--font-body);
+  color: var(--color-text-on-paper-faint);
+}
+
 .fx__comp {
   font: 500 9.5px/1.3 var(--font-label);
   letter-spacing: .12em;
@@ -157,6 +165,10 @@ psl-fixtures { display: block; }
 .fx__row { display: flex; align-items: center; gap: 10px; }
 .fx__crest { flex-shrink: 0; }
 .fx__crest--psl { display: block; }
+/* escudo del rival (/assets/crests/*.webp): vienen en proporciones distintas — FC Miami City es un
+   círculo, Hollywood FC un escudo vertical — así que la caja es fija y object-fit los centra adentro
+   sin deformarlos. width/height explícitos: no usar height:auto, pisa el alto y descuadra la fila. */
+.fx__crest--club { display: block; width: 26px; height: 28px; object-fit: contain; object-position: center; }
 .fx__crest--ph {
   width: 26px; height: 26px;
   display: flex; align-items: center; justify-content: center;
