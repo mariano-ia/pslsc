@@ -20,7 +20,7 @@ subí **dos cosas** para que quede esta estructura:
 ```
 …/wp-content/uploads/psl/
    fonts/     ← subir dist/upload/fonts/  (12 .woff2, 160 KB)
-   assets/    ← subir la carpeta /assets del repo  (brand, images, proof, videos, jersey360)
+   assets/    ← subir la carpeta /assets del repo  (brand, crests, images, proof, staff, videos, jersey360)
 ```
 
 Las fuentes woff2 subseteadas están en `dist/upload/fonts/`. Los assets (imágenes, videos, camiseta 360)

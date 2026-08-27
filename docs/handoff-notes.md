@@ -26,12 +26,13 @@ native/            bloques "nativos" (HTML + CSS, a veces + JS). 1 archivo = 1 b
   staff/           st01-staff                 → la página Staff (equipo de liderazgo)
 custom/            componentes web a medida (Web Components <psl-*>). Cada uno es autocontenido.
   live-counter/    <psl-live-counter>       — banda de métricas / contadores
-  fixtures/        <psl-fixtures>           — Matchday (partidos del equipo reserva)
+  fixtures/        <psl-fixtures>           — Matchday (partidos reserva) · ARCHIVADO, ver §7
   jersey-viewer/   <psl-jersey-viewer>      — camiseta 360° que gira con el scroll
   founder-id/      <psl-founder-id>         — BOARDING PASS de fundador (cámara → foto → compartir)
   departures-board/ <psl-departures-board>  — tablero split-flap tipo aeropuerto
   founder-wall/    <psl-founder-wall> + <psl-founder-card>  — muro/carnet (NO montados hoy; ver §7)
-assets/            brand/ (logos WebP) · fonts/ (tipografías) · images/ · proof/ · jersey360/ · videos/
+assets/            brand/ (logos WebP) · crests/ (escudos rivales) · fonts/ (tipografías) · images/ ·
+                   proof/ · staff/ · jersey360/ · videos/
 pages/             home · sumate · partners · academy · staff .html  → SOLO para preview (ver §2 y §9)
 tools/             build-blocks.py → compila los bloques para WordPress (ver §2). README propio.
 dist/              SALIDA para WordPress: blocks/ (pegar), upload/ (hostear), UPLOAD.md (instructivo).
@@ -117,6 +118,10 @@ Los assets que se cargan están en **WebP** (imágenes) y **H.264** (videos, rec
 son self-hosted. Formatos:
 - **Logos** `assets/brand/`: `crest-aqua.webp`, `crest-black.webp`, `anchor-aqua.webp`,
   `anchor-black.webp` (con transparencia).
+- **Escudos de rivales** `assets/crests/`: `fc-miami-city.webp`, `hollywood-fc.webp` (WebP con alpha,
+  ~120px de lado, recortados al alpha). Bajados del sitio oficial de cada club y **guardados en el
+  repo** — el bloque Matchday no linkea imágenes de terceros. Al sumar un rival nuevo: mismo formato,
+  nombre en kebab-case, y referenciarlo desde `MATCHES` en `custom/fixtures/fixtures.js`.
 - **Fotos**: `assets/images/pslsc_academy.webp` (foto academia), `assets/images/luka-card.webp`
   (mascota Luka para el boarding pass), `assets/proof/stadium-aerial.webp` (render del estadio, Home 04)
   y `assets/proof/stadium-iso-night.webp` (render aéreo nocturno; sale de `docs/PSL-Renders.pdf` p.2).
@@ -156,7 +161,7 @@ está documentado en su `.js`. **Nav (00) y News (08) son del template de USL** 
 | 02 | Stats band | ink | `<psl-live-counter variant="stats">` — ver §7. |
 | 03 | The project (timeline horizontal que se dibuja con el scroll) | paper | HTML + `03-project.js`. |
 | 04 | Proof / construction schedule | ink | "Peek" del render con linterna → click revela la timeline de obra. Client-side (`04-proof.js`). |
-| 04b | Matchday (partidos reserva) | paper | `<psl-fixtures>` — ver §7. |
+| 04b | **Divider** (ex Matchday) | ink | Sólo una línea. El módulo Matchday está archivado — ver §7. |
 | 05 | Jersey / Shop | ink | `<psl-jersey-viewer>` (360°) + CTA "Buy now" a la tienda externa (ver `external/`). |
 | 06 | **Founders** | paper | `<psl-founder-id>` (boarding pass con cámara) + `<psl-departures-board>` (tablero split-flap) + CTA. |
 | 07 | Academy (teaser) | ink | Foto real + copy + CTA a la página Academy. HTML puro. |
@@ -207,11 +212,40 @@ Hoy corren con datos demo; **conectar el endpoint real reemplazando la función 
   Reemplazar `_demoData()` por `fetch(this.config.endpoint)`. Las métricas enteras hacen count-up 0→valor
   al entrar en viewport. La línea "Updated in real time" es opt-in por variante (`showUpdated: true`);
   `stats` y `sponsor` la tienen apagada, igual que el pie `note`.
+  **Variante `sponsor` (P04, actualizada 2026-08-27)**: Founding Members · Monthly Reach (240.000) ·
+  Deposits Captured · Monthly Impressions (1.100.000). Las 4 son fotos de un momento — ninguna pide
+  serie histórica. Salieron del contrato `lastJoined` (para sponsor) y `founderGrowthPercent`: ese
+  porcentaje era el único campo que obligaba a guardar el padrón mes a mes, y bajaba solo en un mes
+  flojo. El endpoint tiene que devolver `founders`, `monthlyReach`, `monthlyImpressions` y
+  `depositsCaptured`.
 
-- **`<psl-fixtures>`** (Matchday) — partidos del equipo reserva.
-  Contrato: `GET /api/fixtures?team=reserve` → `[{ competition, kickoff:ISO, venue, home:{name,abbr},
-  away:{…}, status:"next|upcoming" }]`. El countdown ("in 3 days") se calcula del `kickoff`. Datos demo
-  y detalle en `custom/fixtures/fixtures.js`.
+- **`<psl-fixtures>`** (Matchday) — partidos del equipo reserva. **ARCHIVADO (2026-08-27).**
+  El bloque 04b ya no lo monta: `native/home/04b-fixtures.html` tiene el `<section class="matchday">`
+  comentado entero y en su lugar emite un `<section class="divider">` — una sola línea entre 04 Proof
+  y 05 Jersey, que son los dos `surface-ink` y sin este bloque en el medio se pegaban en una mancha
+  negra larga. El componente (`custom/fixtures/`) queda intacto y con el fixture real cargado.
+  Motivo del archivado: la temporada 2026 cierra el 3 de octubre y quedaban dos fechas — un carrusel
+  de "próximos partidos" con una tarjeta y media no se sostenía.
+  **Para restaurarlo**: descomentar el `<section class="matchday">` y el CSS archivado al pie de
+  `04b-fixtures.css`, borrar el `<section class="divider">` y sus reglas, descomentar las dos líneas
+  de `fixtures.css`/`fixtures.js` en `pages/home.html`, y correr `python3 tools/build-blocks.py`.
+  Detalle del componente:
+  Contrato: `GET /api/fixtures?team=reserve` → `[{ competition, kickoff:ISO, venue, home:{name,abbr,crest},
+  away:{…} }]`. El countdown ("in 3 days") se calcula del `kickoff`.
+  **Los datos son reales** y están cargados a mano en `MATCHES` (`custom/fixtures/fixtures.js`).
+  Fuente: calendario del club (portstluciesc.com/events → categoría *Academy Games*, consultado el
+  2026-08-27), verificado contra el scheduler de la liga
+  (`modular11.com/league-schedule/usl-academy` → Port St. Lucie SC = `academy=1484`, U20, división
+  South Florida). La **temporada 2026 son 10 fechas y cierra el 3 de octubre**; las dos que quedaban
+  por delante a esa fecha son las cargadas, las dos de visitante:
+  **Sat Sep 5, 6:00 PM** vs FC Miami City (Msgr. Edward Pace HS, Miami Gardens) y
+  **Sat Oct 3, 3:00 PM** vs Hollywood FC (Dowdy Field, Hollywood).
+  Noviembre y diciembre están vacíos porque la temporada terminó, no porque falte cargar datos.
+  Cuál es el "próximo" y cuáles van al strip **se deriva de la fecha**, no se hardcodea: el bloque no
+  anuncia un partido ya jugado. Con una sola fecha por delante las flechas no se dibujan, y cuando no
+  queda ninguna el strip avisa que cerró la temporada en vez de mostrar un carrusel vacío.
+  Al cargar la temporada nueva: actualizar `MATCHES` y la constante `SEASON`, sumar el escudo de cada
+  rival a `assets/crests/` (ver §4) y correr `tools/build-blocks.py`.
 
 - **`<psl-departures-board>`** (tablero split-flap del bloque Founders) — figura metafórica de fundadores
   "abordando el vuelo PSL·2027". Los asientos son **aleatorios a propósito** (no es un contador real —
