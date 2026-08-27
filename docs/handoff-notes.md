@@ -9,7 +9,7 @@ templating `{{ }}`). Todo lo que ves corre tal cual en cualquier navegador.
 > La **nav** y las **noticias** son nativas del template de USL — no van en estos bloques.
 > El paso a paso está en **`dist/UPLOAD.md`**. Leé la **§2** antes de tocar nada.
 
-Última actualización: 2026-07-14 · Contacto de diseño: Mariano.
+Última actualización: 2026-08-27 · Contacto de diseño: Mariano.
 
 ---
 
@@ -212,8 +212,9 @@ Hoy corren con datos demo; **conectar el endpoint real reemplazando la función 
   Reemplazar `_demoData()` por `fetch(this.config.endpoint)`. Las métricas enteras hacen count-up 0→valor
   al entrar en viewport. La línea "Updated in real time" es opt-in por variante (`showUpdated: true`);
   `stats` y `sponsor` la tienen apagada, igual que el pie `note`.
-  **Variante `sponsor` (P04, actualizada 2026-08-27)**: Founding Members · Monthly Reach (240.000) ·
-  Deposits Captured · Monthly Impressions (1.100.000). Las 4 son fotos de un momento — ninguna pide
+  **Variante `sponsor` (P04, actualizada 2026-08-27)**: Founding Members · Monthly Impressions
+  (1.100.000) · Monthly Reach (240.000) · Deposits Captured — ese orden lo pidió el cliente.
+  Las 4 son fotos de un momento — ninguna pide
   serie histórica. Salieron del contrato `lastJoined` (para sponsor) y `founderGrowthPercent`: ese
   porcentaje era el único campo que obligaba a guardar el padrón mes a mes, y bajaba solo en un mes
   flojo. El endpoint tiene que devolver `founders`, `monthlyReach`, `monthlyImpressions` y
@@ -305,6 +306,11 @@ python3 -m http.server 4321
 # → http://localhost:4321/pages/home.html   (sumate · partners · academy)
 ```
 Al editar CSS/JS, subir el `?v=N` en `pages/*.html` para saltear el caché del navegador.
+> ⚠️ **No alcanza con el `?v=` de la página.** Un componente puede importar otro archivo con su
+> propio cache-buster — hoy `live-counter.js` hace `import … from './live-counter.config.js?v=7'`.
+> Si editás ese config y sólo subís el de la página, el navegador sigue sirviendo la config vieja:
+> el cambio está en el archivo pero no se ve en pantalla. Subí **los dos**. (Pasó el 2026-08-27.)
+> Al verificar un cambio, recargá con caché tibia, no sólo en una ventana nueva.
 Nada de esto (el server, el `?v=`, el fetch de bloques) se traspasa a WordPress — es andamiaje de preview.
 Para ver los **bloques ya compilados** funcionando, ver `dist/README.md`.
 La **tienda** se ve en `http://localhost:4321/shop/` (ver §10).
