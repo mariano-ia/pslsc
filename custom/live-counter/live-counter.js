@@ -1,4 +1,4 @@
-import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=6';
+import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=7';
 
 /**
  * <psl-live-counter variant="stats|fan|reservation|sponsor"></psl-live-counter>
@@ -41,9 +41,9 @@ class PSLLiveCounter extends HTMLElement {
       deposits2027: 312,
       founderWindow: 'Closes 2027',
       lastJoinedSecondsAgo: 720,
-      monthlyReach: 18400,
+      monthlyReach: 240000,
+      monthlyImpressions: 1100000,
       depositsCaptured: 46800,
-      founderGrowthPercent: 23,
       firstWhistle: '2027',
       // días hasta el primer silbato (2027-03-01) — cuenta viva; el count-up anima 0 -> valor
       daysToWhistle: Math.max(0, Math.ceil((new Date('2027-03-01T00:00:00') - new Date()) / 86400000)),
