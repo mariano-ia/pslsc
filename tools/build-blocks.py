@@ -229,10 +229,13 @@ def build_block(page, name):
     html = read(f"native/{page}/{name}.html")
     html = re.sub(r"<!--.*?-->", "", html, flags=re.S).strip()   # sin comentarios (rompen el parser de WP)
 
-    comps = sorted(set(re.findall(r"<(psl-[a-z-]+)", html)))
-    uses_pcard = bool(re.search(r"\bpcard\b", html))
-    uses_ptl   = bool(re.search(r"\bptl\b", html)) and name != "03-project"
-    needs_motion = bool(re.search(r"data-(reveal|parallax|tilt|spotlight|magnetic|countdown)", html))
+    # Lo que el bloque REALMENTE usa se detecta sobre el HTML sin comentarios: un bloque archivado
+    # entre <!-- --> no tiene que arrastrar su componente ni el motion al bundle (ver 04b-fixtures).
+    live = re.sub(r"<!--.*?-->", " ", html, flags=re.S)
+    comps = sorted(set(re.findall(r"<(psl-[a-z-]+)", live)))
+    uses_pcard = bool(re.search(r"\bpcard\b", live))
+    uses_ptl   = bool(re.search(r"\bptl\b", live)) and name != "03-project"
+    needs_motion = bool(re.search(r"data-(reveal|parallax|tilt|spotlight|magnetic|countdown)", live))
 
     # CSS: tokens + motion + deps compartidas + propio (si tiene) + CSS de cada componente.
     # Algunos bloques no tienen CSS propio (ej. a02-pathway reusa .ptl de 03-project).
