@@ -1,0 +1,112 @@
+/* Port St. Lucie SC — reskin del header/nav NATIVO*/
+:root {
+  --psl-crest-size: 78px;   /* alto del escudo en el header*/
+  --psl-crest-lift: 16px;   /* cuánto sobresale el escudo por debajo del header. 0 = no sobresale. */
+}
+
+/* ---------- Header: fondo oscuro translúcido + sticky + blur ---------- */
+header.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  background: rgba(12, 12, 10, .86);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(244, 241, 234, .1);
+}
+
+/* ---------- Logo: lo agranda y lo deja "flotar" sobresaliendo del header ---------- */
+header.site-header .title-area {
+  position: relative;
+  z-index: 2;
+}
+
+header.site-header .custom-logo {
+  height: var(--psl-crest-size) !important;
+  width: auto !important;
+  margin-bottom: calc(-1 * var(--psl-crest-lift));
+  transition: height 220ms ease;
+}
+
+/* Texto "Port St. Lucie SC" al lado del logo. */
+header.site-header .site-title {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Menú principal: solo tipografía/color, sin tocar layout ---------- */
+header.site-header #menu-main-menu > li.-root-level > a {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #AAF6E6;
+  transition: color 160ms ease;
+}
+header.site-header #menu-main-menu > li.-root-level > a:hover,
+header.site-header #menu-main-menu > li.-root-level > a:focus {
+  color: #FFFFFF;
+}
+
+/* Submenús */
+header.site-header .sub-menu {
+  background: #0C0C0A;
+  border: 1px solid rgba(244, 241, 234, .12);
+  border-radius: 8px;
+  overflow: hidden;
+}
+header.site-header .sub-menu a {
+  color: rgba(244, 241, 234, .82);
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: normal;
+}
+header.site-header .sub-menu a:hover {
+  color: #AAF6E6;
+  background: rgba(244, 241, 234, .06);
+}
+.site-container > .site-inner {
+  padding-top: 0;
+}
+@media (max-width: 1024px) {
+  header.site-header .site-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    column-gap: 10px;
+    overflow: visible;
+  }
+  header.site-header .title-area,
+  header.site-header nav.nbcsn-main-menu,
+  header.site-header .widget-area.header-widget-area {
+    order: 0;
+    grid-row: 1;
+  }
+  header.site-header .title-area {
+    grid-column: 1;
+    justify-self: start;
+  }
+  header.site-header .widget-area.header-widget-area {
+    grid-column: 2;
+    justify-self: center;
+    margin: 0;
+  }
+  header.site-header nav.nbcsn-main-menu {
+    grid-column: 3;
+    justify-self: end;
+  }
+  header.site-header .founder-cta {
+    padding: 10px 14px;
+    font-size: 11px;
+    gap: 5px;
+    letter-spacing: .01em;
+    white-space: nowrap;
+  }
+}

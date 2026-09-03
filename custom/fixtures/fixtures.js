@@ -77,7 +77,7 @@ class PSLFixtures extends HTMLElement {
         <span class="fx__debut-year tnum">2027</span>
         <span class="fx__debut-title">First whistle</span>
         <span class="fx__debut-note">USL League One debut — the first pro match in the city.</span>
-        <a href="sumate.html" class="fx__debut-cta">Become a Founder <span aria-hidden="true">→</span></a>
+        <a href="/joinus/" class="fx__debut-cta">Become a Founder <span aria-hidden="true">→</span></a>
       </article>`;
   }
 

@@ -14,13 +14,22 @@
 
 .news__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 
-/* Tarjetas SIN efecto de hover: estáticas, con el excerpt siempre visible. */
+/* Las cards mockeadas del HTML son <article> (estáticas). Las que arma 08-news.js con noticias
+   reales son <a href="..."> al post real de WordPress — por eso .ncard soporta ambos tags:
+   display:block/text-decoration/color acá son no-op en <article> y necesarios en <a>. Hover sutil
+   porque las reales SÍ son clickeables (antes, mockeadas, no llevaban ningún link real). */
 .ncard {
+  display: block;
   background: var(--color-paper-card);
   border: 1px solid var(--color-paper-line);
   border-radius: 14px;
   overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--dur-fast, 160ms) var(--ease-out-soft, ease);
 }
+a.ncard:hover,
+a.ncard:focus-visible { border-color: var(--color-aqua-deep); }
 
 /* Con motion activo la card lleva [data-reveal]: transición de ENTRADA (stagger del grupo,
    --reveal-delay lo setea motion.js). No es hover. */
@@ -33,6 +42,12 @@
 .ncard__media {
   aspect-ratio: 16/10;
   background: repeating-linear-gradient(135deg, #E7E1D4, #E7E1D4 11px, #E1DACB 11px, #E1DACB 22px);
+}
+/* Foto real (08-news.js): reemplaza el placeholder rayado por la imagen destacada del post. */
+.ncard__media--photo {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .ncard__body { padding: 20px 20px 24px; }

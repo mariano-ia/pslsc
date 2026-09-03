@@ -51,6 +51,14 @@
 .newsletter__input::placeholder { color: var(--color-text-faint); }
 .newsletter__input:focus { border-color: var(--color-aqua); }
 .newsletter__btn { padding: 15px 26px; font-size: 14px; }
+.newsletter__consent {
+  margin: 14px auto 0;
+  max-width: 440px;
+  font: 400 12px/1.5 var(--font-body);
+  color: var(--color-text-faint);
+}
+.newsletter__consent a { color: var(--color-aqua); text-decoration: underline; text-underline-offset: 2px; }
+.newsletter__consent a:hover { color: var(--color-text); }
 .newsletter__msg {
   min-height: 14px;
   margin-top: 16px;

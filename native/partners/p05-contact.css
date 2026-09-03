@@ -39,6 +39,13 @@
 .pfield__input--area { resize: vertical; min-height: 96px; }
 
 .pcontact__submit { margin-top: 6px; align-self: flex-start; }
+.pcontact__consent {
+  margin: 2px 0 0;
+  font: 400 12px/1.5 var(--font-body);
+  color: var(--color-text-faint);
+}
+.pcontact__consent a { color: var(--color-aqua); text-decoration: underline; text-underline-offset: 2px; }
+.pcontact__consent a:hover { color: var(--color-text); }
 .pcontact__msg {
   min-height: 14px;
   font: 500 11px/1.4 var(--font-label);

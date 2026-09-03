@@ -1,28 +1,36 @@
 <!--
-  Nav — header compartido (Home, Sumate, Partners). 🟩 Nativo.
+  Nav — header compartido a las 5 páginas (Home, Academy, Staff, Sumate/Join Us, Partners). 🟩 Nativo.
   Diseño adoptado de Home.dc.html: sticky con blur, badge hexagonal PSL, wordmark + est. line, CTA pill.
 
-  Links entre páginas: como este bloque se inyecta tal cual en las 3 páginas, los hrefs usan
-  "archivo.html#ancla" (no solo "#ancla") para que funcionen sin importar en qué página estés.
-  Si ya estás en esa página, el navegador solo hace scroll (no recarga) porque el archivo es el mismo.
-  NOTA handoff WP: en WordPress esto pasa a ser rutas reales (home_url('/sumate'), etc.), no archivos.
+  Links: ya son rutas reales de WordPress (/home/, /academy-2/, /staff-2/, /joinus/, /partners/), no
+  "archivo.html#ancla" — se pegan tal cual en cualquiera de las 5 páginas. Los que apuntan a "/home/#id"
+  (Teams, Shop, News) solo tienen sentido como anclas dentro de Home: en las otras páginas SÍ navegan
+  (no hacen scroll local), van a Home y una vez ahí el navegador salta a esa sección.
+
+  JS: self-contained, ver tools/build-blocks-manual.py → SELF_CONTAINED_NAV_BLOCKS / nav_only_js().
+  No depende de psl-{page}-motion-core.html (mismo motivo que el footer: se pega en WP sin garantía
+  de que el core ya esté cargado antes en esa sección de la página). Repite el mismo bloque compilado
+  psl-home-00-nav.html en las 5 páginas, igual que se hizo con el footer (09-cierre-footer).
+
+  Mobile: hoy sin menú desplegable — .nav__links se oculta por completo debajo de 900px (ver
+  00-nav.css), queda solo crest + CTA. Si se pide un menú hamburguesa esto hay que revisarlo aparte.
 -->
 <header class="nav">
   <div class="psl-container nav__inner">
-    <a href="home.html" class="nav__brand" aria-label="Port St. Lucie SC — home">
+    <a href="/home/" class="nav__brand" aria-label="Port St. Lucie SC — home">
       <img class="nav__crest" src="/assets/brand/crest-aqua.webp" alt="" width="91" height="96" />
     </a>
     <nav class="nav__links" aria-label="Primary">
-      <a href="home.html">Home</a>
-      <a href="home.html#project">Teams</a>
-      <a href="home.html#jersey">Shop</a>
-      <a href="academy.html">Academy</a>
-      <a href="staff.html">Staff</a>
-      <a href="home.html#news">News</a>
-      <a href="partners.html">Partners</a>
+      <a href="/home/">Home</a>
+      <a href="/home/#project">Teams</a>
+      <a href="/home/#jersey">Shop</a>
+      <a href="/academy-2/">Academy</a>
+      <a href="/staff-2/">Staff</a>
+      <a href="/home/#news">News</a>
+      <a href="/partners/">Partners</a>
     </nav>
     <div class="nav__right">
-      <a href="sumate.html" class="psl-btn cta-primary nav__cta"><span>Become a Founder</span> <span aria-hidden="true">→</span></a>
+      <a href="/joinus/" class="psl-btn cta-primary nav__cta"><span>Become a Founder</span> <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </header>

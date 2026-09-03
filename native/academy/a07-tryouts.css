@@ -111,13 +111,22 @@ select.tform__input {
   font: 400 12px/1.4 var(--font-body);
   color: var(--color-text-faint);
 }
+.tform__consent {
+  margin: 8px 0 0;
+  text-align: center;
+  font: 400 12px/1.4 var(--font-body);
+  color: var(--color-text-faint);
+}
+.tform__consent a { color: var(--color-aqua); text-decoration: underline; text-underline-offset: 2px; }
+.tform__consent a:hover { color: var(--color-text); }
 
 /* mensaje de estado (éxito / error del submit mockeado) */
 .tform__msg { margin-top: 14px; font: 500 14px/1.5 var(--font-body); }
 .tform__msg[data-state="ok"]  { color: var(--color-aqua); }
 .tform__msg[data-state="err"] { color: var(--color-red-marine); }
 .tform.is-done .tform__submit,
-.tform.is-done .tform__fineprint { display: none; }
+.tform.is-done .tform__fineprint,
+.tform.is-done .tform__consent { display: none; }
 
 @media (max-width: 860px) {
   .tryouts__grid { grid-template-columns: 1fr; }

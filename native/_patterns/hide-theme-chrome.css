@@ -1,0 +1,7 @@
+/* Oculta chrome del theme USL que no corresponde a nuestros bloques: el título automático
+   "Protected: {page}" que WordPress agrega a páginas con contraseña, y el breadcrumb del theme
+   (theme Genesis/USL) que aparece debajo del menú principal. Usado hoy en las páginas v2 de
+   testeo (v2-home, v2-academy, v2-partners, v2-sumate). Selectores confirmados inspeccionando
+   el DOM real de v2-academy el 2026-07-31. */
+.sponsor-header:has(> .entry-title) { display: none !important; }
+.site-breadcrumbs.breadcrumb { display: none !important; }

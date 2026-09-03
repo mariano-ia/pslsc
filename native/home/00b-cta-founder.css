@@ -1,0 +1,14 @@
+/* Become a Founder — CTA standalone.
+   .founder-cta: tamaño compacto, ajustado para entrar en una sola línea dentro del widget del
+   header (2026-08-29) — ese widget comparte fila con el menú, que tiene flex-grow y le come ancho al
+   widget (flex-shrink:1 en el tema), así que si el botón queda muy "ancho" (padding/letter-spacing
+   grandes) el texto se corta a dos líneas ("BECOME A" / "FOUNDER"). Achicado letter-spacing/gap/
+   padding respecto de los valores del nav (.nav__cta) para que entre cómodo en ese espacio más
+   angosto, + white-space:nowrap como red de seguridad si el layout lo aprieta más todavía. */
+.founder-cta {
+  padding: 12px 18px;
+  font-size: 12.5px;
+  letter-spacing: .02em;
+  gap: 6px;
+  white-space: nowrap;
+}

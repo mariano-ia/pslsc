@@ -121,7 +121,7 @@ class PSLDeparturesBoard extends HTMLElement {
         </div>
         <div class="db__cols" aria-hidden="true">${cols}</div>
         <div class="db__rows">${rows}</div>
-        <a class="db__row db__row--ghost" href="sumate.html#plans">
+        <a class="db__row db__row--ghost" href="/joinus/#plans">
           <span class="db__group" data-col="no">${this._cells(5)}</span>
           <span class="db__group" data-col="name">${this._cells(13)}</span>
           <span class="db__group" data-col="from">${this._cells(4)}</span>
