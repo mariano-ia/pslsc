@@ -6,19 +6,19 @@
   <title>Staff — Port St. Lucie SC</title>
 
   <!-- Fuentes de marca -->
-  <link rel="stylesheet" href="../tokens/fonts.css?v=67" />
+  <link rel="stylesheet" href="../tokens/fonts.css?v=68" />
   <!-- Tokens -->
-  <link rel="stylesheet" href="../tokens/tokens.css?v=67" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=68" />
 
   <!-- Patrones compartidos -->
-  <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=68" />
 
   <!-- Nav + footer compartidos (reusan los bloques de Home) -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=67" />
-  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=67" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=68" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
 
   <!-- Bloque Staff -->
-  <link rel="stylesheet" href="../native/staff/st01-staff.css?v=67" />
+  <link rel="stylesheet" href="../native/staff/st01-staff.css?v=68" />
 
   <style>
     html, body { margin: 0; padding: 0; background: var(--color-ink); }
@@ -47,8 +47,8 @@
     // init: form de newsletter del footer (mockeado) + sistema de motion (nav/footer).
     // El bloque staff no tiene JS propio (acordeón nativo <details>).
     const [{ initNewsletter }, { initMotion }] = await Promise.all([
-      import('../native/home/09-cierre-footer.js?v=67'),
-      import('../native/_patterns/motion.js?v=67'),
+      import('../native/home/09-cierre-footer.js?v=68'),
+      import('../native/_patterns/motion.js?v=68'),
     ]);
     initNewsletter();
     initMotion();

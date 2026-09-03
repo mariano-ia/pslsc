@@ -179,6 +179,33 @@ psl-founder-id { display: block; }
 }
 .fid__btn--ghost:hover { background: rgba(12, 12, 10, .08); }
 
+/* Gate de edad — requerimiento legal: sin tildar no se abre la cámara ni el file picker. No se
+   persiste en ningún lado: se vuelve a tildar en cada carga, coherente con que el pase no guarda
+   nada. */
+.fid__gate { display: flex; align-items: center; }
+.fid__gate-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font: 600 10px/1.3 var(--font-label);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--color-black);
+}
+.fid__gate-check {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--color-black);
+  cursor: pointer;
+}
+
+/* OJO: el disabled del gate no es el mismo estado que el disabled del share en curso — ese sí
+   lleva cursor:wait (.fid__btn:disabled, más arriba). Esta regla va después para ganarle. */
+.fid__btn--gated:disabled { cursor: not-allowed; opacity: .45; }
+
 .fid__note {
   margin: 0;
   font: 500 11px/1.4 var(--font-body);
@@ -189,6 +216,95 @@ psl-founder-id { display: block; }
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+}
+.fid__foot-text { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
+/* ahora es <button> (abre el modal), así que hay que resetear el chrome del botón */
+.fid__foot-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: 600 8px/1.3 var(--font-label);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(12, 12, 10, .5);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.fid__foot-link:hover { color: var(--color-black); }
+
+/* ── Privacy notice (modal) ───────────────────────────────────────────────────────────────────
+   <dialog> + showModal(): va al top layer, así que se escapa solo del overflow y del stacking
+   del pase — no hace falta portalear nada ni pelearse con z-index. Trae gratis foco atrapado,
+   Esc para cerrar y ::backdrop. El click en el backdrop lo cierra desde el JS. */
+.fid__modal {
+  width: min(680px, calc(100vw - 32px));
+  max-height: min(80vh, 720px);
+  overflow-y: auto;            /* el texto es largo: sin esto el <dialog> lo corta abajo */
+  overscroll-behavior: contain;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: var(--color-paper);
+  color: var(--color-text-on-paper);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .35);
+}
+.fid__modal::backdrop { background: rgba(12, 12, 10, .62); }
+.fid__modal-box { padding: 28px 30px 32px; }
+.fid__modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 4px;
+  /* el cuerpo scrollea: el título y la X quedan fijos arriba */
+  position: sticky;
+  top: 0;
+  padding: 28px 30px 10px;
+  margin: -28px -30px 4px;
+  background: var(--color-paper);
+}
+.fid__modal-title {
+  margin: 0;
+  font: 700 17px/1.25 var(--font-label);
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+.fid__modal-x {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(12, 12, 10, .07);
+  color: var(--color-text-on-paper);
+  font: 400 20px/1 var(--font-body);
+  cursor: pointer;
+}
+.fid__modal-x:hover { background: rgba(12, 12, 10, .14); }
+.fid__modal-eff {
+  margin: 0 0 20px;
+  font: 600 10px/1.4 var(--font-label);
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--color-text-on-paper-muted);
+}
+.fid__modal-box p {
+  margin: 0 0 14px;
+  font: 400 13.5px/1.6 var(--font-body);
+}
+.fid__modal-sub {
+  margin: 22px 0 10px;
+  font: 700 11px/1.3 var(--font-label);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.fid__modal-box a { color: inherit; }
+
+@media (max-width: 560px) {
+  .fid__modal-box { padding: 22px 20px 26px; }
+  .fid__modal-title { font-size: 15px; }
 }
 .fid__foot-label {
   font: 500 8px/1.3 var(--font-label);

@@ -13,6 +13,10 @@
  * PRIVACIDAD: todo es client-side. La foto nunca sale del dispositivo (sin backend, sin upload).
  * La cámara se apaga (stop tracks) al capturar, cancelar, fallar, subir foto o desmontar.
  *
+ * GATE DE EDAD ("I'm 13 or older"): requerimiento legal del cliente. Bloquea las DOS entradas de
+ * foto — cámara y file picker — hasta que se tilda. No se persiste (nada de localStorage): se
+ * vuelve a tildar en cada carga, coherente con que el componente no guarda nada.
+ *
  * Robustez (post-review adversarial): single-flight de getUserMedia; stream frenado si el
  * elemento se desmonta mientras la cámara está pendiente; permiso denegado → "Upload a photo"
  * (no auto-click); acciones bloqueadas durante el share; cancel del share ≠ fallo real.
@@ -22,10 +26,29 @@
  *
  * HANDOFF (WP): este componente usa la CÁMARA. Si el bloque va en <iframe>, el iframe NECESITA el
  * atributo allow="camera" (si no, el navegador la bloquea) y servirse por HTTPS. No hay endpoint
- * que cablear: todo corre client-side (la foto nunca se sube).
+ * que cablear: todo corre client-side (la foto nunca se sube). El privacy notice va como modal
+ * embebido acá (PRIVACY_PARAS), así que no depende de ninguna página externa de WP.
  */
 const LUKA_SRC = '/assets/images/luka-card.webp';
 const CREST_SRC = '/assets/brand/crest-black.webp';   // crest oscuro: el pase es aqua
+// Founder Boarding Pass Privacy Notice — texto provisto por el abogado del cliente.
+// NO editar el cuerpo: es texto legal, no copy. Cualquier cambio pasa por él.
+// Va como MODAL adentro del componente (decisión del cliente), así que el texto viaja embebido en
+// el bloque compilado: cada corrección del abogado obliga a recompilar con tools/build-blocks.py
+// y volver a pegar el bloque en WP.
+const PRIVACY_EFFECTIVE = 'September 3, 2026';
+const PRIVACY_EMAIL = 'contact@portstluciesc.com';
+const PRIVACY_PARAS = [
+  'This Founder Boarding Pass Privacy Notice applies only to the Founder Boarding Pass feature and supplements the privacy policy applicable to the website.',
+  'The Founder Boarding Pass feature allows you, at your option, to create a personalized, shareable digital pass that may include your name and a photo.',
+  'If you choose to take a photo using your device&rsquo;s camera, the camera will only be activated after you grant permission through your browser and only while you are taking the photo. You may also choose to upload a photo from your device instead of using the camera.',
+  'Whether you take a photo using your camera or upload one from your device, the image is processed entirely on your device and within your browser for the limited purpose of generating the Founder Boarding Pass.',
+  'Ebenezer Partnership LLC d/b/a Port St. Lucie SC does not upload, transmit, collect, store, retain, or have access to your photo, your camera feed, the name you enter on the Founder Boarding Pass, or the generated pass, and does not provide third parties access to those items.',
+  'Port St. Lucie SC does not use the photo, camera feed, name, or generated Founder Boarding Pass for facial recognition, biometric identification, identity verification, profiling, analytics, advertising, or any other purpose.',
+  'The information used to create the pass exists only temporarily in your browser memory and is discarded when you leave or reload the page, unless you choose to download or share the generated pass using your own device controls.',
+  'If you choose to download or share your Founder Boarding Pass, the resulting image is saved or shared only through the options, applications, services, and destination you select using your own device. Your use of those device controls or third-party services may be subject to their separate terms and privacy practices.',
+  'Port St. Lucie SC does not automatically publish or post your Founder Boarding Pass; any download or sharing is initiated and controlled by you through your own device. Port St. Lucie SC does not retain a copy of your photo or generated Founder Boarding Pass.',
+];
 const CAPTION = "I'm boarding Flight PSL·2027 — claiming my spot as a founding member of Port St. Lucie SC, the Treasure Coast's first pro club. #PSLSC #FoundingClass";
 
 class PSLFounderID extends HTMLElement {
@@ -38,6 +61,7 @@ class PSLFounderID extends HTMLElement {
     this._starting = false;    // single-flight de getUserMedia
     this._busy = false;        // share en curso
     this._showUpload = false;  // idle muestra "Upload a photo" (cámara falló)
+    this._ageOk = false;       // gate de edad: hasta que no se tilda, no se abre cámara ni picker
     this._note = '';           // mensaje contextual
     this._rendered = false;    // para no robar foco en el primer render
     this._render();
@@ -113,10 +137,17 @@ class PSLFounderID extends HTMLElement {
           <div class="fid__tear" aria-hidden="true"></div>
 
           <div class="fid__stub">
+            ${m === 'idle' ? `
+              <div class="fid__gate">
+                <label class="fid__gate-label">
+                  <input class="fid__gate-check" type="checkbox" />
+                  <span>I&rsquo;m 13 or older</span>
+                </label>
+              </div>` : ''}
             <div class="fid__actions">
               ${m === 'idle' ? (this._showUpload
-                ? `<button class="fid__btn" type="button" data-act="upload">Upload a photo</button>`
-                : `<button class="fid__btn" type="button" data-act="start">Make your boarding pass</button>`) : ''}
+                ? `<button class="fid__btn fid__btn--gated" type="button" data-act="upload" ${this._ageOk ? '' : 'disabled'}>Upload a photo</button>`
+                : `<button class="fid__btn fid__btn--gated" type="button" data-act="start" ${this._ageOk ? '' : 'disabled'}>Make your boarding pass</button>`) : ''}
               ${m === 'live' ? `
                 <button class="fid__btn" type="button" data-act="snap">Take photo</button>
                 <button class="fid__btn fid__btn--ghost" type="button" data-act="cancel">Cancel</button>` : ''}
@@ -127,13 +158,42 @@ class PSLFounderID extends HTMLElement {
             </div>
             ${this._note ? `<p class="fid__note" role="status">${this._note}</p>` : ''}
             <div class="fid__foot">
-              <span class="fid__foot-label">Your photo never leaves your device</span>
+              <div class="fid__foot-text">
+                <span class="fid__foot-label">Your photo never leaves your device</span>
+                <button class="fid__foot-link" type="button" data-act="privacy">Privacy notice</button>
+              </div>
               <span class="fid__barcode" aria-hidden="true"></span>
             </div>
           </div>
         </div>
+
+        <dialog class="fid__modal" aria-label="Founder Boarding Pass Privacy Notice">
+          <article class="fid__modal-box">
+            <header class="fid__modal-head">
+              <h2 class="fid__modal-title">Founder Boarding Pass Privacy Notice</h2>
+              <button class="fid__modal-x" type="button" data-act="privacy-close" aria-label="Close">&times;</button>
+            </header>
+            <p class="fid__modal-eff">Effective Date: ${PRIVACY_EFFECTIVE}</p>
+            ${PRIVACY_PARAS.map((t) => `<p>${t}</p>`).join('')}
+            <h3 class="fid__modal-sub">Questions</h3>
+            <p>If you have questions about this Founder Boarding Pass Privacy Notice or the Founder Boarding Pass feature, you may contact Ebenezer Partnership LLC d/b/a Port St. Lucie SC at <a href="mailto:${PRIVACY_EMAIL}?subject=Questions%20About%20Founder%20Boarding%20Pass%20Privacy%20Notice">${PRIVACY_EMAIL}</a> (subject line: Questions About Founder Boarding Pass Privacy Notice).</p>
+          </article>
+        </dialog>
       </div>
     `;
+
+    const modal = this.querySelector('.fid__modal');
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.close(); });
+
+    const gate = this.querySelector('.fid__gate-check');
+    if (gate) {
+      gate.checked = this._ageOk;                 // sobrevive a los re-render (no se persiste)
+      gate.addEventListener('change', () => {
+        this._ageOk = gate.checked;
+        const gated = this.querySelector('.fid__btn--gated');
+        if (gated) gated.disabled = !this._ageOk;
+      });
+    }
 
     this._file = this.querySelector('.fid__file');
     this._file.addEventListener('change', (e) => this._onFile(e));
@@ -156,12 +216,17 @@ class PSLFounderID extends HTMLElement {
   }
 
   _act(act, btn) {
+    // el botón ya va disabled, pero el gate se chequea igual acá: es el único camino a la cámara
+    // y al file picker, y no quiero que dependa solo de un atributo del DOM.
+    if ((act === 'start' || act === 'upload') && !this._ageOk) return;
     if (act === 'start') this._startCamera();
     if (act === 'upload') this._file.click();
     if (act === 'snap') this._snap();
     if (act === 'cancel') { this._stopCamera(); this._mode = 'idle'; this._note = ''; this._render(); }
     if (act === 'retake') this._startCamera();
     if (act === 'share') this._share(btn);
+    if (act === 'privacy') this.querySelector('.fid__modal').showModal();
+    if (act === 'privacy-close') this.querySelector('.fid__modal').close();
   }
 
   /* ============ cámara / foto ============ */
