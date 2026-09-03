@@ -1,4 +1,4 @@
-import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=7';
+import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=8';
 
 /**
  * <psl-live-counter variant="stats|fan|reservation|sponsor"></psl-live-counter>
@@ -47,6 +47,12 @@ class PSLLiveCounter extends HTMLElement {
       firstWhistle: '2027',
       // días hasta el primer silbato (2027-03-01) — cuenta viva; el count-up anima 0 -> valor
       daysToWhistle: Math.max(0, Math.ceil((new Date('2027-03-01T00:00:00') - new Date()) / 86400000)),
+      // PLACEHOLDER — valor fijo hasta que el cliente confirme la fecha de nacimiento del club.
+      // Cuando la haya, esto pasa a ser una resta como daysToWhistle (y no toca al backend):
+      //   daysInTheMaking: Math.max(0, Math.floor((new Date() - new Date('YYYY-MM-DD')) / 86400000)),
+      // OJO al cambiarlo: la home muestra "Est. 2019" en el bloque 01 (03-project.html), así que
+      // la fecha que se use acá tiene que ser coherente con eso o hay que corregir aquel bloque.
+      daysInTheMaking: 100,
       league: 'USL',
       updatedAt: new Date().toISOString(),
     };
@@ -110,7 +116,7 @@ class PSLLiveCounter extends HTMLElement {
       cell.className = 'live-counter__metric';
       cell.dataset.key = m.key;
       // Flecha "en alza" (aqua, apunta arriba) junto al número — SOLO métricas con `rising: true`
-      // (fundadores/depósitos en la variante stats). Reemplaza al viejo sparkline de barritas.
+      // (hoy solo fundadores, en la variante stats). Reemplaza al viejo sparkline de barritas.
       const rise = this.variant === 'stats' && m.rising === true;
       const riseArrow = rise
         ? '<span class="live-counter__rise" aria-label="on the rise"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M8 2 L13.5 8.5 H10 V14 H6 V8.5 H2.5 Z"/></svg></span>'

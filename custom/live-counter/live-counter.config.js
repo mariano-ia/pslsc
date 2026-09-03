@@ -16,9 +16,13 @@ export const LIVE_COUNTER_CONFIG = {
     updateFrequencyMs: 8000,
     // `rising: true` (SOLO variante stats) marca una métrica "en alza": dibuja una flechita aqua
     // apuntando para arriba al lado del número. fan/reservation/sponsor no la usan.
+    // "Days in the making" NO la lleva a propósito: que un contador de días suba es trivial, la
+    // flecha ahí sería ruido. Tampoco lleva `accent`: el teal se lo queda el countdown, que es el
+    // que mete urgencia. Reemplazó a "Ticket Deposits", que repetía el mismo número que founders
+    // (cada founding member hace un solo ticket deposit, así que las dos casillas decían lo mismo).
     metrics: [
       { key: 'founders', label: 'Founding Members', labelEs: 'Miembros Fundadores', format: 'integer', rising: true },
-      { key: 'deposits2027', label: 'Ticket Deposits', labelEs: 'Depósitos de Entradas', format: 'integer', rising: true },
+      { key: 'daysInTheMaking', label: 'Days in the making', labelEs: 'Días construyendo', format: 'integer' },
       { key: 'daysToWhistle', label: 'Days to first whistle', labelEs: 'Días para el primer silbato', format: 'integer', accent: true },
       { key: 'league', label: 'League One · Pro', labelEs: 'League One · Pro', format: 'static' },
     ],
@@ -70,6 +74,9 @@ export const LIVE_COUNTER_CONFIG = {
 
 /**
  * Contrato de datos esperado del endpoint (a implementar por el developer WordPress).
+ * OJO: `daysInTheMaking` NO va acá — es un valor de cliente, igual que `daysToWhistle`. Hoy está
+ * fijo en 100 en _demoData() como placeholder: falta la fecha definitiva de nacimiento del club
+ * para calcularlo como resta contra hoy. El backend no tiene que devolverlo.
  * GET {endpoint} -> 200 OK
  * {
  *   "founders": 1248,
