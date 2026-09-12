@@ -1,0 +1,37 @@
+=== CLIP 1 ===
+SCENE / FRAMING: a vertical 9:16 mobile phone screen, full frame. The FIRST frame is a football club's website home page: dark, a crest at the top left, a mint "BECOME A FOUNDER" button, the headline "You're watching a club be born." over a construction-site photo, two buttons below. The LAST frame is a matte black textured wall with an aquamarine crest at the top, the headline "SEASON TICKETS ARE HERE.", the subline "BE THERE FROM THE BEGINNING.", a night stadium at the bottom, and the club mascot Luca standing on the right side presenting the headline with an open palm.
+
+CAMERA & LENS: completely static, locked-off, no pan, no zoom, no camera movement, no parallax, no shake. Full uncropped frame.
+
+SUBJECT: Luca, a stylized 3D-animated young monkey mascot: warm brown fluffy fur, wide pale aquamarine (mint) sweatband, black leather eye patch on his LEFT eye (the viewer's right), right eye uncovered with a pale aquamarine iris, gold hoop earrings, black adidas football jersey with the white sponsor wordmark "VIXON" on the chest, black shorts, black socks, pale aquamarine boots, long fluffy tail curling upward. He looks exactly like he does in the last frame at every moment; his design, colors and kit never change.
+
+ACTION & MOVEMENT, in this exact order:
+1. (0 to 1.5 s) The home page stays perfectly still, exactly as in the first frame. Nothing moves.
+2. (1.5 to 3 s) Luca's peach-skinned hands grab the RIGHT edge of the screen from outside the frame, then his head peeks in from the right edge, curious and playful, looking straight at the viewer.
+3. (3 to 6 s) Luca steps in and pushes the home page with both hands. The entire home page behaves like ONE flat, rigid panel: it slides HORIZONTALLY to the LEFT on a straight line and exits completely through the LEFT edge. It does not fade, bend, warp, shrink or dissolve. Behind it, the black wall with the crest and the headline "SEASON TICKETS ARE HERE." is revealed already in place, completely static.
+4. (6 to 8 s) Luca turns to the viewer, stops on the right side of the frame and settles into the exact pose of the last frame: confident smirk, right arm extended toward the headline with an open palm, left hand on his hip.
+
+ENVIRONMENT & LIGHTING: soft studio key light from the upper front, a subtle rim light on his fur; the revealed wall is matte near-black with a faint texture; the stadium at the bottom stays dim.
+
+COLOR GRADE: near-black, warm white, and pale aquamarine (mint) as the only accent color. No saturated turquoise.
+
+MOTION QUALITY: smooth, weighty, animated-film character motion; the panel slides with a clean ease-in and ease-out; no morphing of limbs, no flicker; the text on the wall never jitters, blurs or changes.
+
+NEGATIVES: no camera movement, no zoom, no new text, no captions, no subtitles, no spoken words, no watermark, no timecode, no film frame, no letterbox, no phone bezel, no extra characters, no second monkey, no change of spelling in any text, the eye patch never changes eye, the home page never moves toward the camera or upward, only to the left.
+
+=== CLIP 2 ===
+SCENE / FRAMING: a vertical 9:16 mobile phone screen, full frame. The FIRST frame shows a matte black textured wall with an aquamarine crest at the top, the headline "SEASON TICKETS ARE HERE.", the subline "BE THERE FROM THE BEGINNING.", a night stadium at the bottom, and Luca, the 3D monkey mascot, standing on the right side presenting the headline with an open palm. The LAST frame is the exact same layout with Luca gone: only the wall, crest, headline, subline and stadium remain, pixel-identical to the first frame's background.
+
+CAMERA & LENS: completely static, locked-off, no pan, no zoom, no camera movement, no parallax.
+
+SUBJECT: Luca, a stylized 3D-animated young monkey mascot: warm brown fluffy fur, wide pale aquamarine (mint) sweatband, black leather eye patch on his LEFT eye (the viewer's right), right eye uncovered with a pale aquamarine iris, gold hoop earrings, black adidas football jersey with the white sponsor wordmark "VIXON" on the chest, black shorts, black socks, pale aquamarine boots, long fluffy tail curling upward.
+
+ACTION & MOVEMENT: Luca holds his presenting pose for a beat, gives the viewer a quick playful wink with his right eye and a small nod toward the headline, then turns and walks briskly HORIZONTALLY to the RIGHT, seen in profile, parallel to the camera, and exits completely through the RIGHT edge of the frame, his tail following him out last. After he has left, the frame holds perfectly still on the clean layout for the final second.
+
+ENVIRONMENT & LIGHTING: same soft studio key light and rim light as the first frame; nothing in the background changes.
+
+COLOR GRADE: near-black, warm white, pale aquamarine (mint) as the only accent.
+
+MOTION QUALITY: smooth, weighty animated-film character motion, no morphing; the background, crest, text and stadium never move, shift, blur or change.
+
+NEGATIVES: no camera movement, no new text, no captions, no spoken words, no watermark, no timecode, no letterbox, no extra characters; he does NOT walk toward the camera, NOT to the left, NOT downward; he does NOT fade out, shrink or vanish; he leaves only by walking out through the right edge.

@@ -14,6 +14,8 @@ se pega como un **bloque HTML** en el constructor visual.
 | Regenerar los bloques desde el fuente | [`tools/README.md`](tools/README.md) |
 | La **tienda** (mockup a medida, NO va por bloques) | [`shop/`](shop/) — ver [`shop/README.md`](shop/README.md) |
 | La revisión/auditoría del prototipo | [`docs/auditoria-2026-07-10.md`](docs/auditoria-2026-07-10.md) |
+| **Luca** (mascota): character sheet, paleta y prompts canónicos para imagen/video | [`docs/luca-character-sheet.md`](docs/luca-character-sheet.md) |
+| Producir un **video con Luca** (método, herramientas, revisión) | [`docs/luca-video-playbook.md`](docs/luca-video-playbook.md) |
 
 ## Ver el sitio localmente
 

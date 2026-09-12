@@ -48,3 +48,13 @@ El primer piloto (`06 · Founders`) se compiló con TODO embebido (fuentes e im�
 cero peticiones externas) y se validó en el sitio real. Ese enfoque no escala: los bloques con video
 y la camiseta de 90 frames no se pueden embeber. Por eso todo el sitio usa `build-blocks.py`
 (assets hosteados). Quedan como referencia solo las sondas de diagnóstico en `dist/_pilot/`.
+
+## `kie.py` — cliente de kie.ai para los videos de Luca
+
+Upload de imágenes, creación de tareas (`jobs/createTask`), polling y descarga. Sin secretos: lee
+`KIE_API_KEY` del entorno. Cómo se usa y con qué modelos: **`docs/luca-video-playbook.md`**.
+
+```bash
+export KIE_API_KEY=…
+python3 tools/kie.py upload frame.png      # imprime la URL pública temporal
+```
