@@ -337,3 +337,41 @@ en **`shop/README.md`**. Lo esencial para el handoff:
 - **Relación con el sitio**: el nav del sitio ("Shop") y el "Buy now" de la camiseta salen hoy a la
   tienda externa de Soccer Locker (`shop.myuniformsoccerlocker.com/...`). Definir si esta tienda a medida
   la reemplaza.
+
+---
+
+## Season Tickets — página con takeover mobile (2026-10-06)
+
+`pages/season_tickets.html` es la **Home más un bloque**: `native/season_tickets/00-takeover` (HTML + CSS + JS,
+compilado a `dist/blocks/psl-season_tickets-00-takeover.html`). En WordPress: crear la página, pegar ese bloque
+**primero** y después los mismos bloques de Home.
+
+Qué hace el bloque (solo en viewports ≤ 820px; en desktop se auto-remueve y no descarga el video):
+
+1. Overlay `position: fixed` a pantalla completa, por encima de la nav del template, con scroll bloqueado.
+2. Reproduce `assets/videos/takeover-season-tickets.mp4` (muteado, autoplay, `playsinline`) dentro de un
+   escenario 9:16 centrado; el poster es el primer frame real (la home falsa). En teléfonos más altos
+   que 9:16 quedan barras en ink arriba y abajo.
+3. Al `ended`, muestra `takeover-season-tickets-last-frame.webp` (el último frame real) en la misma caja,
+   corte exacto, y entran dos CTA: **"Buy my season tickets →"** (`data-buy-href` → `pasarela.html`, placeholder "Pasarela de
+   pago"; en WP el token `__URL_PASARELA__`, ver UPLOAD.md) y **"I don't want season tickets"** (cierra el overlay y
+   deja esta misma página). El video se muestra en **cada carga** (decisión del cliente); con `data-once="session"`
+   en la section pasa a una vez por sesión.
+4. Si `play()` rechaza, el video da error o no arranca en 6 s → directo a la interfaz. `prefers-reduced-motion`
+   → sin video. Red de seguridad por duración del video.
+
+**Banner Season Tickets** (`native/season_tickets/02b-banner`, compilado a `psl-season_tickets-02b-banner.html`):
+va **debajo de los destacados (02-stats), al inicio de la zona clara**, desktop y mobile; aparece con el reveal al llegar. Franja de 90px del ancho del contenedor, aquamarine, con Luca hincha
+(`assets/images/luca-fan-bombo.webp`, solo desktop) asomando por arriba (pegado a la nav Luca desaparece y queda solo
+texto + botón), "Season tickets are here. Don't miss your spot." en UNA línea, y el botón "Secure my seat →". En mobile va el busto
+de Luca hincha cómplice (`assets/images/luca-fan-bust.webp`) a la derecha, del pecho para arriba, asomando ~22px por el
+borde superior; a la izquierda, titular en UNA línea con tamaño calculado desde el ancho libre (22px en tablet, ~15px en un teléfono de
+390px) + botón completo, siempre visibles; pegado a la nav el busto desaparece. Aire arriba del bloque: 48px desktop, 32px mobile. El bloque lleva `surface-paper`: la costura ink→paper del
+sistema de motion cae en él y no en 03-project. **Todo el banner es un link** a la compra (`data-buy-href` → `pasarela.html` / token `__URL_PASARELA__`);
+no tiene cierre, a propósito. Al scrollear se queda pegado debajo de la nav: como `position: sticky` solo
+pega dentro de su bloque, el JS fija el banner cuando su hueco pasa bajo la nav y el hueco conserva el alto.
+`data-stick-under` lleva el selector de la nav (en WP, poner el de la nav del template; o `data-stick-top` en px).
+
+Pendiente de validar en el WP real: que ningún wrapper del template tenga `transform`/`filter`/`contain`
+(anularían el `position: fixed` del takeover y del banner) y que el autoplay muteado corra en iPhone y Android. Producción del video y
+del personaje: `docs/luca/takeover/README.md` y `docs/luca-character-sheet.md`.

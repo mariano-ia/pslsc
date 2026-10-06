@@ -1,0 +1,113 @@
+/* Banner Season Tickets. El hueco (.st-banner-slot) reserva el alto (--st-banner-h); el banner es un
+   <a> flex (todo clickeable) que pasa a fixed bajo la nav cuando el scroll lo lleva ahí (02b-banner.js).
+   Luca hincha (solo desktop) es absolute, anclado al piso de la franja: en su lugar SOBRESALE por arriba;
+   pegado a la nav, DESAPARECE (solo texto + botón) y el texto se corre a la izquierda. En mobile no hay
+   Luca: titular en una línea + botón completo, en dos filas. El outline es un anillo de 1px (máscara) con un conic-gradient que gira.
+   El bloque va al inicio de la zona clara (fondo paper) y aparece con el reveal del sistema de motion. */
+.st-banner-block {
+  position: relative; z-index: 3;      /* por encima del inner de la banda de destacados (z-index 1); la nav es 50 */
+  background: var(--color-paper);      /* + .surface-paper en el HTML: la costura ink→paper cae acá, no en 03-project */
+  --st-banner-h: 90px;
+  --st-banner-r: 18px;
+}
+.st-banner-slot { height: var(--st-banner-h); }
+.st-banner-block { padding-top: 48px; }                                /* aire con la banda de destacados */
+
+.st-banner {
+  position: relative;
+  display: flex; align-items: center; gap: 20px;
+  height: var(--st-banner-h);
+  padding: 0 24px 0 196px;
+  border-radius: var(--st-banner-r);
+  transition: padding .3s ease;
+  background: var(--color-aqua); color: var(--color-black);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, .38), 0 2px 6px rgba(0, 0, 0, .18);
+  text-decoration: none;
+}
+.st-banner.is-stuck {
+  position: fixed;
+  z-index: var(--z-sticky-cta);          /* debajo de la nav (--z-nav), encima del contenido */
+  padding-left: 24px;                    /* sin Luca */
+  overflow: hidden;                      /* que no asome mientras se desvanece */
+}
+
+/* Outline 1px degradado animado: anillo enmascarado + gradiente cónico girando (keyframes, portable) */
+.st-banner__ring {
+  position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+  overflow: hidden; pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask-composite: exclude;
+}
+.st-banner__ring-grad {
+  position: absolute; left: 50%; top: 50%;
+  width: 300%; aspect-ratio: 1 / 1;      /* cuadrado que cubre la diagonal al girar */
+  background: conic-gradient(from 0deg, var(--color-aqua-deep), #FFFFFF 22%, var(--color-ink) 50%, #FFFFFF 78%, var(--color-aqua-deep));
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: st-ring-spin 7s linear infinite;
+}
+@keyframes st-ring-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+.st-banner__luca {
+  position: absolute; left: 22px; bottom: 0;
+  height: 170px; width: auto;            /* ~80px sobresalen por arriba de la franja */
+  pointer-events: none;
+  transition: opacity .2s ease, visibility .2s ease;
+}
+.st-banner.is-stuck .st-banner__luca { opacity: 0; visibility: hidden; }   /* pegado: solo texto */
+.st-banner__face { display: none; }                                         /* solo mobile */
+
+.st-banner__text {
+  font: 800 clamp(24px, 2.75vw, 40px)/.95 var(--font-display);
+  text-transform: uppercase; letter-spacing: .005em;
+}
+@media (min-width: 1200px) { .st-banner__text { white-space: nowrap; } }   /* desktop: UNA línea */
+
+.st-banner__cta {
+  margin-left: auto; flex: none;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 24px; border-radius: 999px;
+  background: var(--color-black); color: var(--color-aqua);
+  font: 700 14px/1 var(--font-label); letter-spacing: .12em; text-transform: uppercase;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+.st-banner:hover .st-banner__cta { background: var(--color-white); color: var(--color-black); transform: translateY(-1px); }
+.st-banner__cta-arrow { font-size: 16px; line-height: 1; }
+
+@media (max-width: 820px) {
+  /* Mobile: busto de Luca hincha guiñando a la derecha (del pecho para arriba, asoma por el borde superior)
+     y, a la izquierda, titular en UNA línea + botón completo. El tamaño del titular se CALCULA desde el ancho
+     libre (viewport - gutters - zona del busto - padding) para que nunca pase a dos líneas: grande en tablets,
+     más chico en teléfonos angostos. Pegado: sin busto. */
+  .st-banner-block { --st-banner-r: 14px; padding-top: 32px; --st-bust-zone: 118px; }
+  .st-banner { flex-direction: column; align-items: flex-start; justify-content: center; gap: 6px; padding: 0 var(--st-bust-zone) 0 12px; transition: padding .3s ease; }
+  .st-banner.is-stuck { padding: 0 14px; }
+  .st-banner__luca { display: none; }
+  .st-banner__face {
+    display: block; position: absolute; right: 8px; bottom: 0;
+    height: 112px; width: auto; pointer-events: none;     /* ~22px asoman por arriba */
+    transition: opacity .2s ease, visibility .2s ease;
+  }
+  .st-banner.is-stuck .st-banner__face { opacity: 0; visibility: hidden; }
+  .st-banner__text {
+    white-space: nowrap; line-height: 1;
+    /* 15.7em = ancho de la frase completa en Druk Heavy (medido) */
+    font-size: clamp(11px, calc((100vw - var(--gutter) * 2 - var(--st-bust-zone) - 12px) / 15.7), 22px);
+  }
+  .st-banner__t1, .st-banner__t2 { display: inline; }
+  .st-banner__cta { margin-left: 0; padding: 8px 10px; font-size: clamp(8.5px, 2.7vw, 10.5px); letter-spacing: .06em; gap: 8px; white-space: nowrap; }
+}
+@media (max-width: 420px) {   /* teléfonos: busto un poco más chico para dejarle ancho al titular */
+  .st-banner-block { --st-bust-zone: 100px; }
+  .st-banner__face { height: 100px; right: 4px; }                     /* ~10px asoman */
+}
+@media (max-width: 340px) {   /* teléfonos muy angostos (320): busto más chico y botón sin flecha */
+  .st-banner-block { --st-bust-zone: 86px; }
+  .st-banner__face { height: 86px; right: 2px; }
+  .st-banner__cta-arrow { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .st-banner, .st-banner__luca, .st-banner__face, .st-banner__cta { transition: none; }
+  .st-banner__ring-grad { animation: none; }
+}

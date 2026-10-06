@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Port St. Lucie SC — Season tickets are here.</title>
+
+  <!-- Fuentes de marca self-hosted (Ferryman, Druk, Druk Text Wide, Proxima Nova, Cabazon) -->
+  <link rel="stylesheet" href="../tokens/fonts.css?v=68" />
+
+  <!-- Tokens -->
+  <link rel="stylesheet" href="../tokens/tokens.css?v=68" />
+
+  <!-- Patrones compartidos -->
+  <link rel="stylesheet" href="../native/_patterns/cards.css?v=68" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=68" />
+
+  <!-- Bloques nativos -->
+  <link rel="stylesheet" href="../native/season_tickets/00-takeover.css?v=68" />
+  <link rel="stylesheet" href="../native/season_tickets/02b-banner.css?v=68" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=68" />
+  <link rel="stylesheet" href="../native/home/01-hero.css?v=68" />
+  <link rel="stylesheet" href="../native/home/02-stats.css?v=68" />
+  <link rel="stylesheet" href="../native/home/03-project.css?v=68" />
+  <link rel="stylesheet" href="../native/home/04-proof.css?v=68" />
+  <link rel="stylesheet" href="../native/home/04b-fixtures.css?v=68" />
+  <link rel="stylesheet" href="../native/home/05-jersey.css?v=68" />
+  <link rel="stylesheet" href="../native/home/06-founders.css?v=68" />
+  <link rel="stylesheet" href="../native/home/07-academy.css?v=68" />
+  <link rel="stylesheet" href="../native/home/08-news.css?v=68" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
+
+  <!-- Piezas a medida -->
+  <link rel="stylesheet" href="../custom/live-counter/live-counter.css?v=68" />
+  <link rel="stylesheet" href="../custom/jersey-viewer/jersey-viewer.css?v=68" />
+  <link rel="stylesheet" href="../custom/departures-board/departures-board.css?v=68" />
+  <link rel="stylesheet" href="../custom/founder-id/founder-id.css?v=68" />
+  <!-- Matchday archivado (ver native/home/04b-fixtures.html): <link rel="stylesheet" href="../custom/fixtures/fixtures.css?v=68" /> -->
+
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--color-ink); }
+    body { font-family: var(--font-body); color: var(--color-text); overflow-x: hidden; }
+    ::selection { background: var(--color-aqua); color: var(--color-black); }
+  </style>
+</head>
+<body>
+  <!-- Takeover (solo mobile): video + CTAs por encima de la home. Ver native/season_tickets/ -->
+  <div data-block="00-takeover"></div>
+  <div data-block="00-nav"></div>
+  <div data-block="01-hero"></div>
+  <div data-block="02-stats"></div>
+  <!-- Banner Season Tickets: debajo de los destacados, se pega bajo la nav al scrollear. Ver native/season_tickets/ -->
+  <div data-block="02b-banner"></div>
+  <div data-block="03-project"></div>
+  <div data-block="04-proof"></div>
+  <div data-block="04b-fixtures"></div>
+  <div data-block="05-jersey"></div>
+  <div data-block="06-founders"></div>
+  <div data-block="07-academy"></div>
+  <div data-block="08-news"></div>
+  <div data-block="09-cierre-footer"></div>
+
+  <!-- Ensamblaje de bloques (solo para preview; en WordPress cada bloque se inserta por separado) -->
+  <script type="module">
+    // Season Tickets = la Home + el bloque de takeover (carpeta native/season_tickets/)
+    const blocks = [
+      ['season_tickets', '00-takeover'],
+      ['home', '00-nav'], ['home', '01-hero'], ['home', '02-stats'], ['season_tickets', '02b-banner'], ['home', '03-project'], ['home', '04-proof'],
+      ['home', '04b-fixtures'], ['home', '05-jersey'], ['home', '06-founders'], ['home', '07-academy'],
+      ['home', '08-news'], ['home', '09-cierre-footer'],
+    ];
+    const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
+    await Promise.all(blocks.map(async ([dir, name]) => {
+      const html = await fetch(`../native/${dir}/${name}.html${bust}`).then((r) => r.text());
+      document.querySelector(`[data-block="${name}"]`).innerHTML = html;
+    }));
+    // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.
+    // (El sitio es English-only: no hay init de idioma.)
+    const [{ initTakeover }, { initBanner }, { initNewsletter }, { initHeroMorph }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
+      import('../native/season_tickets/00-takeover.js?v=68'),
+      import('../native/season_tickets/02b-banner.js?v=68'),
+      import('../native/home/09-cierre-footer.js?v=68'),
+      import('../native/home/01-hero.js?v=68'),
+      import('../native/home/04-proof.js?v=68'),
+      import('../native/home/03-project.js?v=68'),
+      import('../native/_patterns/motion.js?v=68'),
+    ]);
+    initTakeover();   // overlay mobile: video → interfaz; en desktop se auto-remueve
+    initBanner();     // banner bajo los destacados: pasa a fixed bajo la nav al scrollear
+    initNewsletter();
+    initHeroMorph();
+    initProofTimeline();
+    initProjectTimeline();
+    initMotion();   // activa reveal, parallax, nav reactiva, grano, cursor — tras inyectar los bloques
+
+    // Aterrizaje con #ancla desde otra página: los bloques se inyectan DESPUÉS del load, así que
+    // el navegador no encontró el ancla — la buscamos ahora (el scroll es suave vía CSS, motion.css).
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  </script>
+
+  <!-- Web components a medida -->
+  <script type="module" src="../custom/live-counter/live-counter.js?v=68"></script>
+  <script type="module" src="../custom/jersey-viewer/jersey-viewer.js?v=68"></script>
+  <script type="module" src="../custom/departures-board/departures-board.js?v=68"></script>
+  <script type="module" src="../custom/founder-id/founder-id.js?v=68"></script>
+  <!-- Matchday archivado (ver native/home/04b-fixtures.html): <script type="module" src="../custom/fixtures/fixtures.js?v=68"></script> -->
+</body>
+</html>

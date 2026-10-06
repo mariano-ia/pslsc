@@ -42,6 +42,7 @@ en los bloques ya pegados en WordPress). Son únicos y greppables:
 | `__URL_HOME__` | `/` | Permalink de Home |
 | `__URL_SUMATE__` | `/become-a-founder/` | Permalink de la página de Founders |
 | `__URL_PARTNERS__` | `/partners/` | Permalink de Partners |
+| `__URL_PASARELA__` | `/season-tickets/checkout/` | Permalink de la **pasarela de pago** de season tickets (hoy placeholder). Lo usan el takeover y el banner. |
 
 `__PSL_ASSET_BASE__` aparece en cada bloque (fuentes + imágenes); los `__URL_*__` solo en los bloques
 que enlazan a otras páginas (nav-CTAs, footer). Ningún bloque queda sin al menos el asset base.
@@ -72,6 +73,7 @@ Qué bloque va en qué página:
 | Become a Founder | s01-hero · s02-benefits · s03-plans · s05-faq · s06-cta |
 | Partners | p01-hero · p01b-partners · p02-opportunity · p03-value · p04-traction · p05-contact |
 | Academy | a01-hero · a02-pathway · a03-method · a05-parents · a06-faq · a07-tryouts |
+| Season Tickets | **00-takeover** (`psl-season_tickets-00-takeover.html`, primero de todo) · 01-hero · 02-stats · **02b-banner** (`psl-season_tickets-02b-banner.html`) · 03-project · … el resto igual que Home. El takeover solo se muestra en mobile; necesita `assets/videos/takeover-season-tickets*` y `assets/images/luca-fan-bombo.webp` subidos. |
 
 Nav (00) y News (08) no están en la lista: son bloques nativos del template de USL.
 

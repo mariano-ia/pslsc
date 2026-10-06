@@ -21,7 +21,7 @@ se pega como un **bloque HTML** en el constructor visual.
 
 ```bash
 python3 -m http.server 4321
-# sitio:   http://localhost:4321/pages/home.html   (sumate · partners · academy)
+# sitio:   http://localhost:4321/pages/home.html   (sumate · partners · academy · season_tickets)
 # tienda:  http://localhost:4321/shop/
 ```
 

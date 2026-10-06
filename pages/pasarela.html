@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Port St. Lucie SC — Pasarela de pago (placeholder)</title>
+  <link rel="stylesheet" href="../tokens/fonts.css?v=68" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=68" />
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--color-ink); }
+    body { font-family: var(--font-body); color: var(--color-text); min-height: 100vh; display: grid; place-items: center; padding: 24px; box-sizing: border-box; }
+    .ph { max-width: 560px; text-align: center; }
+    .ph__kicker { font: 500 12px/1 var(--font-label); letter-spacing: .18em; text-transform: uppercase; color: var(--color-aqua); margin: 0 0 18px; }
+    .ph__title { font: 800 clamp(40px, 8vw, 72px)/.95 var(--font-display); text-transform: uppercase; margin: 0 0 18px; }
+    .ph__note { color: var(--color-text-muted); font-size: 16px; line-height: 1.5; margin: 0 0 28px; }
+    .ph a { color: var(--color-aqua); }
+  </style>
+</head>
+<body>
+  <!-- PLACEHOLDER de la pasarela de pago de season tickets. Lo enlazan el takeover y el banner de
+       pages/season_tickets.html (data-buy-href). Se reemplaza por el checkout real cuando exista;
+       en WordPress el token __URL_PASARELA__ apunta al permalink real (ver dist/UPLOAD.md). -->
+  <main class="ph">
+    <p class="ph__kicker">Season tickets · Port St. Lucie SC</p>
+    <h1 class="ph__title">Pasarela de pago</h1>
+    <p class="ph__note">Placeholder. Acá va el checkout real de season tickets.</p>
+    <p><a href="season_tickets.html">← Volver</a></p>
+  </main>
+</body>
+</html>

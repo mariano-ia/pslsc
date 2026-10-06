@@ -29,6 +29,7 @@ PERMALINKS = {
     "home.html":     "__URL_HOME__",         # ej. "/"          (o "/home/")
     "sumate.html":   "__URL_SUMATE__",       # ej. "/become-a-founder/"
     "partners.html": "__URL_PARTNERS__",     # ej. "/partners/"
+    "pasarela.html": "__URL_PASARELA__",     # ej. "/season-tickets/checkout/" (placeholder "Pasarela de pago")
 }
 
 # Bloques a compilar. Nav (00) y News (08) quedan fuera: son nativos del template de USL.
@@ -43,6 +44,8 @@ BLOCKS = [
     ("academy", "a01-hero"), ("academy", "a02-pathway"), ("academy", "a03-method"),
     ("academy", "a05-parents"), ("academy", "a06-faq"), ("academy", "a07-tryouts"),
     ("staff", "st01-staff"),
+    ("season_tickets", "00-takeover"),   # página Season Tickets = Home + este bloque (solo mobile)
+    ("season_tickets", "02b-banner"),    # banner sticky bajo los destacados (02-stats)
 ]
 
 # Fuentes hosteadas (family, weight, archivo .woff2 en ASSET_BASE fonts/)
@@ -130,7 +133,7 @@ def rewrite_links(html):
     def sub(m):
         page, anchor = m.group(1) + ".html", (m.group(2) or "")
         return PERMALINKS.get(page, page) + anchor
-    return re.sub(r"(home|sumate|partners)\.html(#[\w-]+)?", sub, html)
+    return re.sub(r"(home|sumate|partners|pasarela)\.html(#[\w-]+)?", sub, html)
 
 # ─────────────────────────────────────────────────────────────── JS -> data: URI
 def js_to_data_uri(js):

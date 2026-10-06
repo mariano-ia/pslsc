@@ -1,0 +1,28 @@
+<!--
+  Bloque 02b · Banner Season Tickets. 🟦 A medida. Para desktop (sin takeover) y para quien lo descartó.
+  Franja del ancho del contenedor, 90px (--st-banner-h), aquamarine, DEBAJO DE LOS DESTACADOS (02-stats),
+  al inicio de la zona clara, desktop y mobile. Aparece con el reveal del sistema de motion al llegar (data-reveal).
+  Lleva surface-paper para que el sistema de costuras (motion.js) ponga la costura ink→paper en ESTE bloque y no
+  en "Not a logo…", que así queda del color plano de la sección.
+  TODO el banner es un link a la compra (data-buy-href / href → pasarela.html, placeholder de la pasarela de pago;
+  en WP se reemplaza por el permalink real, token __URL_PASARELA__): un solo camino, sin cierre.
+  Luca hincha (variante documentada en docs/luca-character-sheet.md §13), SOLO DESKTOP, se asoma por ARRIBA
+  de la franja cuando el banner está en su lugar; cuando se pega bajo la nav, desaparece. En MOBILE va el busto de
+  Luca hincha cómplice (st-banner__face) a la derecha, del pecho para arriba, asomando apenas por el borde superior;
+  titular en dos líneas + botón completo a la izquierda. Pegado a la nav, el busto también desaparece.
+  Sticky portable a WP: ver 02b-banner.js (el hueco .st-banner-slot conserva el alto; el banner pasa a
+  fixed bajo la nav). data-stick-under: selector de la nav (en WP, el de la nav del template).
+-->
+<section class="st-banner-block surface-paper" id="season-tickets-banner" data-stick-under=".nav" data-stick-top="0" data-buy-href="pasarela.html">
+  <div class="psl-container">
+    <div class="st-banner-slot">
+      <a class="st-banner" href="pasarela.html" data-reveal>
+        <span class="st-banner__ring" aria-hidden="true"><span class="st-banner__ring-grad"></span></span>
+        <img class="st-banner__luca" src="/assets/images/luca-fan-bombo.webp" alt="" decoding="async" />
+        <img class="st-banner__face" src="/assets/images/luca-fan-bust.webp" alt="" decoding="async" />
+        <span class="st-banner__text"><span class="st-banner__t1">Season tickets are here.</span> <span class="st-banner__t2">Don&rsquo;t miss your spot.</span></span>
+        <span class="st-banner__cta"><span class="st-banner__cta-label">Secure my seat</span> <span class="st-banner__cta-arrow" aria-hidden="true">&rarr;</span></span>
+      </a>
+    </div>
+  </div>
+</section>
