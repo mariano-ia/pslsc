@@ -70,8 +70,12 @@
       ['home', '08-news'], ['home', '09-cierre-footer'],
     ];
     const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
+    // Overrides de esta página sobre bloques compartidos (CTA de nav y hero → "Buy season tickets").
+    // Mismo archivo que usa tools/build-blocks.py para compilar los bloques derivados.
+    const overrides = await fetch(`../native/season_tickets/overrides.json${bust}`).then((r) => r.json());
     await Promise.all(blocks.map(async ([dir, name]) => {
-      const html = await fetch(`../native/${dir}/${name}.html${bust}`).then((r) => r.text());
+      let html = await fetch(`../native/${dir}/${name}.html${bust}`).then((r) => r.text());
+      for (const [a, b] of (overrides[name]?.replace ?? [])) html = html.replace(a, b);
       document.querySelector(`[data-block="${name}"]`).innerHTML = html;
     }));
     // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.

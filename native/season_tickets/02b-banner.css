@@ -79,17 +79,15 @@
   /* Mobile: busto de Luca hincha guiñando a la derecha (del pecho para arriba, asoma por el borde superior)
      y, a la izquierda, titular en UNA línea + botón completo. El tamaño del titular se CALCULA desde el ancho
      libre (viewport - gutters - zona del busto - padding) para que nunca pase a dos líneas: grande en tablets,
-     más chico en teléfonos angostos. Pegado: sin busto. */
+     más chico en teléfonos angostos. Pegado: el busto se queda (hay aire con la nav). */
   .st-banner-block { --st-banner-r: 14px; padding-top: 32px; --st-bust-zone: 118px; }
   .st-banner { flex-direction: column; align-items: flex-start; justify-content: center; gap: 6px; padding: 0 var(--st-bust-zone) 0 12px; transition: padding .3s ease; }
-  .st-banner.is-stuck { padding: 0 14px; }
+  .st-banner.is-stuck { padding: 0 var(--st-bust-zone) 0 12px; overflow: visible; }   /* pegado: el busto se queda */
   .st-banner__luca { display: none; }
   .st-banner__face {
     display: block; position: absolute; right: 8px; bottom: 0;
-    height: 112px; width: auto; pointer-events: none;     /* ~22px asoman por arriba */
-    transition: opacity .2s ease, visibility .2s ease;
+    height: 106px; width: auto; pointer-events: none;     /* ~16px asoman por arriba (= aire con la nav) */
   }
-  .st-banner.is-stuck .st-banner__face { opacity: 0; visibility: hidden; }
   .st-banner__text {
     white-space: nowrap; line-height: 1;
     /* 15.7em = ancho de la frase completa en Druk Heavy (medido) */
@@ -100,7 +98,7 @@
 }
 @media (max-width: 420px) {   /* teléfonos: busto un poco más chico para dejarle ancho al titular */
   .st-banner-block { --st-bust-zone: 100px; }
-  .st-banner__face { height: 100px; right: 4px; }                     /* ~10px asoman */
+  .st-banner__face { height: 100px; right: 4px; }                     /* ~10px asoman, caben en el aire con la nav */
 }
 @media (max-width: 340px) {   /* teléfonos muy angostos (320): busto más chico y botón sin flecha */
   .st-banner-block { --st-bust-zone: 86px; }
@@ -108,6 +106,6 @@
   .st-banner__cta-arrow { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .st-banner, .st-banner__luca, .st-banner__face, .st-banner__cta { transition: none; }
+  .st-banner, .st-banner__luca, .st-banner__cta { transition: none; }
   .st-banner__ring-grad { animation: none; }
 }

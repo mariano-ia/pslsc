@@ -4,6 +4,7 @@
   (home falsa → Luca empuja → "SEASON TICKETS ARE HERE.") dentro de un escenario 9:16 centrado y, al
   terminar, lo reemplaza por el último frame REAL del video como imagen en la misma caja, y entran los
   dos CTA. "I don't want season tickets" cierra el overlay y deja esta misma página (la home de Season Tickets). Si el autoplay falla (ahorro de datos, bajo consumo), salta directo a la interfaz.
+  El video y la imagen final se cargan SOLO en mobile (data-src → src desde el JS): desktop no descarga nada.
   Página: pages/season_tickets.html = home + este bloque. Producción del video: docs/luca/takeover/README.md.
   Compra: data-buy-href → pasarela.html (placeholder "Pasarela de pago"; en WP, token __URL_PASARELA__).
   El video se muestra en CADA carga de la página (decisión de Mariano, 2026-10-06); para mostrarlo una vez por
@@ -12,9 +13,9 @@
 <section class="st-takeover" id="st-takeover" aria-label="Season tickets are here" data-buy-href="pasarela.html">
   <div class="st-takeover__stage">
     <video class="st-takeover__video" muted playsinline preload="auto"
-           poster="/assets/videos/takeover-season-tickets-poster.webp"
+           data-poster="/assets/videos/takeover-season-tickets-poster.webp"
            data-src="/assets/videos/takeover-season-tickets.mp4" aria-hidden="true"></video>
-    <img class="st-takeover__final" src="/assets/videos/takeover-season-tickets-last-frame.webp" alt="" decoding="async" />
+    <img class="st-takeover__final" data-src="/assets/videos/takeover-season-tickets-last-frame.webp" alt="" decoding="async" />
     <p class="st-takeover__sr">Season tickets are here. Be there from the beginning.</p>
     <div class="st-takeover__cta">
       <a class="psl-btn cta-primary st-takeover__buy" href="pasarela.html"><span>Buy my season tickets</span> <span aria-hidden="true">→</span></a>

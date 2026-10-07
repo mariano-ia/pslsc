@@ -73,9 +73,28 @@ Qué bloque va en qué página:
 | Become a Founder | s01-hero · s02-benefits · s03-plans · s05-faq · s06-cta |
 | Partners | p01-hero · p01b-partners · p02-opportunity · p03-value · p04-traction · p05-contact |
 | Academy | a01-hero · a02-pathway · a03-method · a05-parents · a06-faq · a07-tryouts |
-| Season Tickets | **00-takeover** (`psl-season_tickets-00-takeover.html`, primero de todo) · 01-hero · 02-stats · **02b-banner** (`psl-season_tickets-02b-banner.html`) · 03-project · … el resto igual que Home. El takeover solo se muestra en mobile; necesita `assets/videos/takeover-season-tickets*` y `assets/images/luca-fan-bombo.webp` subidos. |
+| Season Tickets | **00-takeover** (`psl-season_tickets-00-takeover.html`, primero de todo) · **01-hero de Season Tickets** (`psl-season_tickets-01-hero.html`: es el hero de Home con el CTA "Buy season tickets" → `__URL_PASARELA__`; NO usar el de Home) · 02-stats · **02b-banner** (`psl-season_tickets-02b-banner.html`) · 03-project · … el resto igual que Home. En esta página el CTA de la **nav del template** también debe decir "Buy season tickets" y apuntar a la pasarela. El takeover solo se muestra en mobile; necesita `assets/videos/takeover-season-tickets*` y `assets/images/luca-fan-bombo.webp` subidos. |
 
 Nav (00) y News (08) no están en la lista: son bloques nativos del template de USL.
+
+### Página Season Tickets — pasos
+
+1. **Assets extra a subir** (además de los de Home) a `__PSL_ASSET_BASE__/assets/`:
+   `videos/takeover-season-tickets.mp4`, `videos/takeover-season-tickets-poster.webp`,
+   `videos/takeover-season-tickets-last-frame.webp`, `images/luca-fan-bombo.webp`, `images/luca-fan-bust.webp`.
+2. **Token `__URL_PASARELA__`**: la URL de la pasarela de pago de season tickets. Hasta que exista, apuntarla a
+   una página de WP que diga "Pasarela de pago" (equivalente a `pages/pasarela.html` del repo).
+3. **Bloques, en este orden**: `psl-season_tickets-00-takeover.html` (primero de todo) ·
+   `psl-season_tickets-01-hero.html` (NO el hero de Home: este tiene el CTA "Buy season tickets") ·
+   `psl-home-02-stats.html` · `psl-season_tickets-02b-banner.html` · y de ahí en adelante los mismos de Home
+   (03-project, 04-proof, 04b-fixtures, 05-jersey, 06-founders, 07-academy, 09-cierre-footer).
+4. **Nav del template** en esta página: el CTA principal debe decir "Buy season tickets" y apuntar a la pasarela.
+5. **Validar en la página publicada, en un teléfono real**: (a) el takeover tapa la nav del template y el video
+   arranca solo (si no arranca por ahorro de datos / bajo consumo, salta directo a la interfaz: es lo previsto);
+   (b) "Buy" va a la pasarela e "I don't want" deja la página; (c) al scrollear, el banner queda pegado 16px debajo
+   de la nav del template (si quedara debajo de otra cosa, poner el selector de la nav en `data-stick-under`
+   del bloque del banner). Si algún wrapper del template tuviera `transform`/`filter`/`contain`, el takeover y el
+   banner (ambos `position: fixed`) dejarían de funcionar: avisar.
 
 ---
 

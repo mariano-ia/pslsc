@@ -49,6 +49,13 @@ cero peticiones externas) y se validó en el sitio real. Ese enfoque no escala: 
 y la camiseta de 90 frames no se pueden embeber. Por eso todo el sitio usa `build-blocks.py`
 (assets hosteados). Quedan como referencia solo las sondas de diagnóstico en `dist/_pilot/`.
 
+### Bloques derivados (`native/<página>/overrides.json`)
+
+Una página puede reutilizar un bloque de otra cambiando solo texto: `{"01-hero": {"from": "home/01-hero",
+"replace": [[antes, después], …]}}`. Si no existe `native/<página>/<bloque>.html`, el compilador toma el origen,
+aplica los reemplazos y usa el CSS/JS del origen. La página de preview lee el mismo archivo. Ejemplo:
+`native/season_tickets/overrides.json` (CTA del hero → "Buy season tickets").
+
 ## `kie.py` — cliente de kie.ai para los videos de Luca
 
 Upload de imágenes, creación de tareas (`jobs/createTask`), polling y descarga. Sin secretos: lee

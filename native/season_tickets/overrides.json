@@ -1,0 +1,15 @@
+{
+  "_doc": "Overrides de la página Season Tickets sobre bloques compartidos de la Home. Los lee pages/season_tickets.html (preview) y tools/build-blocks.py (compila native/season_tickets/<bloque> derivado del origen). La Home no cambia.",
+  "00-nav": {
+    "from": "home/00-nav",
+    "replace": [
+      ["<a href=\"/joinus/\" class=\"psl-btn cta-primary nav__cta\"><span>Become a Founder</span>", "<a href=\"pasarela.html\" class=\"psl-btn cta-primary nav__cta\"><span>Buy season tickets</span>"]
+    ]
+  },
+  "01-hero": {
+    "from": "home/01-hero",
+    "replace": [
+      ["<a href=\"/joinus/\" class=\"psl-btn cta-primary\"><span>Become a Founder</span>", "<a href=\"pasarela.html\" class=\"psl-btn cta-primary\"><span>Buy season tickets</span>"]
+    ]
+  }
+}

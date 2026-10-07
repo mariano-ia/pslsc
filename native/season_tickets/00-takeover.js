@@ -56,7 +56,10 @@ function initTakeover(root = document) {
   skip.addEventListener('click', close);
   buy.addEventListener('click', () => { remember(); unlock(); });
 
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { finish(); return; }
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const f = ov.querySelector('.st-takeover__final'); if (f && f.dataset.src) f.src = f.dataset.src;
+    finish(); return;
+  }
 
   video.addEventListener('ended', finish, { once: true });
   video.addEventListener('error', finish, { once: true });
@@ -67,6 +70,9 @@ function initTakeover(root = document) {
   stall = setTimeout(() => { if (video.currentTime < 0.5) finish(); }, 6000);
   hard = setTimeout(finish, 20000);
 
+  if (video.dataset.poster) video.poster = video.dataset.poster;   // poster: solo en mobile
+  const fin = ov.querySelector('.st-takeover__final');
+  if (fin && fin.dataset.src) fin.src = fin.dataset.src;   // imagen final: solo en mobile
   video.src = video.dataset.src;
   const p = video.play();
   if (p && typeof p.catch === 'function') p.catch(finish);
