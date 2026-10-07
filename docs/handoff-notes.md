@@ -403,15 +403,9 @@ cualquier asset referenciado desde CSS queda correcto.
 
 ---
 
-## Soccer School — landing `/school` (2026-10-07)
+## Soccer School — micrositio aparte (rama `school`)
 
-Landing de **preinscripción** del PSLSC Soccer School (chicos de 5 a 13). Es otro micrositio y vive en la **rama
-`school`**; la v1 también quedó en `main` (`pslsc.vercel.app/school`) porque se mergeó antes de separar la rama.
-**No es WordPress ni pasa por `tools/build-blocks.py`**: es una página propia y
-autocontenida (como `shop/`), con la identidad del Soccer School (`docs/soccer-school/`), no la del sitio.
-Es la v1, que capta leads mientras se arma el micrositio definitivo, que después la reemplaza en la misma URL.
-
-El form envía por proxy a un **form nuevo de ActiveCampaign**, con el mismo patrón que tryouts/newsletter/partners.
-**Hasta completar `school/config.js` no envía**: muestra error y no finge éxito. Cómo conectarlo, pendientes
-(copy, texto legal, rangos de edad, licencias de Druk XCond y Coolvetica) y cómo verla: **`school/README.md`**.
-Spec y plan en `docs/superpowers/`.
+El micrositio del **PSLSC Soccer School** es otro sitio: **no va a WordPress** ni usa bloques, y vive solo en la
+**rama `school`** (código, assets, spec y plan). En esta rama no está. La v1 se mergeó a `main` el 2026-10-07,
+antes de separar la rama, y sale de `main` en el próximo pase de `develop` a producción (con doble check).
+Detalle y pendientes: `school/README.md` en la rama `school`.

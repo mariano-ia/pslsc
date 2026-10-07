@@ -18,7 +18,10 @@ Reglas:
   sale a producción (commits y archivos) y se espera una confirmación explícita. `main` es producción.
 - Trabajo del sitio del club → `develop`, y se promueve a `main` cuando está aprobado. Si se arregla algo
   directo en `main` (hotfix), se trae a `develop` enseguida para que no diverjan.
-- Trabajo del Soccer School → `school`, y nada más que `school`.
+- Trabajo del Soccer School → `school`, y nada más que `school`. `school` **no se mergea con `develop` ni con
+  `main` en ninguna dirección**: si hace falta algo de un lado, se copia o se hace cherry-pick. (`develop` no
+  tiene la carpeta `school/`, y `main` tampoco desde el próximo pase a producción: un merge le borraría el
+  micrositio a `school`).
 - `main` y `develop` respetan el formato de **bloques de WordPress** (CSS bajo `.pslsc`, JS como data URI,
   sin frameworks; ver la §2 de [`docs/handoff-notes.md`](docs/handoff-notes.md)), salvo que se indique lo
   contrario. `school` no tiene ese límite.
@@ -32,7 +35,7 @@ Reglas:
 | Ver los bloques ya compilados | [`dist/`](dist/) — `blocks/` (pegar) · `upload/` (hostear) |
 | Regenerar los bloques desde el fuente | [`tools/README.md`](tools/README.md) |
 | La **tienda** (mockup a medida, NO va por bloques) | [`shop/`](shop/) — ver [`shop/README.md`](shop/README.md) |
-| El **micrositio del Soccer School** (rama `school`, NO va a WordPress) | [`school/`](school/) — ver [`school/README.md`](school/README.md) |
+| El **micrositio del Soccer School** (NO va a WordPress) | Vive en la **rama `school`**, no en esta: ver `school/README.md` en esa rama |
 | La revisión/auditoría del prototipo | [`docs/auditoria-2026-07-10.md`](docs/auditoria-2026-07-10.md) |
 | **Luca** (mascota): character sheet, paleta y prompts canónicos para imagen/video | [`docs/luca-character-sheet.md`](docs/luca-character-sheet.md) |
 | Producir un **video con Luca** (método, herramientas, revisión) | [`docs/luca-video-playbook.md`](docs/luca-video-playbook.md) |
@@ -43,7 +46,6 @@ Reglas:
 python3 -m http.server 4321
 # sitio:   http://localhost:4321/pages/home.html   (sumate · partners · academy · season_tickets)
 # tienda:  http://localhost:4321/shop/
-# school:  http://localhost:4321/school/
 ```
 
 Las páginas de `pages/` arman el sitio completo para previsualizar (hacen `fetch` de los bloques de
@@ -61,7 +63,6 @@ pages/      SOLO preview: arman las páginas completas
 tools/      build-blocks.py → compila los bloques para WordPress
 dist/       SALIDA para WordPress: blocks/ (pegar) · upload/ (hostear) · UPLOAD.md (instructivo)
 shop/       tienda oficial — mockup A MEDIDA (HTML autocontenido). NO va por bloques (ver shop/README.md)
-school/     landing del Soccer School (preinscripción) en pslsc.vercel.app/school. NO va a WordPress (ver school/README.md)
 docs/       handoff-notes.md (la guía completa) + auditoría
 ```
 
