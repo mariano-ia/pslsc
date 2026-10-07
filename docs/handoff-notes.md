@@ -395,3 +395,17 @@ Partners, Academy, Season Tickets) para que el footer nuevo aparezca en todas.
 Nota del compilador (mismo día): ahora también reescribe `url(/assets/…)` **dentro del CSS** a `__PSL_ASSET_BASE__`
 (antes solo HTML y JS; el poster de fondo del hero quedaba con ruta rota en WP). Al recompilar todos los bloques,
 cualquier asset referenciado desde CSS queda correcto.
+
+---
+
+## Soccer School — landing `/school` (2026-10-07)
+
+Landing de **preinscripción** del PSLSC Soccer School (chicos de 5 a 13), publicada en el proyecto de Vercel como
+`pslsc.vercel.app/school`. **No es WordPress ni pasa por `tools/build-blocks.py`**: es una página propia y
+autocontenida (como `shop/`), con la identidad del Soccer School (`docs/soccer-school/`), no la del sitio.
+Es la v1, que capta leads mientras se arma el micrositio definitivo, que después la reemplaza en la misma URL.
+
+El form envía por proxy a un **form nuevo de ActiveCampaign**, con el mismo patrón que tryouts/newsletter/partners.
+**Hasta completar `school/config.js` no envía**: muestra error y no finge éxito. Cómo conectarlo, pendientes
+(copy, texto legal, rangos de edad, licencias de Druk XCond y Coolvetica) y cómo verla: **`school/README.md`**.
+Spec y plan en `docs/superpowers/`.

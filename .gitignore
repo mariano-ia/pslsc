@@ -39,3 +39,6 @@ assets/brand/wordmark-sc-aqua.png
 dist/_preview/
 __pycache__/
 *.pyc
+
+# brainstorming companion (mockups locales)
+.superpowers/

@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PSLSC Soccer School — Pre-register now</title>
+  <!-- COPY: revisar (description y Open Graph) -->
+  <meta name="description" content="The official soccer school of Port St. Lucie SC, for children ages 5–13. Pre-register now to be the first to get location, schedule and pricing.">
+  <link rel="canonical" href="https://pslsc.vercel.app/school">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pslsc.vercel.app/school">
+  <meta property="og:title" content="PSLSC Soccer School — Your journey starts here">
+  <meta property="og:description" content="Learn. Play. Enjoy. Soccer for children ages 5–13 at Port St. Lucie SC. Pre-registration is open.">
+  <meta property="og:image" content="https://pslsc.vercel.app/school/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#FF0048">
+  <link rel="icon" type="image/png" href="/school/assets/favicon.png">
+  <link rel="apple-touch-icon" href="/school/assets/apple-touch-icon.png">
+  <link rel="preload" href="/school/assets/fonts/Druk-Heavy.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/school/school.css">
+  <script type="module" src="/school/school.js"></script>
+</head>
+<body>
+
+  <!-- Barra del club: lo primero que se ve dice Port St. Lucie. Sin links: no queremos fugas antes del form. -->
+  <header class="clubbar">
+    <div class="wrap">
+      <img src="/school/assets/crest-aqua.webp" width="562" height="600" alt="">
+      <div>
+        <p class="clubbar__name d">Port St. Lucie SC</p>
+        <p class="clubbar__city">Port St. Lucie, Florida</p>
+      </div>
+      <!-- COPY: revisar -->
+      <p class="clubbar__tag">Official<br>Soccer School</p>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero + formulario -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero__grid">
+        <div class="hero__intro">
+          <!-- COPY: revisar -->
+          <p class="pill">Pre-registration open · Ages 5–13</p>
+          <img class="hero__logo" src="/school/assets/logo-aqua.webp" width="900" height="428" alt="PSLSC Soccer School">
+          <h1 class="hero__title d" id="hero-title">Your journey starts here.</h1>
+          <p class="hero__lpe d">Learn. Play. Enjoy.</p>
+          <p class="hero__lead">A place for children ages 5–13 to learn, play and enjoy soccer while becoming part of Port St. Lucie SC.</p>
+        </div>
+
+        <div class="card" id="preregister">
+          <!-- COPY: revisar (todo el formulario, el texto legal y el mensaje de éxito) -->
+          <form class="form" data-ss-form novalidate>
+            <h2 class="form__title d">Pre-register now</h2>
+            <p class="form__sub">Free and no commitment. Be the first to get location, schedule and pricing, and register before anyone else.</p>
+
+            <div class="field">
+              <label for="ss-name">Parent’s name</label>
+              <input class="input" id="ss-name" name="parentName" type="text" autocomplete="name" placeholder="First and last name" required>
+            </div>
+
+            <div class="field">
+              <label for="ss-email">Email</label>
+              <input class="input" id="ss-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com" required>
+            </div>
+
+            <fieldset class="field" data-ss-ages>
+              <legend>Your kids’ ages <em>(select all that apply)</em></legend>
+              <div class="chips">
+                <label class="chip"><input type="checkbox" name="kidsAges" value="5"><span>5</span></label>
+                <label class="chip"><input type="checkbox" name="kidsAges" value="6"><span>6</span></label>
+                <label class="chip"><input type="checkbox" name="kidsAges" value="7"><span>7</span></label>
+                <label class="chip"><input type="checkbox" name="kidsAges" value="8"><span>8</span></label>
+                <label class="chip"><input type="checkbox" name="kidsAges" value="9"><span>9</span></label>
+                <label class="chip"><input type="checkbox" name="kidsAges" value="10"><span>10</span></label>
+                <label class="chip"><input type="checkbox" name="kidsAges" value="11"><span>11</span></label>
+                <label class="chip"><input type="checkbox" name="kidsAges" value="12"><span>12</span></label>
+                <label class="chip"><input type="checkbox" name="kidsAges" value="13"><span>13</span></label>
+              </div>
+            </fieldset>
+
+            <label class="check">
+              <input type="checkbox" name="consent" required>
+              <span>I’m the parent or guardian and agree to be contacted about the Soccer School.</span>
+            </label>
+
+            <!-- Honeypot: invisible para personas; si llega con datos, el envío se descarta. -->
+            <div class="hp" aria-hidden="true">
+              <label for="ss-company">Company</label>
+              <input id="ss-company" name="company" type="text" tabindex="-1" autocomplete="off">
+            </div>
+
+            <button class="btn" type="submit">
+              Pre-register now
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12h16M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"/></svg>
+            </button>
+            <p class="msg" data-ss-msg role="status" aria-live="polite"></p>
+            <p class="legal">By clicking Pre-register now, you agree to the <a href="https://www.uslsoccer.com/usl-privacy-policy" target="_blank" rel="noopener noreferrer">USL privacy policy</a> and to receive emails from USL.</p>
+          </form>
+
+          <div class="success" data-ss-success tabindex="-1" hidden>
+            <h2 class="success__title d">You’re on the list!</h2>
+            <p>We’ll email <strong data-ss-email></strong> as soon as registration opens, before anyone else.</p>
+          </div>
+
+          <!-- Acá school.js monta el form oculto de ActiveCampaign (embed simple) que recibe los datos. -->
+          <div id="ac-proxy" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Learn / Play / Enjoy — texto de la editora, tal cual -->
+    <section class="section" data-reveal aria-labelledby="pillars-title">
+      <div class="wrap">
+        <h2 class="visually-hidden" id="pillars-title">Learn. Play. Enjoy.</h2>
+        <ul class="pillars">
+          <li class="pillar"><h3 class="pillar__name d">Learn.</h3><p>Learn soccer fundamentals through play.</p></li>
+          <li class="pillar"><h3 class="pillar__name d">Play.</h3><p>Play, participate and share experiences with other children.</p></li>
+          <li class="pillar"><h3 class="pillar__name d">Enjoy.</h3><p>Have fun and enjoy soccer in a safe, positive and welcoming environment.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Categorías. Rangos de edad pendientes de definir. -->
+    <section class="section section--tight" data-reveal aria-labelledby="journey-title">
+      <div class="wrap">
+        <!-- COPY: revisar (título y descripciones, adaptadas de la pieza "Categorías" del manual) -->
+        <h2 class="h2 d" id="journey-title">Your journey</h2>
+        <ul class="cats">
+          <li class="cat cat--explorers"><h3 class="d">Little Explorers</h3><p>Discovering soccer and starting a new adventure at the club.</p></li>
+          <li class="cat cat--sailors"><h3 class="d">Junior Sailors</h3><p>Finding their place in the crew while they play, learn and gain confidence.</p></li>
+          <li class="cat cat--mates"><h3 class="d">First Mates</h3><p>More experience and more independence within the crew.</p></li>
+          <li class="cat cat--captains"><h3 class="d">Junior Captains</h3><p>The most advanced stage: independence, leadership and belonging.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Por qué PSLSC -->
+    <section class="section section--ink" data-reveal aria-labelledby="why-title">
+      <div class="wrap split">
+        <!-- COPY: revisar (traducido del castellano de la editora) -->
+        <h2 class="h2 d why__title" id="why-title">Why choose Port St. Lucie SC Soccer School?</h2>
+        <ul class="reasons">
+          <li>Experienced coaches.</li>
+          <li>A shared methodology.</li>
+          <li>Learning and developing values on and off the field.</li>
+          <li>A positive and safe environment.</li>
+          <li>The opportunity to learn and play within a professional soccer club.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- FAQ — preguntas y respuestas de la editora, tal cual (salvo la última) -->
+    <section class="section" data-reveal aria-labelledby="faq-title">
+      <div class="wrap split">
+        <h2 class="h2 d" id="faq-title">Your questions answered</h2>
+        <div class="faq">
+          <details open>
+            <summary>What ages is the Soccer School designed for?</summary>
+            <p>The Soccer School welcomes children ages 5–13.</p>
+          </details>
+          <details>
+            <summary>Does my child need previous soccer experience?</summary>
+            <p>Children with or without previous soccer experience are welcome.</p>
+          </details>
+          <details>
+            <summary>What will my child learn?</summary>
+            <p>Children will learn soccer fundamentals through play while developing confidence, important values, and social skills.</p>
+          </details>
+          <details>
+            <summary>Who will be coaching the children?</summary>
+            <p>Experienced coaches working with a shared methodology.</p>
+          </details>
+          <!-- COPY: revisar (pregunta nuestra) -->
+          <details>
+            <summary>Does pre-registering commit me to anything?</summary>
+            <p>No. Pre-registering is free and doesn’t commit you to anything. You’ll be the first to hear about location, schedule and pricing, and you’ll get to register before registration opens to everyone.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cierre: segundo CTA, vuelve al formulario -->
+    <section class="section section--red" data-reveal>
+      <div class="wrap">
+        <p class="closing__title d">Your journey starts here.</p>
+        <a class="btn btn--aqua" href="#preregister">
+          Pre-register now
+          <svg class="arrow arrow--up" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12h16M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"/></svg>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer del club: escudo, ciudad, sitio y redes (mismos links que el footer del sitio) -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__club">
+        <img src="/school/assets/crest-aqua.webp" width="562" height="600" alt="">
+        <div>
+          <p class="footer__name d">Port St. Lucie SC</p>
+          <p>Port St. Lucie, Florida</p>
+        </div>
+      </div>
+      <div class="footer__links">
+        <a class="footer__site" href="https://www.portstluciesc.com/" target="_blank" rel="noopener noreferrer">portstluciesc.com</a>
+        <ul class="social">
+          <li><a href="https://www.instagram.com/portstluciesc" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>
+          </a></li>
+          <li><a href="https://www.facebook.com/profile.php?id=61582912806573" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a></li>
+          <li><a href="https://x.com/portstluciesc" target="_blank" rel="noopener noreferrer" aria-label="X">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+          </a></li>
+          <li><a href="https://www.tiktok.com/@portstluciesc" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+          </a></li>
+          <li><a href="https://www.youtube.com/@portstluciesc" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a></li>
+          <li><a href="https://www.linkedin.com/company/port-saint-lucie-sc/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

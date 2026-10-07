@@ -13,6 +13,7 @@ se pega como un **bloque HTML** en el constructor visual.
 | Ver los bloques ya compilados | [`dist/`](dist/) — `blocks/` (pegar) · `upload/` (hostear) |
 | Regenerar los bloques desde el fuente | [`tools/README.md`](tools/README.md) |
 | La **tienda** (mockup a medida, NO va por bloques) | [`shop/`](shop/) — ver [`shop/README.md`](shop/README.md) |
+| La **landing del Soccer School** (`/school`, en Vercel, NO va a WordPress) | [`school/`](school/) — ver [`school/README.md`](school/README.md) |
 | La revisión/auditoría del prototipo | [`docs/auditoria-2026-07-10.md`](docs/auditoria-2026-07-10.md) |
 | **Luca** (mascota): character sheet, paleta y prompts canónicos para imagen/video | [`docs/luca-character-sheet.md`](docs/luca-character-sheet.md) |
 | Producir un **video con Luca** (método, herramientas, revisión) | [`docs/luca-video-playbook.md`](docs/luca-video-playbook.md) |
@@ -23,6 +24,7 @@ se pega como un **bloque HTML** en el constructor visual.
 python3 -m http.server 4321
 # sitio:   http://localhost:4321/pages/home.html   (sumate · partners · academy · season_tickets)
 # tienda:  http://localhost:4321/shop/
+# school:  http://localhost:4321/school/
 ```
 
 Las páginas de `pages/` arman el sitio completo para previsualizar (hacen `fetch` de los bloques de
@@ -40,6 +42,7 @@ pages/      SOLO preview: arman las páginas completas
 tools/      build-blocks.py → compila los bloques para WordPress
 dist/       SALIDA para WordPress: blocks/ (pegar) · upload/ (hostear) · UPLOAD.md (instructivo)
 shop/       tienda oficial — mockup A MEDIDA (HTML autocontenido). NO va por bloques (ver shop/README.md)
+school/     landing del Soccer School (preinscripción) en pslsc.vercel.app/school. NO va a WordPress (ver school/README.md)
 docs/       handoff-notes.md (la guía completa) + auditoría
 ```
 
