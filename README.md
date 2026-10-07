@@ -4,6 +4,25 @@ Prototipo funcional del sitio de **Port St. Lucie SC**, en HTML + CSS + JavaScri
 navegador — **sin frameworks**. Se entrega para portar a **WordPress** (WP VIP), donde cada sección
 se pega como un **bloque HTML** en el constructor visual.
 
+## Ramas (desde 2026-10-07)
+
+| Rama | Qué es | Formato | Se ve en |
+|---|---|---|---|
+| `main` | **Solo lo que está en producción** del sitio del club. | Bloques de WordPress, salvo indicación contraria | `pslsc.vercel.app` · los bloques que se pegan en WP salen de acá |
+| `develop` | Rama de trabajo del sitio del club. Va adelantada a `main` **a propósito**. | Bloques de WordPress, salvo indicación contraria | `pslsc-git-develop-marianonoceti-gmailcoms-projects.vercel.app` |
+| `school` | El **micrositio del Soccer School**, que es otro sitio. Se trabaja **solo en esta rama**: no se mezcla con `develop` ni con `main`. | **Sin las restricciones de WordPress**: HTML/CSS/JS libre, identidad propia | `pslsc-git-school-marianonoceti-gmailcoms-projects.vercel.app/school` |
+
+Reglas:
+
+- **Nada sube a `main` sin doble check de Mariano.** Antes de cualquier merge o push a `main` se muestra qué
+  sale a producción (commits y archivos) y se espera una confirmación explícita. `main` es producción.
+- Trabajo del sitio del club → `develop`, y se promueve a `main` cuando está aprobado. Si se arregla algo
+  directo en `main` (hotfix), se trae a `develop` enseguida para que no diverjan.
+- Trabajo del Soccer School → `school`, y nada más que `school`.
+- `main` y `develop` respetan el formato de **bloques de WordPress** (CSS bajo `.pslsc`, JS como data URI,
+  sin frameworks; ver la §2 de [`docs/handoff-notes.md`](docs/handoff-notes.md)), salvo que se indique lo
+  contrario. `school` no tiene ese límite.
+
 ## Por dónde empezar
 
 | Si querés… | Andá a |
@@ -13,7 +32,7 @@ se pega como un **bloque HTML** en el constructor visual.
 | Ver los bloques ya compilados | [`dist/`](dist/) — `blocks/` (pegar) · `upload/` (hostear) |
 | Regenerar los bloques desde el fuente | [`tools/README.md`](tools/README.md) |
 | La **tienda** (mockup a medida, NO va por bloques) | [`shop/`](shop/) — ver [`shop/README.md`](shop/README.md) |
-| La **landing del Soccer School** (`/school`, en Vercel, NO va a WordPress) | [`school/`](school/) — ver [`school/README.md`](school/README.md) |
+| El **micrositio del Soccer School** (rama `school`, NO va a WordPress) | [`school/`](school/) — ver [`school/README.md`](school/README.md) |
 | La revisión/auditoría del prototipo | [`docs/auditoria-2026-07-10.md`](docs/auditoria-2026-07-10.md) |
 | **Luca** (mascota): character sheet, paleta y prompts canónicos para imagen/video | [`docs/luca-character-sheet.md`](docs/luca-character-sheet.md) |
 | Producir un **video con Luca** (método, herramientas, revisión) | [`docs/luca-video-playbook.md`](docs/luca-video-playbook.md) |

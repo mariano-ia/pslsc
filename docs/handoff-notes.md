@@ -9,6 +9,11 @@ templating `{{ }}`). Todo lo que ves corre tal cual en cualquier navegador.
 > La **nav** y las **noticias** son nativas del template de USL — no van en estos bloques.
 > El paso a paso está en **`dist/UPLOAD.md`**. Leé la **§2** antes de tocar nada.
 
+> **Ramas (desde 2026-10-07):** los bloques para WordPress se compilan desde **`main`**, que tiene solo lo
+> que está en producción. `develop` es trabajo en curso del sitio y puede ir adelantada. `school` es otro
+> micrositio (Soccer School): no va a WordPress ni usa bloques. Nada sube a `main` sin doble check de
+> Mariano. Detalle en la sección "Ramas" del `README.md`.
+
 Última actualización: 2026-08-27 · Contacto de diseño: Mariano.
 
 ---
@@ -400,8 +405,9 @@ cualquier asset referenciado desde CSS queda correcto.
 
 ## Soccer School — landing `/school` (2026-10-07)
 
-Landing de **preinscripción** del PSLSC Soccer School (chicos de 5 a 13), publicada en el proyecto de Vercel como
-`pslsc.vercel.app/school`. **No es WordPress ni pasa por `tools/build-blocks.py`**: es una página propia y
+Landing de **preinscripción** del PSLSC Soccer School (chicos de 5 a 13). Es otro micrositio y vive en la **rama
+`school`**; la v1 también quedó en `main` (`pslsc.vercel.app/school`) porque se mergeó antes de separar la rama.
+**No es WordPress ni pasa por `tools/build-blocks.py`**: es una página propia y
 autocontenida (como `shop/`), con la identidad del Soccer School (`docs/soccer-school/`), no la del sitio.
 Es la v1, que capta leads mientras se arma el micrositio definitivo, que después la reemplaza en la misma URL.
 

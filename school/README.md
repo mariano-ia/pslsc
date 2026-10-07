@@ -3,9 +3,17 @@
 Landing mínima para captar **preinscripciones** de familias (chicos de 5 a 13 años) mientras se arma el
 micrositio definitivo, que después la reemplaza en la misma URL.
 
-Vive en **`pslsc.vercel.app/school`**, el mismo proyecto de Vercel que el prototipo. **No va a WordPress ni
-pasa por `tools/build-blocks.py`**: es una página propia y autocontenida, como `shop/`. No importa nada de
-`tokens/`, `native/` ni `custom/`, así que se muda a otro dominio copiando la carpeta.
+**Rama `school`.** El Soccer School es otro micrositio: se trabaja **solo en la rama `school`**, sin mezclarlo
+con `develop` ni con `main` (ver "Ramas" en el `README.md` de la raíz). Se ve en
+`pslsc-git-school-marianonoceti-gmailcoms-projects.vercel.app/school`, la URL fija de la rama en Vercel. La v1
+también quedó en `main` (`pslsc.vercel.app/school`) porque se mergeó ahí el 2026-10-07, antes de separar la rama.
+
+**Sin las restricciones de WordPress.** No va a WP ni pasa por `tools/build-blocks.py`, así que no aplican las
+reglas de bloques (CSS bajo `.pslsc`, JS como data URI, etc.): HTML/CSS/JS libre y con identidad propia. Hoy es
+una página autocontenida que no importa nada de `tokens/`, `native/` ni `custom/`, así que se muda a otro dominio
+copiando la carpeta. Mismo proyecto de Vercel que el prototipo.
+
+Nada sube a `main` sin doble check de Mariano.
 
 Spec: [`docs/superpowers/specs/2026-10-07-soccer-school-landing-design.md`](../docs/superpowers/specs/2026-10-07-soccer-school-landing-design.md) ·
 Plan: [`docs/superpowers/plans/2026-10-07-soccer-school-landing.md`](../docs/superpowers/plans/2026-10-07-soccer-school-landing.md) ·
