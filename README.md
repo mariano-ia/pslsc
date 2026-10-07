@@ -18,7 +18,10 @@ Reglas:
   sale a producción (commits y archivos) y se espera una confirmación explícita. `main` es producción.
 - Trabajo del sitio del club → `develop`, y se promueve a `main` cuando está aprobado. Si se arregla algo
   directo en `main` (hotfix), se trae a `develop` enseguida para que no diverjan.
-- Trabajo del Soccer School → `school`, y nada más que `school`.
+- Trabajo del Soccer School → `school`, y nada más que `school`. `school` **no se mergea con `develop` ni con
+  `main` en ninguna dirección**: si hace falta algo de un lado, se copia o se hace cherry-pick. (`develop` no
+  tiene la carpeta `school/`, y `main` tampoco desde el próximo pase a producción: un merge le borraría el
+  micrositio a `school`).
 - `main` y `develop` respetan el formato de **bloques de WordPress** (CSS bajo `.pslsc`, JS como data URI,
   sin frameworks; ver la §2 de [`docs/handoff-notes.md`](docs/handoff-notes.md)), salvo que se indique lo
   contrario. `school` no tiene ese límite.

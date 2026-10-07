@@ -405,8 +405,9 @@ cualquier asset referenciado desde CSS queda correcto.
 
 ## Soccer School — landing `/school` (2026-10-07)
 
-Landing de **preinscripción** del PSLSC Soccer School (chicos de 5 a 13). Es otro micrositio y vive en la **rama
-`school`**; la v1 también quedó en `main` (`pslsc.vercel.app/school`) porque se mergeó antes de separar la rama.
+Landing de **preinscripción** del PSLSC Soccer School (chicos de 5 a 13). Es otro micrositio y vive solo en la
+**rama `school`** (no se mergea con `develop` ni con `main`). La v1 se mergeó a `main` antes de separar la rama y
+sale de ahí en el próximo pase de `develop` a producción.
 **No es WordPress ni pasa por `tools/build-blocks.py`**: es una página propia y
 autocontenida (como `shop/`), con la identidad del Soccer School (`docs/soccer-school/`), no la del sitio.
 Es la v1, que capta leads mientras se arma el micrositio definitivo, que después la reemplaza en la misma URL.

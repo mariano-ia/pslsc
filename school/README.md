@@ -5,8 +5,10 @@ micrositio definitivo, que después la reemplaza en la misma URL.
 
 **Rama `school`.** El Soccer School es otro micrositio: se trabaja **solo en la rama `school`**, sin mezclarlo
 con `develop` ni con `main` (ver "Ramas" en el `README.md` de la raíz). Se ve en
-`pslsc-git-school-marianonoceti-gmailcoms-projects.vercel.app/school`, la URL fija de la rama en Vercel. La v1
-también quedó en `main` (`pslsc.vercel.app/school`) porque se mergeó ahí el 2026-10-07, antes de separar la rama.
+`pslsc-git-school-marianonoceti-gmailcoms-projects.vercel.app/school`, la URL fija de la rama en Vercel (para la
+pauta conviene asignarle un dominio propio a esta rama en Vercel). La v1 se mergeó a `main` el 2026-10-07, antes
+de separar la rama: `pslsc.vercel.app/school` sigue viva hasta el próximo pase de `develop` a producción, que la
+saca. **No mergear `develop` ni `main` en esta rama**: no tienen `school/`, y el merge borraría el micrositio.
 
 **Sin las restricciones de WordPress.** No va a WP ni pasa por `tools/build-blocks.py`, así que no aplican las
 reglas de bloques (CSS bajo `.pslsc`, JS como data URI, etc.): HTML/CSS/JS libre y con identidad propia. Hoy es
