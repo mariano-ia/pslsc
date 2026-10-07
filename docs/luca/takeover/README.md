@@ -55,8 +55,8 @@ kie: **recargar antes de cualquier regeneración.**
 ## Integración web
 
 Bloque `native/season_tickets/00-takeover` (+ página de preview `pages/season_tickets.html` = Home + bloque).
-Overlay fijo solo mobile: video en escenario 9:16 → al terminar, el último frame real como imagen en la
-misma caja + CTAs "Buy my season tickets →" (`data-buy-href` → `pasarela.html`, placeholder de la pasarela; en WP
+Overlay fijo solo mobile: video en escenario 9:16; a los 4.5 s, cuando Luca terminó de empujar la home falsa
+fuera de pantalla, entran los CTAs anclados abajo (zona libre de Luca) y quedan; al terminar, el último frame real como imagen en la misma caja. CTAs: "Buy my season tickets →" (`data-buy-href` → `pasarela.html`, placeholder de la pasarela; en WP
 `__URL_PASARELA__`) y "I don't want season tickets" (cierra y deja la página). El video corre en cada carga. Detalle en `docs/handoff-notes.md`, sección Season Tickets.
 
 ## Historial

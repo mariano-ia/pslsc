@@ -1,16 +1,17 @@
 <!--
   Bloque 00 · Takeover — Season Tickets. 🟦 A medida. SOLO MOBILE (≤ 820px); en desktop no se muestra.
   Overlay fijo a pantalla completa, por encima de la nav del template. Reproduce el video del takeover
-  (home falsa → Luca empuja → "SEASON TICKETS ARE HERE.") dentro de un escenario 9:16 centrado y, al
-  terminar, lo reemplaza por el último frame REAL del video como imagen en la misma caja, y entran los
-  dos CTA. "I don't want season tickets" cierra el overlay y deja esta misma página (la home de Season Tickets). Si el autoplay falla (ahorro de datos, bajo consumo), salta directo a la interfaz.
+  (home falsa → Luca empuja → "SEASON TICKETS ARE HERE.") dentro de un escenario 9:16 centrado. Los dos CTA
+  entran a los 4.5 s, cuando Luca terminó de empujar la home falsa fuera de pantalla (data-cta-at; medido en
+  el video: el panel sale del todo a ~4.4 s), así nunca conviven con los botones falsos. Anclados abajo, quedan; al terminar, el video se
+  reemplaza por el último frame REAL como imagen en la misma caja. "I don't want season tickets" cierra el overlay y deja esta misma página (la home de Season Tickets). Si el autoplay falla (ahorro de datos, bajo consumo), salta directo a la interfaz.
   El video y la imagen final se cargan SOLO en mobile (data-src → src desde el JS): desktop no descarga nada.
   Página: pages/season_tickets.html = home + este bloque. Producción del video: docs/luca/takeover/README.md.
   Compra: data-buy-href → pasarela.html (placeholder "Pasarela de pago"; en WP, token __URL_PASARELA__).
   El video se muestra en CADA carga de la página (decisión de Mariano, 2026-10-06); para mostrarlo una vez por
   sesión, agregar data-once="session" a la section.
 -->
-<section class="st-takeover" id="st-takeover" aria-label="Season tickets are here" data-buy-href="pasarela.html">
+<section class="st-takeover" id="st-takeover" aria-label="Season tickets are here" data-buy-href="pasarela.html" data-cta-at="4.5">
   <div class="st-takeover__stage">
     <video class="st-takeover__video" muted playsinline preload="auto"
            data-poster="/assets/videos/takeover-season-tickets-poster.webp"

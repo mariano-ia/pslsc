@@ -24,10 +24,12 @@
 .st-takeover.is-final .st-takeover__video { visibility: hidden; }
 .st-takeover.is-final .st-takeover__final { opacity: 1; }
 
-/* CTAs: debajo de la bajada ("BE THERE FROM THE BEGINNING." termina al 61% del alto del frame),
-   alineados con el margen izquierdo del titular (6%). Entran con fade + rise, escalonados. */
+/* CTAs: anclados ABAJO del escenario (≈80–95% del alto). Es la única franja libre de Luca durante todo
+   el video, y en la home falsa coincide con sus botones ("Become a Founder" / "See the project"), así
+   los reales ocupan su lugar cuando ya salieron. Alineados con el margen del titular (6%). Entran a los 4.5 s,
+   con la home falsa ya fuera de pantalla (data-cta-at, ver JS), con fade + rise, escalonados, y quedan. */
 .st-takeover__cta {
-  position: absolute; left: 6%; right: 6%; top: 64.5%;
+  position: absolute; left: 6%; right: 6%; bottom: 4.5%;
   display: flex; flex-direction: column; gap: 12px; align-items: flex-start;
 }
 .st-takeover__cta .psl-btn {
@@ -37,7 +39,10 @@
 }
 .st-takeover__cta .psl-btn:nth-child(2) { transition-delay: .12s; }
 .st-takeover.is-cta .st-takeover__cta .psl-btn { opacity: 1; transform: none; }
-.st-takeover__cta .cta-secondary { color: var(--color-text-muted); }
+.st-takeover__cta .cta-secondary {          /* fondo propio: se lee sobre la home falsa, Luca y la pared */
+  color: var(--color-text); background: rgba(12, 12, 10, .62);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
 .st-takeover__cta .cta-secondary:hover { color: var(--color-text); }
 
 .st-takeover__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

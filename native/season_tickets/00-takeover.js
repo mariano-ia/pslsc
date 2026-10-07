@@ -1,9 +1,9 @@
 /**
  * Takeover — Season Tickets (solo mobile). 🟦 A medida.
  *
- * Secuencia: overlay con el video (poster = primer frame real = la home falsa) → al `ended` se
- * muestra el último frame REAL del video como imagen en la misma caja (corte exacto) → entran los
- * dos CTA. "I don't want" cierra el overlay con fade y destraba el scroll: queda esta misma página.
+ * Secuencia: overlay con el video (poster = primer frame real = la home falsa) → a los 4.5 s, cuando Luca
+ * terminó de empujar la home falsa fuera de pantalla (data-cta-at), entran los dos CTA y quedan → al `ended` se muestra el último frame REAL del
+ * video como imagen en la misma caja (corte exacto); los CTA siguen ahí. "I don't want" cierra el overlay con fade y destraba el scroll: queda esta misma página.
  * "Buy" navega a data-buy-href (pasarela.html, placeholder; en WP el permalink real). El video se muestra
  * en cada carga salvo data-once="session".
  *
@@ -61,6 +61,16 @@ function initTakeover(root = document) {
     finish(); return;
   }
 
+  // CTAs: entran cuando Luca terminó de empujar la home falsa fuera de pantalla (data-cta-at segundos,
+  // default 4.5; medido en el video: el panel sale del todo a ~4.4 s) y quedan hasta el final. Antes de eso
+  // se pisarían con los botones de la home falsa. Si se regenera el video, volver a medir este tiempo.
+  const ctaAt = parseFloat(ov.dataset.ctaAt || '4.5');
+  const onTime = () => {
+    if (video.currentTime < ctaAt) return;
+    ov.classList.add('is-cta');
+    video.removeEventListener('timeupdate', onTime);
+  };
+  video.addEventListener('timeupdate', onTime);
   video.addEventListener('ended', finish, { once: true });
   video.addEventListener('error', finish, { once: true });
   video.addEventListener('loadedmetadata', () => {

@@ -355,8 +355,10 @@ Qué hace el bloque (solo en viewports ≤ 820px; en desktop se auto-remueve y n
 2. Reproduce `assets/videos/takeover-season-tickets.mp4` (muteado, autoplay, `playsinline`) dentro de un
    escenario 9:16 centrado; el poster es el primer frame real (la home falsa). En teléfonos más altos
    que 9:16 quedan barras en ink arriba y abajo.
-3. Al `ended`, muestra `takeover-season-tickets-last-frame.webp` (el último frame real) en la misma caja,
-   corte exacto, y entran dos CTA: **"Buy my season tickets →"** (`data-buy-href` → `pasarela.html`, placeholder "Pasarela de
+3. A los 4.5 s, cuando Luca terminó de empujar la home falsa fuera de pantalla (`data-cta-at`; si se regenera el
+   video, volver a medir), entran dos CTA anclados abajo del escenario (franja libre de Luca en todo el clip) y
+   quedan hasta el final. Al `ended`, muestra
+   `takeover-season-tickets-last-frame.webp` (el último frame real) en la misma caja, corte exacto. Los CTA: **"Buy my season tickets →"** (`data-buy-href` → `pasarela.html`, placeholder "Pasarela de
    pago"; en WP el token `__URL_PASARELA__`, ver UPLOAD.md) y **"I don't want season tickets"** (cierra el overlay y
    deja esta misma página). El video se muestra en **cada carga** (decisión del cliente); con `data-once="session"`
    en la section pasa a una vez por sesión.
