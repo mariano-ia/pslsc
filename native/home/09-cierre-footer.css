@@ -165,6 +165,16 @@
 .footer__col a { font: 400 14px/1 var(--font-body); color: var(--color-text-muted); text-decoration: none; }
 .footer__col a:hover { color: var(--color-text); }
 
+/* Redes: fila de íconos circulares, monocromos, en currentColor; hover aqua */
+.footer__social { display: flex; gap: 10px; flex-wrap: wrap; }
+.footer__social a {
+  width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--color-line-strong); border-radius: 50%;
+  color: var(--color-text-muted); transition: color .2s ease, border-color .2s ease, transform .2s ease;
+}
+.footer__social a:hover { color: var(--color-aqua); border-color: var(--color-aqua); transform: translateY(-1px); }
+.footer__social svg { width: 17px; height: 17px; display: block; }
+
 .footer__bottom {
   margin-top: 44px;
   padding-top: 22px;
