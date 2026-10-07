@@ -45,6 +45,7 @@ BLOCKS = [
     ("academy", "a05-parents"), ("academy", "a06-faq"), ("academy", "a07-tryouts"),
     ("staff", "st01-staff"),
     ("season_tickets", "00-takeover"),   # página Season Tickets = Home + este bloque (solo mobile)
+    ("season_tickets", "01-hero"),       # hero de la Home con el CTA "Buy season tickets" (derivado vía overrides.json)
     ("season_tickets", "02b-banner"),    # banner sticky bajo los destacados (02-stats)
 ]
 
@@ -228,8 +229,25 @@ def base_css():
 {NS} .psl-diag.is-ok {{ background:rgba(14,140,121,.12); color:var(--color-aqua-deep); }}"""
 
 # ─────────────────────────────────────────────────────────────── build de un bloque
+def load_overrides(page):
+    """native/{page}/overrides.json: bloques derivados de otro ({"from": "home/01-hero", "replace": [[a, b], ...]}).
+       Mismo archivo que usa la página de preview, así la regla vive en un solo lugar."""
+    import json
+    path = os.path.join(REPO, f"native/{page}/overrides.json")
+    return json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
+
 def build_block(page, name):
-    html = read(f"native/{page}/{name}.html")
+    src_page = page
+    own_html = os.path.join(REPO, f"native/{page}/{name}.html")
+    ov = load_overrides(page).get(name)
+    if not os.path.exists(own_html) and ov:
+        src_page, src_name = ov["from"].split("/", 1)
+        html = read(f"native/{src_page}/{src_name}.html")
+        for a, b in ov["replace"]:
+            assert a in html, f"override de {page}/{name}: no se encontró el texto a reemplazar: {a[:60]}"
+            html = html.replace(a, b)
+    else:
+        html = read(f"native/{page}/{name}.html")
     html = re.sub(r"<!--.*?-->", "", html, flags=re.S).strip()   # sin comentarios (rompen el parser de WP)
 
     # Lo que el bloque REALMENTE usa se detecta sobre el HTML sin comentarios: un bloque archivado
@@ -245,16 +263,16 @@ def build_block(page, name):
     css_files = ["tokens/tokens.css", "native/_patterns/motion.css"]
     if uses_pcard: css_files.append("native/_patterns/cards.css")
     if uses_ptl:   css_files.append("native/home/03-project.css")
-    own_css = f"native/{page}/{name}.css"
+    own_css = f"native/{src_page}/{name}.css"
     if os.path.exists(os.path.join(REPO, own_css)): css_files.append(own_css)
     for c in comps:
         if c in COMPONENT_CSS: css_files.append("custom/" + COMPONENT_CSS[c])
-    css = "\n".join(namespace_css(read(f)) for f in css_files)
+    css = rewrite_assets("\n".join(namespace_css(read(f)) for f in css_files))   # url(/assets/...) en CSS también va a ASSET_BASE
 
     # JS de bloque propio (native/{page}/{name}.js) + compartido (la timeline .ptl reusa
     # 03-project.js igual que su CSS). Cada uno aporta su init, que el boot llama scopeado.
     block_mods = []
-    own_js = f"native/{page}/{name}.js"
+    own_js = f"native/{src_page}/{name}.js"
     if os.path.exists(os.path.join(REPO, own_js)):
         block_mods.append(block_js(own_js))
     if uses_ptl:
