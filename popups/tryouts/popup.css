@@ -1,0 +1,319 @@
+/* POPUP DE TRYOUTS (35to ajuste, 2026-09-26) — sec_popup 14812 + WPForms 14813.
+
+   El popup es el post type nativo "Popups" (sec_popup) del tema de SportsEngine: el contenedor
+   es .sec-popup-container > .popup.lightbox y adentro va lo que se cargue en el editor. Ese
+   editor solo acepta 12 bloques (no hay Custom HTML), así que el contenido es:
+
+     Grupo con clase "psl-tryout-popup"   (Bloque > Avanzado > Clase CSS adicional)
+     ├── Encabezado H2   "Hey amigo, ready for your shot?"
+     ├── Párrafo         "Show us your fútbol and earn your spot in the family"
+     └── Bloque WPForms  form 14813 "Tryout Request (Popup)"
+
+   DÓNDE SE PEGA: en el propio popup, NO en el CSS adicional del sitio. Bloque WPForms →
+   Avanzado → "Custom CSS" (el de WPForms; el "Additional CSS" de Ghostkit solo acepta
+   propiedades sueltas y no sirve). WPForms lo imprime tal cual, sin prefijos ni escapes, en un
+   <style id="wpforms-custom-css-14813-block-…"> pegado al formulario (verificado 26-09 con el
+   renderizador de bloques: `>`, `:has()`, comillas y "\2192" salen intactos). Así el CSS vive y
+   muere con el popup: se borra el popup y se va con él. Esta copia es la fuente de referencia.
+
+   Todo el CSS cuelga de .psl-tryout-popup (la tarjeta y los textos) o de #wpforms-14813 (el
+   formulario), nunca de las clases genéricas del tema ni de WPForms: así no se mueve ningún otro
+   popup ni ningún otro formulario del sitio.
+
+   Copia la tarjeta del form de Academy (native/academy/a07-tryouts.css, .tryouts__card/.tform):
+   mismos colores, radios, tipografías, chevron aqua en los selects, año+posición en dos columnas
+   y la frase de USL debajo del botón. Los tokens del sitio (--color-*) viven bajo .pslsc y el
+   popup está fuera de ese wrapper, por eso acá van los valores literales. */
+
+/* El lightbox del tema no lleva caja propia cuando adentro está nuestra tarjeta */
+.sec-popup-container .popup.lightbox:has(.psl-tryout-popup) {
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ----- tarjeta ----- */
+.psl-tryout-popup {
+  width: min(520px, calc(100vw - 32px));
+  max-height: calc(100dvh - 96px);
+  overflow-y: auto;
+  margin: 0 auto !important;
+  padding: clamp(24px, 3vw, 34px) !important;
+  background: #131118 !important;
+  border: 1px solid rgba(244, 241, 234, .16);
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .45);
+  color: #F4F1EA;
+  font-family: 'Proxima Nova', system-ui, sans-serif;
+  text-align: left;
+}
+.psl-tryout-popup .wp-block-group__inner-container > *,
+.psl-tryout-popup > * { margin-block: 0 !important; }
+
+.psl-tryout-popup h2 {
+  margin: 0 0 10px !important;
+  font: 800 clamp(30px, 6.4vw, 42px)/.96 'Druk', 'Arial Narrow', sans-serif !important;
+  letter-spacing: .02em !important;
+  text-transform: none !important;
+  text-wrap: balance;
+  color: #F4F1EA !important;
+}
+.psl-tryout-popup p.wp-block-paragraph,
+.psl-tryout-popup .wp-block-group__inner-container > p {
+  margin: 0 0 24px !important;
+  font: 400 16px/1.5 'Proxima Nova', system-ui, sans-serif !important;
+  color: rgba(244, 241, 234, .68) !important;
+}
+
+/* ----- formulario ----- */
+#wpforms-14813 {
+  --wpforms-field-background-color: #16150F !important;
+  --wpforms-field-border-color: rgba(244, 241, 234, .16) !important;
+  --wpforms-field-border-color-spare: rgba(244, 241, 234, .16) !important;
+  --wpforms-field-text-color: #F4F1EA !important;
+  --wpforms-field-menu-color: #131118 !important;
+  --wpforms-label-color: rgba(244, 241, 234, .68) !important;
+  --wpforms-label-sublabel-color: rgba(244, 241, 234, .5) !important;
+  --wpforms-label-error-color: #FF5A5A !important;
+  --wpforms-field-border-radius: 5px !important;
+  --wpforms-button-border-radius: 100px !important;
+  --wpforms-button-background-color: #AAF6E6 !important;
+  --wpforms-button-border-color: #AAF6E6 !important;
+  --wpforms-button-text-color: #000000 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  font-family: 'Proxima Nova', system-ui, sans-serif;
+}
+
+/* Grilla: todo a lo ancho, salvo año y posición que van de a dos (como .tform__row).
+   El contenedor de campos pasa a display:contents para que el botón y la frase de USL
+   (que WPForms pone en contenedores distintos) se puedan ordenar en la misma grilla. */
+#wpforms-14813 form {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 14px;
+  row-gap: 16px;
+}
+#wpforms-14813 .wpforms-field-container { display: contents !important; }
+#wpforms-14813 form > *,
+#wpforms-14813 .wpforms-field { grid-column: 1 / -1; }
+#wpforms-14813 .wpforms-field { padding: 0 !important; margin: 0 !important; }
+#wpforms-14813 #wpforms-14813-field_2-container,
+#wpforms-14813 #wpforms-14813-field_3-container { grid-column: auto; }
+#wpforms-14813 .wpforms-submit-container { order: 1; }
+#wpforms-14813-field_7-container { order: 2; }
+
+#wpforms-14813 .wpforms-field-label {
+  display: block;
+  margin: 0 0 7px !important;
+  font: 600 12px/1.2 'Proxima Nova', system-ui, sans-serif !important;
+  letter-spacing: .02em !important;
+  text-transform: none !important;
+  color: rgba(244, 241, 234, .68) !important;
+}
+/* el form de Academy no marca obligatorios con asterisco: marca el opcional ("Phone (optional)") */
+#wpforms-14813 .wpforms-required-label { display: none !important; }
+
+#wpforms-14813 input[type="text"],
+#wpforms-14813 input[type="email"],
+#wpforms-14813 input[type="tel"],
+#wpforms-14813 select {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 46px;
+  padding-top: 13px !important;
+  padding-bottom: 13px !important;
+  padding-right: 14px !important;
+  background-color: #16150F !important;
+  border: 1px solid rgba(244, 241, 234, .16) !important;
+  border-radius: 5px !important;
+  box-shadow: none !important;
+  color: #F4F1EA !important;
+  font: 400 15px/1.2 'Proxima Nova', system-ui, sans-serif !important;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+/* el tel NO: intl-tel-input le reserva a la izquierda el lugar de la bandera */
+#wpforms-14813 input[type="text"],
+#wpforms-14813 input[type="email"],
+#wpforms-14813 select { padding-left: 14px !important; }
+
+#wpforms-14813 input::placeholder { color: rgba(244, 241, 234, .5) !important; opacity: 1; }
+#wpforms-14813 input:focus,
+#wpforms-14813 select:focus {
+  outline: none !important;
+  border-color: #AAF6E6 !important;
+  box-shadow: 0 0 0 3px rgba(170, 246, 230, .16) !important;
+}
+
+/* chevron aqua, igual que select.tform__input */
+#wpforms-14813 select {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #AAF6E6 50%),
+    linear-gradient(135deg, #AAF6E6 50%, transparent 50%) !important;
+  background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50% !important;
+  background-size: 5px 5px, 5px 5px !important;
+  background-repeat: no-repeat !important;
+  padding-right: 40px !important;
+  text-align: left !important;
+  text-align-last: left !important;
+}
+#wpforms-14813 select:invalid,
+#wpforms-14813 select.wpforms-field-select-placeholder { color: rgba(244, 241, 234, .5) !important; }
+#wpforms-14813 select option { color: #F4F1EA; background: #131118; }
+
+/* teléfono internacional (intl-tel-input) */
+#wpforms-14813 .iti { display: block !important; width: 100% !important; }
+#wpforms-14813 .iti__selected-dial-code { color: #F4F1EA; }
+#wpforms-14813 .iti__arrow { border-top-color: rgba(244, 241, 234, .68); }
+#wpforms-14813 .iti__arrow--up { border-bottom-color: rgba(244, 241, 234, .68); }
+#wpforms-14813 .iti__country-container:hover .iti__selected-country,
+#wpforms-14813 .iti__selected-flag:hover { background: rgba(244, 241, 234, .06) !important; }
+#wpforms-14813 .iti__dropdown-content,
+#wpforms-14813 .iti__country-list {
+  background: #131118 !important;
+  color: #F4F1EA !important;
+  border: 1px solid rgba(244, 241, 234, .16) !important;
+  border-radius: 5px;
+}
+#wpforms-14813 .iti__search-input { background: #16150F !important; color: #F4F1EA !important; border-bottom: 1px solid rgba(244, 241, 234, .16) !important; }
+#wpforms-14813 .iti__country.iti__highlight { background: rgba(170, 246, 230, .12) !important; }
+#wpforms-14813 .iti__dial-code { color: rgba(244, 241, 234, .5) !important; }
+
+/* consentimiento */
+#wpforms-14813 .wpforms-field-checkbox { margin-top: 4px !important; }
+#wpforms-14813 .wpforms-field-checkbox ul { margin: 0 !important; padding: 0 !important; list-style: none !important; }
+#wpforms-14813 .wpforms-field-checkbox li { display: flex !important; align-items: flex-start; gap: 11px; margin: 0 !important; padding: 0 !important; }
+#wpforms-14813 .wpforms-field-checkbox li::marker { content: none; }
+#wpforms-14813 input[type="checkbox"] { flex-shrink: 0; width: 18px !important; height: 18px !important; margin: 1px 0 0 !important; accent-color: #AAF6E6; }
+#wpforms-14813 .wpforms-field-label-inline {
+  margin: 0 !important;
+  font: 400 13.5px/1.45 'Proxima Nova', system-ui, sans-serif !important;
+  color: rgba(244, 241, 234, .68) !important;
+  cursor: pointer;
+}
+#wpforms-14813 .wpforms-field-description {
+  margin: 10px 0 0 !important;
+  font: 400 12px/1.4 'Proxima Nova', system-ui, sans-serif !important;
+  color: rgba(244, 241, 234, .5) !important;
+}
+
+/* ¿jugó profesionalmente? (radio Yes / No): dos cajas lado a lado con la misma altura y el
+   mismo borde que los inputs; la elegida se marca en aqua. WPForms le pone .wpforms-selected
+   al <li> elegido. El campo 10 ("Last professional match") solo aparece si eligen Yes: eso es
+   lógica condicional del form, no CSS. */
+#wpforms-14813 .wpforms-field-radio ul {
+  display: flex !important;
+  gap: 10px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+#wpforms-14813 .wpforms-field-radio li {
+  flex: 1 1 0;
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  margin: 0 !important;
+  padding: 0 14px !important;
+  background: #16150F;
+  border: 1px solid rgba(244, 241, 234, .16);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+#wpforms-14813 .wpforms-field-radio li::marker { content: none; }
+#wpforms-14813 .wpforms-field-radio li:hover { border-color: rgba(244, 241, 234, .32); }
+#wpforms-14813 .wpforms-field-radio li.wpforms-selected {
+  border-color: #AAF6E6;
+  background: rgba(170, 246, 230, .08);
+}
+#wpforms-14813 input[type="radio"] {
+  flex-shrink: 0;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+  accent-color: #AAF6E6;
+}
+#wpforms-14813 .wpforms-field-radio .wpforms-field-label-inline {
+  flex: 1;
+  margin: 0 !important;
+  padding: 13px 0 !important;
+  font: 400 15px/1.2 'Proxima Nova', system-ui, sans-serif !important;
+  color: #F4F1EA !important;
+  cursor: pointer;
+}
+
+/* botón: pill aqua de .psl-btn .cta-primary */
+#wpforms-14813 .wpforms-submit-container { margin: 2px 0 0 !important; padding: 0 !important; }
+#wpforms-14813 button[type="submit"] {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100% !important;
+  height: auto !important;
+  padding: 15px 26px !important;
+  border: none !important;
+  border-radius: 100px !important;
+  background: #AAF6E6 !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+  font: 600 14px/1 'Proxima Nova', system-ui, sans-serif !important;
+  letter-spacing: .06em !important;
+  text-transform: uppercase !important;
+  cursor: pointer;
+  transition: transform 140ms ease, background 160ms ease;
+}
+#wpforms-14813 button[type="submit"]::after,
+#wpforms-14813 button[type="submit"]:focus::after {
+  content: "\2192" !important;
+  position: static !important;
+  inset: auto !important;
+  border: 0 !important;
+  width: auto !important;
+  height: auto !important;
+}
+#wpforms-14813 button[type="submit"]:hover { background: #FFFFFF !important; transform: translateY(-1px); }
+#wpforms-14813 button[type="submit"]:focus-visible { outline: 2px solid #AAF6E6 !important; outline-offset: 3px; }
+
+/* frase de USL (campo HTML), debajo del botón como .tform__consent */
+#wpforms-14813 .tform__consent {
+  margin: 0 !important;
+  text-align: center;
+  font: 400 12px/1.4 'Proxima Nova', system-ui, sans-serif !important;
+  color: rgba(244, 241, 234, .5) !important;
+}
+#wpforms-14813 .tform__consent a { color: #AAF6E6 !important; text-decoration: underline; text-underline-offset: 2px; }
+#wpforms-14813 .tform__consent a:hover { color: #F4F1EA !important; }
+
+/* errores y confirmación */
+#wpforms-14813 label.wpforms-error,
+#wpforms-14813 em.wpforms-error {
+  display: block;
+  margin: 6px 0 0 !important;
+  font: 500 12px/1.4 'Proxima Nova', system-ui, sans-serif !important;
+  color: #FF5A5A !important;
+}
+#wpforms-14813 input.wpforms-error,
+#wpforms-14813 select.wpforms-error { border-color: #FF5A5A !important; }
+#wpforms-confirmation-14813 {
+  margin: 0 !important;
+  padding: 18px 20px !important;
+  background: rgba(170, 246, 230, .08) !important;
+  border: 1px solid rgba(170, 246, 230, .35) !important;
+  border-radius: 14px;
+  color: #F4F1EA !important;
+  font: 500 15px/1.5 'Proxima Nova', system-ui, sans-serif !important;
+}
+#wpforms-confirmation-14813 p { margin: 0 !important; color: inherit !important; }
+
+@media (max-width: 420px) {
+  #wpforms-14813 form { grid-template-columns: 1fr; }
+  #wpforms-14813 #wpforms-14813-field_2-container,
+  #wpforms-14813 #wpforms-14813-field_3-container { grid-column: 1 / -1; }
+}
