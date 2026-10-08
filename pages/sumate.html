@@ -58,10 +58,12 @@
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
     }));
     // init del form de newsletter del footer + sistema de motion (reveals, nav reactiva, grano)
-    const [{ initNewsletter }, { initMotion }] = await Promise.all([
+    const [{ initHeroVideo }, { initNewsletter }, { initMotion }] = await Promise.all([
+      import('../native/sumate/s01-hero.js?v=67'),
       import('../native/home/09-cierre-footer.js?v=67'),
       import('../native/_patterns/motion.js?v=67'),
     ]);
+    initHeroVideo();   // video del hero diferido (s01-hero.js)
     initNewsletter();
     initMotion();
 

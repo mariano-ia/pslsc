@@ -67,7 +67,7 @@
     }));
     // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.
     // (El sitio es English-only: no hay init de idioma.)
-    const [{ initNewsletter }, { initHeroMorph }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
+    const [{ initNewsletter }, { initHeroMorph, initHeroVideo }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
       import('../native/home/09-cierre-footer.js?v=67'),
       import('../native/home/01-hero.js?v=67'),
       import('../native/home/04-proof.js?v=67'),
@@ -76,6 +76,7 @@
     ]);
     initNewsletter();
     initHeroMorph();
+    initHeroVideo();   // video del hero diferido (01-hero.js): sin esto queda solo el poster
     initProofTimeline();
     initProjectTimeline();
     initMotion();   // activa reveal, parallax, nav reactiva, grano, cursor — tras inyectar los bloques

@@ -63,12 +63,14 @@
 
     // init: pathway scroll-scrub (reusa 03-project.js) + form de tryouts (mockeado) +
     // form de newsletter del footer + sistema de motion
-    const [{ initProjectTimeline }, { initTryouts }, { initNewsletter }, { initMotion }] = await Promise.all([
+    const [{ initHeroVideo }, { initProjectTimeline }, { initTryouts }, { initNewsletter }, { initMotion }] = await Promise.all([
+      import('../native/academy/a01-hero.js?v=67'),
       import('../native/home/03-project.js?v=67'),
       import('../native/academy/a07-tryouts.js?v=67'),
       import('../native/home/09-cierre-footer.js?v=67'),
       import('../native/_patterns/motion.js?v=67'),
     ]);
+    initHeroVideo();   // video del hero diferido (a01-hero.js)
     initProjectTimeline();
     initTryouts();
     initNewsletter();
