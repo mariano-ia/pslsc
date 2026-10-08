@@ -193,13 +193,15 @@ REPORTER = """
 def block_js(path):
     """JS de un bloque que NO es web component (scramble del hero, scrubbing de la timeline,
        linterna de proof, forms). Saca el `export` y el auto-init de DOMContentLoaded (el boot lo
-       llama scopeado al bloque), reescribe assets. Devuelve (código, nombre-del-init)."""
+       llama scopeado al bloque), reescribe assets. Devuelve (código, [inits]).
+       Toma TODOS los nombres del export: `export { initHeroMorph, initHeroVideo }` -> los dos van
+       al boot (antes solo el primero, y el video diferido del hero de la Home nunca arrancaba)."""
     src = read(path)
-    m = re.search(r"export\s*\{\s*(\w+)", src)
-    init = m.group(1) if m else None
+    m = re.search(r"export\s*\{([^}]+)\}", src)
+    inits = [n.strip() for n in m.group(1).split(",") if n.strip()] if m else []
     src = re.sub(r"export\s+\{[^}]+\};", "", src)
     src = re.sub(r"document\.addEventListener\('DOMContentLoaded'[^;]*;", "", src)
-    return rewrite_assets(src), init
+    return rewrite_assets(src), inits
 
 def boot_js(needs_motion, inits):
     # cada init(root) se llama por cada .pslsc del DOM, una sola vez (data-psl-booted)
@@ -277,7 +279,7 @@ def build_block(page, name):
         block_mods.append(block_js(own_js))
     if uses_ptl:
         block_mods.append(block_js("native/home/03-project.js"))
-    block_inits = [i for _, i in block_mods if i]
+    block_inits = [i for _, inits in block_mods for i in inits]
 
     # JS: motion (si hace falta) + componentes + JS de bloque + boot
     js_parts = []
