@@ -51,6 +51,7 @@ function hideAcProxy() {
 }
 
 function initPartnerContact(root = document) {
+  acInstallResultHooks();
   const form = root.querySelector('[data-partner-contact]');
   if (!form) return;
   const msg = form.querySelector('[data-partner-msg]');
@@ -79,17 +80,28 @@ function initPartnerContact(root = document) {
       settled = true;
       observer.disconnect();
       clearTimeout(fallback);
+      document.removeEventListener(AC_RESULT_EVENT, onAcResult);
       submitBtn.disabled = false;
       if (!ok) msg.classList.add('pcontact__msg--error');
       msg.textContent = text;
       if (ok) form.reset();
     };
 
+    // El hook global es la via principal: _show_error(id, mensaje) trae el motivo real de AC.
+    // El observer de abajo queda como respaldo por si el embed deja de usar esas funciones.
+    const onAcResult = (ev) => {
+      if (settled) return;
+      const args = ev.detail && Array.isArray(ev.detail.args) ? ev.detail.args : [];
+      if (ev.detail && ev.detail.ok) return;   // el exito lo resuelve el observer
+      finish(false, acApplyError(form, args[1], 'partner-contact'));
+    };
+    document.addEventListener(AC_RESULT_EVENT, onAcResult);
+
     const observer = new MutationObserver(() => {
       const success = thankYou && thankYou.style.display !== 'none' && thankYou.style.display !== '';
       if (success) { finish(true, '✓ Got it. A real person will get back to you soon.'); return; }
       const error = acForm.querySelector('._form_error, ._error-inner._form_error');
-      if (error) finish(false, 'Something went wrong sending that — try again in a moment.');
+      if (error) finish(false, acApplyError(form, acDomErrorText(acForm), 'partner-contact'));
     });
     observer.observe(acForm, { attributes: true, attributeFilter: ['style'], childList: true, subtree: true });
     const fallback = setTimeout(
@@ -106,9 +118,22 @@ function initPartnerContact(root = document) {
         target.dispatchEvent(new Event('input', { bubbles: true }));
         target.dispatchEvent(new Event('change', { bubbles: true }));
       });
-      submitButton.click();
+      // Posteamos nosotros a proc.php en vez de apretar el boton de AC: su submit inyecta un
+      // <script> a activehosted.com y en iPhone con bloqueo de contenido ese <script> nunca
+      // entra, asi que el envio no salia y caiamos al timeout. Ver acSubmitDirect().
+      acSubmitDirect(acForm).then((r) => {
+        if (r.ok) {
+          finish(true, '✓ Got it. A real person will get back to you soon.');
+          return;
+        }
+        finish(false, acApplyError(form, r.message, 'partner-contact'));
+      }).catch((err) => {
+        // ultimo recurso: el camino original de AC, por si el fetch no sale (red, CORS, proxy)
+        console.warn('[psl-form] partner-contact — el POST directo fallo, reintento con el submit de AC', err);
+        try { submitButton.click(); } catch (err2) { finish(false, 'We could not send that — please try again in a moment.'); }
+      });
     } catch (err) {
-      finish(false, 'Something went wrong sending that — try again in a moment.');
+      finish(false, 'We could not send that — please try again in a moment.');
       console.error('[partner-contact] ActiveCampaign proxy submit falló', err);
     }
   });
