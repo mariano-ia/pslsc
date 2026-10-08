@@ -1,34 +1,414 @@
-/* Port St. Lucie SC — reskin del header/nav NATIVO*/
-:root {
-  --psl-crest-size: 78px;   /* alto del escudo en el header*/
-  --psl-crest-lift: 16px;   /* cuánto sobresale el escudo por debajo del header. 0 = no sobresale. */
+/* ===== PSL · BLOQUE GENERADO — NO EDITAR DEBAJO DE ESTA LINEA =====
+   Lo regenera tools/build-blocks-manual.py en cada compilada: cualquier cambio a mano
+   aca adentro se pierde. Editá abajo, despues de la marca de fin.
+   Los bloques compilados NO traen los tokens ni el reset adentro: los toman de aca,
+   asi que esto tiene que estar pegado para que cualquier bloque se vea bien. */
+@font-face{font-family:'Ferryman';font-weight:800;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/Ferryman-ExtraBold.woff2) format('woff2');}
+@font-face{font-family:'Ferryman';font-weight:700;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/Ferryman-Bold.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:500;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/Druk-Medium.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:700;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/Druk-Bold.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:800;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/Druk-Heavy.woff2) format('woff2');}
+@font-face{font-family:'Druk';font-weight:900;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/Druk-Super.woff2) format('woff2');}
+@font-face{font-family:'Druk Text Wide';font-weight:500;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/DrukTextWide-Medium.woff2) format('woff2');}
+@font-face{font-family:'Druk Text Wide';font-weight:800;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/DrukTextWide-Heavy.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:400;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/ProximaNova-Regular.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:600;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/ProximaNova-Semibold.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:700;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/ProximaNova-Bold.woff2) format('woff2');}
+@font-face{font-family:'Cabazon';font-weight:400;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/Cabazon-Regular.woff2) format('woff2');}
+.pslsc, .pslsc *, .pslsc *::before, .pslsc *::after { box-sizing: border-box; }
+.pslsc { width:100%; font-family:var(--font-body); color:var(--color-text); line-height:normal; -webkit-font-smoothing:antialiased; }
+.pslsc h1,.pslsc h2,.pslsc h3,.pslsc h4,.pslsc h5,.pslsc h6,.pslsc p,.pslsc ul,.pslsc ol,.pslsc li,.pslsc figure,.pslsc blockquote,.pslsc dl,.pslsc dd { margin:0; padding:0; color:inherit; font:inherit; text-transform:none; }
+.pslsc ul,.pslsc ol,.pslsc li { list-style:none; }
+.pslsc li::marker { content:none; }
+.pslsc a { color:inherit; text-decoration:none; }
+.pslsc img,.pslsc video,.pslsc canvas,.pslsc svg { display:block; max-width:100%; }
+.pslsc button,.pslsc input,.pslsc textarea,.pslsc select { font:inherit; color:inherit; }
+.pslsc ::selection { background:var(--color-aqua); color:var(--color-black); }
+.pslsc--bleed { width:max(var(--psl-vw,100vw),100%); max-width:max(var(--psl-vw,100vw),100%); margin-left:calc(50% - max(var(--psl-vw,100vw),100%)/2); margin-right:calc(50% - max(var(--psl-vw,100vw),100%)/2); }
+.pslsc .psl-diag { font:12px/1.5 ui-monospace,Menlo,monospace; margin-top:16px; padding:9px 12px; border-radius:6px; background:#FF0033; color:#fff; word-break:break-word; }
+.pslsc .psl-diag.is-ok { background:rgba(14,140,121,.12); color:var(--color-aqua-deep); }
+.pslsc{--color-aqua:        #AAF6E6;   
+  --color-aqua-deep:   #0E8C79;   
+  --color-black:       #000000;
+  --color-white:       #FFFFFF;
+  --color-red-marine:  #FF0033;   
+
+  
+  --color-ink:      #0C0C0A;   
+  --color-ink-2:    #131118;   
+  --color-ink-3:    #16150F;   
+  --color-paper:      #F4F1EA;   
+  --color-paper-2:    #EDE8DE;   
+  --color-paper-card: #FFFFFF;   
+  --color-paper-line: rgba(0,0,0,.09);
+
+  
+  --color-text:            #F4F1EA;   
+  --color-text-muted:      rgba(244,241,234,.68);
+  --color-text-faint:      rgba(244,241,234,.5);
+  --color-text-on-paper:       #0C0C0A;
+  --color-text-on-paper-muted: rgba(12,12,10,.62);
+  --color-text-on-paper-faint: rgba(12,12,10,.45);
+
+  
+  --color-line:        rgba(244,241,234,.1);
+  --color-line-strong: rgba(244,241,234,.16);
+
+  
+  --color-bg: var(--color-ink);
+  --color-bg-elevated: var(--color-ink-2);
+  --color-border: var(--color-line);
+  --color-whatsapp: #25d366;
+  --color-jersey-viewer-bg: #0C0C0A;
+  
+  --color-teal: var(--color-aqua);
+  --color-teal-bright: var(--color-aqua);
+  --color-teal-ink: var(--color-aqua-deep);
+  --color-sky: var(--color-aqua);
+
+  
+  --font-hero:    'Ferryman', Georgia, serif;
+  --font-display: 'Druk', 'Arial Narrow', sans-serif;
+  --font-label:   'Druk Text Wide', 'Arial Narrow', sans-serif;
+  --font-body:    'Proxima Nova', system-ui, sans-serif;   
+  --font-detail:  'Cabazon', 'Druk', serif;
+  --font-mono:    var(--font-label);   
+
+  
+  --ls-display: 0.02em;
+
+  
+  --fs-hero:  clamp(52px, 8.6vw, 138px);
+  --fs-h2:    clamp(34px, 5.4vw, 72px);
+  --fs-h3:    clamp(20px, 2vw, 26px);
+  --fs-card-title: 21px;
+  --fs-body-lg: clamp(15px, 1.4vw, 19px);
+  --fs-body:  16px;
+  --fs-small: 13.5px;
+
+  
+  --fs-kicker: 11px;
+  --fs-label:  10.5px;
+  --ls-kicker: .14em;
+  --ls-label:  .12em;
+
+  
+  --fs-counter: clamp(40px, 5vw, 72px);
+  --font-feature-counter: 'tabular-nums';
+
+  --lh-tight: .9;
+  --lh-normal: 1.6;
+
+  
+  --container: 1320px;
+  --gutter: clamp(22px, 5vw, 56px);
+  --section-pad: clamp(84px, 11vw, 150px);   
+
+  
+  --space-1: 0.25rem;  --space-2: 0.5rem;  --space-3: 1rem;
+  --space-4: 1.5rem;   --space-5: 2.5rem;  --space-6: 4rem;
+
+  
+  --radius-sm: 5px;  --radius-md: 14px;  --radius-lg: 18px;  --radius-pill: 100px;
+
+  
+  --ease-jersey-drag: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-jersey-drag-min: 400ms;
+  --duration-jersey-drag-max: 600ms;
+  --duration-wall-slide-in: 300ms;
+  --ease-wall-slide-in: ease-out;
+  --duration-wall-highlight: 2500ms;
+  --duration-counter-highlight: 1500ms;
+
+  
+  --ease-out-soft:    cubic-bezier(.22, .61, .36, 1);   
+  --ease-out-expo:    cubic-bezier(.16, 1, .3, 1);      
+  --ease-in-out-soft: cubic-bezier(.65, 0, .35, 1);
+  --dur-fast:   240ms;
+  --dur-med:    460ms;
+  --dur-reveal: 720ms;   
+  --reveal-shift: 22px;  
+  --stagger: 80ms;       
+
+  
+  --z-sticky-cta: 40;  --z-nav: 50;  --z-modal: 200;}
+
+
+
+@keyframes psl-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.82)} }
+
+@keyframes psl-marq  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+@keyframes psl-rise  { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+@keyframes psl-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+
+@keyframes psl-hero-in   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+@keyframes psl-float     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+
+@keyframes psl-draw-x    { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+
+@keyframes psl-scroll-cue{ 0%{opacity:0;transform:translateY(-4px)} 35%{opacity:1} 100%{opacity:0;transform:translateY(10px)} }
+
+@keyframes psl-ping      { 0%{transform:scale(.5);opacity:.8} 100%{transform:scale(2.6);opacity:0} }
+
+@keyframes psl-sheen     { 0%{background-position:-140% 0} 60%,100%{background-position:140% 0} }
+
+@keyframes psl-grad-flow { 0%{background-position:0% 50%} 100%{background-position:-200% 50%} }
+.pslsc *, .pslsc *::before, .pslsc *::after{box-sizing: border-box;}
+.pslsc .psl-container{max-width: var(--container);
+  margin: 0 auto;
+  padding-inline: var(--gutter);}
+.pslsc .surface-ink{background: var(--color-ink);   color: var(--color-text);}
+.pslsc .surface-paper{background: var(--color-paper); color: var(--color-text-on-paper);}
+.pslsc .surface-aqua{background: var(--color-aqua);  color: var(--color-black);}
+.pslsc .psl-kicker{font: 500 var(--fs-kicker)/1 var(--font-label);
+  letter-spacing: var(--ls-kicker);
+  color: var(--color-aqua);
+  text-transform: uppercase;}
+.pslsc .surface-paper .psl-kicker{color: var(--color-aqua-deep);}
+.pslsc .psl-h2{margin: 18px 0 0;
+  font: 800 var(--fs-h2)/0.98 var(--font-display);
+  letter-spacing: var(--ls-display);
+  text-transform: none;
+  text-wrap: balance;}
+.pslsc .psl-btn{display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font: 600 14px/1 var(--font-body);   
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 15px 26px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: transform 140ms ease, background 160ms ease, border-color 160ms ease;}
+.pslsc .psl-btn:hover{transform: translateY(-1px);}
+.pslsc .cta-primary{background: var(--color-aqua); color: var(--color-black);}
+.pslsc .cta-primary:hover{background: var(--color-white);}
+.pslsc .cta-secondary{background: transparent; color: currentColor; border: 1px solid rgba(244,241,234,.28);}
+.pslsc .surface-paper .cta-secondary{border-color: rgba(0,0,0,.22);}
+.pslsc .tnum{font-variant-numeric: var(--font-feature-counter);}
+.pslsc.psl-motion [data-reveal]{opacity: 0;
+  transform: translateY(var(--reveal-shift, 22px));
+  transition: opacity var(--dur-reveal, 720ms) var(--ease-out-soft, ease),
+              transform var(--dur-reveal, 720ms) var(--ease-out-soft, ease);
+  transition-delay: var(--reveal-delay, 0ms);}
+.pslsc.psl-motion [data-reveal="left"]{transform: translateX(calc(-1 * var(--reveal-shift, 22px)));}
+.pslsc.psl-motion [data-reveal="right"]{transform: translateX(var(--reveal-shift, 22px));}
+.pslsc.psl-motion [data-reveal="scale"]{transform: scale(.94);}
+.pslsc.psl-motion [data-reveal="mask"]{opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--dur-reveal, 720ms) var(--ease-out-expo, ease);
+  transition-delay: var(--reveal-delay, 0ms);}
+.pslsc.psl-motion [data-reveal].is-revealed{opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 0 0);}
+.pslsc [data-spotlight]{position: relative;}
+.pslsc [data-spotlight]::after{content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, -20%),
+              rgba(170, 246, 230, .16), transparent 62%);
+  opacity: 0;
+  transition: opacity 320ms ease;
+  z-index: 1;}
+.pslsc .surface-paper [data-spotlight]::after, .pslsc [data-spotlight].on-paper::after{background: radial-gradient(240px circle at var(--mx, 50%) var(--my, -20%),
+              rgba(14, 140, 121, .12), transparent 62%);}
+.pslsc [data-spotlight]:hover::after{opacity: 1;}
+.pslsc [data-spotlight] > *{position: relative; z-index: 2;}
+.pslsc [data-tilt]{transition: transform 300ms var(--ease-out-soft, ease); transform-style: preserve-3d;}
+.pslsc [data-magnetic]{transition: transform 300ms var(--ease-out-soft, ease); will-change: transform;}
+.pslsc [data-parallax]{will-change: transform;}
+.pslsc .nav__progress{position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--color-aqua), var(--color-red-marine));
+  z-index: 1;}
+.pslsc .nav.is-scrolled{background: rgba(12, 12, 10, .92);
+  box-shadow: 0 1px 24px rgba(0, 0, 0, .34);}
+.pslsc .nav.is-scrolled .nav__inner{height: 58px;}
+.pslsc .nav__inner{transition: height 280ms var(--ease-out-soft, ease);}
+.pslsc .nav__links a{position: relative; transition: color 160ms ease;}
+.pslsc .nav__links a.is-active{color: var(--color-text);}
+.pslsc .nav__links a.is-active::after{content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--color-aqua);
+  border-radius: 2px;}
+.pslsc .psl-grain{position: fixed;
+  inset: 0;
+  z-index: 36;
+  pointer-events: none;
+  opacity: .035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;}
+.pslsc .psl-cursor-glow{position: fixed;
+  top: 0;
+  left: 0;
+  width: 130px;
+  height: 130px;
+  margin: -65px 0 0 -65px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 60;
+  background: radial-gradient(circle, rgba(170, 246, 230, .11), rgba(170, 246, 230, 0) 68%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 400ms ease;}
+.pslsc .psl-cursor-glow.is-on{opacity: 1;}
+.pslsc .psl-seam--from-ink, .pslsc .psl-seam--from-paper{position: relative;}
+.pslsc .psl-seam--from-ink::before, .pslsc .psl-seam--from-paper::before{content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 90px;
+  pointer-events: none;
+  z-index: 0;}
+.pslsc .psl-seam--from-ink::before{background: linear-gradient(180deg, rgba(12, 12, 10, .16), transparent);}
+.pslsc .psl-seam--from-paper::before{background: linear-gradient(180deg, rgba(244, 241, 234, .07), transparent);}
+
+
+@media (prefers-reduced-motion: reduce) {.pslsc.psl-motion [data-reveal]{opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;}
+.pslsc .psl-grain, .pslsc .psl-cursor-glow{display: none !important;}
+.pslsc .nav__inner{transition: none !important;}}
+.pslsc .psl-field-invalid, .pslsc [aria-invalid="true"]{outline: 2px solid #FF5A5A;
+  outline-offset: 2px;
+  border-color: #FF5A5A !important;}
+/* ===== PSL · FIN DEL BLOQUE GENERADO — de aca para abajo es a mano ===== */
+
+/*footer hiding code*/
+.footer-items-top {
+  display: none;
+}
+.site-footer hr {
+  display: none;
+}
+.footer-items-bellow {
+  display: none;
+}
+/*news archive numbers*/
+.archive-pagination li a {
+color: #000;
+}
+/* Add spacing above anchors */
+.has-anchor-offset {
+  scroll-margin-top: 230px;
 }
 
-/* ---------- Header: fondo oscuro translúcido + sticky + blur ---------- */
+.nbcsn-cta__button-style-bordered-button .nbcsn-cta__link.nbcsn-cta__link-button {
+  border: 1px solid #fff;
+  color: transparent;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  padding: .8125rem 1.75rem;
+  text-decoration: none;
+  transition-duration: .2s;
+  transition-property: border-color, color, background-color;
+}
+
+/* Add spacing above anchors */
+.has-anchor-offset {
+  scroll-margin-top: 230px;
+}
+
+.nbcsn-cta__button-style-bordered-button .nbcsn-cta__link.nbcsn-cta__link-button {
+  border: 1px solid #fff;
+  color: transparent;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  padding: .8125rem 1.75rem;
+  text-decoration: none;
+  transition-duration: .2s;
+  transition-property: border-color, color, background-color;
+}
+
+
+
+
+.site-header {
+  --menu-item-link-color-hover: lightgray;
+}
+
+.site-header>.wrap {
+background-color: #000;}
+
+.nbcsn-cta__arrow .nbcsn-card__content .nbcsn-cta__arrow-icon .arrow-path
+{
+  fill: #aaf0e6;
+}
+
+@media only screen and (max-width: 959px) {
+  .site-header .nbcsn-main-menu.sportsengine-classic-menu[class]>ul#menu-main-menu.menu-primary.menu {
+    background-color: #000;}
+}
+
+
+
+
+.display-restricted {
+  display: none;
+}
+
+.logged-in .display-restricted {
+  display: block;
+}
+
+/* calendar */
+.tribe-events-calendar-month thead th {
+background: none;
+}
+.tec-events-category-color-filter.tec-events-category-color-filter--open .tec-events-category-color-filter__dropdown {
+  color: #000;
+}
+
+/* Port St. Lucie SC — reskin del header/nav NATIVO de WordPress  */
+:root {
+  --psl-crest-size: 78px; 
+  --psl-crest-lift: 16px;   
+}
+
+@font-face{font-family:'Proxima Nova';font-weight:400;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/ProximaNova-Regular.woff2) format('woff2');}
+@font-face{font-family:'Proxima Nova';font-weight:600;font-style:normal;font-display:swap;src:url(https://www.portstluciesc.com/wp-content/uploads/sites/388/fonts/ProximaNova-Semibold.woff2) format('woff2');}
+
+/* ---------- Header---------- */
 header.site-header {
   position: sticky;
   top: 0;
   z-index: 500;
-  background: rgba(12, 12, 10, .86);
+  background: rgba(12, 12, 10, .82);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(244, 241, 234, .1);
 }
 
-/* ---------- Logo: lo agranda y lo deja "flotar" sobresaliendo del header ---------- */
+/* ---------- Logo---------- */
 header.site-header .title-area {
   position: relative;
-  z-index: 2;
+  z-index: 2;  
 }
 
-header.site-header .custom-logo {
-  height: var(--psl-crest-size) !important;
-  width: auto !important;
-  margin-bottom: calc(-1 * var(--psl-crest-lift));
-  transition: height 220ms ease;
-}
-
-/* Texto "Port St. Lucie SC" al lado del logo. */
+/* Texto "Port St. Lucie SC" al lado del logo */
 header.site-header .site-title {
   position: absolute;
   width: 1px; height: 1px;
@@ -39,22 +419,23 @@ header.site-header .site-title {
   border: 0;
 }
 
-/* ---------- Menú principal: solo tipografía/color, sin tocar layout ---------- */
+/* Menú principal*/
 header.site-header #menu-main-menu > li.-root-level > a {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Proxima Nova', system-ui, sans-serif;
   font-weight: 600;
-  font-size: 13.5px;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  color: #AAF6E6;
+  font-size: 14px;
+  letter-spacing: normal;
+  text-transform: none !important; 
+  color: rgba(244, 241, 234, .68) !important; 
   transition: color 160ms ease;
+  padding: 8px 14px !important;
 }
 header.site-header #menu-main-menu > li.-root-level > a:hover,
 header.site-header #menu-main-menu > li.-root-level > a:focus {
-  color: #FFFFFF;
+  color: #F4F1EA !important;
 }
 
-/* Submenús */
+/* Submenús  */
 header.site-header .sub-menu {
   background: #0C0C0A;
   border: 1px solid rgba(244, 241, 234, .12);
@@ -63,7 +444,7 @@ header.site-header .sub-menu {
 }
 header.site-header .sub-menu a {
   color: rgba(244, 241, 234, .82);
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Proxima Nova', system-ui, sans-serif;
   font-size: 13px;
   text-transform: none;
   letter-spacing: normal;
@@ -75,6 +456,24 @@ header.site-header .sub-menu a:hover {
 .site-container > .site-inner {
   padding-top: 0;
 }
+
+.entry-content > p.wp-block-paragraph:empty {
+  margin: 0;
+}
+
+/* Franja blanca entre el nav y el contenido, SOLO en mobile*/
+body:not(.single) .entry-header {
+  margin-bottom: 0 !important;
+}
+
+/* Bloques full-bleed que se ven en BLANCO en mobile */
+.pslsc--bleed {
+  width: max(var(--psl-vw, 100vw), 100%) !important;
+  max-width: max(var(--psl-vw, 100vw), 100%) !important;
+  margin-left: calc(50% - max(var(--psl-vw, 100vw), 100%) / 2) !important;
+  margin-right: calc(50% - max(var(--psl-vw, 100vw), 100%) / 2) !important;
+}
+
 @media (max-width: 1024px) {
   header.site-header .site-inner {
     display: grid;
@@ -109,4 +508,92 @@ header.site-header .sub-menu a:hover {
     letter-spacing: .01em;
     white-space: nowrap;
   }
+}
+
+/* NOTICIAS INDIVIDUALES (single-sec_news)  */
+/* NOTICIAS — ARCHIVO (/news/)*/
+
+body.post-type-archive-sec_news {
+  background: #F4F1EA !important;
+}
+
+.post-type-archive-sec_news .archive-title {
+  font-family: 'Druk', 'Arial Narrow', sans-serif !important;
+  font-weight: 800 !important;
+  letter-spacing: .02em;
+  text-transform: none !important;
+  color: #0C0C0A;
+}
+
+/* Cards*/
+.post-type-archive-sec_news .entry.card-style {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 12, 10, .09);
+  border-radius: 14px;
+  box-shadow: none !important;
+  overflow: hidden;
+  transition: border-color 160ms ease;
+}
+.post-type-archive-sec_news .entry.card-style:hover {
+  border-color: #0E8C79;
+}
+
+/* Kicker de categoria ("Tickets News", etc.) */
+.post-type-archive-sec_news .card-tag {
+  font-family: 'Druk Text Wide', 'Arial Narrow', sans-serif !important;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #0E8C79 !important;
+}
+
+/* Titulo de cada card */
+.post-type-archive-sec_news .entry-title-link {
+  font-family: 'Druk', 'Arial Narrow', sans-serif !important;
+  font-weight: 800 !important;
+  letter-spacing: .02em;
+  text-transform: none;
+  color: #0C0C0A;
+  text-decoration: none;
+}
+.post-type-archive-sec_news .entry-title-link:hover,
+.post-type-archive-sec_news .entry-title-link:focus {
+  color: #0E8C79;
+}
+
+/* Paginacion del archivo de noticias*/
+.post-type-archive-sec_news .archive-pagination ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+.post-type-archive-sec_news .archive-pagination li a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid rgba(12, 12, 10, .18) !important;
+  border-radius: 100px !important;
+  font-family: 'Proxima Nova', system-ui, sans-serif !important;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: .02em;
+  text-decoration: none;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+.post-type-archive-sec_news .archive-pagination li a:hover {
+  border-color: #0E8C79 !important;
+}
+.post-type-archive-sec_news .archive-pagination li.active a {
+  background: #AAF6E6 !important;
+  border-color: #AAF6E6 !important;
+}
+.post-type-archive-sec_news .archive-pagination li.pagination-next a {
+  padding: 0 20px;
 }

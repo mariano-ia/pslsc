@@ -7,25 +7,28 @@
 -->
 <section class="acad-hero surface-ink" id="top">
   <div class="acad-hero__bg" aria-hidden="true" data-parallax="0.10">
-    <video class="acad-hero__video" autoplay loop muted playsinline preload="auto"
-           poster="/assets/images/pslsc_academy.webp">
-      <source src="/assets/videos/hero_academy.mp4" type="video/mp4" />
-    </video>
+    <!-- El poster va como <img> real: es el elemento LCP (~37 KB) y pinta enseguida.
+         El <video> arranca sin src y lo carga initHeroVideo() despues del load de la
+         pagina (ver el .js del bloque) — asi el hero no espera 1,4 MB para pintar. -->
+    <img class="acad-hero__poster" data-hero-poster src="/assets/images/pslsc_academy.webp" alt="" width="1536" height="1024"
+         fetchpriority="high" decoding="async" />
+    <video class="acad-hero__video" data-hero-video="/assets/videos/hero_academy.mp4" loop muted playsinline preload="none"></video>
   </div>
   <div class="acad-hero__scrim" aria-hidden="true"></div>
 
   <div class="psl-container acad-hero__content">
     <div class="acad-hero__eyebrow">
       <span class="acad-hero__dot" aria-hidden="true"></span>
-      <span>The Academy · Tryouts open for 2026–27</span>
+      <span>Youth · Tryouts open for 2026–27</span>
     </div>
-    <h1 class="acad-hero__headline">The club starts <span class="acad-hero__accent">here</span>.</h1>
+    <h1 class="acad-hero__headline">The future starts <span class="acad-hero__accent">here</span>.</h1>
     <p class="acad-hero__subhead">
-      Before the stadium, before the first pro match — there&rsquo;s the Academy: the club putting down roots
-      in the neighborhood. Local kids on real pitches, already training and competing on the Treasure Coast.
+      Before the first professional match, our Youth program is already building the club&rsquo;s future. Young
+      players are training, competing, and developing on the Treasure Coast as part of the Port St.
+      Lucie SC pathway.
     </p>
     <div class="acad-hero__ctas">
-      <a href="#tryouts" class="psl-btn cta-primary"><span>Academy tryouts</span> <span aria-hidden="true">→</span></a>
+      <a href="#tryouts" class="psl-btn cta-primary"><span>Tryouts</span> <span aria-hidden="true">→</span></a>
       <a href="#pathway" class="psl-btn cta-secondary">See the pathway</a>
     </div>
   </div>

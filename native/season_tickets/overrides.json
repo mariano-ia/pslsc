@@ -9,7 +9,7 @@
   "01-hero": {
     "from": "home/01-hero",
     "replace": [
-      ["<a href=\"/joinus/\" class=\"psl-btn cta-primary\"><span>Become a Founder</span>", "<a href=\"pasarela.html\" class=\"psl-btn cta-primary\"><span>Buy season tickets</span>"]
+      ["<a href=\"/joinus/\" class=\"psl-btn cta-primary\"><span>Place your ticket deposit</span>", "<a href=\"pasarela.html\" class=\"psl-btn cta-primary\"><span>Buy season tickets</span>"]
     ]
   }
 }

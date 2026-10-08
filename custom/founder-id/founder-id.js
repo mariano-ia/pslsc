@@ -13,9 +13,10 @@
  * PRIVACIDAD: todo es client-side. La foto nunca sale del dispositivo (sin backend, sin upload).
  * La cámara se apaga (stop tracks) al capturar, cancelar, fallar, subir foto o desmontar.
  *
- * GATE DE EDAD ("I'm 13 or older"): requerimiento legal del cliente. Bloquea las DOS entradas de
- * foto — cámara y file picker — hasta que se tilda. No se persiste (nada de localStorage): se
- * vuelve a tildar en cada carga, coherente con que el componente no guarda nada.
+ * GATE DE EDAD ("I'm 13 or older"): requerimiento legal del cliente (merge desde version
+ * anterior/pslsc-main, 2026-09-04). Bloquea las DOS entradas de foto — cámara y file picker —
+ * hasta que se tilda. No se persiste (nada de localStorage): se vuelve a tildar en cada carga,
+ * coherente con que el componente no guarda nada.
  *
  * Robustez (post-review adversarial): single-flight de getUserMedia; stream frenado si el
  * elemento se desmonta mientras la cámara está pendiente; permiso denegado → "Upload a photo"
@@ -105,7 +106,7 @@ class PSLFounderID extends HTMLElement {
               ? `<video class="fid__video" autoplay playsinline muted></video>
                  <span class="fid__frame" aria-hidden="true"></span>`
               : `<img class="fid__img" src="${isYou ? this._photo : LUKA_SRC}"
-                     alt="${isYou ? 'Your boarding pass photo' : 'Luka, the club mascot'}" />`}
+                     alt="${isYou ? 'Your boarding pass photo' : 'Luca, the club mascot'}" />`}
             <span class="fid__shine" aria-hidden="true"></span>
           </div>
 
@@ -114,7 +115,7 @@ class PSLFounderID extends HTMLElement {
               <span class="fid__label">Passenger</span>
               ${isYou
                 ? `<input class="fid__name-input" type="text" maxlength="18" placeholder="YOUR NAME" aria-label="Passenger name on the boarding pass" />`
-                : `<span class="fid__value fid__value--name">Luka</span>`}
+                : `<span class="fid__value fid__value--name">Luca</span>`}
             </div>
             <div class="fid__field fid__field--seat">
               <span class="fid__label">Seat</span>
@@ -343,7 +344,17 @@ class PSLFounderID extends HTMLElement {
 
   // compone el boarding pass 1080×1500 (mismo look turquesa que el DOM) para compartir/descargar
   async _compose() {
-    const W = 1080, H = 1500, PAD = 72;
+    // Layout del PNG que se comparte. Todas las Y salen de estas constantes: antes eran numeros
+    // sueltos y el numero de asiento (120px de Druk, que es altisima) le pisaba la etiqueta SEAT.
+    const W = 1080, PAD = 72;
+    const PW = W - PAD * 2;              // 936: ancho Y alto de la foto (cuadrada, como en la tarjeta)
+    const FOTO_Y = 216;
+    const FOTO_BOTTOM = FOTO_Y + PW;
+    const Y_SEAT = FOTO_BOTTOM + 190;    // baseline del numero de asiento
+    const Y_COL_LABEL = Y_SEAT + 88;
+    const Y_COL_VALUE = Y_COL_LABEL + 52;
+    const Y_TEAR = Y_COL_VALUE + 80;     // linea de perforacion
+    const H = Y_TEAR + 210;
     const INK = '#0C0C0A';
     try {
       await Promise.all([
@@ -390,23 +401,25 @@ class PSLFounderID extends HTMLElement {
     ctx.fillText('BOARDING PASS · FOUNDING CLASS', PAD + crestW + 28, 176);
     ctx.letterSpacing = '0px';
 
-    // foto (ventana ancha, recorte cover)
-    const pw = W - PAD * 2, phh = 680;
-    const srcH = photo.naturalHeight * Math.min(1, (phh / pw) * (photo.naturalWidth / photo.naturalHeight));
-    const srcY = (photo.naturalHeight - srcH) / 2;
+    // foto CUADRADA, igual que en la tarjeta. La ventana era apaisada (936x680) y recortaba una
+    // banda centrada: se comia ~14% arriba y ~14% abajo, asi que lo que encuadrabas en pantalla NO
+    // era lo que se compartia (podia cortar el menton o la frente). Reportado 2026-09-22.
+    const escala = Math.max(PW / photo.naturalWidth, PW / photo.naturalHeight);
+    const srcW = PW / escala, srcH = PW / escala;
+    const srcX = (photo.naturalWidth - srcW) / 2, srcY = (photo.naturalHeight - srcH) / 2;
     ctx.save();
-    this._roundRect(ctx, PAD, 216, pw, phh, 28);
+    this._roundRect(ctx, PAD, FOTO_Y, PW, PW, 28);
     ctx.clip();
-    ctx.drawImage(photo, 0, srcY, photo.naturalWidth, srcH, PAD, 216, pw, phh);
-    const vg = ctx.createRadialGradient(W / 2, 216 + phh / 2, phh * 0.5, W / 2, 216 + phh / 2, phh * 0.95);
+    ctx.drawImage(photo, srcX, srcY, srcW, srcH, PAD, FOTO_Y, PW, PW);
+    const vg = ctx.createRadialGradient(W / 2, FOTO_Y + PW / 2, PW * 0.5, W / 2, FOTO_Y + PW / 2, PW * 0.95);
     vg.addColorStop(0, 'rgba(0,0,0,0)');
     vg.addColorStop(1, 'rgba(0,0,0,.25)');
     ctx.fillStyle = vg;
-    ctx.fillRect(PAD, 216, pw, phh);
+    ctx.fillRect(PAD, FOTO_Y, PW, PW);
     ctx.restore();
     ctx.strokeStyle = 'rgba(12,12,10,.42)';
     ctx.lineWidth = 2;
-    this._roundRect(ctx, PAD, 216, pw, phh, 28);
+    this._roundRect(ctx, PAD, FOTO_Y, PW, PW, 28);
     ctx.stroke();
 
     // PASSENGER / SEAT
@@ -418,17 +431,23 @@ class PSLFounderID extends HTMLElement {
       ctx.fillText(t, x, y);
       ctx.letterSpacing = '0px';
     };
-    const name = (isYou ? (this._name.trim() || 'FUTURE FOUNDER') : 'LUKA').toUpperCase();
-    label('PASSENGER', PAD, 986);
+    const name = (isYou ? (this._name.trim() || 'FUTURE FOUNDER') : 'LUCA').toUpperCase();
+    // El numero de asiento manda: medimos cuanto sube sobre su baseline y recien ahi colocamos las
+    // etiquetas, 26px mas arriba. Con Y fijas, Druk a 120px trepaba hasta la etiqueta y la tapaba.
+    const seatText = isYou ? this._seat : '#0001';
+    ctx.font = '800 112px Druk, "Arial Narrow", sans-serif';
+    const subeNum = ctx.measureText(seatText).actualBoundingBoxAscent || 112 * 0.73;
+    const yLabels = Math.round(Y_SEAT - subeNum - 26);
+    label('PASSENGER', PAD, yLabels);
+    label('SEAT', W - PAD, yLabels, 'right');
     ctx.fillStyle = INK;
     ctx.font = '700 62px Druk, "Arial Narrow", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText(name, PAD, 1052);
-    label('SEAT', W - PAD, 986, 'right');
+    ctx.fillText(name, PAD, yLabels + 68);
     ctx.fillStyle = INK;
-    ctx.font = '800 120px Druk, "Arial Narrow", sans-serif';
+    ctx.font = '800 112px Druk, "Arial Narrow", sans-serif';
     ctx.textAlign = 'right';
-    ctx.fillText(isYou ? this._seat : '#0001', W - PAD, 1074);
+    ctx.fillText(seatText, W - PAD, Y_SEAT);
     ctx.textAlign = 'left';
 
     // FLIGHT / DEPARTS / CLASS
@@ -438,14 +457,14 @@ class PSLFounderID extends HTMLElement {
       ['CLASS', isYou ? 'FOUNDING' : 'FIRST FAN', 810],
     ];
     cols.forEach(([l, v, x]) => {
-      label(l, x, 1160);
+      label(l, x, Y_COL_LABEL);
       ctx.fillStyle = INK;
       ctx.font = '700 40px Druk, "Arial Narrow", sans-serif';
-      ctx.fillText(v, x, 1212);
+      ctx.fillText(v, x, Y_COL_VALUE);
     });
 
     // línea de perforación con muescas
-    const ty = 1290;
+    const ty = Y_TEAR;
     ctx.strokeStyle = 'rgba(12,12,10,.4)';
     ctx.lineWidth = 3;
     ctx.setLineDash([16, 14]);
@@ -465,17 +484,17 @@ class PSLFounderID extends HTMLElement {
     ctx.fillStyle = 'rgba(12,12,10,.6)';
     ctx.font = '500 22px "Druk Text Wide", sans-serif';
     ctx.letterSpacing = '4px';
-    ctx.fillText(isYou ? 'CLAIM YOUR FOUNDING NUMBER' : 'FIRST FAN · CLUB MASCOT', PAD, 1372);
+    ctx.fillText(isYou ? 'CLAIM YOUR FOUNDING NUMBER' : 'FIRST FAN · CLUB MASCOT', PAD, Y_TEAR + 82);
     ctx.fillStyle = 'rgba(12,12,10,.5)';
     ctx.font = '500 20px "Druk Text Wide", sans-serif';
-    // Est. 2019 = año de marca, único en todo el sitio (ver la timeline en native/home/03-project.html)
-    ctx.fillText('EST. 2019 · FIRST WHISTLE 2027', PAD, 1420);
+    // Est. 2025 = año de marca, único en todo el sitio (ver la timeline en native/home/03-project.html)
+    ctx.fillText('EST. 2025 · FIRST WHISTLE 2027', PAD, Y_TEAR + 130);
     ctx.letterSpacing = '0px';
     let bx = W - PAD - 240;
     for (let i = 0; i < 34; i++) {
       const bw = i % 3 === 0 ? 8 : 4;
       ctx.fillStyle = `rgba(12,12,10,${i % 2 ? .75 : .35})`;
-      ctx.fillRect(bx, 1340, bw, 90);
+      ctx.fillRect(bx, Y_TEAR + 50, bw, 90);
       bx += bw + 3;
     }
 

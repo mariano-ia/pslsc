@@ -1,0 +1,59 @@
+<!--
+  Bloque HOME 10 · Popup de captación — pruebas de jugadores / academia. 🟩 Nativo.
+
+  Creado 26-09-2026 para la salida del video con Valentín Scarsini: la gente que llega al sitio
+  por el video no viene a leer, viene a preguntar cómo probarse. El popup les da el lugar para
+  dejar el dato sin tener que encontrar la página de Academy.
+
+  NO es un plugin ni un componente de WordPress: en este sitio no tenemos acceso a plugins (lo
+  administra SportsEngine/USL, ver CLAUDE.md). Y aunque lo tuviéramos, un popup genérico mete
+  adentro el embed nativo de AC, que envía inyectando un <script> a activehosted.com — justo lo
+  que se bloquea en iPhone (bug del 24-09). Por eso el form es nuestro y postea con acSubmitDirect().
+
+  QUÉ HAY QUE PEGAR EN LA PÁGINA HOME (dos bloques, además del motion-core):
+    1. El embed simple del form de ActiveCampaign:
+         <div class="_form_NN"></div>
+         <script src="https://portstluciesc.activehosted.com/f/embed.php?id=NN"></script>
+       El form de AC tiene que tener SOLO Full Name y Email, los dos obligatorios — nuestros
+       campos obligatorios no pueden exceder los de AC (ver formularios-activecampaign.md).
+    2. Este bloque.
+
+  La frase de consentimiento de USL es condición de ellos para todos los formularios del sitio
+  (Madison Suitor, 28-08-2026). No sacarla.
+-->
+<div class="psltp" data-tryout-popup hidden>
+  <div class="psltp__veil" data-tryout-close></div>
+
+  <div class="psltp__card" role="dialog" aria-modal="true" aria-labelledby="psltp-title" aria-describedby="psltp-lead">
+    <button type="button" class="psltp__x" data-tryout-close aria-label="Close">
+      <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" focusable="false"><path d="M1 1l14 14M15 1L1 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+
+    <span class="psl-kicker psltp__kicker">Player tryouts</span>
+    <h2 class="psltp__title" id="psltp-title">Want to try out?</h2>
+    <p class="psltp__lead" id="psltp-lead">Leave your name and we&rsquo;ll tell you first when tryouts, academy spots and open training dates go live.</p>
+
+    <form class="psltp__form" data-tryout-form>
+      <label class="psltp__field">
+        <span class="psltp__label">Full name <span class="psltp__req" aria-hidden="true">*</span></span>
+        <input class="psltp__input" type="text" name="name" autocomplete="name" required />
+      </label>
+      <label class="psltp__field">
+        <span class="psltp__label">Email <span class="psltp__req" aria-hidden="true">*</span></span>
+        <input class="psltp__input" type="email" name="email" autocomplete="email" required />
+      </label>
+
+      <button type="submit" class="psl-btn cta-primary psltp__submit"><span>Keep me posted</span> <span aria-hidden="true">&rarr;</span></button>
+
+      <p class="psltp__consent">By clicking Keep me posted, you are agreeing to the <a href="https://www.uslsoccer.com/usl-privacy-policy" target="_blank" rel="noopener noreferrer">USL privacy policy</a>, <a href="https://www.uslsoccer.com/terms-of-use" target="_blank" rel="noopener noreferrer">USL Terms of Use</a> and agree to receive communication from the USL.</p>
+      <p class="psltp__msg" data-tryout-msg role="status" aria-live="polite"></p>
+    </form>
+
+    <div class="psltp__done" data-tryout-done hidden>
+      <span class="psltp__tick" aria-hidden="true">&#10003;</span>
+      <h3 class="psltp__done-title">You&rsquo;re on the list.</h3>
+      <p class="psltp__done-lead">We&rsquo;ll email you the moment tryout dates are confirmed.</p>
+      <button type="button" class="psl-btn cta-secondary psltp__done-btn" data-tryout-close>Close</button>
+    </div>
+  </div>
+</div>

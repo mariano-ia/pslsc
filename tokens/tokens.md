@@ -30,7 +30,7 @@ Color: **aquamarine principal, negro secundario, blanco + red marine acento** (i
 | `--color-red-marine` | `#FF0033` | Red Marine oficial — acento de urgencia |
 | `--font-hero` | Ferryman | título de la home (H1) / heros |
 | `--font-display` | Druk | títulos de sección, números display, títulos de card |
-| `--font-label` (`--font-mono` alias) | Druk Text Wide | kickers, labels, nav, "EST. 2019" |
+| `--font-label` (`--font-mono` alias) | Druk Text Wide | kickers, labels, nav, "EST. 2025" |
 | `--font-body` | Proxima Nova | body / UI / botones / inputs (legible) |
 | `--font-detail` | Cabazon | detalle decorativo (uso puntual) |
 
