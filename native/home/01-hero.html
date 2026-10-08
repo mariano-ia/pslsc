@@ -9,10 +9,12 @@
        data-parallax: deriva vertical sutil con el scroll; .hero__bg está agrandado en CSS
        (inset negativo) para que el desplazamiento NO deje huecos en los bordes. -->
   <div class="hero__bg" aria-hidden="true" data-parallax="0.10">
-    <video class="hero__video" autoplay loop muted playsinline preload="auto"
-           poster="/assets/videos/hero-poster.webp">
-      <source src="/assets/videos/hero.mp4" type="video/mp4" />
-    </video>
+    <!-- El poster va como <img> real: es el elemento LCP (~37 KB) y pinta enseguida.
+         El <video> arranca sin src y lo carga initHeroVideo() despues del load de la
+         pagina (ver el .js del bloque) — asi el hero no espera 1,4 MB para pintar. -->
+    <img class="hero__poster" data-hero-poster src="/assets/videos/hero-poster.webp" alt="" width="1280" height="720"
+         fetchpriority="high" decoding="async" />
+    <video class="hero__video" data-hero-video="/assets/videos/hero.mp4" loop muted playsinline preload="none"></video>
   </div>
   <div class="hero__scrim" aria-hidden="true"></div>
 
@@ -22,11 +24,11 @@
     </div>
     <h1 class="hero__headline"><span class="hero__morph-prefix">You&rsquo;re watching a club be</span> <span class="hero__morph" aria-label="born."><span class="hero__morph-sizer" aria-hidden="true">imagined.</span><span class="hero__morph-word" data-words="imagined,loved,born">born.</span></span></h1>
     <p class="hero__subhead">
-      The first professional football club in Port St. Lucie — built on the Treasure Coast,
-      shaped by Argentine football culture. Not a promise. A build already underway.
+      The first professional soccer club in Port St. Lucie — built on the Treasure Coast,
+      shaped by Argentine soccer culture. Not a promise. A build already underway.
     </p>
     <div class="hero__ctas">
-      <a href="/joinus/" class="psl-btn cta-primary"><span>Become a Founder</span> <span aria-hidden="true">→</span></a>
+      <a href="/joinus/" class="psl-btn cta-primary"><span>Place your ticket deposit</span> <span aria-hidden="true">→</span></a>
       <a href="#project" class="psl-btn cta-secondary">See the project</a>
     </div>
   </div>

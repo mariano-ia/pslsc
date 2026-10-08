@@ -35,27 +35,105 @@ function scrambleLabel(el, word, done) {
 }
 
 /**
- * Mobile (≤780): el peek NO juega a la linterna. El render aparece revelado (visible) pero con las
- * luces bajas y, cuando entra en el viewport con el scroll, se ENCIENDEN los reflectores (mismo
- * flicker + brillo que el reveal de desktop). Sin tap, sin capa negra. Un IntersectionObserver lo
- * dispara una sola vez. Ya no es interactivo, así que le sacamos el rol de botón.
+ * Mobile (≤780): la linterna TAMBIÉN se puede arrastrar, pero desplazada: el hueco va por encima
+ * del dedo (como la lupa de selección de iOS), porque si quedara debajo el propio dedo taparia lo
+ * que se está mirando. Y la capa no es negra plena sino un velo: el que no toca nada igual ve el
+ * render, y el bloque nunca parece roto. Arrastrar explora; un tap revela todo.
  */
-function setupMobileLights(peek) {
-  peek.classList.add('peek--auto');
-  peek.removeAttribute('tabindex');
-  peek.removeAttribute('role');
-  peek.removeAttribute('aria-label');
-  let lit = false;
-  const lightUp = () => {
-    if (lit) return;
-    lit = true;
-    peek.classList.add('lights-on');
+function setupTouchPeek(peek) {
+  const img = peek.querySelector('.proof__peek-img');
+  // loading="lazy" no siempre dispara acá (el navegador no evalúa imágenes diferidas con la
+  // pestaña en segundo plano, y en el medio de una página tan alta la foto puede no pedirse
+  // nunca -> caja negra). Acá la foto ES el contenido, así que la pedimos de una.
+  const forceLoad = () => { if (img && img.loading === 'lazy') img.loading = 'eager'; };
+  forceLoad();
+
+  const label = peek.querySelector('.proof__peek-label');
+  const R0 = 70;        // hueco más chico que en desktop: la foto mide ~195px de alto en mobile
+  const OFFSET = 92;    // cuánto sube el hueco por encima del dedo (mayor que R0: el dedo queda fuera)
+  let revealed = false;
+  let movido = false;
+
+  peek.classList.add('peek--active', 'peek--touch');
+  peek.style.setProperty('--peek-r0', R0 + 'px');
+  peek.style.setProperty('--r', R0 + 'px');
+  peek.setAttribute('aria-label', 'Sneak peek - drag to explore, tap to reveal the full stadium complex');
+  if (label) label.textContent = PEEK_COPY.peek;
+
+  const center = () => {
+    const r = peek.getBoundingClientRect();
+    peek.style.setProperty('--mx', (r.width / 2) + 'px');
+    peek.style.setProperty('--my', (r.height / 2) + 'px');
+    peek.style.setProperty('--lx', (r.width / 2) + 'px');
   };
-  if (!('IntersectionObserver' in window)) { lightUp(); return; }
-  const io = new IntersectionObserver((entries, obs) => {
-    if (entries.some((e) => e.isIntersecting)) { lightUp(); obs.disconnect(); }
-  }, { threshold: 0.4 });
-  io.observe(peek);
+  center();
+  window.addEventListener('resize', center, { passive: true });
+
+  const mover = (e) => {
+    if (revealed) return;
+    const t = e.touches && e.touches[0] ? e.touches[0] : e;
+    const r = peek.getBoundingClientRect();
+    const mx = Math.min(Math.max(t.clientX - r.left, 0), r.width);
+    // el hueco NO va debajo del dedo: el dedo taparía justo lo que se está mirando. Va por
+    // encima, y si no entra arriba (dedo cerca del borde superior) se espeja hacia abajo.
+    let my = t.clientY - r.top - OFFSET;
+    if (my < R0 * 0.5) my = t.clientY - r.top + OFFSET;
+    my = Math.min(Math.max(my, 0), r.height);
+    peek.classList.add('peek--touched');   // deja de latir apenas lo movés
+    peek.style.setProperty('--mx', mx + 'px');
+    peek.style.setProperty('--my', my + 'px');
+    peek.style.setProperty('--lx', Math.min(Math.max(mx, 76), r.width - 76) + 'px');
+    peek.classList.toggle('peek--label-above', (r.height - my) < (R0 + 56));
+    if (label && !peek.classList.contains('peek--ready')) {
+      peek.classList.add('peek--ready');
+      scrambleLabel(label, PEEK_COPY.ctaTouch);
+    }
+  };
+
+  const reveal = () => {
+    if (revealed) return;
+    revealed = true;
+    peek.classList.add('is-revealed');
+    const r = peek.getBoundingClientRect();
+    const target = Math.hypot(r.width, r.height) * 1.12;
+    const t0 = performance.now();
+    const ease = (t) => 1 - Math.pow(1 - t, 4);
+    const tick = (now) => {
+      const t = Math.min((now - t0) / 900, 1);
+      peek.style.setProperty('--r', (R0 + (target - R0) * ease(t)) + 'px');
+      if (t < 1) { requestAnimationFrame(tick); return; }
+      setTimeout(() => peek.classList.add('lights-on'), 200);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  let x0 = 0, y0 = 0;
+  // el PRIMER toque solo coloca la linterna: si revelara de una, el visitante nunca llega a ver
+  // que se puede explorar. A partir del segundo tap (o tras arrastrar y soltar) sí revela.
+  let armado = false;
+  let huboTouch = false;   // si el navegador manda touch, el click sintetico que viene despues sobra
+  peek.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    x0 = t.clientX; y0 = t.clientY; movido = false; huboTouch = true;
+    mover(e);
+  }, { passive: true });
+  peek.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    if (Math.hypot(t.clientX - x0, t.clientY - y0) > 10) movido = true;
+    mover(e);
+  }, { passive: true });
+  // tap = revelar. Si arrastró, no revela: estaba explorando.
+  peek.addEventListener('touchend', () => {
+    if (movido) { armado = true; return; }   // arrastró: exploró, no revela
+    if (!armado) { armado = true; return; }  // primer tap: solo coloca la linterna
+    reveal();
+  }, { passive: true });
+  // solo para un navegador angosto SIN touch (desktop achicado): en touch manda el touchend,
+  // y el click sintetico que el navegador dispara despues del tap se ignora.
+  peek.addEventListener('click', (e) => { if (!huboTouch && e.detail !== 0) reveal(); });
+  peek.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reveal(); }
+  });
 }
 
 /**
@@ -64,7 +142,7 @@ function setupMobileLights(peek) {
  * cuando el usuario ya recorrió un par de barridos (o pasó un tiempo), MUTA con scramble al CTA
  * ("hacé click y miralo entero"). Click/tap/Enter hace crecer el hueco hasta revelar todo.
  * No-JS y prefers-reduced-motion = render visible sin capa. En touch (tablet ≥781) la linterna queda
- * centrada y la etiqueta sube al CTA tras un momento. En mobile (≤780) → setupMobileLights.
+ * centrada y la etiqueta sube al CTA tras un momento. En mobile (≤780) → setupTouchPeek.
  */
 function setupPeek(root) {
   const peek = root.querySelector('.proof__peek');
@@ -72,7 +150,7 @@ function setupPeek(root) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const overlay = window.matchMedia('(min-width: 781px)').matches;   // timeline como overlay (desktop)
-  if (!overlay) { setupMobileLights(peek); return; }   // mobile: render revelado + luces al scrollear
+  if (!overlay) { setupTouchPeek(peek); return; }   // mobile: linterna arrastrable con el dedo
 
   const R0 = 120;
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;

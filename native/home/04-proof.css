@@ -24,8 +24,10 @@
 .proof__peek-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 /* con las luces bajas (tenue) mientras se espía Y durante la expansión del reveal — hasta .lights-on.
    peek--auto = modo mobile: el render se ve entero (sin linterna) pero apagado hasta entrar en viewport. */
-.proof__peek.peek--active:not(.lights-on) .proof__peek-img,
-.proof__peek.peek--auto:not(.lights-on) .proof__peek-img { filter: brightness(.5) saturate(.9); }
+.proof__peek.peek--active:not(.lights-on) .proof__peek-img { filter: brightness(.5) saturate(.9); }
+/* mobile: no hay capa negra ni linterna, la foto ES el contenido -> apagarla a .5 la dejaba
+   ilegible en un render nocturno. .72 se lee y igual deja notar el encendido. */
+.proof__peek.peek--auto:not(.lights-on) .proof__peek-img { filter: brightness(.72) saturate(.95); }
 /* .lights-on lo agrega el JS un instante DESPUÉS de que terminó de abrirse el círculo:
    se encienden TODAS las luces (flicker de reflector → brillo pleno). Sin fill: reposo = brillo base. */
 .proof__peek.lights-on .proof__peek-img { animation: proof-lights-on 1.3s var(--ease-out-soft); }
@@ -121,6 +123,33 @@
   display: none;
 }
 .proof__peek.peek--active .proof__peek-ring { display: block; }
+
+/* ===== MOBILE (peek--touch): la misma linterna, pero arrastrable con el dedo =====
+   Dos diferencias con desktop, las dos por el dedo:
+   1) el hueco va DESPLAZADO por encima del punto de contacto (lo calcula el JS en --my), como la
+      lupa de selección de texto de iOS: si quedara debajo, el dedo taparía justo lo que se mira.
+   2) la capa no es negra plena sino un velo: el visitante que no toca nada igual ve el render y el
+      bloque no parece roto. El velo ya oscurece, así que la foto NO se apaga además. */
+.proof__peek.peek--touch { touch-action: none; }          /* el arrastre explora, no scrollea */
+.proof__peek.peek--touch.is-revealed { touch-action: auto; }
+.proof__peek.peek--touch.peek--active .proof__peek-mask {
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
+    transparent calc(var(--r, 88px) - 1px),
+    rgba(12, 12, 10, .8) var(--r, 88px));
+}
+.proof__peek.peek--touch.peek--active:not(.lights-on) .proof__peek-img { filter: none; }
+.proof__peek.peek--touch.peek--active:not(.is-revealed) { cursor: pointer; }
+/* la etiqueta NO sigue a la linterna en mobile: la caja mide ~195px de alto y entre el circulo
+   y sus bordes no queda lugar, se recortaba. Va fija al pie, centrada. */
+.proof__peek.peek--touch .proof__peek-label,
+.proof__peek.peek--touch.peek--label-above .proof__peek-label {
+  left: 50%;
+  top: auto;
+  bottom: 10px;
+  transform: translateX(-50%);
+  font-size: 11px;
+  letter-spacing: .12em;
+}
 /* el círculo LATE para llamar la atención; deja de latir apenas el usuario lo mueve (.peek--touched) */
 .proof__peek.peek--active:not(.is-revealed):not(.peek--touched) .proof__peek-ring { animation: proof-peek-pulse 1.25s ease-in-out infinite; }
 .proof__peek.is-revealed .proof__peek-ring { opacity: 0; transition: opacity .5s ease; }
@@ -228,7 +257,10 @@
 /* ≤780: la timeline va DEBAJO del peek (estática, siempre visible) — la foto es chica para overlay */
 @media (max-width: 780px) {
   .proof__timeline {
-    position: static;
+    /* relative, NO static: el eje 2024->2027 es un ::before absolute. Con static, el timeline deja
+       de ser su bloque contenedor y el ::before se ancla a .proof__stage -> la linea aqua se iba
+       al borde SUPERIOR del bloque, flotando arriba de la foto (reportado 2026-09-22 en mobile). */
+    position: relative;
     opacity: 1; transform: none; pointer-events: auto;
     background: none;
     border-radius: 0;
