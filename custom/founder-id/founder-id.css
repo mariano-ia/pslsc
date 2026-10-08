@@ -179,9 +179,9 @@ psl-founder-id { display: block; }
 }
 .fid__btn--ghost:hover { background: rgba(12, 12, 10, .08); }
 
-/* Gate de edad — requerimiento legal: sin tildar no se abre la cámara ni el file picker. No se
-   persiste en ningún lado: se vuelve a tildar en cada carga, coherente con que el pase no guarda
-   nada. */
+/* Gate de edad — requerimiento legal (merge desde version anterior/pslsc-main, 2026-09-04): sin
+   tildar no se abre la camara ni el file picker. No se persiste en ningun lado: se vuelve a
+   tildar en cada carga, coherente con que el pase no guarda nada. */
 .fid__gate { display: flex; align-items: center; }
 .fid__gate-label {
   display: inline-flex;
@@ -202,8 +202,8 @@ psl-founder-id { display: block; }
   cursor: pointer;
 }
 
-/* OJO: el disabled del gate no es el mismo estado que el disabled del share en curso — ese sí
-   lleva cursor:wait (.fid__btn:disabled, más arriba). Esta regla va después para ganarle. */
+/* OJO: el disabled del gate no es el mismo estado que el disabled del share en curso — ese si
+   lleva cursor:wait (.fid__btn:disabled, mas arriba). Esta regla va despues para ganarle. */
 .fid__btn--gated:disabled { cursor: not-allowed; opacity: .45; }
 
 .fid__note {
@@ -218,7 +218,7 @@ psl-founder-id { display: block; }
   gap: 10px;
 }
 .fid__foot-text { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
-/* ahora es <button> (abre el modal), así que hay que resetear el chrome del botón */
+/* ahora es <button> (abre el modal), asi que hay que resetear el chrome del boton */
 .fid__foot-link {
   padding: 0;
   border: 0;
@@ -233,9 +233,9 @@ psl-founder-id { display: block; }
 }
 .fid__foot-link:hover { color: var(--color-black); }
 
-/* ── Privacy notice (modal) ───────────────────────────────────────────────────────────────────
-   <dialog> + showModal(): va al top layer, así que se escapa solo del overflow y del stacking
-   del pase — no hace falta portalear nada ni pelearse con z-index. Trae gratis foco atrapado,
+/* -- Privacy notice (modal) -----------------------------------------------------------------
+   <dialog> + showModal(): va al top layer, asi que se escapa solo del overflow y del stacking
+   del pase -- no hace falta portalear nada ni pelearse con z-index. Trae gratis foco atrapado,
    Esc para cerrar y ::backdrop. El click en el backdrop lo cierra desde el JS. */
 .fid__modal {
   width: min(680px, calc(100vw - 32px));
@@ -257,7 +257,7 @@ psl-founder-id { display: block; }
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 4px;
-  /* el cuerpo scrollea: el título y la X quedan fijos arriba */
+  /* el cuerpo scrollea: el titulo y la X quedan fijos arriba */
   position: sticky;
   top: 0;
   padding: 28px 30px 10px;

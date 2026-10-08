@@ -20,6 +20,9 @@ export const LIVE_COUNTER_CONFIG = {
     // flecha ahí sería ruido. Tampoco lleva `accent`: el teal se lo queda el countdown, que es el
     // que mete urgencia. Reemplazó a "Ticket Deposits", que repetía el mismo número que founders
     // (cada founding member hace un solo ticket deposit, así que las dos casillas decían lo mismo).
+    // OJO: esto es SOLO en la variante `stats` — `deposits2027` sigue vivo y en uso en las
+    // variantes `fan` y `reservation` de acá abajo, no se toca (merge desde version anterior/
+    // pslsc-main, 2026-09-04).
     metrics: [
       { key: 'founders', label: 'Founding Members', labelEs: 'Miembros Fundadores', format: 'integer', rising: true },
       { key: 'daysInTheMaking', label: 'Days in the making', labelEs: 'Días construyendo', format: 'integer' },
