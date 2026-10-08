@@ -47,6 +47,7 @@ function hideAcProxy() {
 }
 
 function initNewsletter(root = document) {
+  acInstallResultHooks();
   const form = root.querySelector('[data-newsletter]');
   if (!form) return;
   const msg = form.parentElement.querySelector('[data-newsletter-msg]');
@@ -76,17 +77,28 @@ function initNewsletter(root = document) {
       settled = true;
       observer.disconnect();
       clearTimeout(fallback);
+      document.removeEventListener(AC_RESULT_EVENT, onAcResult);
       if (submitBtn) submitBtn.disabled = false;
       if (!ok) msg.classList.add('newsletter__msg--error');
       msg.textContent = text;
       if (ok) form.reset();
     };
 
+    // El hook global es la via principal: _show_error(id, mensaje) trae el motivo real de AC.
+    // El observer de abajo queda como respaldo por si el embed deja de usar esas funciones.
+    const onAcResult = (ev) => {
+      if (settled) return;
+      const args = ev.detail && Array.isArray(ev.detail.args) ? ev.detail.args : [];
+      if (ev.detail && ev.detail.ok) return;   // el exito lo resuelve el observer
+      finish(false, acApplyError(form, args[1], 'newsletter'));
+    };
+    document.addEventListener(AC_RESULT_EVENT, onAcResult);
+
     const observer = new MutationObserver(() => {
       const success = thankYou && thankYou.style.display !== 'none' && thankYou.style.display !== '';
       if (success) { finish(true, "✓ You're on the list. Welcome to the build."); return; }
       const error = acForm.querySelector('._form_error, ._error-inner._form_error');
-      if (error) finish(false, 'Something went wrong — try again in a moment.');
+      if (error) finish(false, acApplyError(form, acDomErrorText(acForm), 'newsletter'));
     });
     observer.observe(acForm, { attributes: true, attributeFilter: ['style'], childList: true, subtree: true });
     // fallback: si AC no contesta (red caída, script no cargó a tiempo) no queremos dejar el botón
@@ -101,9 +113,22 @@ function initNewsletter(root = document) {
       emailInput.value = form.elements.email.value;
       emailInput.dispatchEvent(new Event('input', { bubbles: true }));
       emailInput.dispatchEvent(new Event('change', { bubbles: true }));
-      submitButton.click();
+      // Posteamos nosotros a proc.php en vez de apretar el boton de AC: su submit inyecta un
+      // <script> a activehosted.com y en iPhone con bloqueo de contenido ese <script> nunca
+      // entra, asi que el envio no salia y caiamos al timeout. Ver acSubmitDirect().
+      acSubmitDirect(acForm).then((r) => {
+        if (r.ok) {
+          finish(true, "✓ You're on the list. Welcome to the build.");
+          return;
+        }
+        finish(false, acApplyError(form, r.message, 'newsletter'));
+      }).catch((err) => {
+        // ultimo recurso: el camino original de AC, por si el fetch no sale (red, CORS, proxy)
+        console.warn('[psl-form] newsletter — el POST directo fallo, reintento con el submit de AC', err);
+        try { submitButton.click(); } catch (err2) { finish(false, 'We could not send that — please try again in a moment.'); }
+      });
     } catch (err) {
-      finish(false, 'Something went wrong — try again in a moment.');
+      finish(false, 'We could not send that — please try again in a moment.');
       console.error('[newsletter] ActiveCampaign proxy submit falló', err);
     }
   });

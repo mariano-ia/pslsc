@@ -1,0 +1,183 @@
+/**
+ * HOME 10 · Popup de captación (tryouts). Ver el HTML para el contexto y qué se pega en WP.
+ *
+ * El JS mueve el popup a un <div class="pslsc"> colgado del <body> (ver initTryoutPopup):
+ * position:fixed se rompe si CUALQUIER ancestro tiene transform/filter/perspective, y el
+ * content column del tema no es nuestro. Moverlo al body lo saca de esa lotería. El host lleva
+ * la clase .pslsc justamente para que sigan aplicando .psl-btn / .cta-primary / .psl-field-invalid,
+ * que en el CSS adicional viven prefijadas con .pslsc.
+ */
+
+.psltp {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.psltp.is-open { display: flex; }
+
+.psltp__veil {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 6, 5, .74);
+  animation: psltp-veil 260ms var(--ease-out-soft) both;
+}
+
+.psltp__card {
+  position: relative;
+  width: min(440px, 100%);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  background: var(--color-ink);
+  color: var(--color-text);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px 24px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
+  animation: psltp-card 340ms var(--ease-out-expo) both;
+}
+
+.psltp__x {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 140ms ease, border-color 140ms ease;
+}
+.psltp__x:hover { color: var(--color-text); border-color: var(--color-line-strong); }
+
+.psltp__kicker { display: block; }
+
+.psltp__title {
+  margin: 12px 0 0;
+  font: 800 clamp(26px, 6vw, 34px)/.98 var(--font-display);
+  letter-spacing: var(--ls-display);
+  text-wrap: balance;
+}
+
+.psltp__lead {
+  margin: 10px 0 0;
+  font-size: var(--fs-small);
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}
+
+.psltp__form {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.psltp__field { display: grid; gap: 6px; }
+
+.psltp__label {
+  font: 500 var(--fs-label)/1 var(--font-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+.psltp__req { color: var(--color-aqua); }
+
+.psltp__input {
+  width: 100%;
+  padding: 13px 14px;
+  font: 400 16px/1.2 var(--font-body);   /* 16px: menos de eso y iOS hace zoom al enfocar */
+  color: var(--color-text);
+  background: var(--color-ink-3);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  transition: border-color 140ms ease;
+}
+.psltp__input:focus-visible {
+  outline: none;
+  border-color: var(--color-aqua);
+}
+
+.psltp__submit {
+  justify-content: center;
+  width: 100%;
+  margin-top: 4px;
+}
+.psltp__submit[disabled] { opacity: .55; cursor: progress; }
+
+.psltp__consent {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--color-text-faint);
+}
+.psltp__consent a { color: var(--color-text-muted); }
+
+.psltp__msg {
+  margin: 0;
+  font-size: var(--fs-small);
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+.psltp__msg--error { color: #FF9C8A; }
+.psltp__msg:empty { display: none; }
+
+/* Estado de gracias — reemplaza al form, no se apila debajo */
+.psltp__done { text-align: center; padding: 8px 0 4px; }
+.psltp__tick {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin: 0 auto 14px;
+  border-radius: var(--radius-pill);
+  background: var(--color-aqua);
+  color: var(--color-black);
+  font-size: 22px;
+}
+.psltp__done-title {
+  margin: 0;
+  font: 800 26px/1 var(--font-display);
+  letter-spacing: var(--ls-display);
+}
+.psltp__done-lead {
+  margin: 8px 0 20px;
+  font-size: var(--fs-small);
+  color: var(--color-text-muted);
+}
+.psltp__done-btn { justify-content: center; }
+
+/* En celular es hoja inferior, no cortina de pantalla completa: deja ver la página detrás,
+   se alcanza con el pulgar y es lo que Google mira cuando habla de interstitials intrusivos. */
+@media (max-width: 560px) {
+  .psltp { align-items: flex-end; padding: 0; }
+  .psltp__card {
+    width: 100%;
+    max-height: 88dvh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-bottom: none;
+    padding: 26px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+    animation-name: psltp-sheet;
+  }
+}
+
+/* El host que cuelga del body no tiene que ocupar nada en el flujo. :global(...) y no
+   ".psltp-host" a secas porque el compilador prefija como DESCENDIENTE (".pslsc .psltp-host")
+   y acá las dos clases viven en el MISMO elemento. Misma razón para el lock del <body>, que es
+   ancestro de todo. */
+:global(.pslsc.psltp-host) { width: 0; height: 0; }
+:global(html.psltp-lock), :global(body.psltp-lock) { overflow: hidden; }
+
+@keyframes psltp-veil  { from { opacity: 0 } to { opacity: 1 } }
+@keyframes psltp-card  { from { opacity: 0; transform: translateY(14px) scale(.98) } to { opacity: 1; transform: none } }
+@keyframes psltp-sheet { from { transform: translateY(100%) } to { transform: none } }
+
+@media (prefers-reduced-motion: reduce) {
+  .psltp__veil, .psltp__card { animation: none; }
+}

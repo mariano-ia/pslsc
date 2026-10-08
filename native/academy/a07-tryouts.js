@@ -81,6 +81,7 @@ function setProxyConsent(acForm, checked) {
 }
 
 function initTryouts(root = document) {
+  acInstallResultHooks();
   const form = root.querySelector('form[data-tryout]');
   if (!form) return;
   const msg = form.querySelector('[data-tryout-msg]');
@@ -135,6 +136,7 @@ function initTryouts(root = document) {
       settled = true;
       observer.disconnect();
       clearTimeout(fallback);
+      document.removeEventListener(AC_RESULT_EVENT, onAcResult);
       if (ok) {
         form.classList.add('is-done');
       } else if (submit) {
@@ -143,6 +145,16 @@ function initTryouts(root = document) {
       setMsg(text, state);
     };
 
+    // El hook global es la via principal: _show_error(id, mensaje) trae el motivo real de AC.
+    // El observer de abajo queda como respaldo por si el embed deja de usar esas funciones.
+    const onAcResult = (ev) => {
+      if (settled) return;
+      const args = ev.detail && Array.isArray(ev.detail.args) ? ev.detail.args : [];
+      if (ev.detail && ev.detail.ok) return;   // el exito lo resuelve el observer
+      finish(false, acApplyError(form, args[1], 'tryout-request'), 'err');
+    };
+    document.addEventListener(AC_RESULT_EVENT, onAcResult);
+
     const observer = new MutationObserver(() => {
       const success = thankYou && thankYou.style.display !== 'none' && thankYou.style.display !== '';
       if (success) {
@@ -150,7 +162,7 @@ function initTryouts(root = document) {
         return;
       }
       const error = acForm.querySelector('._form_error, ._error-inner._form_error');
-      if (error) finish(false, 'Something went wrong. Try again in a moment.', 'err');
+      if (error) finish(false, acApplyError(form, acDomErrorText(acForm), 'tryout-request'), 'err');
     });
     observer.observe(acForm, { attributes: true, attributeFilter: ['style'], childList: true, subtree: true });
     // fallback: si AC no contesta (red caída, script no cargó a tiempo) no queremos dejar el botón
@@ -165,9 +177,22 @@ function initTryouts(root = document) {
         setProxyFieldValue(acForm, acName, payload[name]);
       });
       setProxyConsent(acForm, payload.consent);
-      submitButton.click();
+      // Posteamos nosotros a proc.php en vez de apretar el boton de AC: su submit inyecta un
+      // <script> a activehosted.com y en iPhone con bloqueo de contenido ese <script> nunca
+      // entra, asi que el envio no salia y caiamos al timeout. Ver acSubmitDirect().
+      acSubmitDirect(acForm).then((r) => {
+        if (r.ok) {
+          finish(true, `You’re on the list. We’ll email the 2026–27 tryout details to ${payload.email}.`, 'ok');
+          return;
+        }
+        finish(false, acApplyError(form, r.message, 'tryout-request'), 'err');
+      }).catch((err) => {
+        // ultimo recurso: el camino original de AC, por si el fetch no sale (red, CORS, proxy)
+        console.warn('[psl-form] tryout-request — el POST directo fallo, reintento con el submit de AC', err);
+        try { submitButton.click(); } catch (err2) { finish(false, 'We could not send that — please try again in a moment.', 'err'); }
+      });
     } catch (err) {
-      finish(false, 'Something went wrong. Try again in a moment.', 'err');
+      finish(false, 'We could not send that — please try again in a moment.', 'err');
       console.error('[tryout-request] ActiveCampaign proxy submit falló', err);
     }
   });

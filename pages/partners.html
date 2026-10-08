@@ -64,12 +64,14 @@
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
     }));
     // p05: form de contacto · footer: newsletter · 03-project: timeline de P02 · motion: reveals + nav
-    const [{ initPartnerContact }, { initNewsletter }, { initProjectTimeline }, { initMotion }] = await Promise.all([
+    const [{ initHeroVideo }, { initPartnerContact }, { initNewsletter }, { initProjectTimeline }, { initMotion }] = await Promise.all([
+      import('../native/partners/p01-hero.js?v=68'),
       import('../native/partners/p05-contact.js?v=68'),
       import('../native/home/09-cierre-footer.js?v=68'),
       import('../native/home/03-project.js?v=68'),
       import('../native/_patterns/motion.js?v=68'),
     ]);
+    initHeroVideo();   // video del hero diferido (p01-hero.js)
     initPartnerContact();
     initNewsletter();
     initProjectTimeline();

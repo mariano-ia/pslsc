@@ -25,6 +25,12 @@
   object-fit: cover;
   display: block;
 }
+/* Poster como <img> real (elemento LCP) + video que aparece recien cuando puede reproducirse.
+   Sin JS, o con reduced-motion, queda la imagen: el video nunca recibe src. */
+.sumate-hero__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity .5s ease; }
+.sumate-hero__poster.is-hidden { opacity: 0; }
+.sumate-hero__video { opacity: 0; transition: opacity .5s ease; }
+.sumate-hero__video.is-ready { opacity: 1; }
 .sumate-hero__scrim {
   position: absolute;
   inset: 0;
@@ -72,6 +78,8 @@
   font: 400 var(--fs-body-lg)/1.55 var(--font-body);
   color: var(--color-text-muted);
 }
+
+.sumate-hero__subhead--more { margin-top: 14px; }
 
 .sumate-hero__ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
 

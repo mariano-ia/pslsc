@@ -1,0 +1,7 @@
+/* Campo rechazado por ActiveCampaign: lo marca acMarkField() y se limpia al corregirlo. */
+.psl-field-invalid,
+[aria-invalid="true"] {
+  outline: 2px solid #FF5A5A;
+  outline-offset: 2px;
+  border-color: #FF5A5A !important;
+}

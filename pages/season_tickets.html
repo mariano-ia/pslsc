@@ -80,7 +80,7 @@
     }));
     // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.
     // (El sitio es English-only: no hay init de idioma.)
-    const [{ initTakeover }, { initBanner }, { initNewsletter }, { initHeroMorph }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
+    const [{ initTakeover }, { initBanner }, { initNewsletter }, { initHeroMorph, initHeroVideo }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
       import('../native/season_tickets/00-takeover.js?v=68'),
       import('../native/season_tickets/02b-banner.js?v=68'),
       import('../native/home/09-cierre-footer.js?v=68'),
@@ -93,6 +93,7 @@
     initBanner();     // banner bajo los destacados: pasa a fixed bajo la nav al scrollear
     initNewsletter();
     initHeroMorph();
+    initHeroVideo();   // video del hero diferido (01-hero.js): sin esto queda solo el poster
     initProofTimeline();
     initProjectTimeline();
     initMotion();   // activa reveal, parallax, nav reactiva, grano, cursor — tras inyectar los bloques
