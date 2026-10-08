@@ -138,6 +138,15 @@
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
+/* El ghost usa clamp(150px, 30vw, 420px) + white-space:nowrap: en pantallas angostas gana el piso
+   de 150px, el wordmark completo mide mucho mas que el viewport y el overflow:hidden del footer
+   deja ver solo una tajada del medio ("St Lu"), que se lee como una mancha gris sin sentido
+   (reportado por el cliente 2026-09-22 con captura de un iPhone). Abajo de 640px lo atamos al
+   ancho real de la pantalla para que entre el wordmark entero, que es lo que le da la textura. */
+@media (max-width: 640px) {
+  .footer__ghost { font-size: clamp(42px, 13vw, 90px); }
+}
+
 @media (max-width: 480px) {
   .ftag__word { font-size: 22px; }
   .ftag__seal { width: 42px; height: 42px; }

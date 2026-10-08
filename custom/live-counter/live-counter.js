@@ -1,5 +1,41 @@
 import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=8';
 
+// Founders / Ticket Deposits en vivo (bloque 02-stats, Home) — 2026-09-01.
+// Fuente real: Vivenu (evento "Founding Crew", ticket type "Founding Crew Deposits", $35 --
+// hoy founders y deposits2027 son el MISMO producto, ver nota en el propio Sheet) leido por un
+// Google Apps Script (corre cada 1h, guarda la key de Vivenu en sus Script Properties, nunca
+// expuesta aca) que escribe el total en una pestaña "Resumen" de un Google Sheet, publicada a
+// la web en CSV. Esta URL es publica pero de solo lectura y sin datos personales (2 numeros
+// nada mas) -- ver docs/ o memoria del proyecto para el detalle de la Fase 1/Fase 2.
+const LIVE_STATS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vREtGNg5ISHgY2GaYO2H8ln0kud89zDYgyQtsr-EIfWQsWdfcACZzJs6ruSesTCAGFmiqVdfr0SxSlY/pub?gid=424190757&single=true&output=csv';
+// El Sheet se actualiza solo 1 vez por hora (trigger del Apps Script) -- no tiene sentido pedirlo
+// mas seguido que eso; se throttlea el fetch real a este intervalo minimo, aunque el poll visual
+// del componente (config.updateFrequencyMs) siga corriendo mas rapido para otras variantes.
+const LIVE_STATS_MIN_INTERVAL_MS = 2 * 60 * 1000;
+
+// Pide el CSV publicado y lo parsea a { founders: N, deposits2027: N, ... }. Formato esperado,
+// una fila por metrica, sin encabezado: "label,value,updatedAt" (ej. "founders,853,9/1/2026").
+// Devuelve null ante cualquier falla (red, CORS, Sheet despublicado) -- el caller debe degradar
+// con gracia a los datos demo, nunca romper el render del bloque.
+async function fetchLiveStats() {
+  try {
+    const res = await fetch(LIVE_STATS_CSV_URL, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const text = await res.text();
+    const out = {};
+    text.trim().split('\n').forEach((line) => {
+      const [label, value] = line.split(',');
+      if (!label) return;
+      const n = Number(value);
+      if (!Number.isNaN(n)) out[label.trim()] = n;
+    });
+    return out;
+  } catch (e) {
+    console.warn('psl-live-counter: no se pudo leer el Sheet de stats en vivo', e);
+    return null;
+  }
+}
+
 /**
  * <psl-live-counter variant="stats|fan|reservation|sponsor"></psl-live-counter>
  *
@@ -27,6 +63,15 @@ class PSLLiveCounter extends HTMLElement {
     this._data = this._demoData();
     this._render();
     this._poll();
+    // Primer fetch real apenas conecta el componente -- no hace falta esperar al primer tick
+    // del poll (8s stats / 30s sponsor). "founders" tiene fuente real (Sheet/Vivenu) en las
+    // variantes stats (Home) y sponsor (Partners) -- ahi se mergea sobre el resto de metricas
+    // demo (deposits2027/monthlyReach/monthlyImpressions/depositsCaptured siguen en demo hasta
+    // tener su propia fuente -- depositsCaptured etc. bloqueados por Marce, ver pendiente 9).
+    // fan/reservation quedan 100% demo, no se tocan.
+    // Se guarda la promesa: el count-up inicial la espera (con tope) para contar directo hasta el
+    // numero real del Sheet y no hasta el de respaldo de _demoData() -- ver _observeReveal().
+    if (this.variant === 'stats' || this.variant === 'sponsor') this._liveReady = this._refreshLiveStats();
   }
 
   disconnectedCallback() {
@@ -37,7 +82,8 @@ class PSLLiveCounter extends HTMLElement {
   // ---- DEMO DATA — reemplazar por fetch(this.config.endpoint) cuando exista el endpoint real ----
   _demoData() {
     return {
-      founders: 1248,
+      // Respaldo: SOLO se ve si el Sheet no responde. Ultimo valor real conocido (Sheet, 2026-09-28).
+      founders: 974,
       deposits2027: 312,
       founderWindow: 'Closes 2027',
       lastJoinedSecondsAgo: 720,
@@ -47,12 +93,11 @@ class PSLLiveCounter extends HTMLElement {
       firstWhistle: '2027',
       // días hasta el primer silbato (2027-03-01) — cuenta viva; el count-up anima 0 -> valor
       daysToWhistle: Math.max(0, Math.ceil((new Date('2027-03-01T00:00:00') - new Date()) / 86400000)),
-      // PLACEHOLDER — valor fijo hasta que el cliente confirme la fecha de nacimiento del club.
-      // Cuando la haya, esto pasa a ser una resta como daysToWhistle (y no toca al backend):
-      //   daysInTheMaking: Math.max(0, Math.floor((new Date() - new Date('YYYY-MM-DD')) / 86400000)),
-      // OJO al cambiarlo: la home muestra "Est. 2019" en el bloque 01 (03-project.html), así que
-      // la fecha que se use acá tiene que ser coherente con eso o hay que corregir aquel bloque.
-      daysInTheMaking: 100,
+      // días desde el arranque del proyecto (2025-11-04) — cuenta viva, mismo patrón que daysToWhistle.
+      // Fecha confirmada por el cliente el 2026-09-04 (antes placeholder fijo en 100).
+      // OJO: la home muestra "Est. 2025" en el bloque 01 (03-project.html) — esa fecha refiere
+      // a la fundación/historia del club, no al arranque de este proyecto/sitio; no son la misma cosa.
+      daysInTheMaking: Math.max(0, Math.floor((new Date() - new Date('2025-11-04T00:00:00')) / 86400000)),
       league: 'USL',
       updatedAt: new Date().toISOString(),
     };
@@ -71,8 +116,47 @@ class PSLLiveCounter extends HTMLElement {
     return false;
   }
 
+  // Trae founders/deposits2027 reales del Sheet publicado y los mergea en this._data --
+  // nunca pisa las demas metricas (monthlyReach, depositsCaptured, etc.), esas siguen en demo
+  // hasta que tengan su propia fuente. Throttleado a LIVE_STATS_MIN_INTERVAL_MS: llamarlo mas
+  // seguido que eso es un no-op silencioso.
+  async _refreshLiveStats() {
+    const nowMs = Date.now();
+    if (this._lastLiveFetchAt && (nowMs - this._lastLiveFetchAt) < LIVE_STATS_MIN_INTERVAL_MS) return;
+    this._lastLiveFetchAt = nowMs;
+
+    const live = await fetchLiveStats();
+    if (!live) return;
+    // El primer dato real reemplaza al de respaldo: eso no es "se sumo un fundador", no va toast.
+    const firstLive = !this._hadLive;
+    this._hadLive = true;
+
+    const prevFounders = Number(this._data.founders) || 0;
+    let changed = false;
+    ['founders', 'deposits2027'].forEach((key) => {
+      if (typeof live[key] === 'number' && live[key] !== this._data[key]) {
+        this._data[key] = live[key];
+        changed = true;
+      }
+    });
+    this._data.updatedAt = new Date().toISOString();
+    if (!changed) return;
+    // Si el count-up inicial todavia no corrio, alcanza con haber actualizado this._data --
+    // _runCountUps() va a leer el valor real cuando el bloque entre en viewport.
+    if (!this._countUpDone) return;
+    this._update();
+    if (!firstLive && this.variant === 'stats' && Number(this._data.founders) > prevFounders) this._showFounderToast();
+  }
+
   _poll() {
     this._pollHandle = setInterval(() => {
+      if (this.variant === 'stats' || this.variant === 'sponsor') {
+        // Variantes conectadas al Sheet/Vivenu de verdad (founders): nada de incremento
+        // simulado ahi, solo re-consultar el Sheet (throttleado adentro de _refreshLiveStats
+        // -- este tick puede ser un no-op).
+        this._refreshLiveStats();
+        return;
+      }
       const founderAdded = this._simulateIncrement();
       this._update();
       // Toast "+1" efímero — SOLO variante stats y una vez que el count-up inicial terminó.
@@ -116,10 +200,10 @@ class PSLLiveCounter extends HTMLElement {
       cell.className = 'live-counter__metric';
       cell.dataset.key = m.key;
       // Flecha "en alza" (aqua, apunta arriba) junto al número — SOLO métricas con `rising: true`
-      // (hoy solo fundadores, en la variante stats). Reemplaza al viejo sparkline de barritas.
+      // (fundadores/depósitos en la variante stats). Reemplaza al viejo sparkline de barritas.
       const rise = this.variant === 'stats' && m.rising === true;
       const riseArrow = rise
-        ? '<span class="live-counter__rise" aria-label="on the rise"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M8 2 L13.5 8.5 H10 V14 H6 V8.5 H2.5 Z"/></svg></span>'
+        ? '<span class="live-counter__rise" role="img" aria-label="on the rise"><svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M8 2 L13.5 8.5 H10 V14 H6 V8.5 H2.5 Z"/></svg></span>'
         : '';
       cell.innerHTML = `
         <div class="live-counter__valrow">
@@ -183,15 +267,32 @@ class PSLLiveCounter extends HTMLElement {
 
   // Dispara el count-up cuando el componente entra en viewport (una sola vez).
   // Basado en getBoundingClientRect + scroll/load, sin depender de IntersectionObserver.
+  //
+  // Bug 2026-09-28 (Home mostraba 848 y recien ~2 min despues el 974 del Sheet): en la Home el bloque
+  // ya esta en pantalla al cargar, asi que el count-up arrancaba ANTES de que volviera el Sheet y
+  // contaba hasta el valor de respaldo. Cuando el Sheet llegaba en el medio de la animacion, el
+  // ultimo cuadro volvia a escribir el valor viejo encima, y el proximo fetch recien salia a los
+  // 2 min (LIVE_STATS_MIN_INTERVAL_MS). En Partners no pasaba porque el bloque esta mas abajo y
+  // cuando se llega scrolleando el Sheet ya respondio. Arreglo: (1) el count-up espera el primer
+  // fetch, con tope de LIVE_WAIT_MS para no quedar en blanco si Google tarda o esta caido;
+  // (2) _runCountUps() lee el objetivo en cada cuadro, asi que si el dato llega igual en el medio,
+  // termina en el valor nuevo.
   _observeReveal() {
+    const LIVE_WAIT_MS = 1500;
     const maybe = () => {
-      if (this._countUpDone) return;
+      if (this._revealStarted) return;
       const r = this.getBoundingClientRect();
       const vh = window.innerHeight || document.documentElement.clientHeight;
       if (r.top < vh * 0.85 && r.bottom > 0) {
-        this._countUpDone = true;
+        this._revealStarted = true;
         window.removeEventListener('scroll', maybe);
-        this._runCountUps();
+        const wait = this._liveReady
+          ? Promise.race([this._liveReady, new Promise((res) => setTimeout(res, LIVE_WAIT_MS))])
+          : Promise.resolve();
+        wait.catch(() => {}).then(() => {
+          this._countUpDone = true;
+          this._runCountUps();
+        });
       }
     };
     this._maybeReveal = maybe;
@@ -204,18 +305,23 @@ class PSLLiveCounter extends HTMLElement {
   _runCountUps() {
     const reduce = typeof window !== 'undefined'
       && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.config.metrics.filter((m) => this._isCountUp(m)).forEach((m) => {
+    const metrics = this.config.metrics.filter((m) => this._isCountUp(m));
+    let pending = metrics.length;
+    const done = () => { pending -= 1; if (pending <= 0) this._countingUp = false; };
+    this._countingUp = pending > 0;
+    metrics.forEach((m) => {
       const cell = this._metricsEl.querySelector(`[data-key="${m.key}"] .live-counter__value`);
-      const target = Number(this._data[m.key]) || 0;
-      if (reduce) { cell.textContent = this._fmtInt(target); return; }
+      // el objetivo se relee en cada cuadro: si el Sheet responde en el medio, termina en ese valor
+      const target = () => Number(this._data[m.key]) || 0;
+      if (reduce) { cell.textContent = this._fmtInt(target()); done(); return; }
       const DURATION = 1200;
       const t0 = performance.now();
       const easeOut = (t) => 1 - Math.pow(1 - t, 3);
       const tick = (now) => {
         const t = Math.min((now - t0) / DURATION, 1);
-        cell.textContent = this._fmtInt(target * easeOut(t));
+        cell.textContent = this._fmtInt(target() * easeOut(t));
         if (t < 1) requestAnimationFrame(tick);
-        else cell.textContent = this._fmtInt(target);
+        else { cell.textContent = this._fmtInt(target()); done(); }
       };
       requestAnimationFrame(tick);
     });
@@ -226,7 +332,7 @@ class PSLLiveCounter extends HTMLElement {
     this.config.metrics.forEach((m) => {
       const cell = this._metricsEl.querySelector(`[data-key="${m.key}"] .live-counter__value`);
       // durante/antes del count-up inicial no pisar el valor animado de las métricas enteras
-      if (this._isCountUp(m) && !this._countUpDone) return;
+      if (this._isCountUp(m) && (!this._countUpDone || this._countingUp)) return;
       const formatted = this._format(m);
       if (cell.textContent === formatted) return;
       // Métricas con count-up: actualizar el número en silencio (que cambie ES la prueba de "vivo";

@@ -1,0 +1,248 @@
+/* PLANTILLA DE NOTA INDIVIDUAL (single-sec_news) — sacada del CSS adicional global el 28-09-2026.
+
+   Dónde va: en CADA nota, editor de la nota → menú ⋮ (o ícono de Ghostkit) → "Custom Code" →
+   pestaña CSS. Ghostkit lo imprime solo en la página de esa nota. Pedido de Santiago: que cada
+   nota lleve su CSS y el global quede solo con el archivo /news/ y lo común del sitio.
+
+   OJO: una nota nueva nace SIN estilo hasta que se le pegue esto. Copiar `noticia.min.css`
+   (misma cosa sin comentarios) en cada nota nueva. Si se cambia el diseño, hay que repetir el
+   cambio en todas las notas (lista en noticias/README.md).
+
+   Las fuentes (Druk, Druk Text Wide, Proxima Nova) NO van acá: ya están declaradas en el bloque
+   generado del CSS adicional global. */
+
+/* NOTICIAS INDIVIDUALES (single-sec_news) — plantilla de marca*/
+
+
+/* Fondo general de la nota*/
+body.single-sec_news {
+  background: #F4F1EA !important;
+}
+
+/* Titulo (H1) sobre la foto de portada — Druk Heavy, como el resto de titulares */
+.single-sec_news .entry-title {
+  font-family: 'Druk', 'Arial Narrow', sans-serif !important;
+  font-weight: 800 !important;
+  letter-spacing: .02em;
+  text-transform: none !important;
+}
+/* Sin overlay oscuro detras del titulo -- a pedido del cliente 2026-09-01,
+   que quede solo la foto + el titulo, sin caja/sombreado. */
+.single-sec_news .sponsor-header {
+  background: transparent !important;
+}
+
+/* Autor / fecha — mismo tratamiento que el kicker/fecha de las news cards
+   del home (native/home/08-news.css .ncard__date): Druk Text Wide, mayusculas,
+   tracking amplio, gris tenue. */
+.single-sec_news .sec-news-entry-header-post-author,
+.single-sec_news .sec-news-entry-header-post-time {
+  font-family: 'Druk Text Wide', 'Arial Narrow', sans-serif;
+  font-weight: 500;
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(12, 12, 10, .45);
+}
+.single-sec_news .sec-news-entry-header-post-author { color: rgba(12, 12, 10, .65); }
+
+/* Boton "Share" nativo */
+.single-sec_news .info .share {
+  font-family: 'Proxima Nova', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: .02em;
+  color: #0C0C0A;
+}
+
+/* Cuerpo del articulo — bloques de Gutenberg (parrafos + subtitulos) que ya
+   escribe cada editor: se ven iguales en todas las notas sin tocar nada. */
+.single-sec_news .inner-content p.wp-block-paragraph {
+  font-family: 'Proxima Nova', system-ui, sans-serif !important;
+  line-height: 1.65;
+  color: rgba(12, 12, 10, .82) !important;
+}
+/* si el editor eligio explicitamente texto chico/grande (.has-*-font-size de
+   Gutenberg) no lo pisamos con un tamaño fijo -- solo tipografia/color/line-height */
+.single-sec_news .inner-content a {
+  color: #0E8C79;
+  text-decoration-color: rgba(14, 140, 121, .45);
+}
+.single-sec_news .inner-content h5.wp-block-heading {
+  font-family: 'Druk', 'Arial Narrow', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: clamp(20px, 2.4vw, 26px);
+  line-height: 1.15;
+  letter-spacing: .02em;
+  color: #0C0C0A !important;
+  margin-top: 44px;
+}
+
+/* Pie de nota: "Back to Previous Page" / "Print This Page" como botones
+   pill de marca (mismo patron que .psl-btn / .cta-secondary del resto del sitio) */
+.single-sec_news .entry-footer a.previous-page,
+.single-sec_news .entry-footer a.print-page {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Proxima Nova', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 13px 22px;
+  border-radius: 100px;
+  text-decoration: none;
+  border: 1px solid rgba(12, 12, 10, .18);
+  color: #0C0C0A;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+.single-sec_news .entry-footer a.previous-page:hover,
+.single-sec_news .entry-footer a.print-page:hover {
+  background: #AAF6E6;
+  border-color: #AAF6E6;
+}
+
+/* imagenes, galerias y botones */
+.single-sec_news .inner-content .wp-block-image,
+.single-sec_news .inner-content figure.wp-block-gallery {
+  margin: 28px 0;
+}
+.single-sec_news .inner-content .wp-block-image img,
+.single-sec_news .inner-content figure.wp-block-gallery img {
+  border-radius: 14px;
+}
+.single-sec_news .inner-content figcaption {
+  font-family: 'Proxima Nova', system-ui, sans-serif;
+  font-size: 12.5px;
+  color: rgba(12, 12, 10, .5);
+  margin-top: 8px;
+}
+
+/* Boton de Gutenberg dentro del cuerpo (wp-block-buttons) -> mismo pill de marca
+   que el resto del sitio. No tocamos el color que eligio el editor (ya sale
+   parecido al aqua de marca via la paleta del tema), solo tipografia/forma. */
+.single-sec_news .inner-content .wp-block-button__link {
+  font-family: 'Proxima Nova', system-ui, sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border-radius: 100px !important;
+  padding: 15px 26px !important;
+}
+
+/* Listas y citas (por si alguna nota futura las usa) */
+.single-sec_news .inner-content ul.wp-block-list,
+.single-sec_news .inner-content ol.wp-block-list {
+  font-family: 'Proxima Nova', system-ui, sans-serif;
+  line-height: 1.65;
+  color: rgba(12, 12, 10, .82);
+}
+.single-sec_news .inner-content blockquote {
+  border-left: 3px solid #AAF6E6;
+  padding-left: 20px;
+  font-family: 'Proxima Nova', system-ui, sans-serif;
+  font-style: italic;
+  color: rgba(12, 12, 10, .7);
+}
+.single-sec_news .entry-categories,
+.single-sec_news .entry-category {
+  font-family: 'Druk Text Wide', 'Arial Narrow', sans-serif !important;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #AAF6E6 !important;
+  text-decoration: none;
+}
+.single-sec_news .inner-content hr.wp-block-separator {
+  border: none;
+  border-top: 1px solid rgba(12, 12, 10, .12);
+  margin: 40px 0;
+}
+
+/* Sacar el breadcrumb del header */
+.single-sec_news .site-breadcrumbs {
+  display: none !important;
+}
+
+/* NOTICIAS INDIVIDUALES — HERO EN MOBILE (34to ajuste, 2026-09-25, pedido del cliente:
+   "el texto tapa mucho la foto principal ... es como que se corta la cabeza a los tres").
+
+   El tema arma el header de la nota SIEMPRE igual (es la plantilla unica del CPT sec_news,
+   verificado en 4 notas de distintas fechas):
+
+     header.entry-header            position:relative; overflow:hidden; margin:-60px -15px 60px
+     |-- div.header-box             display:flex; justify-content:end  -> h1.entry-title (blanco)
+     |-- img.singular-image         position:absolute; inset 0; object-fit:cover; object-position:50% 0%
+     `-- ::after                    scrim linear-gradient(transparent, rgba(0,0,0,.4) 70%) z-index:-1
+
+   La foto siempre viene recortada por el tema a 550px de alto (?w=<ancho>&h=550&crop=1), o sea
+   una franja panoramica (1920x550, 1600x550, 1080x550... segun la nota). En desktop entra entera
+   y el titulo en blanco queda sobre la franja baja de la foto. En mobile esa misma franja tiene
+   que llenar una caja de 375x240: `cover` recorta mas de la mitad del ancho y, con object-position
+   en 50% 0%, ademas la ancla arriba -> cabezas cortadas y el titulo tapando lo poco que se ve.
+
+   Solucion: en <=767px dejamos de superponer. El header pasa a ser una columna -- foto arriba
+   entera, titulo + meta abajo en tinta sobre el papel -- que es el mismo patron de las cards de
+   noticias (.ncard del home y las cards del archivo /news/). La foto va con height:auto y SIN
+   aspect-ratio fijo: como el <img> del tema trae width/height reales, el browser reserva el alto
+   solo (no hay CLS) y cada nota se muestra completa con su propia relacion, que no es la misma
+   en todas (medido: 1920x550, 1600x550, 1080x550).
+
+   Desktop no se toca (todo va dentro de la media query) y el HTML del tema tampoco: solo se
+   reordena con flex + order. */
+@media (max-width: 767px) {
+  .single-sec_news .entry-header {
+    display: flex !important;
+    flex-direction: column;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    margin: 0 -15px 14px !important;
+    background: transparent !important;
+  }
+
+  /* La foto deja de estar en position:absolute y pasa a ser el primer item de la columna.
+     height:auto + los atributos width/height del <img> -> relacion real de cada nota. */
+  .single-sec_news .entry-header > .singular-image {
+    order: 1;
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    object-fit: cover;
+    object-position: 50% 50%;
+    display: block;
+  }
+
+  /* El titulo baja debajo de la foto, sobre el papel. */
+  .single-sec_news .entry-header > .header-box {
+    order: 2;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 16px 15px 0 !important;
+    display: block !important;
+  }
+  .single-sec_news .sponsor-header {
+    padding: 0 !important;
+  }
+  .single-sec_news .entry-title {
+    color: #0C0C0A !important;
+    font-size: clamp(27px, 7.6vw, 34px) !important;
+    line-height: 1.04 !important;
+    text-shadow: none !important;
+  }
+  .single-sec_news .info {
+    margin-top: 4px !important;
+  }
+
+  /* El scrim del tema solo tiene sentido con el titulo ENCIMA de la foto: apilado pinta
+     una banda gris detras del texto. */
+  .single-sec_news .entry-header::after {
+    display: none !important;
+  }
+}

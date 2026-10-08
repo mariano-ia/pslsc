@@ -10,26 +10,32 @@
        data-parallax: deriva vertical sutil con el scroll; .sumate-hero__bg está agrandado en CSS
        (inset negativo) para que el desplazamiento NO deje huecos en los bordes. -->
   <div class="sumate-hero__bg" aria-hidden="true" data-parallax="0.10">
-    <video class="sumate-hero__video" autoplay loop muted playsinline preload="auto"
-           poster="/assets/videos/founder-hero-poster.webp">
-      <source src="/assets/videos/founder-hero.mp4" type="video/mp4" />
-    </video>
+    <!-- El poster va como <img> real: es el elemento LCP (~37 KB) y pinta enseguida.
+         El <video> arranca sin src y lo carga initHeroVideo() despues del load de la
+         pagina (ver el .js del bloque) — asi el hero no espera 1,4 MB para pintar. -->
+    <img class="sumate-hero__poster" data-hero-poster src="/assets/videos/founder-hero-poster.webp" alt="" width="1280" height="720"
+         fetchpriority="high" decoding="async" />
+    <video class="sumate-hero__video" data-hero-video="/assets/videos/founder-hero.mp4" loop muted playsinline preload="none"></video>
   </div>
   <div class="sumate-hero__scrim" aria-hidden="true"></div>
 
   <div class="psl-container sumate-hero__content">
     <div class="sumate-hero__eyebrow">
       <span class="sumate-hero__dot" aria-hidden="true"></span>
-      <span>Founding Members · Window closes with the first match in 2027</span>
+      <span>Founding Members · A distinction that lasts a lifetime</span>
     </div>
-    <h1 class="sumate-hero__headline"><span>Be a Founder.</span> <span class="sumate-hero__accent">Forever.</span></h1>
+    <h1 class="sumate-hero__headline"><span>Founding Members.</span> <span class="sumate-hero__accent">Forever.</span></h1>
     <p class="sumate-hero__subhead">
-      Thousands will fill the stands one day. A few hundred will say they were here before the
-      first whistle. A $35 refundable founding deposit — your name, your number, on the wall for
-      the lifetime of the club.
+      Only 1,000 supporters earned Founding Member status, securing a permanent place in Port St.
+      Lucie SC history. Their names will be displayed on the Founding Members Wall at the new
+      stadium for the lifetime of the club.
+    </p>
+    <p class="sumate-hero__subhead sumate-hero__subhead--more">
+      Ticket Deposits are still available. Place your $35 Ticket Deposit now to receive priority
+      access when season tickets go on sale.
     </p>
     <div class="sumate-hero__ctas">
-      <a href="https://tickets.portstluciesc.com/event/founding-crew-hg5arm" data-external="tickets" target="_blank" rel="noopener" class="psl-btn cta-primary"><span>Reserve your seat</span> <span aria-hidden="true">→</span></a>
+      <a href="https://tickets.portstluciesc.com/event/founding-crew-copy-b7d2us" data-external="tickets" target="_blank" rel="noopener" class="psl-btn cta-primary"><span>Place your ticket deposit</span> <span aria-hidden="true">→</span></a>
     </div>
   </div>
 
