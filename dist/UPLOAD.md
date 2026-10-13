@@ -20,7 +20,7 @@ subí **dos cosas** para que quede esta estructura:
 ```
 …/wp-content/uploads/psl/
    fonts/     ← subir dist/upload/fonts/  (12 .woff2, 160 KB)
-   assets/    ← subir la carpeta /assets del repo  (brand, crests, images, proof, staff, videos, jersey360)
+   assets/    ← subir la carpeta /assets del repo  (brand, crests, images, partners, proof, staff, videos, jersey360)
 ```
 
 Las fuentes woff2 subseteadas están en `dist/upload/fonts/`. Los assets (imágenes, videos, camiseta 360)
@@ -70,7 +70,7 @@ Qué bloque va en qué página:
 |---|---|
 | Home | 01-hero · 02-stats · 03-project · 04-proof · 04b-fixtures · 05-jersey · 06-founders · 07-academy · 09-cierre-footer |
 | Become a Founder | s01-hero · s02-benefits · s03-plans · s05-faq · s06-cta |
-| Partners | p01-hero · p02-opportunity · p03-value · p04-traction · p05-contact |
+| Partners | p01-hero · p01b-partners · p02-opportunity · p03-value · p04-traction · p05-contact |
 | Academy | a01-hero · a02-pathway · a03-method · a05-parents · a06-faq · a07-tryouts |
 
 Nav (00) y News (08) no están en la lista: son bloques nativos del template de USL.

@@ -9,6 +9,11 @@ templating `{{ }}`). Todo lo que ves corre tal cual en cualquier navegador.
 > La **nav** y las **noticias** son nativas del template de USL — no van en estos bloques.
 > El paso a paso está en **`dist/UPLOAD.md`**. Leé la **§2** antes de tocar nada.
 
+> **Ramas (desde 2026-10-07):** los bloques para WordPress se compilan desde **`main`**, que tiene solo lo
+> que está en producción. `develop` es trabajo en curso del sitio y puede ir adelantada. `school` es otro
+> micrositio (Soccer School): no va a WordPress ni usa bloques. Nada sube a `main` sin doble check de
+> Mariano. Detalle en la sección "Ramas" del `README.md`.
+
 Última actualización: 2026-08-27 · Contacto de diseño: Mariano.
 
 ---
@@ -122,6 +127,10 @@ son self-hosted. Formatos:
   ~120px de lado, recortados al alpha). Bajados del sitio oficial de cada club y **guardados en el
   repo** — el bloque Matchday no linkea imágenes de terceros. Al sumar un rival nuevo: mismo formato,
   nombre en kebab-case, y referenciarlo desde `MATCHES` en `custom/fixtures/fixtures.js`.
+- **Logos de partners** `assets/partners/`: `adidas.webp`, `vixon.webp`, `ayonic.webp` (blanco
+  monocromo con alpha, recortados al alpha) para la franja P01b de Partners. Los originales a color
+  (SVG/PNG) están en `docs/partners-logos/`. Al sumar un partner: mismo formato, un `<li>` en
+  `native/partners/p01b-partners.html` y su alto en el CSS para que pese igual que el resto.
 - **Fotos**: `assets/images/pslsc_academy.webp` (foto academia), `assets/images/luka-card.webp`
   (mascota Luka para el boarding pass), `assets/proof/stadium-aerial.webp` (render del estadio, Home 04)
   y `assets/proof/stadium-iso-night.webp` (render aéreo nocturno; sale de `docs/PSL-Renders.pdf` p.2).
@@ -333,3 +342,25 @@ en **`shop/README.md`**. Lo esencial para el handoff:
 - **Relación con el sitio**: el nav del sitio ("Shop") y el "Buy now" de la camiseta salen hoy a la
   tienda externa de Soccer Locker (`shop.myuniformsoccerlocker.com/...`). Definir si esta tienda a medida
   la reemplaza.
+
+---
+
+## Footer: redes sociales (2026-10-07)
+
+`native/home/09-cierre-footer` suma una columna **Follow** con seis íconos SVG inline (Instagram, Facebook, X, TikTok,
+YouTube, LinkedIn), links canónicos sin parámetros de tracking, `target="_blank" rel="noopener noreferrer"`.
+Compilado en `psl-home-09-cierre-footer.html`: **volver a pegar este bloque en todas las páginas** (Home, Founders,
+Partners, Academy) para que el footer nuevo aparezca en todas.
+
+Nota del compilador (mismo día): ahora también reescribe `url(/assets/…)` **dentro del CSS** a `__PSL_ASSET_BASE__`
+(antes solo HTML y JS; el poster de fondo del hero quedaba con ruta rota en WP). Al recompilar todos los bloques,
+cualquier asset referenciado desde CSS queda correcto.
+
+---
+
+## Soccer School — micrositio aparte (rama `school`)
+
+El micrositio del **PSLSC Soccer School** es otro sitio: **no va a WordPress** ni usa bloques, y vive solo en la
+**rama `school`** (código, assets, spec y plan). En esta rama no está. La v1 se mergeó a `main` el 2026-10-07,
+antes de separar la rama, y sale de `main` en el próximo pase de `develop` a producción (con doble check).
+Detalle y pendientes: `school/README.md` en la rama `school`.

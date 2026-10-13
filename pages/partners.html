@@ -6,29 +6,30 @@
   <title>Build it with us — Port St. Lucie SC Partners</title>
 
   <!-- Fuentes de marca -->
-  <link rel="stylesheet" href="../tokens/fonts.css?v=67" />
+  <link rel="stylesheet" href="../tokens/fonts.css?v=68" />
   <!-- Tokens -->
-  <link rel="stylesheet" href="../tokens/tokens.css?v=67" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=68" />
 
   <!-- Patrones compartidos -->
-  <link rel="stylesheet" href="../native/_patterns/cards.css?v=67" />
-  <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
+  <link rel="stylesheet" href="../native/_patterns/cards.css?v=68" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=68" />
 
   <!-- Nav + footer compartidos (bloques de Home) -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=67" />
-  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=67" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=68" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
   <!-- Timeline compartida con la Home (P02 reusa .ptl de 03-project) -->
-  <link rel="stylesheet" href="../native/home/03-project.css?v=67" />
+  <link rel="stylesheet" href="../native/home/03-project.css?v=68" />
 
   <!-- Bloques Partners -->
-  <link rel="stylesheet" href="../native/partners/p01-hero.css?v=67" />
-  <link rel="stylesheet" href="../native/partners/p02-opportunity.css?v=67" />
-  <link rel="stylesheet" href="../native/partners/p03-value.css?v=67" />
-  <link rel="stylesheet" href="../native/partners/p04-traction.css?v=67" />
-  <link rel="stylesheet" href="../native/partners/p05-contact.css?v=67" />
+  <link rel="stylesheet" href="../native/partners/p01-hero.css?v=68" />
+  <link rel="stylesheet" href="../native/partners/p01b-partners.css?v=68" />
+  <link rel="stylesheet" href="../native/partners/p02-opportunity.css?v=68" />
+  <link rel="stylesheet" href="../native/partners/p03-value.css?v=68" />
+  <link rel="stylesheet" href="../native/partners/p04-traction.css?v=68" />
+  <link rel="stylesheet" href="../native/partners/p05-contact.css?v=68" />
 
   <!-- Pieza a medida -->
-  <link rel="stylesheet" href="../custom/live-counter/live-counter.css?v=67" />
+  <link rel="stylesheet" href="../custom/live-counter/live-counter.css?v=68" />
 
   <style>
     html, body { margin: 0; padding: 0; background: var(--color-ink); }
@@ -39,6 +40,7 @@
 <body>
   <div data-block="00-nav"></div>
   <div data-block="p01-hero"></div>
+  <div data-block="p01b-partners"></div>
   <div data-block="p02-opportunity"></div>
   <div data-block="p03-value"></div>
   <div data-block="p04-traction"></div>
@@ -49,6 +51,7 @@
     const blocks = [
       { slot: '00-nav',          path: '../native/home/00-nav.html' },
       { slot: 'p01-hero',        path: '../native/partners/p01-hero.html' },
+      { slot: 'p01b-partners',   path: '../native/partners/p01b-partners.html' },
       { slot: 'p02-opportunity', path: '../native/partners/p02-opportunity.html' },
       { slot: 'p03-value',       path: '../native/partners/p03-value.html' },
       { slot: 'p04-traction',    path: '../native/partners/p04-traction.html' },
@@ -62,11 +65,11 @@
     }));
     // p05: form de contacto · footer: newsletter · 03-project: timeline de P02 · motion: reveals + nav
     const [{ initHeroVideo }, { initPartnerContact }, { initNewsletter }, { initProjectTimeline }, { initMotion }] = await Promise.all([
-      import('../native/partners/p01-hero.js?v=67'),
-      import('../native/partners/p05-contact.js?v=67'),
-      import('../native/home/09-cierre-footer.js?v=67'),
-      import('../native/home/03-project.js?v=67'),
-      import('../native/_patterns/motion.js?v=67'),
+      import('../native/partners/p01-hero.js?v=68'),
+      import('../native/partners/p05-contact.js?v=68'),
+      import('../native/home/09-cierre-footer.js?v=68'),
+      import('../native/home/03-project.js?v=68'),
+      import('../native/_patterns/motion.js?v=68'),
     ]);
     initHeroVideo();   // video del hero diferido (p01-hero.js)
     initPartnerContact();

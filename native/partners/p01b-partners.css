@@ -1,0 +1,35 @@
+/* Bloque P01b · Partners actuales — franja de logos debajo del hero (kicker a la izquierda, logos
+   repartidos en el resto; en mobile el kicker pasa arriba). */
+
+.ppartners .psl-container {
+  display: flex;
+  align-items: center;
+  gap: clamp(28px, 6vw, 96px);
+  padding-block: clamp(44px, 6vw, 76px);
+}
+.ppartners__kicker { margin: 0; flex-shrink: 0; }
+
+.ppartners__list {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: clamp(28px, 6vw, 88px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ppartners__item { display: flex; }   /* sin el hueco de línea base de un <img> inline */
+
+/* Los logos tienen proporciones muy distintas (VIXON es un wordmark 5:1, Ayonic un lockup casi
+   cuadrado): un alto por logo para que pesen visualmente parecido. Blanco puro al 92% para que
+   no encandile al lado del blanco cálido del texto. */
+.ppartners__logo { display: block; width: auto; opacity: .92; }
+.ppartners__logo--adidas { height: clamp(44px, 4.3vw, 62px); }
+.ppartners__logo--vixon  { height: clamp(18px, 1.8vw, 26px); }
+.ppartners__logo--ayonic { height: clamp(62px, 5.8vw, 84px); }
+
+@media (max-width: 700px) {
+  .ppartners .psl-container { flex-direction: column; align-items: flex-start; }
+  .ppartners__list { width: 100%; justify-content: space-between; }
+}
