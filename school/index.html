@@ -20,9 +20,31 @@
   <link rel="apple-touch-icon" href="/school/assets/apple-touch-icon.png">
   <link rel="preload" href="/school/assets/fonts/Druk-Heavy.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/school/school.css">
+  <script>
+    // Intro (ver initIntro en school.js): la clase va antes del primer pintado para que la landing no asome
+    // un instante por debajo. Sin JS o con reduced motion no hay intro.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('intro-on');
+      // Red de seguridad: si school.js no toma el control (el módulo falla), la landing se ve igual.
+      setTimeout(function () { if (!window.ssIntro) document.documentElement.classList.remove('intro-on'); }, 4000);
+    }
+  </script>
   <script type="module" src="/school/school.js"></script>
 </head>
 <body>
+
+  <!-- Intro: el video del club (youtube.com/watch?v=g9vyEQWpi3E), hasta "Your journey starts here", como pantalla
+       de carga. Al terminar, la landing sube fundiéndose con el video. El video lo carga school.js (720p o 1080p). -->
+  <div class="intro" data-intro role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <div class="intro__stage">
+      <video class="intro__video" data-intro-video muted playsinline preload="auto" poster="/school/assets/intro/intro-poster.webp" aria-hidden="true"></video>
+    </div>
+    <!-- Línea pegada al borde de arriba del video que crece con el avance; el "Loading" acompaña la punta -->
+    <div class="intro__loader" aria-hidden="true">
+      <span class="intro__bar"></span>
+      <span class="intro__track"><span class="intro__label">Loading <span data-intro-pct>0</span>%</span></span>
+    </div>
+  </div>
 
   <!-- Barra del club: lo primero que se ve dice Port St. Lucie. Sin links: no queremos fugas antes del form. -->
   <header class="clubbar">
@@ -43,11 +65,9 @@
     <section class="hero" aria-labelledby="hero-title">
       <div class="wrap hero__grid">
         <div class="hero__intro">
-          <!-- COPY: revisar -->
-          <p class="pill">Pre-registration open · Ages 5–13</p>
           <img class="hero__logo" src="/school/assets/logo-aqua.webp" width="900" height="428" alt="PSLSC Soccer School">
-          <h1 class="hero__title d" id="hero-title">Your journey starts here.</h1>
-          <p class="hero__lpe d">Learn. Play. Enjoy.</p>
+          <h1 class="hero__title d" id="hero-title" data-words>Your journey starts here.</h1>
+          <p class="hero__lpe d" data-words>Learn. Play. Enjoy.</p>
           <p class="hero__lead">A place for children ages 5–13 to learn, play and enjoy soccer while becoming part of Port St. Lucie SC.</p>
         </div>
 
@@ -110,6 +130,8 @@
           <div id="ac-proxy" hidden></div>
         </div>
       </div>
+      <!-- Borde ondulado hacia la sección blanca, como la onda de "Register now" en el video del club -->
+      <svg class="hero__wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 0H1440V30C1280 62 1120 62 960 38C800 14 640 14 480 40C320 66 160 66 0 42Z"/></svg>
     </section>
 
     <!-- Learn / Play / Enjoy — texto de la editora, tal cual -->
@@ -128,7 +150,7 @@
     <section class="section section--tight" data-reveal aria-labelledby="journey-title">
       <div class="wrap">
         <!-- COPY: revisar (título y descripciones, adaptadas de la pieza "Categorías" del manual) -->
-        <h2 class="h2 d" id="journey-title">Your journey</h2>
+        <h2 class="h2 d" id="journey-title" data-words>Your journey</h2>
         <ul class="cats">
           <li class="cat cat--explorers"><h3 class="d">Little Explorers</h3><p>Discovering soccer and starting a new adventure at the club.</p></li>
           <li class="cat cat--sailors"><h3 class="d">Junior Sailors</h3><p>Finding their place in the crew while they play, learn and gain confidence.</p></li>
@@ -142,7 +164,7 @@
     <section class="section section--ink" data-reveal aria-labelledby="why-title">
       <div class="wrap split">
         <!-- COPY: revisar (traducido del castellano de la editora) -->
-        <h2 class="h2 d why__title" id="why-title">Why choose Port St. Lucie SC Soccer School?</h2>
+        <h2 class="h2 d why__title" id="why-title" data-words>Why choose Port St. Lucie SC Soccer School?</h2>
         <ul class="reasons">
           <li>Experienced coaches.</li>
           <li>A shared methodology.</li>
@@ -156,7 +178,7 @@
     <!-- FAQ — preguntas y respuestas de la editora, tal cual (salvo la última) -->
     <section class="section" data-reveal aria-labelledby="faq-title">
       <div class="wrap split">
-        <h2 class="h2 d" id="faq-title">Your questions answered</h2>
+        <h2 class="h2 d" id="faq-title" data-words>Your questions answered</h2>
         <div class="faq">
           <details open>
             <summary>What ages is the Soccer School designed for?</summary>
@@ -186,7 +208,7 @@
     <!-- Cierre: segundo CTA, vuelve al formulario -->
     <section class="section section--red" data-reveal>
       <div class="wrap">
-        <p class="closing__title d">Your journey starts here.</p>
+        <p class="closing__title d" data-words>Your journey starts here.</p>
         <a class="btn btn--aqua" href="#preregister">
           Pre-register now
           <svg class="arrow arrow--up" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12h16M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"/></svg>

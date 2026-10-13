@@ -97,20 +97,12 @@ a { color: inherit; }
 }
 
 /* ---------- Hero + formulario ---------- */
-.hero { background: var(--red); color: #fff; padding: 22px 0 32px; }
+.hero { --wave-h: 44px; position: relative; background: var(--red); color: #fff; padding: 22px 0 32px; margin-bottom: var(--wave-h); }
+/* Borde ondulado que cuelga sobre la sección blanca (la onda de "Register now" del video) */
+.hero__wave { position: absolute; top: calc(100% - 1px); left: 0; width: 100%; height: calc(var(--wave-h) + 1px); fill: var(--red); }
+.hero + .section { padding-top: 40px; }
 .hero__grid { display: grid; gap: 22px; }
 .hero__intro { text-align: center; }
-.pill {
-  display: inline-block;
-  background: var(--aqua);
-  color: var(--ink);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  padding: 7px 12px 6px;
-  border-radius: 999px;
-}
 .hero__logo { width: min(260px, 74%); margin: 16px auto 14px; }
 .hero__title { color: var(--aqua); font-size: clamp(40px, 11.5vw, 84px); }
 .hero__lpe { font-size: clamp(22px, 6.4vw, 34px); margin: 8px 0 12px; }
@@ -222,14 +214,45 @@ a { color: inherit; }
 .pillar__name { font-size: 42px; }
 .pillar p { font-size: 17px; }
 
-.cats { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
-.cat { padding: 18px 18px 16px; border-radius: 0 28px 0 0; color: var(--ink); }
+.cats { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; counter-reset: cat; }
+.cat { position: relative; overflow: hidden; min-height: 190px; padding: 18px 18px 16px; border-radius: 0 28px 0 0; color: var(--ink); counter-increment: cat; }
+.cat > * { position: relative; z-index: 1; }
+/* Número fantasma de la etapa, asomando por la esquina de abajo a la derecha */
+.cat::after {
+  content: '0' counter(cat);
+  position: absolute;
+  z-index: 0;
+  right: -4px;
+  bottom: -.14em;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 104px;
+  line-height: 1;
+  color: rgba(28, 28, 28, .13);
+  pointer-events: none;
+}
 .cat h3 { font-size: 32px; }
 .cat p { margin-top: 8px; font-size: 16px; line-height: 1.35; }
 .cat--explorers { background: var(--c-explorers); }
 .cat--sailors { background: var(--c-sailors); }
 .cat--mates { background: var(--c-mates); }
 .cat--captains { background: var(--c-captains); }
+/* Teléfonos y tablets: las etapas van en un carrusel horizontal con snap, asomando la siguiente */
+@media (max-width: 959px) {
+  .cats {
+    grid-auto-flow: column;
+    grid-auto-columns: min(76%, 300px);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 0 var(--gutter);
+    scrollbar-width: none;
+  }
+  .cats::-webkit-scrollbar { display: none; }
+  .cat { scroll-snap-align: start; }
+}
 
 .why__title { color: var(--aqua); }
 .reasons { margin: 0; padding: 0; list-style: none; }
@@ -257,7 +280,7 @@ a { color: inherit; }
 }
 .faq summary::-webkit-details-marker { display: none; }
 .faq summary::after { content: '+'; flex: none; font-family: var(--font-display); font-size: 28px; line-height: 1; transition: transform .2s ease; }
-.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details[open]:not(.is-closing) summary::after { transform: rotate(45deg); }
 .faq details p { padding-bottom: 18px; max-width: 60ch; color: #444; }
 
 .closing__title { color: var(--aqua); font-size: clamp(44px, 11.5vw, 96px); margin-bottom: 26px; }
@@ -284,10 +307,117 @@ a { color: inherit; }
 .social a:hover { border-color: var(--aqua); color: var(--aqua); }
 .social svg { width: 16px; height: 16px; }
 
-/* ---------- Fade de secciones (lo activa school.js; sin JS o con reduced motion se ve todo) ---------- */
+/* ---------- Intro: video del club como pantalla de carga (lo maneja school.js; ver el <head>) ---------- */
+.intro {
+  /* Apaisado: el video cubre la pantalla. Vertical: elipse (ver más abajo). */
+  --stage-w: max(100vw, 177.78vh);
+  --stage-h: calc(var(--stage-w) * .5625);
+  --p: 0; /* avance del loader, de 0 a 1 (lo pone school.js) */
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  background: #FF0052; /* el rojo de las placas del video tal como lo pinta Chrome (no es --red) */
+  transition: opacity .9s ease;
+}
+@supports (height: 100dvh) { .intro { --stage-w: max(100vw, 177.78dvh); } }
+@media (max-aspect-ratio: 1/1) {
+  /* Vertical: el video va adentro de una elipse con la proporción del logo de la school (2,1:1), más ancha que la
+     pantalla, que sobresale por los costados. Se ve el 48% central del ancho y el 85% del alto del cuadro, donde
+     cae todo el texto del video. El loader queda pegado al borde de arriba. */
+  .intro { --stage-w: 210vw; --stage-h: calc(210vw / 2.1); }
+  .intro__stage { border-radius: 50%; overflow: hidden; clip-path: ellipse(50% 50%); isolation: isolate; }
+  .intro .intro__loader { top: 0; } /* pisa el top calculado de más abajo */
+}
+.intro-on { overflow: hidden; }
+.intro-on .intro, .intro.is-leaving { display: block; }
+.intro.is-leaving { opacity: 0; pointer-events: none; }
+/* La landing espera abajo y sube mientras el video se desvanece */
+body > :not(.intro) { transition: opacity .9s ease, transform .9s cubic-bezier(.2, .7, .2, 1); }
+.intro-on body > :not(.intro) { opacity: 0; transform: translateY(56px); }
+.intro__stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--stage-w);
+  height: var(--stage-h);
+  transform: translate(-50%, -50%);
+}
+.intro__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.intro__loader {
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* Pegado al borde de arriba del video; si el video se sale por arriba (pantallas muy anchas), al de la pantalla */
+  top: max(0px, calc(50% - var(--stage-h) / 2));
+}
+.intro__bar {
+  display: block;
+  height: 4px;
+  background: var(--aqua);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, .3);
+  transform: scaleX(var(--p));
+  transform-origin: left;
+}
+.intro__track { position: absolute; top: 14px; left: var(--gutter); right: var(--gutter); }
+.intro__label {
+  position: absolute;
+  top: 0;
+  /* Acompaña la punta de la línea sin salirse: al 0% arranca en el borde izquierdo, al 100% termina en el derecho */
+  left: calc(var(--p) * 100%);
+  transform: translateX(calc(var(--p) * -100%));
+  padding: 9px 16px 6px;
+  border-radius: 999px;
+  background: rgba(28, 28, 28, .55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--aqua);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ---------- Movimiento (lo activa school.js; sin JS o con reduced motion se ve todo quieto) ---------- */
+/* Todo entra subiendo con `rise`, escalonado: --i es el índice (palabra o ítem), --step el paso y --d el arranque.
+   Se anima `translate` y no `transform`, para no pisar el hover de las tarjetas. */
+@keyframes rise { from { opacity: 0; translate: 0 var(--rise, 24px); } }
+.w { display: inline-block; --rise: .5em; }
+.reveal-on [data-reveal]:not(.is-in) :is(.w, .pillar, .cat, .reasons li, .faq details, .btn),
+.reveal-on:not(.page-in) .hero :is(.w, .hero__lead) { opacity: 0; }
+.reveal-on [data-reveal].is-in :is(.w, .pillar, .cat, .reasons li, .faq details, .btn),
+.reveal-on.page-in .hero :is(.w, .hero__lead) {
+  animation: rise .7s cubic-bezier(.2, .7, .2, 1) both;
+  animation-delay: calc(var(--d, 0ms) + var(--i, 0) * var(--step, 70ms));
+}
+:is(.pillars, .cats, .reasons, .faq) > :nth-child(2) { --i: 1; }
+:is(.pillars, .cats, .reasons, .faq) > :nth-child(3) { --i: 2; }
+:is(.pillars, .cats, .reasons, .faq) > :nth-child(4) { --i: 3; }
+:is(.pillars, .cats, .reasons, .faq) > :nth-child(5) { --i: 4; }
+:is(.pillar, .cat, .reasons li, .faq details) { --step: 90ms; --d: 180ms; } /* después de las palabras del título */
+.pillar { --d: 0ms; }
+.section--red .btn { --i: 4; } /* después de las 4 palabras del cierre */
+/* Hero: arranca cuando el intro ya se está yendo (la página sube en .9 s) */
+.hero__title { --d: 250ms; }
+.hero__lpe { --d: 530ms; }
+.hero__lead { --d: 760ms; }
+
+/* Microinteracciones */
+@keyframes pop { 50% { transform: scale(1.14); } }
 @media (prefers-reduced-motion: no-preference) {
-  .reveal-on [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
-  .reveal-on [data-reveal].is-in { opacity: 1; transform: none; }
+  .arrow { transition: translate .2s ease; }
+  .btn:hover .arrow { translate: 4px 0; }
+  .btn:hover .arrow--up { translate: 0 -4px; }
+  .chip span { transition: background-color .15s ease, color .15s ease; }
+  .chip input:checked + span { animation: pop .3s ease; }
+  .cat { transition: transform .25s ease, box-shadow .25s ease; }
+}
+@media (hover: hover) and (min-width: 960px) and (prefers-reduced-motion: no-preference) {
+  .cat:hover { transform: translateY(-6px); box-shadow: 0 16px 28px rgba(0, 0, 0, .14); }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -307,7 +437,8 @@ a { color: inherit; }
   .clubbar img { width: 36px; }
   .clubbar__name { font-size: 22px; }
   .clubbar__tag { font-size: 12px; }
-  .hero { padding: 56px 0 64px; }
+  .hero { --wave-h: 80px; padding: 56px 0 64px; }
+  .hero + .section { padding-top: 64px; }
   .hero__grid { grid-template-columns: 7fr 5fr; gap: 64px; align-items: center; }
   .hero__intro { text-align: left; }
   .hero__logo { width: 400px; margin: 22px 0; }
@@ -322,9 +453,13 @@ a { color: inherit; }
   .pillar p { font-size: 18px; max-width: 300px; }
   .cats { grid-template-columns: repeat(4, 1fr); gap: 16px; }
   .cat { min-height: 220px; padding: 24px 22px; border-radius: 0 40px 0 0; }
+  .cat::after { font-size: 128px; }
   .cat h3 { font-size: 36px; }
   .cat p { font-size: 15px; }
   .split { display: grid; grid-template-columns: 5fr 7fr; gap: 64px; align-items: start; }
   .reasons li { font-size: 20px; padding: 16px 0; }
   .footer .wrap { justify-content: space-between; }
+  .intro__bar { height: 6px; }
+  .intro__track { top: 20px; }
+  .intro__label { font-size: 28px; padding: 11px 20px 8px; }
 }

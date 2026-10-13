@@ -29,8 +29,31 @@ Identidad: [`docs/soccer-school/`](../docs/soccer-school/) (manual + fuentes del
 | `school.css` | Estilos. Tokens de marca en `:root`. Mobile-first, un breakpoint a 960px. |
 | `config.js` | **Lo único que hay que tocar** para conectar ActiveCampaign y analytics. |
 | `form.js` | Lógica pura del form (UTM, validación, mapeo a AC). Tests: `node --test "tools/tests/*.test.mjs"`. |
-| `school.js` | Cableado del form (proxy a AC, estados, honeypot), analytics opcional y fade de secciones. |
+| `school.js` | Cableado del form (proxy a AC, estados, honeypot), analytics opcional, intro y movimiento (titulares palabra por palabra, ítems escalonados, FAQ animado). La coreografía está en `school.css`, sección "Movimiento". |
 | `assets/` | Generados con `python3 tools/school-assets.py` (logo aqua, og-image, íconos, escudo, ancla, fuentes). |
+| `assets/intro/` | El video del intro, cortado y comprimido a mano (ver "Intro"). |
+
+## Intro
+
+Al entrar se reproduce a pantalla completa el video del club ([YouTube](https://www.youtube.com/watch?v=g9vyEQWpi3E),
+sin audio) hasta *"Your journey starts here"*, como pantalla de carga: una línea aqua pegada al borde de arriba del
+video crece con el avance, y el *Loading %* acompaña la punta. 0,6 s antes del final la landing sube (fade in up) fundiéndose con el video, en 0,9 s. Sin autoplay (modo
+ahorro de iOS), con *reduced motion*, sin JS o si el video no arranca en 5 s, no hay intro y se ve la landing.
+
+- **Corte:** cuadros 0–233 (9,36 s); el 234 ya es la toma de *"Learn. Play. Enjoy."*.
+- **Encuadre:** apaisado, el video cubre la pantalla. Vertical, va adentro de una elipse con la proporción del logo
+  (2,1:1), de 210vw de ancho, que sobresale por los costados; se ve el 48% central del ancho y el 85% del alto del
+  cuadro, donde cae todo el texto del video (verificado cuadro por cuadro). El fondo (`#FF0052`) es el rojo de las
+  placas tal como lo pinta Chrome.
+- **Calidad:** 720p en teléfonos (1,4 MB) y 1080p en pantallas grandes (2,6 MB).
+- **Regenerar** (desde `school/`, con el video bajado como `src.mp4`; en zsh `$X264` no se separa en palabras, usar `bash`):
+
+  ```bash
+  X264="-c:v libx264 -preset slow -profile:v high -pix_fmt yuv420p -color_primaries bt709 -color_trc bt709 -colorspace bt709 -movflags +faststart -an"
+  ffmpeg -i src.mp4 -frames:v 234 -crf 28 $X264 assets/intro/intro-1080.mp4
+  ffmpeg -i src.mp4 -frames:v 234 -vf scale=1280:720:flags=lanczos -crf 28 $X264 assets/intro/intro-720.mp4
+  ffmpeg -i src.mp4 -frames:v 1 -vf scale=1280:720:flags=lanczos -c:v libwebp -quality 78 assets/intro/intro-poster.webp
+  ```
 
 ## Ver localmente
 
@@ -39,6 +62,8 @@ python3 -m http.server 4321   # → http://localhost:4321/school/
 ```
 
 Las rutas son absolutas (`/school/…`), así que hay que servir la **raíz del repo**, no la carpeta `school/`.
+El `http.server` de Python no soporta pedidos `Range`: en Chrome el intro anda, pero Safari no reproduce el video
+(se saltea el intro). Vercel sí los soporta.
 
 ## Conectar ActiveCampaign (antes de difundir la URL)
 

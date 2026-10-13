@@ -202,14 +202,103 @@ function initForm() {
   });
 }
 
-/* ---------- Fade de secciones ---------- */
+/* ---------- Intro ---------- */
 
-function initReveal() {
-  const sections = document.querySelectorAll('[data-reveal]');
-  if (!sections.length || !('IntersectionObserver' in window)) return;
+// El video del club hasta "Your journey starts here" (cuadros 0–233, ver README) como pantalla de carga, con un
+// "Loading" que avanza con el video. Poco antes del final la landing sube fundiéndose con él.
+const INTRO_STALL_MS = 5000;
+const INTRO_FADE_MS = 900; // = la transición de .intro y de la landing en school.css
+const INTRO_FADE_LEAD = 0.6; // s antes del final: la landing sube mientras el video todavía se mueve
+
+function initIntro() {
+  const root = document.documentElement;
+  const intro = document.querySelector('[data-intro]');
+  if (!intro || !root.classList.contains('intro-on')) return;
+  window.ssIntro = true; // apaga la red de seguridad del <head>
+
+  const video = intro.querySelector('[data-intro-video]');
+  const pct = intro.querySelector('[data-intro-pct]');
+  const page = [...document.body.children].filter((el) => el !== intro);
+  page.forEach((el) => { el.inert = true; });
+
+  // 1080p solo si el video se dibuja con más de 1400 px reales y no es un teléfono (ver --stage-w en school.css).
+  const portrait = window.matchMedia('(max-aspect-ratio: 1/1)').matches;
+  const stageWidth = portrait ? innerWidth * 2.1 : Math.max(innerWidth, innerHeight * 16 / 9);
+  const isPhone = Math.min(innerWidth, innerHeight) < 600;
+  const quality = !isPhone && stageWidth * (window.devicePixelRatio || 1) > 1400 ? '1080' : '720';
+  video.src = `/school/assets/intro/intro-${quality}.mp4`;
+
+  let done = false;
+  let shown = -1;
+  // Si el video no arranca (red lenta), la landing no espera.
+  const stall = setTimeout(finish, INTRO_STALL_MS);
+
+  function setProgress(ratio) {
+    const progress = Math.min(Math.max(ratio, 0), 1);
+    intro.style.setProperty('--p', progress.toFixed(4)); // la línea crece continua; el número, de a 1%
+    const value = Math.round(progress * 100);
+    if (value === shown) return;
+    shown = value;
+    pct.textContent = value;
+    intro.setAttribute('aria-valuenow', value);
+  }
+
+  function finish() {
+    if (done) return;
+    done = true;
+    clearTimeout(stall);
+    setProgress(1);
+    page.forEach((el) => { el.inert = false; });
+    intro.classList.add('is-leaving');
+    root.classList.remove('intro-on');
+    document.dispatchEvent(new Event('ss:intro-end')); // initMotion arranca el hero
+    setTimeout(() => {
+      intro.classList.remove('is-leaving');
+      intro.hidden = true;
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+    }, INTRO_FADE_MS);
+  }
+
+  function tick() {
+    if (done) return;
+    const end = video.duration - INTRO_FADE_LEAD;
+    if (end > 0) {
+      setProgress(video.currentTime / end);
+      if (video.currentTime >= end) { finish(); return; }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  video.addEventListener('playing', () => clearTimeout(stall), { once: true });
+  video.addEventListener('ended', finish);
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') finish(); });
+  // Sin autoplay (p. ej. modo ahorro de batería en iOS) no hay intro.
+  video.play().then(() => requestAnimationFrame(tick), finish);
+}
+
+/* ---------- Movimiento ---------- */
+
+// Titulares palabra por palabra e ítems escalonados; la coreografía está en school.css ("Movimiento"). Acá solo se
+// parten los titulares [data-words] en <span class="w">, se marca cada sección cuando entra en pantalla (is-in) y
+// el hero cuando el intro ya se va (page-in). Sin JS o con reduced motion no se parte nada y se ve todo quieto.
+function initMotion() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  // La clase se pone recién acá: sin JS (o si el módulo falla) las secciones se ven igual.
-  document.documentElement.classList.add('reveal-on');
+  if (!('IntersectionObserver' in window)) return;
+  const root = document.documentElement;
+  document.querySelectorAll('[data-words]').forEach((el) => {
+    const words = el.textContent.trim().split(/\s+/);
+    el.textContent = '';
+    words.forEach((word, i) => {
+      const span = document.createElement('span');
+      span.className = 'w';
+      span.style.setProperty('--i', i);
+      span.textContent = word;
+      el.append(span, ' ');
+    });
+  });
+  root.classList.add('reveal-on');
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
@@ -217,9 +306,46 @@ function initReveal() {
       io.unobserve(entry.target);
     });
   }, { rootMargin: '0px 0px -10% 0px' });
-  sections.forEach((section) => io.observe(section));
+  // Con el intro encima no se observa nada todavía: las secciones que ya están en pantalla entrarían a escondidas.
+  const start = () => {
+    root.classList.add('page-in');
+    document.querySelectorAll('[data-reveal]').forEach((section) => io.observe(section));
+  };
+  if (root.classList.contains('intro-on')) document.addEventListener('ss:intro-end', start, { once: true });
+  else start();
 }
 
+/* ---------- FAQ ---------- */
+
+// Abre y cierra con animación de alto (<details> no lo anima solo). Con reduced motion queda el corte nativo.
+function initFaq() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('animate' in Element.prototype)) return;
+  document.querySelectorAll('.faq details').forEach((details) => {
+    const summary = details.querySelector('summary');
+    let anim = null;
+    summary.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (anim) anim.cancel();
+      const opening = !details.open;
+      const from = details.offsetHeight;
+      if (opening) details.open = true;
+      const border = details.offsetHeight - details.clientHeight;
+      const to = opening ? details.offsetHeight : summary.offsetHeight + border;
+      details.classList.toggle('is-closing', !opening);
+      details.style.overflow = 'hidden';
+      anim = details.animate({ height: [`${from}px`, `${to}px`] }, { duration: 280, easing: 'ease' });
+      anim.onfinish = () => {
+        details.open = opening;
+        details.classList.remove('is-closing');
+        details.style.overflow = '';
+        anim = null;
+      };
+    });
+  });
+}
+
+initIntro();
 initForm();
 initAnalytics(CONFIG.analytics);
-initReveal();
+initMotion();
+initFaq();
