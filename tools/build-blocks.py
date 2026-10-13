@@ -29,7 +29,6 @@ PERMALINKS = {
     "home.html":     "__URL_HOME__",         # ej. "/"          (o "/home/")
     "sumate.html":   "__URL_SUMATE__",       # ej. "/become-a-founder/"
     "partners.html": "__URL_PARTNERS__",     # ej. "/partners/"
-    "pasarela.html": "__URL_PASARELA__",     # ej. "/season-tickets/checkout/" (placeholder "Pasarela de pago")
 }
 
 # Bloques a compilar. Nav (00) y News (08) quedan fuera: son nativos del template de USL.
@@ -44,9 +43,6 @@ BLOCKS = [
     ("academy", "a01-hero"), ("academy", "a02-pathway"), ("academy", "a03-method"),
     ("academy", "a05-parents"), ("academy", "a06-faq"), ("academy", "a07-tryouts"),
     ("staff", "st01-staff"),
-    ("season_tickets", "00-takeover"),   # página Season Tickets = Home + este bloque (solo mobile)
-    ("season_tickets", "01-hero"),       # hero de la Home con el CTA "Buy season tickets" (derivado vía overrides.json)
-    ("season_tickets", "02b-banner"),    # banner sticky bajo los destacados (02-stats)
 ]
 
 # Fuentes hosteadas (family, weight, archivo .woff2 en ASSET_BASE fonts/)

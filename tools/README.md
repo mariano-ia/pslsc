@@ -53,8 +53,8 @@ y la camiseta de 90 frames no se pueden embeber. Por eso todo el sitio usa `buil
 
 Una página puede reutilizar un bloque de otra cambiando solo texto: `{"01-hero": {"from": "home/01-hero",
 "replace": [[antes, después], …]}}`. Si no existe `native/<página>/<bloque>.html`, el compilador toma el origen,
-aplica los reemplazos y usa el CSS/JS del origen. La página de preview lee el mismo archivo. Ejemplo:
-`native/season_tickets/overrides.json` (CTA del hero → "Buy season tickets").
+aplica los reemplazos y usa el CSS/JS del origen. La página de preview lee el mismo archivo. (Hoy ninguna página
+lo usa en `develop`; Season Tickets, que lo usa, vive en la rama `season-tickets`.)
 
 ## `kie.py` — cliente de kie.ai para los videos de Luca
 
