@@ -84,7 +84,7 @@ psl-live-counter { display: block; }
 .live-counter--stats .live-counter__rise svg { display: block; width: 1em; height: 1em; }
 @keyframes psl-rise-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
 
-/* Toast "+1 Founding member" — sube y se desvanece sobre la métrica de fundadores */
+/* Toast "+1 Member" — sube y se desvanece sobre la métrica de miembros */
 .live-counter--stats .live-counter__toast {
   position: absolute;
   left: 0;

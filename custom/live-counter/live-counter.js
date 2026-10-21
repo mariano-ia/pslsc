@@ -1,4 +1,4 @@
-import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=8';
+import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=9';
 
 // Founders / Ticket Deposits en vivo (bloque 02-stats, Home) — 2026-09-01.
 // Fuente real: Vivenu (evento "Founding Crew", ticket type "Founding Crew Deposits", $35 --
@@ -175,7 +175,7 @@ class PSLLiveCounter extends HTMLElement {
     const toast = document.createElement('span');
     toast.className = 'live-counter__toast';
     toast.setAttribute('aria-hidden', 'true');
-    toast.textContent = '+1 Founding member';
+    toast.textContent = '+1 Member';
     cell.appendChild(toast);
     const cleanup = () => toast.remove();
     toast.addEventListener('animationend', cleanup);

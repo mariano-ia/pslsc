@@ -23,8 +23,13 @@ export const LIVE_COUNTER_CONFIG = {
     // OJO: esto es SOLO en la variante `stats` — `deposits2027` sigue vivo y en uso en las
     // variantes `fan` y `reservation` de acá abajo, no se toca (merge desde version anterior/
     // pslsc-main, 2026-09-04).
+    // "Members" (antes "Founding Members", cierre de Founding Members 2026-10): el cupo de 1,000
+    // fundadores se completó pero el número sigue contando TODOS los depósitos, así que dejó de ser
+    // "fundadores". Cada depósito individual cuenta como un miembro, aunque varios sean de la misma
+    // cuenta (confirmado por comunicación). La key sigue siendo `founders`: es el contrato con el
+    // Sheet/endpoint, solo cambia lo que se muestra.
     metrics: [
-      { key: 'founders', label: 'Founding Members', labelEs: 'Miembros Fundadores', format: 'integer', rising: true },
+      { key: 'founders', label: 'Members', labelEs: 'Miembros', format: 'integer', rising: true },
       { key: 'daysInTheMaking', label: 'Days in the making', labelEs: 'Días construyendo', format: 'integer' },
       { key: 'daysToWhistle', label: 'Days to first whistle', labelEs: 'Días para el primer silbato', format: 'integer', accent: true },
       { key: 'league', label: 'League One · Pro', labelEs: 'League One · Pro', format: 'static' },
@@ -66,7 +71,7 @@ export const LIVE_COUNTER_CONFIG = {
     endpoint: '/api/live-counter?scope=partners',
     updateFrequencyMs: 30000,
     metrics: [
-      { key: 'founders', label: 'Founding Members', labelEs: 'Miembros Fundadores', format: 'integer' },
+      { key: 'founders', label: 'Members', labelEs: 'Miembros', format: 'integer' }, // ídem stats: "Members" (2026-10)
       { key: 'monthlyImpressions', label: 'Monthly Impressions', labelEs: 'Impresiones Mensuales', format: 'integer' },
       { key: 'monthlyReach', label: 'Monthly Reach', labelEs: 'Alcance Mensual', format: 'integer' },
       { key: 'depositsCaptured', label: 'Deposits Captured', labelEs: 'Depósitos Captados', format: 'currency' },
