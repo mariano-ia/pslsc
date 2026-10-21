@@ -82,8 +82,9 @@ class PSLLiveCounter extends HTMLElement {
   // ---- DEMO DATA — reemplazar por fetch(this.config.endpoint) cuando exista el endpoint real ----
   _demoData() {
     return {
-      // Respaldo: SOLO se ve si el Sheet no responde. Ultimo valor real conocido (Sheet, 2026-09-28).
-      founders: 974,
+      // Respaldo: SOLO se ve si el Sheet no responde. Ultimo valor real conocido (1,027 depósitos
+      // informados por Sean al 2026-10-19).
+      founders: 1027,
       deposits2027: 312,
       founderWindow: 'Closes 2027',
       lastJoinedSecondsAgo: 720,
