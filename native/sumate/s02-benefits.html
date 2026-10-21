@@ -1,60 +1,71 @@
 <!--
-  Bloque S02 · Qué significa ser Fundador — Sumate. 🟩 Nativo. Reusa .pcard (variante beneficio).
+  Bloque S02 · Qué te da el depósito — Sumate. 🟩 Nativo. Reusa .pcard (variante beneficio).
   Iconografía + texto corto; cada beneficio ENTREGABLE HOY, sin promesas a futuro.
-  4 beneficios del wireframe: For life / Your number / On the wall / Your card.
+  Cierre de Founding Members (2026-10, opción B aprobada por comunicación): antes era "What being a
+  Founder means" (For life / Your number / On the wall / Your card) y se leía como lo que recibe
+  quien compra hoy. El hero y el CTA final ya celebran a los 1,000 Founding Members; esta sección
+  vende lo que sigue disponible: el Ticket Deposit.
+  - Priority access: respeta la prioridad superior de los Founding Members (no decir "first").
+  - It's credited: sin importe — hubo distintos precios promocionales.
+  - Bring your crew: hasta OCHO depósitos individuales por cuenta (corrección de comunicación).
+  - Sin link al boarding pass: es una experiencia gratuita para cualquier hincha, no un beneficio.
 -->
 <section class="benefits surface-paper" id="benefits">
   <div class="psl-container">
     <header class="benefits__head">
-      <span class="psl-kicker" data-reveal>What being a Founder means</span>
-      <h2 class="psl-h2 benefits__title" data-reveal data-reveal-delay="90">Not perks. Proof you were here first.</h2>
+      <span class="psl-kicker" data-reveal>What your deposit gets you</span>
+      <h2 class="psl-h2 benefits__title" data-reveal data-reveal-delay="90">Not a promise. A place in line.</h2>
     </header>
 
     <div class="benefits__grid" data-reveal-group="90">
       <article class="pcard pcard--benefit" data-reveal>
         <div class="pcard__body">
           <svg class="pcard__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M7 8a4 4 0 100 8c2 0 3-1.5 5-4s3-4 5-4a4 4 0 110 8c-2 0-3-1.5-5-4S9 8 7 8z" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M4 6l6 6-6 6M12 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <h3 class="pcard__title">For life</h3>
-          <p class="pcard__desc">Founder status for the lifetime of the club — it never expires, never renews.</p>
+          <h3 class="pcard__title">Priority access</h3>
+          <p class="pcard__desc">You buy before the general public.</p>
         </div>
       </article>
 
       <article class="pcard pcard--benefit" data-reveal>
         <div class="pcard__body">
           <svg class="pcard__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M9 4L7 20M17 4l-2 16M4 9h16M3 15h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <rect x="4" y="5" width="16" height="15" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M8 3v4M16 3v4M8.5 13l2.5 2.5 4.5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <h3 class="pcard__title">Your number</h3>
-          <p class="pcard__desc">A permanent founder number, assigned the moment you join. The lower it is, the earlier you were.</p>
+          <h3 class="pcard__title">It's credited</h3>
+          <p class="pcard__desc">Your deposit is credited toward your season ticket purchase.</p>
         </div>
       </article>
 
       <article class="pcard pcard--benefit" data-reveal>
         <div class="pcard__body">
           <svg class="pcard__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="3" y="4" width="18" height="16" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
-            <path d="M3 9h18M3 14h18M9 4v5m0 5v6M15 9v5" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M3.5 19c.6-3 2.8-5 5.5-5s4.9 2 5.5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M15.5 5.3a3 3 0 010 5.4M17.5 14.3c1.5.7 2.6 2.3 3 4.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
           </svg>
-          <h3 class="pcard__title">On the wall</h3>
-          <p class="pcard__desc">Your name goes on the founders wall — public, permanent, alongside everyone who believed early.</p>
+          <h3 class="pcard__title">Bring your crew</h3>
+          <p class="pcard__desc">Up to eight individual deposits per account — one for everyone you bring.</p>
         </div>
       </article>
 
       <article class="pcard pcard--benefit" data-reveal>
         <div class="pcard__body">
           <svg class="pcard__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/>
-            <path d="M7 15h4M14 9h4M14 12h4M7 9h3v3H7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15L6 16z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M10 20.5a2 2 0 004 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
           </svg>
-          <h3 class="pcard__title">Your card</h3>
-          <p class="pcard__desc">A digital founder card with your number — built to share, in one tap.</p>
-          <!-- el "founders wall" del copy ES el tablero de abordaje (bloque 06 de la Home), donde
-               además se arma el boarding pass. Por eso el link apunta ahí y no a un muro aparte. -->
-          <a href="/home/#founders" class="pcard__link pcard__link--teal">See your card →</a>
+          <h3 class="pcard__title">First to know</h3>
+          <p class="pcard__desc">Seat selection dates and club news, before anyone else.</p>
         </div>
       </article>
+    </div>
+
+    <!-- CTA comercial de la sección: mismo destino y texto que el resto de Join Us -->
+    <div class="benefits__cta" data-reveal data-reveal-delay="220">
+      <a href="https://tickets.portstluciesc.com/event/founding-crew-copy-b7d2us" data-external="tickets" target="_blank" rel="noopener" class="psl-btn cta-primary benefits__cta-btn"><span>Get Priority Access</span> <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>
