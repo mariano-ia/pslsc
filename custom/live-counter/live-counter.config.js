@@ -58,7 +58,7 @@ export const LIVE_COUNTER_CONFIG = {
       { key: 'deposits2027', label: '2027 Deposits', format: 'integer' },
       { key: 'lastJoined', label: 'Last Reserved', format: 'relative-time' },
     ],
-    note: 'Refundable deposit — Founder Window closes with the first match in 2027',
+    note: 'Non-refundable deposit — Founder Window closes with the first match in 2027',
     showUpdated: true,
   },
 

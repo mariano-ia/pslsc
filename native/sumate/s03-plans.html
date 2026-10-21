@@ -1,7 +1,12 @@
 <!--
   Bloque S03 · Cómo sumarte — Sumate. 🟦 A medida (flujo de alta de fundador).
   Franja de acción: urgencia comercial separada del storytelling.
-  UN SOLO precio hasta nuevo aviso (2026-08): seña de ticket de $35, "Founding price".
+  UN SOLO precio hasta nuevo aviso (2026-08): seña de ticket de $35.
+  Cierre de Founding Members (2026-10): el badge pasó de "Founding price" a "Limited-time price"
+  (comunicación propuso "Ticket Deposit", pero repetía el nombre de la tarjeta y el precio sigue
+  siendo especial — decisión de Martín, PENDIENTE de validar con comunicación). El kicker pasó de
+  "How to join" a "How it works", y el depósito es NO REEMBOLSABLE (confirmado por Sean; antes
+  decía "refundable deposit").
   (Los planes Free $0 / Founder $25 / Premium $150 anteriores quedan en el historial de git.)
   1 depósito = 1 season pass; se pueden dejar varios depósitos (ver FAQ en S05).
 
@@ -13,16 +18,16 @@
       POST /api/founder-signup
       { "plan": "founder",
         "name": "...", "email": "...", "city": "...",
-        "depositAmount": 35 }   // seña reembolsable; 1 depósito por asiento
+        "depositAmount": 35 }   // seña NO reembolsable; 1 depósito por asiento
       -> 201 { "founderNumber": 1250, "tier": "founding|charter|early" }
-    Pasa por el checkout de seña (reembolsable hasta 2027).
+    Pasa por el checkout de seña (no reembolsable).
     Al completar, mostrar el <psl-founder-card> con el founderNumber devuelto.
 -->
 <section class="plans surface-ink" id="plans">
   <div class="psl-container plans__split">
     <!-- Mitad izquierda: el argumento -->
     <header class="plans__head">
-      <span class="psl-kicker" data-reveal>How to join</span>
+      <span class="psl-kicker" data-reveal>How it works</span>
       <h2 class="psl-h2 plans__title" data-reveal data-reveal-delay="90">One price. One deposit. <span class="plans__title-accent">Your priority place in line.</span></h2>
       <p class="plans__lead" data-reveal data-reveal-delay="180">Ticket Deposits remain available at $35. Your deposit secures your priority place in line to purchase 2027 season tickets when sales open and will be applied to your overall ticket balance at the time of seat selection.</p>
       <p class="plans__note" data-reveal data-reveal-delay="260">Bringing people with you? Only one deposit is needed per account. Each account can purchase up to five season tickets online.</p>
@@ -31,10 +36,10 @@
     <!-- Mitad derecha: la tarjeta del depósito -->
     <div class="plans__grid plans__grid--solo">
       <article class="plan plan--featured" data-reveal="right" data-reveal-delay="200">
-        <span class="plan__badge">Founding price</span>
+        <span class="plan__badge">Limited-time price</span>
         <div class="plan__top">
           <span class="plan__name">Ticket deposit</span>
-          <span class="plan__price"><span class="plan__price-amount tnum">$35</span><span class="plan__price-unit">refundable deposit</span></span>
+          <span class="plan__price"><span class="plan__price-amount tnum">$35</span><span class="plan__price-unit">non-refundable deposit</span></span>
           <span class="plan__price-note">Secures priority access to 2027 season tickets</span>
         </div>
         <ul class="plan__features">
