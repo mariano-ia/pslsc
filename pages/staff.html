@@ -31,6 +31,10 @@
   <div data-block="st01-staff"></div>
   <div data-block="footer"></div>
 
+  <!-- ac-forms.js: funciones globales (acInstallResultHooks, …) que llaman los forms de AC
+       (newsletter del footer, contacto, tryouts). En WordPress las carga el sitio; acá hay que
+       cargarlas antes del init o el script se corta y no arrancan video, timelines ni reveal. -->
+  <script src="../custom/ac-forms/ac-forms.js?v=1"></script>
   <script type="module">
     // Nav y footer se toman de los bloques compartidos de Home; el staff es un bloque de /staff.
     const blocks = [

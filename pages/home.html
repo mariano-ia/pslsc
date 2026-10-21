@@ -55,6 +55,10 @@
   <div data-block="09-cierre-footer"></div>
 
   <!-- Ensamblaje de bloques (solo para preview; en WordPress cada bloque se inserta por separado) -->
+  <!-- ac-forms.js: funciones globales (acInstallResultHooks, …) que llaman los forms de AC
+       (newsletter del footer, contacto, tryouts). En WordPress las carga el sitio; acá hay que
+       cargarlas antes del init o el script se corta y no arrancan video, timelines ni reveal. -->
+  <script src="../custom/ac-forms/ac-forms.js?v=1"></script>
   <script type="module">
     const blocks = [
       '00-nav', '01-hero', '02-stats', '03-project', '04-proof', '04b-fixtures',
