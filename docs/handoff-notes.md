@@ -216,6 +216,16 @@ ver `dist/UPLOAD.md`). Los anclas dentro de la misma página (ej. `#join`) funci
 Todos son `customElements.define` (API nativa del navegador). Se insertan como una etiqueta HTML.
 Hoy corren con datos demo; **conectar el endpoint real reemplazando la función de datos indicada**.
 
+> ⚠️ **El contador de producción NO es el del repo (2026-10).** En WordPress (Santi) la variante
+> `sponsor` ya trae Monthly Impressions, Monthly Reach y Deposits Captured reales; en este repo esas
+> tres siguen en `_demoData()`. **No pegar el contador compilado desde el repo encima del de WP** (se
+> perderían los datos reales). Los cambios de texto del cierre de Founding Members hay que aplicarlos
+> a mano en la versión de WP:
+> - Label de la métrica `founders` en `stats` (Home) y `sponsor` (Partners): "Founding Members" → **"Members"**.
+>   La key del dato sigue siendo `founders`; cada depósito individual cuenta como un miembro.
+> - Toast de la Home: "+1 Founding member" → **"+1 Member"**.
+> - (Opcional) valor de respaldo de `founders` si el Sheet no responde: 974 → 1027.
+
 - **`<psl-live-counter variant="stats|fan|reservation|sponsor">`** — banda de métricas.
   Contrato: `GET /api/live-counter?scope=…`. Schema completo en `custom/live-counter/live-counter.config.js`.
   Reemplazar `_demoData()` por `fetch(this.config.endpoint)`. Las métricas enteras hacen count-up 0→valor
