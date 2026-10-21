@@ -10,7 +10,14 @@
  * Columnas: NO. (número de socio REAL, orden de compra en Vivenu — ver DATOS REALES abajo) ·
  * MEMBER · FROM (código de ciudad estilo aeropuerto) · STATUS. Header: FLIGHT PSL·2027 + reloj
  * (sin total).
- * Fila fantasma al pie: "#____ YOU — BOARDING" → link al claim real (Sumate).
+ * Fila fantasma al pie: "#____ YOU — BOARDING" → link a Join Us ("Get Priority Access").
+ *
+ * CIERRE DE FOUNDING MEMBERS (2026-10): el cupo de 1,000 se completó y el tablero cuenta que los
+ * fundadores ya embarcaron y que el vuelo sigue abierto para los nuevos depósitos. STATUS sale
+ * del número: #0001–#1000 = "FOUNDER", #1001 en adelante = "ON BOARD" (confirmado con Sean: cada
+ * depósito individual es un miembro, respetando el orden de los depósitos registrados). Se sacó
+ * el "JUST NOW" de la primera fila: con el roster mezclado, ponía a un fundador de julio como
+ * recién llegado.
  *
  * Primera aparición: el tablero arranca en blanco y se llena en cascada cuando entra al viewport.
  *
@@ -82,6 +89,9 @@ const COLS = [
 ];
 const ROWS = 7;
 const JOIN_EVERY = 9000;
+// último número de Founding Member: hasta acá el STATUS es "FOUNDER", después "ON BOARD"
+const FOUNDERS_CAP = 1000;
+const statusFor = (num) => (num <= FOUNDERS_CAP ? 'FOUNDER' : 'ON BOARD');
 
 const pad = (s, len) => String(s).toUpperCase().slice(0, len).padEnd(len, ' ');
 const randFlap = () => FLAP[Math.floor(Math.random() * FLAP.length)];
@@ -210,7 +220,7 @@ class PSLDeparturesBoard extends HTMLElement {
       if (this._filled) {
         // el board ya se había llenado con demo (el fetch tardó más que el arranque) —
         // se re-renderiza con los datos reales apenas llegan.
-        this._entries.forEach((e, i) => { e.status = i === 0 ? 'JUST NOW' : 'ON BOARD'; });
+        this._entries.forEach((e) => { e.status = statusFor(e.num); });
         this._rowsEls.forEach((rowEl, i) => this._setRow(rowEl, this._entries[i], true, i));
       }
     });
@@ -275,9 +285,9 @@ class PSLDeparturesBoard extends HTMLElement {
       </div>`).join('');
 
     this.innerHTML = `
-      <div class="db" role="group" aria-label="Founding members boarding — live departures board">
+      <div class="db" role="group" aria-label="Founding class complete, now boarding 2027 — live departures board">
         <div class="db__head">
-          <span class="db__head-title"><span class="db__dot" aria-hidden="true"></span>Now boarding · Founding class 2027</span>
+          <span class="db__head-title"><span class="db__dot" aria-hidden="true"></span>Founding class: complete · Now boarding 2027</span>
           <span class="db__head-right">
             <span class="db__flight">Flight PSL·2027</span>
             <span class="db__clock tnum"></span>
@@ -285,14 +295,14 @@ class PSLDeparturesBoard extends HTMLElement {
         </div>
         <div class="db__cols" aria-hidden="true">${cols}</div>
         <div class="db__rows">${rows}</div>
-        <a class="db__row db__row--ghost" href="/joinus/#plans" aria-label="Claim your founding number">
+        <a class="db__row db__row--ghost" href="/joinus/#plans" aria-label="Get Priority Access">
           <span class="db__group" data-col="no">${this._cells(5)}</span>
           <span class="db__group" data-col="name">${this._cells(13)}</span>
           <span class="db__group" data-col="from">${this._cells(4)}</span>
           <span class="db__group db__group--boarding" data-col="status">${this._cells(8)}</span>
         </a>
         <div class="db__foot">
-          <span class="db__foot-text">This flight is about to take off — secure your seat before the <span class="db__foot-accent">first whistle</span></span>
+          <span class="db__foot-text">1,000 founders on board. The flight to the <span class="db__foot-accent">first whistle</span> is still boarding.</span>
         </div>
       </div>
     `;
@@ -359,7 +369,7 @@ class PSLDeparturesBoard extends HTMLElement {
 
   _fill(animate) {
     this._filled = true;
-    this._entries.forEach((e, i) => { e.status = i === 0 ? 'JUST NOW' : 'ON BOARD'; });
+    this._entries.forEach((e) => { e.status = statusFor(e.num); });
     this._rowsEls.forEach((rowEl, i) => this._setRow(rowEl, this._entries[i], animate, i));
     // fila fantasma: tu asiento
     this._setGroup(this._ghostEl.querySelector('[data-col="no"]'), pad('#____', 5), animate, 340);
@@ -388,7 +398,7 @@ class PSLDeparturesBoard extends HTMLElement {
     const join = () => {
       this._entries.unshift(this._nextFounder());
       this._entries.length = Math.min(this._entries.length, ROWS);
-      this._entries.forEach((e, i) => { e.status = i === 0 ? 'JUST NOW' : 'ON BOARD'; });
+      this._entries.forEach((e) => { e.status = statusFor(e.num); });
       // el tablero entero se corre una fila → cascada de flips (como un Solari real)
       this._rowsEls.forEach((rowEl, i) => this._setRow(rowEl, this._entries[i], true, i));
       this._later(join, JOIN_EVERY);

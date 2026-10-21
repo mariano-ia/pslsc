@@ -31,7 +31,7 @@
   <!-- Piezas a medida -->
   <link rel="stylesheet" href="../custom/live-counter/live-counter.css?v=67" />
   <link rel="stylesheet" href="../custom/jersey-viewer/jersey-viewer.css?v=67" />
-  <link rel="stylesheet" href="../custom/departures-board/departures-board.css?v=67" />
+  <link rel="stylesheet" href="../custom/departures-board/departures-board.css?v=68" />
   <link rel="stylesheet" href="../custom/founder-id/founder-id.css?v=68" />
   <!-- Matchday archivado (ver native/home/04b-fixtures.html): <link rel="stylesheet" href="../custom/fixtures/fixtures.css?v=67" /> -->
 
@@ -55,6 +55,10 @@
   <div data-block="09-cierre-footer"></div>
 
   <!-- Ensamblaje de bloques (solo para preview; en WordPress cada bloque se inserta por separado) -->
+  <!-- ac-forms.js: funciones globales (acInstallResultHooks, …) que llaman los forms de AC
+       (newsletter del footer, contacto, tryouts). En WordPress las carga el sitio; acá hay que
+       cargarlas antes del init o el script se corta y no arrancan video, timelines ni reveal. -->
+  <script src="../custom/ac-forms/ac-forms.js?v=1"></script>
   <script type="module">
     const blocks = [
       '00-nav', '01-hero', '02-stats', '03-project', '04-proof', '04b-fixtures',
@@ -87,10 +91,10 @@
   </script>
 
   <!-- Web components a medida -->
-  <script type="module" src="../custom/live-counter/live-counter.js?v=68"></script>
+  <script type="module" src="../custom/live-counter/live-counter.js?v=70"></script>
   <script type="module" src="../custom/jersey-viewer/jersey-viewer.js?v=67"></script>
-  <script type="module" src="../custom/departures-board/departures-board.js?v=67"></script>
-  <script type="module" src="../custom/founder-id/founder-id.js?v=68"></script>
+  <script type="module" src="../custom/departures-board/departures-board.js?v=68"></script>
+  <script type="module" src="../custom/founder-id/founder-id.js?v=69"></script>
   <!-- Matchday archivado (ver native/home/04b-fixtures.html): <script type="module" src="../custom/fixtures/fixtures.js?v=67"></script> -->
 </body>
 </html>

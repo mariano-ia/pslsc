@@ -1,4 +1,4 @@
-import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=8';
+import { LIVE_COUNTER_CONFIG } from './live-counter.config.js?v=9';
 
 // Founders / Ticket Deposits en vivo (bloque 02-stats, Home) — 2026-09-01.
 // Fuente real: Vivenu (evento "Founding Crew", ticket type "Founding Crew Deposits", $35 --
@@ -82,8 +82,9 @@ class PSLLiveCounter extends HTMLElement {
   // ---- DEMO DATA — reemplazar por fetch(this.config.endpoint) cuando exista el endpoint real ----
   _demoData() {
     return {
-      // Respaldo: SOLO se ve si el Sheet no responde. Ultimo valor real conocido (Sheet, 2026-09-28).
-      founders: 974,
+      // Respaldo: SOLO se ve si el Sheet no responde. Ultimo valor real conocido (1,027 depósitos
+      // informados por Sean al 2026-10-19).
+      founders: 1027,
       deposits2027: 312,
       founderWindow: 'Closes 2027',
       lastJoinedSecondsAgo: 720,
@@ -175,7 +176,7 @@ class PSLLiveCounter extends HTMLElement {
     const toast = document.createElement('span');
     toast.className = 'live-counter__toast';
     toast.setAttribute('aria-hidden', 'true');
-    toast.textContent = '+1 Founding member';
+    toast.textContent = '+1 Member';
     cell.appendChild(toast);
     const cleanup = () => toast.remove();
     toast.addEventListener('animationend', cleanup);

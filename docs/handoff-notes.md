@@ -216,12 +216,22 @@ ver `dist/UPLOAD.md`). Los anclas dentro de la misma página (ej. `#join`) funci
 Todos son `customElements.define` (API nativa del navegador). Se insertan como una etiqueta HTML.
 Hoy corren con datos demo; **conectar el endpoint real reemplazando la función de datos indicada**.
 
+> ⚠️ **El contador de producción NO es el del repo (2026-10).** En WordPress (Santi) la variante
+> `sponsor` ya trae Monthly Impressions, Monthly Reach y Deposits Captured reales; en este repo esas
+> tres siguen en `_demoData()`. **No pegar el contador compilado desde el repo encima del de WP** (se
+> perderían los datos reales). Los cambios de texto del cierre de Founding Members hay que aplicarlos
+> a mano en la versión de WP:
+> - Label de la métrica `founders` en `stats` (Home) y `sponsor` (Partners): "Founding Members" → **"Members"**.
+>   La key del dato sigue siendo `founders`; cada depósito individual cuenta como un miembro.
+> - Toast de la Home: "+1 Founding member" → **"+1 Member"**.
+> - (Opcional) valor de respaldo de `founders` si el Sheet no responde: 974 → 1027.
+
 - **`<psl-live-counter variant="stats|fan|reservation|sponsor">`** — banda de métricas.
   Contrato: `GET /api/live-counter?scope=…`. Schema completo en `custom/live-counter/live-counter.config.js`.
   Reemplazar `_demoData()` por `fetch(this.config.endpoint)`. Las métricas enteras hacen count-up 0→valor
   al entrar en viewport. La línea "Updated in real time" es opt-in por variante (`showUpdated: true`);
   `stats` y `sponsor` la tienen apagada, igual que el pie `note`.
-  **Variante `sponsor` (P04, actualizada 2026-08-27)**: Founding Members · Monthly Impressions
+  **Variante `sponsor` (P04, actualizada 2026-08-27)**: Members (antes Founding Members, 2026-10) · Monthly Impressions
   (1.100.000) · Monthly Reach (240.000) · Deposits Captured — ese orden lo pidió el cliente.
   Las 4 son fotos de un momento — ninguna pide
   serie histórica. Salieron del contrato `lastJoined` (para sponsor) y `founderGrowthPercent`: ese
@@ -316,7 +326,7 @@ python3 -m http.server 4321
 ```
 Al editar CSS/JS, subir el `?v=N` en `pages/*.html` para saltear el caché del navegador.
 > ⚠️ **No alcanza con el `?v=` de la página.** Un componente puede importar otro archivo con su
-> propio cache-buster — hoy `live-counter.js` hace `import … from './live-counter.config.js?v=7'`.
+> propio cache-buster — hoy `live-counter.js` hace `import … from './live-counter.config.js?v=9'`.
 > Si editás ese config y sólo subís el de la página, el navegador sigue sirviendo la config vieja:
 > el cambio está en el archivo pero no se ve en pantalla. Subí **los dos**. (Pasó el 2026-08-27.)
 > Al verificar un cambio, recargá con caché tibia, no sólo en una ventana nueva.

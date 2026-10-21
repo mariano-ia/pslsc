@@ -18,5 +18,9 @@
 /* link teal legible sobre tarjeta blanca (el aquamarine claro no contrasta sobre paper) */
 .pcard--benefit .pcard__link--teal { color: var(--color-aqua-deep); }
 
+/* CTA comercial de la sección (mismo tamaño que el de la sección 05 de la Home) */
+.benefits__cta { margin-top: clamp(24px, 3vw, 36px); display: flex; justify-content: flex-start; }
+.benefits__cta-btn { padding: 17px 30px; font-size: 14px; }
+
 @media (max-width: 960px) { .benefits__grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .benefits__grid { grid-template-columns: 1fr; } }
