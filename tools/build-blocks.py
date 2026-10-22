@@ -23,6 +23,7 @@ NS = ".pslsc"
 # ─────────────────────────────────────────────────────────────── CONFIG
 # Decisión del cliente (2026-07-10): dejar los placeholders TAL CUAL. El desarrollador de WordPress
 # hace un find-and-replace de estos 4 tokens cuando tenga las URLs reales (ver dist/UPLOAD.md §2).
+# __URL_SCHOOL__ (link de la Soccer School) va escrito tal cual en el HTML de 07b-school y del footer: mismo find-and-replace.
 # Alternativa equivalente: poner acá los valores reales y re-correr el build.
 ASSET_BASE = "__PSL_ASSET_BASE__/"           # ej. "https://www.portstluciesc.com/wp-content/uploads/psl/"
 PERMALINKS = {
@@ -35,7 +36,7 @@ PERMALINKS = {
 BLOCKS = [
     ("home", "01-hero"), ("home", "02-stats"), ("home", "03-project"), ("home", "04-proof"),
     ("home", "04b-fixtures"), ("home", "05-jersey"), ("home", "06-founders"),
-    ("home", "07-academy"), ("home", "09-cierre-footer"),
+    ("home", "07-academy"), ("home", "07b-school"), ("home", "09-cierre-footer"),
     ("sumate", "s01-hero"), ("sumate", "s02-benefits"), ("sumate", "s03-plans"),
     ("sumate", "s05-faq"), ("sumate", "s06-cta"),
     ("partners", "p01-hero"), ("partners", "p01b-partners"), ("partners", "p02-opportunity"),

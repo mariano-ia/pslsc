@@ -30,10 +30,10 @@ sin usar que el `.gitignore` excluye (`anchor-white.png`, `360_shirt.mp4`, etc.)
 > **Mismo dominio, importante.** Los `<script type="module">` y los `@font-face` cross-origin exigen
 > cabecera `Access-Control-Allow-Origin`. Hosteando bajo el dominio de WP no hay que configurar nada.
 
-### 2. Rellenar 4 tokens (find-and-replace)
+### 2. Rellenar 5 tokens (find-and-replace)
 
-Los bloques en `dist/blocks/` traen 4 placeholders a propósito. Cuando tengas las URLs reales,
-hacé un **find-and-replace** de estos 4 tokens (en los archivos de `dist/blocks/`, o directamente
+Los bloques en `dist/blocks/` traen 5 placeholders a propósito. Cuando tengas las URLs reales,
+hacé un **find-and-replace** de estos 5 tokens (en los archivos de `dist/blocks/`, o directamente
 en los bloques ya pegados en WordPress). Son únicos y greppables:
 
 | Token (buscar) | Reemplazar por (ejemplo) | Qué es |
@@ -42,6 +42,7 @@ en los bloques ya pegados en WordPress). Son únicos y greppables:
 | `__URL_HOME__` | `/` | Permalink de Home |
 | `__URL_SUMATE__` | `/become-a-founder/` | Permalink de la página de Founders |
 | `__URL_PARTNERS__` | `/partners/` | Permalink de Partners |
+| `__URL_SCHOOL__` | `https://…` (**a definir**) | Sitio de la Soccer School: botón "Register now" de `home/07b-school` y link del footer |
 
 `__PSL_ASSET_BASE__` aparece en cada bloque (fuentes + imágenes); los `__URL_*__` solo en los bloques
 que enlazan a otras páginas (nav-CTAs, footer). Ningún bloque queda sin al menos el asset base.

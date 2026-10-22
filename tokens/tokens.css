@@ -13,6 +13,7 @@
   --color-black:       #000000;
   --color-white:       #FFFFFF;
   --color-red-marine:  #FF0033;   /* Red Marine (Pantone 0821 C) — acento de urgencia/vida */
+  --color-school-red:  #FF0048;   /* rojo de la sub-marca Soccer School — SOLO dentro de piezas de la School (07b, footer) */
 
   /* Sede 2027 (native/sede/) — código de sede: rombo arena = sede temporal · círculo aquamarine = estadio propio.
      El verde mar es la identidad del estadio propio: solo en el bloque final "Home port". */
