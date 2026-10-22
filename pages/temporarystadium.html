@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Página oculta: solo se llega con el link directo (no está en la nav ni enlazada desde el sitio) -->
+  <meta name="robots" content="noindex, nofollow" />
+  <title>2027 Venue — Port St. Lucie SC</title>
+
+  <!-- Fuentes de marca -->
+  <link rel="stylesheet" href="../tokens/fonts.css?v=67" />
+  <!-- Tokens -->
+  <link rel="stylesheet" href="../tokens/tokens.css?v=68" />
+
+  <!-- Patrones compartidos -->
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
+
+  <!-- Nav + footer compartidos (reusan los bloques de Home) -->
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=67" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=67" />
+
+  <!-- Bloques Sede 2027 -->
+  <link rel="stylesheet" href="../native/sede/v01-hero.css?v=2" />
+  <link rel="stylesheet" href="../native/sede/v02-glance.css?v=1" />
+  <link rel="stylesheet" href="../native/sede/v03-tour.css?v=1" />
+  <link rel="stylesheet" href="../native/sede/v04-matches.css?v=3" />
+  <link rel="stylesheet" href="../native/sede/v05-tickets.css?v=2" />
+  <link rel="stylesheet" href="../native/sede/v06-getting-here.css?v=1" />
+  <link rel="stylesheet" href="../native/sede/v07-faq.css?v=1" />
+  <link rel="stylesheet" href="../native/sede/v08-home-port.css?v=3" />
+
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--color-ink); }
+    body { font-family: var(--font-body); color: var(--color-text); overflow-x: hidden; }
+    ::selection { background: var(--color-aqua); color: var(--color-black); }
+  </style>
+</head>
+<body>
+  <div data-block="00-nav"></div>
+  <div data-block="v01-hero"></div>
+  <div data-block="v02-glance"></div>
+  <div data-block="v03-tour"></div>
+  <div data-block="v04-matches"></div>
+  <div data-block="v05-tickets"></div>
+  <div data-block="v06-getting-here"></div>
+  <div data-block="v07-faq"></div>
+  <div data-block="v08-home-port"></div>
+  <div data-block="footer"></div>
+
+  <!-- ac-forms.js: funciones globales que llama el form de newsletter del footer. En WordPress las
+       carga el sitio; acá hay que cargarlas antes del init o el script se corta. -->
+  <script src="../custom/ac-forms/ac-forms.js?v=1"></script>
+  <script type="module">
+    // Nav y footer se toman de los bloques compartidos de Home; el resto son bloques de /sede.
+    const blocks = [
+      { slot: '00-nav',           path: '../native/home/00-nav.html' },
+      { slot: 'v01-hero',         path: '../native/sede/v01-hero.html' },
+      { slot: 'v02-glance',       path: '../native/sede/v02-glance.html' },
+      { slot: 'v03-tour',         path: '../native/sede/v03-tour.html' },
+      { slot: 'v04-matches',      path: '../native/sede/v04-matches.html' },
+      { slot: 'v05-tickets',      path: '../native/sede/v05-tickets.html' },
+      { slot: 'v06-getting-here', path: '../native/sede/v06-getting-here.html' },
+      { slot: 'v07-faq',          path: '../native/sede/v07-faq.html' },
+      { slot: 'v08-home-port',    path: '../native/sede/v08-home-port.html' },
+      { slot: 'footer',           path: '../native/home/09-cierre-footer.html' },
+    ];
+    const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
+    await Promise.all(blocks.map(async ({ slot, path }) => {
+      const html = await fetch(path + bust).then((r) => r.text());
+      document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
+    }));
+
+    const [{ initHeroVideo }, { initTour }, { initMatches }, { initZones }, { initNewsletter }, { initMotion }] = await Promise.all([
+      import('../native/sede/v01-hero.js?v=1'),
+      import('../native/sede/v03-tour.js?v=1'),
+      import('../native/sede/v04-matches.js?v=1'),
+      import('../native/sede/v05-tickets.js?v=1'),
+      import('../native/home/09-cierre-footer.js?v=67'),
+      import('../native/_patterns/motion.js?v=67'),
+    ]);
+    initHeroVideo();   // video del hero diferido (v01-hero.js)
+    initTour();
+    initMatches();
+    initZones();
+    initNewsletter();
+    initMotion();
+
+    // Aterrizaje con #ancla desde otra página: los bloques se inyectan DESPUÉS del load.
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  </script>
+</body>
+</html>

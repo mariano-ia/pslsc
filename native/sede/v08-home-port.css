@@ -1,0 +1,40 @@
+/* Bloque V08 · Home port — identidad del estadio propio (solo en este bloque) */
+
+.venue-port { position: relative; overflow: hidden; background: var(--color-sea); color: var(--color-white); }
+.venue-port__bg { position: absolute; inset: 0; background: url('/assets/proof/stadium-aerial.webp') center/cover no-repeat; opacity: .55; }
+.venue-port__bg::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(6,32,28,.35) 0%, rgba(6,32,28,.85) 60%, var(--color-sea) 100%);
+}
+
+.venue-port__inner {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 22px;
+  padding-block: clamp(84px, 11vw, 140px);
+}
+
+/* señalética del estadio */
+.venue-port__sign {
+  display: flex; border-radius: 8px; overflow: hidden;
+  font: 800 10.5px/1 var(--font-label); letter-spacing: .14em; text-transform: uppercase;
+}
+.venue-port__sign b { flex: none; white-space: nowrap; display: flex; align-items: center; gap: 8px; padding: 11px 12px; background: var(--color-aqua); color: var(--color-sea); }
+.venue-port__sign b img { width: auto; height: 16px; }
+.venue-port__sign > span { padding: 11px 13px; background: rgba(6,32,28,.85); box-shadow: inset 0 0 0 1px rgba(170,246,230,.4); color: var(--color-aqua); }
+
+.venue-port__title {
+  font: 800 clamp(32px, 7.2vw, 104px)/.92 var(--font-label);   /* Druk Text Wide es muy ancha: "MEANWHILE," tiene que entrar en 390 */
+  letter-spacing: .01em; text-transform: uppercase; text-wrap: balance;
+}
+.venue-port__title em { font-style: normal; color: var(--color-aqua); }
+.venue-port__lead { max-width: 560px; font: 400 var(--fs-body-lg)/1.55 var(--font-body); color: rgba(255,255,255,.8); }
+
+.venue-port__facts { align-self: stretch; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; max-width: 640px; }
+.venue-port__facts div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 6px; padding-top: 12px; border-top: 2px solid var(--color-aqua); }
+.venue-port__facts dd { font: 900 clamp(30px, 3.4vw, 48px)/.9 var(--font-display); color: var(--color-aqua); }
+.venue-port__facts dt { font: 500 8.5px/1.35 var(--font-label); letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+
+.venue-port__cta { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.venue-port .is-disabled { opacity: .55; cursor: not-allowed; }
+.venue-port .is-disabled:hover { transform: none; background: var(--color-aqua); }
+.venue-port__note { font: 500 9.5px/1.4 var(--font-label); letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.6); }

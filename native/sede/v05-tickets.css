@@ -1,0 +1,71 @@
+/* Bloque V05 · Entradas — Sede 2027 */
+
+.venue-tickets { padding: var(--section-pad) 0; }
+.venue-tickets__inner { display: flex; flex-direction: column; gap: 30px; }
+
+.venue-tickets__kicker {
+  font: 500 var(--fs-kicker)/1.4 var(--font-label); letter-spacing: var(--ls-kicker);
+  text-transform: uppercase; color: var(--color-sand);
+}
+.venue-tickets__lead { margin-top: 18px; max-width: 52ch; font: 400 var(--fs-body-lg)/1.55 var(--font-body); color: var(--color-text-muted); }
+
+/* ---------- plano ---------- */
+.venue-tickets__map {
+  display: grid; grid-template-columns: 64px minmax(0, 1fr) 64px; grid-template-rows: 56px 150px 56px;
+  gap: 8px; padding: 14px; border-radius: var(--radius-md);
+  background: var(--color-ink-3); box-shadow: inset 0 0 0 1px var(--color-line);
+}
+.venue-tickets__pitch { position: relative; grid-column: 2; grid-row: 2; border-radius: 6px; background: #12241F; box-shadow: inset 0 0 0 1px #2E5A52; }
+.venue-tickets__pitch::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px solid #2E5A52; }
+.venue-tickets__pitch::after { content: ""; position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px; border-radius: 50%; box-shadow: inset 0 0 0 1px #2E5A52; }
+
+.venue-tickets__zone {
+  border: 0; border-radius: 6px; cursor: pointer;
+  background: #1E1E1B; color: var(--color-white); box-shadow: inset 0 0 0 1px var(--color-line-strong);
+  font: 800 9px/1.2 var(--font-label); letter-spacing: .1em; text-transform: uppercase;
+  transition: background 160ms ease, color 160ms ease;
+}
+.venue-tickets__zone:hover { box-shadow: inset 0 0 0 1px rgba(233,212,167,.6); }
+.venue-tickets__zone.is-on { background: var(--color-sand); color: var(--color-ink); box-shadow: none; }
+.venue-tickets__zone--n { grid-column: 2; grid-row: 1; }
+.venue-tickets__zone--w { grid-column: 1; grid-row: 2; writing-mode: vertical-rl; transform: rotate(180deg); }
+.venue-tickets__zone--e { grid-column: 3; grid-row: 2; writing-mode: vertical-rl; }
+.venue-tickets__zone--s { grid-column: 2; grid-row: 3; }
+
+/* ---------- ficha de zona ---------- */
+.venue-tickets__zinfo {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 22px 20px;
+  border-radius: var(--radius-md); background: var(--color-ink-3); box-shadow: inset 0 0 0 1px var(--color-line);
+}
+.venue-tickets__zinfo [data-zone-info][hidden] { display: none; }
+.venue-tickets__zinfo h3 { font: 800 30px/1 var(--font-display); letter-spacing: var(--ls-display); }
+.venue-tickets__zinfo p { margin-top: 10px; font-size: 15px; line-height: 1.55; color: var(--color-text-muted); }
+.venue-tickets__zinfo .venue-tickets__from { display: flex; align-items: baseline; gap: 8px; margin: 14px 0 8px; font-size: 13px; color: var(--color-text-faint); }
+.venue-tickets__from b { font: 900 40px/1 var(--font-display); color: var(--color-sand); }
+
+/* ---------- más formas de entrar ---------- */
+.venue-tickets__ways .psl-kicker { display: block; margin-bottom: 14px; }
+.venue-tickets__ways-list { display: flex; flex-direction: column; border-top: 1px solid var(--color-line-strong); }
+.venue-tickets__ways-list a {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center;
+  padding: 18px 0; border-bottom: 1px solid var(--color-line-strong);
+  color: inherit; text-decoration: none;
+}
+.venue-tickets__ways-list b { display: block; font: 800 22px/1 var(--font-display); letter-spacing: var(--ls-display); }
+.venue-tickets__ways-list span { display: block; margin-top: 6px; font-size: 14px; color: var(--color-text-muted); }
+.venue-tickets__ways-list i {
+  width: 40px; height: 40px; border-radius: 50%; font-style: normal;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset 0 0 0 1.5px rgba(170,246,230,.5); color: var(--color-aqua);
+  transition: background 160ms ease, color 160ms ease;
+}
+.venue-tickets__ways-list a:hover i { background: var(--color-aqua); color: var(--color-ink); }
+
+@media (min-width: 900px) {
+  .venue-tickets__inner { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 28px 56px; align-items: start; }
+  .venue-tickets__head, .venue-tickets__ways { grid-column: 1 / -1; }
+  .venue-tickets__map { grid-template-columns: 90px minmax(0, 1fr) 90px; grid-template-rows: 80px 260px 80px; gap: 12px; padding: 22px; }
+  .venue-tickets__zone { font-size: 10px; }
+  .venue-tickets__ways-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 28px; border-top: 0; }
+  .venue-tickets__ways-list a { border-top: 1px solid var(--color-line-strong); }
+}

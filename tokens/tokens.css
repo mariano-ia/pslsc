@@ -14,6 +14,12 @@
   --color-white:       #FFFFFF;
   --color-red-marine:  #FF0033;   /* Red Marine (Pantone 0821 C) — acento de urgencia/vida */
 
+  /* Sede 2027 (native/sede/) — código de sede: rombo arena = sede temporal · círculo aquamarine = estadio propio.
+     El verde mar es la identidad del estadio propio: solo en el bloque final "Home port". */
+  --color-sand:      #E9D4A7;   /* sede temporal sobre oscuro */
+  --color-sand-deep: #8A6A2E;   /* sede temporal legible sobre claro */
+  --color-sea:       #06201C;   /* verde mar del estadio propio */
+
   /* Superficies (negro cálido para suavizar el 100% black en pantalla) */
   --color-ink:      #0C0C0A;   /* fondo base oscuro */
   --color-ink-2:    #131118;   /* cards oscuras / texto sobre claro reemplazado por black */

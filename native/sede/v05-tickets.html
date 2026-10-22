@@ -1,0 +1,59 @@
+<!--
+  Bloque V05 · Entradas — Sede 2027. 🟩 Nativo + JS (v05-tickets.js).
+  Plano por zonas: cada zona es un botón; al tocarla se muestra su ficha (data-zone-info, mismo orden
+  que los botones: Supporters, Family, Sideline, Hospitality). Arranca en Sideline.
+  Sin JS: se ve la ficha de Sideline.
+  HANDOFF: zonas y precios son FICTICIOS (ver native/sede/DATOS.md).
+  HANDOFF: "Buy tickets" y "Single match" van a la home de la ticketera; cambiar por el evento real.
+-->
+<section class="venue-tickets surface-ink" id="tickets">
+  <div class="psl-container venue-tickets__inner">
+    <header class="venue-tickets__head">
+      <span class="venue-tickets__kicker" data-reveal>Tickets</span>
+      <h2 class="psl-h2" data-reveal data-reveal-delay="90">Pick your seat.</h2>
+      <p class="venue-tickets__lead" data-reveal data-reveal-delay="160">Seating at Treasure Coast Field. Tap a zone to see what it&rsquo;s like.</p>
+    </header>
+
+    <div class="venue-tickets__map" role="group" aria-label="Seating zones" data-reveal>
+      <button type="button" class="venue-tickets__zone venue-tickets__zone--n" aria-pressed="false">Supporters</button>
+      <button type="button" class="venue-tickets__zone venue-tickets__zone--w" aria-pressed="false">Family</button>
+      <button type="button" class="venue-tickets__zone venue-tickets__zone--e is-on" aria-pressed="true">Sideline</button>
+      <button type="button" class="venue-tickets__zone venue-tickets__zone--s" aria-pressed="false">Hospitality</button>
+      <div class="venue-tickets__pitch" aria-hidden="true"></div>
+    </div>
+
+    <div class="venue-tickets__zinfo" data-reveal data-reveal-delay="120" aria-live="polite">
+      <span class="venue-tickets__kicker">Zone</span>
+      <div data-zone-info hidden>
+        <h3>Supporters end</h3>
+        <p>Behind the goal, standing and singing for ninety minutes. Where the Founding Crew makes noise.</p>
+        <p class="venue-tickets__from">From <b class="tnum">$18</b></p>
+      </div>
+      <div data-zone-info hidden>
+        <h3>Family zone</h3>
+        <p>Built for coming with kids, close to food, restrooms and Luca.</p>
+        <p class="venue-tickets__from">From <b class="tnum">$22</b></p>
+      </div>
+      <div data-zone-info>
+        <h3>Sideline</h3>
+        <p>Midfield view: the best seat to follow every play.</p>
+        <p class="venue-tickets__from">From <b class="tnum">$30</b></p>
+      </div>
+      <div data-zone-info hidden>
+        <h3>Hospitality</h3>
+        <p>Premium seats with food and drinks included.</p>
+        <p class="venue-tickets__from">From <b class="tnum">$85</b></p>
+      </div>
+      <a href="https://tickets.portstluciesc.com/" data-external="tickets" target="_blank" rel="noopener" class="psl-btn cta-primary"><span>Buy tickets</span> <span aria-hidden="true">→</span></a>
+    </div>
+
+    <div class="venue-tickets__ways">
+      <span class="psl-kicker" data-reveal>More ways in</span>
+      <div class="venue-tickets__ways-list" data-reveal-group="80">
+        <a href="/joinus/" data-reveal><div><b>Season tickets</b><span>Deposit holders pick first. Your $35 is applied at seat selection.</span></div><i aria-hidden="true">→</i></a>
+        <a href="https://tickets.portstluciesc.com/" data-external="tickets" target="_blank" rel="noopener" data-reveal><div><b>Single match</b><span>One night under the lights. On sale January 2027.</span></div><i aria-hidden="true">→</i></a>
+        <a href="/partners/#contact" data-reveal><div><b>Groups</b><span>Clubs, schools and companies.</span></div><i aria-hidden="true">→</i></a>
+      </div>
+    </div>
+  </div>
+</section>
