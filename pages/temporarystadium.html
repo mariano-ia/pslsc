@@ -68,7 +68,7 @@
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
     }));
     // preview: marcar "2027 Venue" como página actual en la nav compartida
-    document.querySelector('.nav__links a[href="/2027-venue/"]')?.setAttribute('aria-current', 'page');
+    document.querySelector('.nav__links a[href="/temporarystadium/"]')?.setAttribute('aria-current', 'page');
 
     const [{ initHeroVideo }, { initTour }, { initMatches }, { initZones }, { initNewsletter }, { initMotion }] = await Promise.all([
       import('../native/sede/v01-hero.js?v=1'),

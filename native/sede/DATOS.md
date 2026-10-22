@@ -1,6 +1,6 @@
 # Sede 2027 · datos a confirmar
 
-La página del estadio temporal (`pages/sede.html`, bloques `native/sede/v01…v08`) está armada con
+La página del estadio temporal (`pages/temporarystadium.html`, bloques `native/sede/v01…v08`) está armada con
 **datos ficticios** hasta que el club confirme la sede. Esta es la lista completa de lo que hay que
 reemplazar y dónde está. En el código, cada bloque lo marca con `HANDOFF:` en su comentario de cabecera.
 
@@ -36,4 +36,4 @@ reemplazar y dónde está. En el código, cada bloque lo marca con `HANDOFF:` en
 - **"Visit the stadium site"** (v08): deshabilitado hasta que el micrositio del Groundbreaking esté online.
 - **Links sin destino**: "Add to calendar" y "Full schedule" (v04). "Buy tickets" y "Single match" (v05) van a
   la home de la ticketera (`tickets.portstluciesc.com`); cambiar por el evento real.
-- **Permalink de la página**: la nav apunta a `/2027-venue/` (ver `native/home/00-nav.html`).
+- **Permalink de la página**: la nav apunta a `/temporarystadium/` (ver `native/home/00-nav.html`).
