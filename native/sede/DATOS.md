@@ -36,4 +36,5 @@ reemplazar y dónde está. En el código, cada bloque lo marca con `HANDOFF:` en
 - **"Visit the stadium site"** (v08): deshabilitado hasta que el micrositio del Groundbreaking esté online.
 - **Links sin destino**: "Add to calendar" y "Full schedule" (v04). "Buy tickets" y "Single match" (v05) van a
   la home de la ticketera (`tickets.portstluciesc.com`); cambiar por el evento real.
-- **Permalink de la página**: la nav apunta a `/temporarystadium/` (ver `native/home/00-nav.html`).
+- **Permalink de la página**: `/temporarystadium/`. Página **oculta**: no va en la nav ni se enlaza desde el sitio, solo se
+  llega con el link directo (en WordPress: sin ítem de menú y con noindex).

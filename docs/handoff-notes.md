@@ -210,8 +210,9 @@ V04 partidos (pestañas, `v04-matches.js`) · V05 entradas (plano por zonas, `v0
 V07 FAQ (`<details>`, sin JS) · V08 "Home port" (único bloque con la identidad del estadio propio).
 **Los datos de la sede son ficticios** hasta que el club la confirme: lista completa en `native/sede/DATOS.md`
 y marcados con `HANDOFF:` en cada bloque. Código de sede: rombo arena = sede temporal · círculo aquamarine =
-estadio propio (tokens `--color-sand`, `--color-sand-deep`, `--color-sea`). La nav suma "2027 Venue" → en WP
-hay que agregarlo al menú del template de USL cuando la página se publique.
+estadio propio (tokens `--color-sand`, `--color-sand-deep`, `--color-sea`). **Página oculta**: permalink
+`/temporarystadium/`, sin ítem en la nav ni links desde el sitio; solo se llega con el link directo (en WP: sin
+menú y con noindex).
 
 ### Navegación entre páginas
 El **nav y el footer** (00 / 09) van iguales en todas las páginas. Sus links usan `archivo.html#ancla`;

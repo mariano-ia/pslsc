@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Página oculta: solo se llega con el link directo (no está en la nav ni enlazada desde el sitio) -->
+  <meta name="robots" content="noindex, nofollow" />
   <title>2027 Venue — Port St. Lucie SC</title>
 
   <!-- Fuentes de marca -->
@@ -67,8 +69,6 @@
       const html = await fetch(path + bust).then((r) => r.text());
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
     }));
-    // preview: marcar "2027 Venue" como página actual en la nav compartida
-    document.querySelector('.nav__links a[href="/temporarystadium/"]')?.setAttribute('aria-current', 'page');
 
     const [{ initHeroVideo }, { initTour }, { initMatches }, { initZones }, { initNewsletter }, { initMotion }] = await Promise.all([
       import('../native/sede/v01-hero.js?v=1'),
