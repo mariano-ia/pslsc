@@ -204,6 +204,15 @@ una tarjeta no estira a las vecinas. Fotos en `assets/staff/*.webp` (6, del mism
 la página, pegar el bloque compilado y **agregar "Staff" al menú del template de USL** (la nav no
 sale de estos bloques). Contenido (nombres/roles/bios) tomado del sitio en producción.
 
+### SEDE 2027 (`pages/sede.html`) — estadio temporal · EN DESARROLLO (rama `feature/sede-2027`)
+V01 hero (video provisorio + boarding ticket) · V02 de un vistazo · V03 recorrido (6 capítulos, `v03-tour.js`) ·
+V04 partidos (pestañas, `v04-matches.js`) · V05 entradas (plano por zonas, `v05-tickets.js`) · V06 cómo llegar ·
+V07 FAQ (`<details>`, sin JS) · V08 "Home port" (único bloque con la identidad del estadio propio).
+**Los datos de la sede son ficticios** hasta que el club la confirme: lista completa en `native/sede/DATOS.md`
+y marcados con `HANDOFF:` en cada bloque. Código de sede: rombo arena = sede temporal · círculo aquamarine =
+estadio propio (tokens `--color-sand`, `--color-sand-deep`, `--color-sea`). La nav suma "2027 Venue" → en WP
+hay que agregarlo al menú del template de USL cuando la página se publique.
+
 ### Navegación entre páginas
 El **nav y el footer** (00 / 09) van iguales en todas las páginas. Sus links usan `archivo.html#ancla`;
 el compilador los reescribe a los permalinks reales de WordPress (find-and-replace de `__URL_*__`,

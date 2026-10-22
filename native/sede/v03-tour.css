@@ -1,0 +1,99 @@
+/* Bloque V03 · Recorrido — Sede 2027 */
+
+.venue-tour { padding: var(--section-pad) 0; background: var(--color-ink-3); color: var(--color-text); }
+.venue-tour__inner { display: flex; flex-direction: column; gap: 28px; }
+
+.venue-tour__kicker {
+  font: 500 var(--fs-kicker)/1.4 var(--font-label); letter-spacing: var(--ls-kicker);
+  text-transform: uppercase; color: var(--color-sand);
+}
+.venue-tour__lead { margin-top: 18px; max-width: 52ch; font: 400 var(--fs-body-lg)/1.55 var(--font-body); color: var(--color-text-muted); }
+
+.venue-tour__main { display: flex; flex-direction: column; gap: 18px; }
+
+/* pantalla */
+.venue-tour__screen {
+  position: relative; aspect-ratio: 16 / 10; border-radius: var(--radius-md); overflow: hidden;
+  background: linear-gradient(160deg, #2A2418, #0E0D09);
+  box-shadow: inset 0 0 0 1px rgba(233,212,167,.18);
+}
+.venue-tour__poster,
+.venue-tour__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: .75; filter: sepia(.2); }
+.venue-tour__video { opacity: 0; transition: opacity .4s ease; }
+.venue-tour__screen.is-playing .venue-tour__video { opacity: .75; }
+
+.venue-tour__plate {
+  position: absolute; left: 14px; top: 14px; z-index: 1;
+  display: flex; border-radius: 6px; overflow: hidden;
+  font: 800 10px/1 var(--font-label); letter-spacing: .12em; text-transform: uppercase;
+}
+.venue-tour__plate b { padding: 9px 10px; background: var(--color-sand); color: var(--color-ink); }
+.venue-tour__plate span { padding: 9px 11px; background: rgba(12,12,10,.85); color: var(--color-white); }
+
+.venue-tour__play {
+  position: absolute; left: 50%; top: 50%; z-index: 1; width: 72px; height: 72px; margin: -36px;
+  border: 0; border-radius: 50%; background: var(--color-sand); color: var(--color-ink);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: transform 160ms ease, opacity 200ms ease;
+}
+.venue-tour__play:hover { transform: scale(1.06); }
+.venue-tour__play svg { width: 24px; height: 24px; margin-left: 4px; }
+.venue-tour__screen.is-playing .venue-tour__play { opacity: 0; pointer-events: none; }
+
+.venue-tour__ref {
+  position: absolute; right: 14px; bottom: 16px; z-index: 1;
+  font: 500 9px/1 var(--font-label); letter-spacing: .14em; text-transform: uppercase; color: rgba(233,212,167,.7);
+}
+.venue-tour__prog { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; height: 3px; background: rgba(255,255,255,.12); }
+.venue-tour__prog i { display: block; height: 100%; background: var(--color-sand); transition: width 300ms var(--ease-out-soft); }
+
+/* ficha del capítulo */
+.venue-tour__know {
+  padding: 22px 20px; border-radius: var(--radius-md);
+  background: var(--color-ink); box-shadow: inset 0 0 0 1px var(--color-line);
+}
+.venue-tour__know[hidden] { display: none; }
+.venue-tour__know h3 { font: 800 30px/1 var(--font-display); letter-spacing: var(--ls-display); }
+.venue-tour__know p { margin-top: 10px; font-size: 15px; line-height: 1.55; color: var(--color-text-muted); }
+.venue-tour__know .venue-tour__kicker { display: block; margin-top: 20px; }
+.venue-tour__know ul { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+.venue-tour__know li { display: flex; gap: 12px; align-items: baseline; font-size: 15px; }
+.venue-tour__know li::before {   /* rombo arena = sede temporal */
+  content: ""; flex: none; width: 7px; height: 7px; background: var(--color-sand);
+  transform: rotate(45deg) translateY(-2px);
+}
+
+/* capítulos */
+.venue-tour__side { display: flex; flex-direction: column; gap: 14px; }
+.venue-tour__chaps { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.venue-tour__chap {
+  flex: none; display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 16px 0 6px;
+  border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--color-text);
+  box-shadow: inset 0 0 0 1px var(--color-line-strong); cursor: pointer;
+  font: 600 13px/1 var(--font-body); text-align: left;
+  transition: background 160ms ease, color 160ms ease;
+}
+.venue-tour__chap i {
+  font-style: normal; width: 34px; height: 34px; border-radius: 50%; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  font: 800 15px/1 var(--font-display); background: rgba(255,255,255,.08);
+}
+.venue-tour__chap:hover { box-shadow: inset 0 0 0 1px rgba(233,212,167,.5); }
+.venue-tour__chap.is-on { background: var(--color-sand); color: var(--color-ink); box-shadow: none; }
+.venue-tour__chap.is-on i { background: var(--color-ink); color: var(--color-sand); }
+.venue-tour__full { justify-content: center; }
+
+@media (min-width: 900px) {
+  .venue-tour__inner {
+    display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 28px 48px; align-items: start;
+  }
+  .venue-tour__head { grid-column: 1 / -1; }
+  .venue-tour__side { gap: 18px; }
+  .venue-tour__chaps { flex-direction: column; overflow: visible; }
+  .venue-tour__chap { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .venue-tour__prog i, .venue-tour__play { transition: none; }
+}
