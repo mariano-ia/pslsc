@@ -279,6 +279,23 @@
   .nav__crest { height: 72px; }
   .nav.is-scrolled .nav__crest { height: 50px; }
 }
+/* ── Variante B (en prueba): el mismo lockup del banderín (PSLSC + SOCCER SCHOOL. en aquamarine, flamea al pasar
+   el mouse) pero sin el fondo rojo: queda centrado dentro de la barra. Mismo panel al pasar el mouse.
+   Va al final del archivo para pisar el banderín en todos los anchos. ── */
+.nav--school-quiet .nav__links a.nav__school,
+.nav--school-quiet .nav__links a.nav__school:hover,
+.nav--school-quiet .nav__links a.nav__school:focus-visible,
+.nav--school-quiet.is-school-open .nav__links a.nav__school {
+  align-self: center;
+  height: auto;
+  padding: 0;
+  background: none;
+  clip-path: none;
+}
+@media (max-width: 1000px) {
+  .nav--school-quiet .nav__links { top: 50%; transform: translate(-50%, -50%); }
+}
+
 /* con el menú abierto la página de atrás no scrollea */
 html.nav-menu-open { overflow: hidden; }
 

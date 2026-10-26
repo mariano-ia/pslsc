@@ -8,10 +8,12 @@
   (no hacen scroll local), van a Home y una vez ahí el navegador salta a esa sección.
 
   Soccer School (frente home-school, ver docs/frentes/home-school/BRIEF.md):
-  - Desktop: banderín rojo entre Academy y Staff. Al pasar el mouse (o con foco de teclado) las letras flamean
+  - Desktop: banderín rojo al final de los links, al lado del CTA (después de Partners). Al pasar el mouse (o con foco de teclado) las letras flamean
     y se abre .nav__panel debajo de la barra, con el póster de la School. En touch, el primer toque abre el panel.
   - Mobile (< 1000px): banderín centrado en la barra + menú hamburguesa (.nav__menu) con los links, el póster
     de la School y el CTA. El CTA sale de la barra y pasa al menú.
+  - Variante B (.nav--school-quiet, en prueba): el mismo lockup (PSLSC + SOCCER SCHOOL. en aquamarine, flamea al
+    pasar el mouse) pero sin el fondo rojo del banderín: queda centrado dentro de la barra. Mismo panel al pasar el mouse. En el preview: agregar ?nav=b a la URL.
   - Link de la School: __URL_SCHOOL__ (placeholder, mismo find-and-replace que el resto, ver dist/UPLOAD.md §2).
   - HANDOFF (WP): la nav real es la del template de USL. Ver docs/handoff-notes.md → "Nav · banderín Soccer School".
 
@@ -27,13 +29,13 @@
       <a href="/home/#project">Teams</a>
       <a href="/home/#jersey">Shop</a>
       <a href="/academy/">Academy</a>
+      <a href="/staff/">Staff</a>
+      <a href="/home/#news">News</a>
+      <a href="/partners/">Partners</a>
       <a href="__URL_SCHOOL__" class="nav__school" aria-label="Soccer School">
         <img src="/assets/school/ss-script-aqua.webp" alt="" width="678" height="182" />
         <span class="nav__wave" aria-hidden="true"><span style="--i:0;--y:-0.000em;--s:1.000">S</span><span style="--i:1;--y:-0.013em;--s:1.033">O</span><span style="--i:2;--y:-0.025em;--s:1.063">C</span><span style="--i:3;--y:-0.034em;--s:1.085">C</span><span style="--i:4;--y:-0.039em;--s:1.098">E</span><span style="--i:5;--y:-0.040em;--s:1.099">R</span><span class="nav__sp"> </span><span style="--i:7;--y:-0.028em;--s:1.070">S</span><span style="--i:8;--y:-0.017em;--s:1.042">C</span><span style="--i:9;--y:-0.004em;--s:1.010">H</span><span style="--i:10;--y:0.010em;--s:0.976">O</span><span style="--i:11;--y:0.022em;--s:0.945">O</span><span style="--i:12;--y:0.032em;--s:0.921">L</span><span style="--i:13;--y:0.038em;--s:0.905">.</span></span>
       </a>
-      <a href="/staff/">Staff</a>
-      <a href="/home/#news">News</a>
-      <a href="/partners/">Partners</a>
     </nav>
     <div class="nav__right">
       <a href="/joinus/" class="psl-btn cta-primary nav__cta"><span>Get Priority Access</span> <span aria-hidden="true">→</span></a>

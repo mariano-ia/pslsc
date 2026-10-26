@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
 
   <!-- Bloques nativos -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=72" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=76" />
   <link rel="stylesheet" href="../native/home/01-hero.css?v=67" />
   <link rel="stylesheet" href="../native/home/02-stats.css?v=67" />
   <link rel="stylesheet" href="../native/home/03-project.css?v=67" />
@@ -85,7 +85,7 @@
     initProofTimeline();
     initProjectTimeline();
     initMotion();   // activa reveal, parallax, nav reactiva, grano, cursor — tras inyectar los bloques
-    import('../native/home/00-nav.js?v=2').then((m) => m.initNav());   // hamburguesa + banderín de la School
+    import('../native/home/00-nav.js?v=3').then((m) => m.initNav());   // hamburguesa + banderín de la School
 
     // Aterrizaje con #ancla desde otra página: los bloques se inyectan DESPUÉS del load, así que
     // el navegador no encontró el ancla — la buscamos ahora (el scroll es suave vía CSS, motion.css).

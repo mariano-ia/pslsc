@@ -216,7 +216,13 @@ estadio propio (tokens `--color-sand`, `--color-sand-deep`, `--color-sea`). **P�
 menú y con noindex).
 
 ### Nav · banderín Soccer School (`native/home/00-nav.*`)
-En el prototipo, "Soccer School" entra a la barra como un banderín rojo entre Academy y Staff:
+**Dos variantes a definir con marketing** (las dos en el prototipo, se elige por URL):
+- **A — banderín** (por defecto): `pages/home.html`.
+- **B — sin banderín** (`.nav--school-quiet`): `pages/home.html?nav=b`. Mismo lockup en aquamarine y mismo
+  flameo/panel, pero sin el fondo rojo, centrado dentro de la barra. `?nav=b` funciona en todas las páginas.
+Cuando se elija una, se borra la otra y el selector de `00-nav.js`.
+
+En el prototipo, "Soccer School" entra a la barra después de Partners, al lado del CTA:
 - **Desktop**: al pasar el mouse (o con foco de teclado) las letras flamean y se abre un panel debajo de la barra
   con el póster de la School y "Register now". Es solo CSS (`:has()`); en touch, el primer toque abre el panel
   (`00-nav.js`).
@@ -226,7 +232,7 @@ En el prototipo, "Soccer School" entra a la barra como un banderín rojo entre A
 
 **HANDOFF (WP)**: la nav real es la del template de USL, que ya se reestiliza desde `docs/header-additional-css.css`.
 Para llevar el banderín:
-1. En el menú de WordPress, agregar el ítem "Soccer School" entre Academy y Staff, con link a la School y la clase
+1. En el menú de WordPress, agregar el ítem "Soccer School" después de Partners, con link a la School y la clase
    CSS `psl-school` (opción "Clases CSS" del ítem de menú).
 2. Pasar los estilos del banderín y del panel de `00-nav.css` al CSS adicional del header, apuntando a
    `#menu-main-menu > li.psl-school > a` en lugar de `.nav__school`.
