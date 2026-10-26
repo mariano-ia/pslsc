@@ -216,12 +216,6 @@ estadio propio (tokens `--color-sand`, `--color-sand-deep`, `--color-sea`). **P�
 menú y con noindex).
 
 ### Nav · banderín Soccer School (`native/home/00-nav.*`)
-**Dos variantes a definir con marketing** (las dos en el prototipo, se elige por URL):
-- **A — banderín** (por defecto): `pages/home.html`.
-- **B — sin banderín** (`.nav--school-quiet`): `pages/home.html?nav=b`. Mismo lockup en aquamarine y mismo
-  flameo/panel, pero sin el fondo rojo, centrado dentro de la barra. `?nav=b` funciona en todas las páginas.
-Cuando se elija una, se borra la otra y el selector de `00-nav.js`.
-
 En el prototipo, "Soccer School" entra a la barra después de Partners, al lado del CTA:
 - **Desktop**: al pasar el mouse (o con foco de teclado) las letras flamean y se abre un panel debajo de la barra
   con el póster de la School y "Register now". Es solo CSS (`:has()`); en touch, el primer toque abre el panel

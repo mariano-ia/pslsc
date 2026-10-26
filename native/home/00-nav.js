@@ -9,9 +9,6 @@ function initNav(root = document) {
   if (!nav || nav.dataset.navBound) return;
   nav.dataset.navBound = '1';
 
-  // Variantes para mostrar a marketing: ?nav=b = sin banderín (.nav--school-quiet). Se borra al elegir una.
-  if (new URLSearchParams(location.search).get('nav') === 'b') nav.classList.add('nav--school-quiet');
-
   const burger = nav.querySelector('.nav__burger');
   const menu = nav.querySelector('.nav__menu');
   const setMenu = (open) => {
