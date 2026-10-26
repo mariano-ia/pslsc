@@ -8,13 +8,13 @@
   <!-- Fuentes de marca -->
   <link rel="stylesheet" href="../tokens/fonts.css?v=67" />
   <!-- Tokens -->
-  <link rel="stylesheet" href="../tokens/tokens.css?v=67" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=69" />
 
   <!-- Patrones compartidos -->
   <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
 
   <!-- Nav + footer compartidos (reusan los bloques de Home) -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=67" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=77" />
   <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=67" />
 
   <!-- Bloque Staff -->
@@ -56,6 +56,7 @@
     ]);
     initNewsletter();
     initMotion();
+    import('../native/home/00-nav.js?v=4').then((m) => m.initNav());   // hamburguesa + banderín de la School
 
     // Aterrizaje con #ancla desde otra página: los bloques se inyectan después del load.
     if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();

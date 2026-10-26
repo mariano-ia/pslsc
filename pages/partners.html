@@ -8,14 +8,14 @@
   <!-- Fuentes de marca -->
   <link rel="stylesheet" href="../tokens/fonts.css?v=68" />
   <!-- Tokens -->
-  <link rel="stylesheet" href="../tokens/tokens.css?v=68" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=69" />
 
   <!-- Patrones compartidos -->
   <link rel="stylesheet" href="../native/_patterns/cards.css?v=68" />
   <link rel="stylesheet" href="../native/_patterns/motion.css?v=68" />
 
   <!-- Nav + footer compartidos (bloques de Home) -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=68" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=77" />
   <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
   <!-- Timeline compartida con la Home (P02 reusa .ptl de 03-project) -->
   <link rel="stylesheet" href="../native/home/03-project.css?v=68" />
@@ -80,6 +80,7 @@
     initNewsletter();
     initProjectTimeline();
     initMotion();
+    import('../native/home/00-nav.js?v=4').then((m) => m.initNav());   // hamburguesa + banderín de la School
 
     // Aterrizaje con #ancla desde otra página: los bloques se inyectan DESPUÉS del load, así que
     // el navegador no encontró el ancla — la buscamos ahora (el scroll es suave vía CSS, motion.css).

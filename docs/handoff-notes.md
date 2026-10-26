@@ -167,7 +167,7 @@ está documentado en su `.js`. **Nav (00) y News (08) son del template de USL** 
 
 | # | Bloque | Superficie | Qué es / a implementar |
 |---|---|---|---|
-| 00 | Nav (crest + CTA "Become a Founder") | ink | **Del template.** Sticky. |
+| 00 | Nav (crest + CTA "Become a Founder") | ink | **Del template.** Sticky. Suma el banderín de la Soccer School — ver "Nav · banderín Soccer School" abajo. |
 | 01 | Hero + video + efecto "born" | ink | Video de fondo `hero.mp4`. La última palabra del título hace scramble (`01-hero.js`). |
 | 02 | Stats band | ink | `<psl-live-counter variant="stats">` — ver §7. |
 | 03 | The project (timeline horizontal que se dibuja con el scroll) | paper | HTML + `03-project.js`. |
@@ -175,7 +175,8 @@ está documentado en su `.js`. **Nav (00) y News (08) son del template de USL** 
 | 04b | **Divider** (ex Matchday) | ink | Sólo una línea. El módulo Matchday está archivado — ver §7. |
 | 05 | Jersey / Shop | ink | `<psl-jersey-viewer>` (360°) + CTA "Buy now" a la tienda externa (ver `external/`). |
 | 06 | **Founders** | paper | `<psl-founder-id>` (boarding pass con cámara) + `<psl-departures-board>` (tablero split-flap) + CTA. |
-| 07 | Academy (teaser) | ink | Foto real + copy + CTA a la página Academy. HTML puro. |
+| 07 | ~~Academy (teaser)~~ | — | **Sale de la Home** (sacarlo también en WP): lo reemplaza 07b, que usa la misma foto. Academy sigue en la nav y el footer. El bloque queda en el repo. |
+| 07b | **Soccer School** | ink | Póster de la campaña (foto + título en onda + "Register now") y cinta de categorías. HTML + CSS, sin JS. Link `__URL_SCHOOL__`. |
 | 08 | News ("From the build") | paper | **Del template.** |
 | 09 | Newsletter + Footer | ink | Form de suscripción (`09-cierre-footer.js`) — ver §7. |
 
@@ -215,6 +216,25 @@ y marcados con `HANDOFF:` en cada bloque. Código de sede: rombo arena = sede te
 estadio propio (tokens `--color-sand`, `--color-sand-deep`, `--color-sea`). **Página oculta**: permalink
 `/temporarystadium/`, sin ítem en la nav ni links desde el sitio; solo se llega con el link directo (en WP: sin
 menú y con noindex).
+
+### Nav · banderín Soccer School (`native/home/00-nav.*`)
+En el prototipo, "Soccer School" entra a la barra después de Partners, al lado del CTA:
+- **Desktop**: al pasar el mouse (o con foco de teclado) las letras flamean y se abre un panel debajo de la barra
+  con el póster de la School y "Register now". Es solo CSS (`:has()`); en touch, el primer toque abre el panel
+  (`00-nav.js`).
+- **Mobile (< 1000px)**: banderín centrado en la barra + menú hamburguesa con los links, el póster de la School y
+  el CTA.
+- Respeta "reducir movimiento" (sin flameo ni transiciones).
+
+**HANDOFF (WP)**: la nav real es la del template de USL, que ya se reestiliza desde `docs/header-additional-css.css`.
+Para llevar el banderín:
+1. En el menú de WordPress, agregar el ítem "Soccer School" después de Partners, con link a la School y la clase
+   CSS `psl-school` (opción "Clases CSS" del ítem de menú).
+2. Pasar los estilos del banderín y del panel de `00-nav.css` al CSS adicional del header, apuntando a
+   `#menu-main-menu > li.psl-school > a` en lugar de `.nav__school`.
+3. El lockup del banderín, las letras en onda y el panel son markup que el menú de WP no genera: hace falta un
+   script chico en el header que los inyecte (mismo markup que `00-nav.html`). El menú mobile ya lo trae el
+   template; el póster va al final de ese menú.
 
 ### Navegación entre páginas
 El **nav y el footer** (00 / 09) van iguales en todas las páginas. Sus links usan `archivo.html#ancla`;

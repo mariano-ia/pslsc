@@ -55,13 +55,235 @@
 .nav__links a:hover { color: var(--color-text); }
 
 .nav__right { display: flex; align-items: center; gap: 16px; }
-.nav__cta { padding: 12px 18px; font-size: 12.5px; }
+.nav__cta { padding: 12px 18px; font-size: 12.5px; white-space: nowrap; }
+/* laptops chicas: con el banderín la barra se aprieta, los links se juntan un poco */
+@media (max-width: 1100px) { .nav__links { gap: 16px; } }
 
-@media (max-width: 900px) {
-  .nav__links { display: none; }   /* mobile: crest + CTA (nav sin menú desplegable) */
+/* ── Soccer School: banderín rojo que cuelga del borde de la barra ──
+   Rojo, onda y botón son la identidad de la sub-marca: solo acá, en 07b y en el footer. */
+.nav__links { align-self: stretch; }
+.nav__links a.nav__school {
+  align-self: flex-start;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  height: 88px;
+  padding: 11px 14px 0;
+  background: var(--color-school-red);
+  color: var(--color-aqua);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), 0 100%);
+  transition: height 250ms ease;
+}
+.nav__school img { width: 66px; height: auto; display: block; }
+.nav__school .nav__wave { font: 800 21px/1 var(--font-display); letter-spacing: .01em; }
+.nav__links a.nav__school:hover, .nav__links a.nav__school:focus-visible, .nav.is-school-open .nav__links a.nav__school { height: 96px; }
+.nav__school:focus-visible { outline: 2px solid var(--color-aqua); outline-offset: -4px; }
+
+/* Letras "en onda": cada una con su desplazamiento y scaleY (Druk Heavy comprimido) */
+.nav__wave { display: block; white-space: nowrap; }
+.nav__wave span {
+  display: inline-block;
+  margin: 0 -.05em;
+  transform-origin: 50% 55%;
+  transform: translateY(var(--y)) scale(.8, var(--s));
+}
+.nav__wave .nav__sp { width: .2em; }
+.nav__wave--2 { margin-top: .07em; }
+@keyframes nav-flag {
+  0%, 100% { transform: translateY(.05em) scale(.8, .9); }
+  50%      { transform: translateY(-.05em) scale(.8, 1.14); }
+}
+/* el banderín flamea al pasar el mouse; los títulos del póster flamean siempre, despacio */
+.nav__school:hover .nav__wave span,
+.nav__school:focus-visible .nav__wave span,
+.nav.is-school-open .nav__school .nav__wave span { animation: nav-flag .9s ease-in-out infinite; animation-delay: calc(var(--i) * -.08s); }
+.nav__panel-title .nav__wave span { animation: nav-flag 3.2s ease-in-out infinite; animation-delay: calc(var(--i) * -.16s); }
+
+/* ── Panel de la School (desktop): se abre debajo de la barra al pasar por el banderín ── */
+.nav__panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 1;
+  height: 470px;
+  overflow: hidden;
+  background: var(--color-ink);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 250ms ease, transform 250ms ease, visibility 0s linear 250ms;
+}
+.nav:has(.nav__school:hover) .nav__panel,
+.nav:has(.nav__school:focus-visible) .nav__panel,
+.nav__panel:hover,
+.nav__panel:focus-within,
+.nav.is-school-open .nav__panel {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+.nav__panel-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
+.nav__panel::before,
+.nav__menu-poster::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(12,12,10,.15) 0, rgba(12,12,10,.25) 45%, rgba(12,12,10,.72) 100%);
+}
+.nav__grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .22;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.nav__panel-in {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 46px var(--gutter) 0;
+  text-align: center;
+  color: var(--color-white);
+}
+.nav__lockup { width: 150px; height: auto; display: block; }
+.nav__panel-title {
+  margin: 0;
+  font: 800 132px/.8 var(--font-display);
+  color: var(--color-white);
+  text-transform: uppercase;
+}
+.nav__caps {
+  display: block;
+  max-width: 640px;
+  margin: 0;
+  font: 700 14px/1.35 var(--font-body);
+  letter-spacing: .01em;
+  text-transform: uppercase;
+}
+.nav__school-cta { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.nav__school-cta img { width: 26px; height: auto; display: block; }
+.nav__school-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 26px 0 16px;
+  background: var(--color-school-red);
+  color: var(--color-white);
+  text-decoration: none;
+  font: 700 13px/1 var(--font-body);
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-radius: 3px 0 0 3px;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+}
+
+/* ── Hamburguesa + menú mobile (solo < 1000px) ── */
+.nav__burger { display: none; }
+.nav__menu { display: none; }
+
+@media (max-width: 1000px) {
+  .nav__panel { display: none; }
+  .nav__cta { display: none; }   /* el CTA pasa al menú */
+
+  /* de los links de la barra solo queda el banderín, centrado */
+  .nav__links { position: absolute; left: 50%; top: 0; transform: translateX(-50%); }
+  .nav__links a:not(.nav__school) { display: none; }
+  .nav__links a.nav__school { height: 76px; padding: 9px 11px 0; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 13px), 0 100%); }
+  .nav__school img { width: 52px; }
+  .nav__school .nav__wave { font-size: 16px; }
+  .nav__links a.nav__school:hover, .nav__links a.nav__school:focus-visible { height: 76px; }
+
+  .nav__burger {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px var(--color-line-strong);
+    color: var(--color-text);
+    cursor: pointer;
+  }
+  .nav__burger span {
+    position: absolute;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 200ms ease;
+  }
+  .nav__burger span:first-child { transform: translateY(-4px); }
+  .nav__burger span:last-child  { transform: translateY(4px); }
+  .nav.is-menu-open .nav__burger span:first-child { transform: rotate(45deg); }
+  .nav.is-menu-open .nav__burger span:last-child  { transform: rotate(-45deg); }
+  .nav__burger:focus-visible { outline: 2px solid var(--color-aqua); outline-offset: 2px; }
+
+  .nav__menu:not([hidden]) {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: calc(100dvh - 70px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 30px var(--gutter) 34px;
+    background: var(--color-ink);
+  }
+  .nav__menu-links a {
+    display: block;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--color-line);
+    font: 800 34px/1 var(--font-display);
+    letter-spacing: var(--ls-display);
+    text-transform: uppercase;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .nav__menu-poster {
+    position: relative;
+    display: block;
+    height: 500px;
+    margin-top: 22px;
+    overflow: hidden;
+    text-decoration: none;
+  }
+  .nav__menu-poster .nav__panel-photo { object-position: center 30%; }
+  .nav__menu-poster .nav__panel-in { gap: 14px; padding: 0 16px; }
+  .nav__menu-poster .nav__lockup { width: 118px; }
+  .nav__menu-poster .nav__panel-title { display: block; font-size: clamp(76px, 25vw, 96px); color: var(--color-aqua); }
+  .nav__menu-poster .nav__caps { font-size: 12px; }
+  .nav__menu-poster .nav__school-cta { gap: 12px; }
+  .nav__menu-poster .nav__school-cta img { width: 22px; }
+  .nav__menu-poster .nav__school-btn { height: 32px; font-size: 12px; }
+  .nav__menu-cta { display: flex; justify-content: center; margin-top: 20px; padding: 16px; }
 }
 @media (max-width: 560px) {
   .nav__crest { height: 72px; }
   .nav.is-scrolled .nav__crest { height: 50px; }
+}
+/* con el menú abierto la página de atrás no scrollea */
+html.nav-menu-open { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nav__wave span { animation: none !important; }
+  .nav__school, .nav__panel, .nav__burger span { transition: none; }
 }
 
