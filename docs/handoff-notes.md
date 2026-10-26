@@ -127,8 +127,10 @@ son self-hosted. Formatos:
   ~120px de lado, recortados al alpha). Bajados del sitio oficial de cada club y **guardados en el
   repo** — el bloque Matchday no linkea imágenes de terceros. Al sumar un rival nuevo: mismo formato,
   nombre en kebab-case, y referenciarlo desde `MATCHES` en `custom/fixtures/fixtures.js`.
-- **Logos de partners** `assets/partners/`: `adidas.webp`, `vixon.webp`, `ayonic.webp` (blanco
-  monocromo con alpha, recortados al alpha) para la franja P01b de Partners. Los originales a color
+- **Logos de partners** `assets/partners/`: `adidas.webp`, `vixon.webp`, `ayonic.webp`, `hps.webp`
+  (blanco monocromo con alpha, recortados al alpha) para la franja P01b de Partners. En `hps.webp`
+  (Helping People Succeed) se sacó el sol en degradé del emblema: en blanco monocromo quedaba como
+  una mancha gris. Los originales a color
   (SVG/PNG) están en `docs/partners-logos/`. Al sumar un partner: mismo formato, un `<li>` en
   `native/partners/p01b-partners.html` y su alto en el CSS para que pese igual que el resto.
 - **Fotos**: `assets/images/pslsc_academy.webp` (foto academia), `assets/images/luka-card.webp`
