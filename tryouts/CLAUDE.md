@@ -37,6 +37,21 @@ Domingo 8 de noviembre de 2026 · jugadores de 18 a 25 años · sin costo. El de
 - Envío: **pendiente** conectar ActiveCampaign en `tryouts.js > sendLead` con el mismo patrón que `/school`
   (`school/README.md`, `school/school.js`). Sin config no envía y no finge éxito. `?demo` muestra la confirmación.
 
+## Confirmación de los seleccionados (`/tryouts/confirmar/`)
+
+- Una sola página igual para todos (decisión de Mariano, 26-oct-2026: nada de links personalizados). Nombre y apellido +
+  mail, aclarando que sean **los mismos con los que se anotaron**, y dos botones: **"Sí, voy a ir"** / **"No puedo ir"**.
+- Título: **"Quedaste seleccionado para la prueba."** ("para la prueba" para que no se lea como seleccionado para el club),
+  con una línea chica debajo: es para quienes recibieron el mail (el link es el mismo para todos y puede circular).
+  La pregunta **"¿Te vemos el 8 de noviembre?"** es el título de la tarjeta, pegada a los dos botones, y es neutral a
+  propósito: el "no" le sirve al club tanto como el "sí".
+- Sede: **Benavídez**, provincia de Buenos Aires. Si confirman, les llega otro mail con el grupo asignado y el horario.
+- El apto médico se avisa **antes** de responder (es requisito para ir) y se repite en la respuesta del "sí".
+- En el "no" no se dice "nos vemos en la próxima" (sin promesas): se agradece el aviso y, en condicional, si el club
+  organiza otra prueba, les escribe.
+- Se puede cambiar la respuesta volviendo al mismo link; vale la última.
+- El envío lo conecta Santi (`confirmar/confirmar.js > sendAnswer`).
+
 ## Estructura de la página
 
 1. Barra del club (igual a `/school`, sin links para no generar fugas) con "Pruebas oficiales".

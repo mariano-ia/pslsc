@@ -1,0 +1,40 @@
+/* /tryouts/confirmar · respuesta de los jugadores seleccionados (va / no va).
+   Usa los estilos de /tryouts/tryouts.css; acá solo lo propio de esta página. */
+
+/* Hero más corto que el de /tryouts: la página es solo el form (sin barra del club arriba). */
+.cf-hero .lead b{color:#FFFFFF;font-weight:700}
+.cf-hero .lead strong{color:#AAF6E6;font-weight:700}
+.cf-hero .cf-lead2{margin-top:12px}
+/* "seleccionado" mide ~6.7 veces el cuerpo: en celulares angostos el título se achica para que entre. */
+.cf-hero h1{font-size:clamp(40px,calc((100vw - 40px) / 6.9),58px)}
+.cf-who{margin:18px 0 0;font-size:13px;line-height:1.45;color:rgba(255,255,255,.5)}
+@media (min-width:900px){
+  .cf-hero{min-height:0;padding:96px 0 110px}
+  .cf-hero .wrap{align-items:center}
+  /* "seleccionado" y "para la prueba." tienen que entrar en una línea cada uno en la columna de texto (al lado del form). */
+  .cf-hero h1{font-size:clamp(52px,5.6vw,72px)}
+  .cf-who{font-size:14px}
+}
+
+/* Los dos botones: apilados en mobile, lado a lado en escritorio. El "no" es secundario pero bien visible:
+   que avise el que no va es lo que permite reorganizar la prueba. */
+.cf-btns{display:grid;gap:8px}
+@media (min-width:900px){
+  .cf-btns{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+}
+.card .cf-btns .btn{padding:18px 14px}
+.btn:disabled{opacity:.55;cursor:default}
+
+/* Datos que el club todavía tiene que completar (mismo criterio que los [corchetes] de las bases). */
+.ph{background:rgba(255,0,51,.16);color:#FF8FA3;border-radius:3px;padding:0 3px}
+
+/* Confirmaciones */
+.ok .cf-left{text-align:left}
+.ok .note{margin:14px 0 0}
+.cf-ic-gh{background:transparent;box-shadow:inset 0 0 0 1.5px rgba(170,246,230,.45)}
+.cf-ic-gh img{height:40px}
+.cf-kit{margin:16px 0 0}
+.cf-kit ul{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0;padding:0;list-style:none}
+.cf-kit li{padding:8px 11px;border-radius:100px;background:#0C0C0A;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);font:600 12.5px/1.2 'Proxima Nova',sans-serif;color:rgba(255,255,255,.85)}
+.cf-kit li.hot{box-shadow:inset 0 0 0 1.5px #AAF6E6;color:#AAF6E6}
+.ok p.cf-after{margin:18px 0 0}

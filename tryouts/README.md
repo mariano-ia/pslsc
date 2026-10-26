@@ -32,6 +32,17 @@ Mientras `config.js` esté vacío, el form valida pero **no envía y no finge é
 
 Para revisar el diseño de la confirmación sin backend: abrir **`/tryouts/?demo`**.
 
+## `/tryouts/confirmar/` — respuesta de los seleccionados
+
+Página a la que lleva el mail que reciben los ~200 jugadores seleccionados. Es la **misma para todos**
+(sin links personalizados): cargan nombre y apellido + mail (los mismos con los que se anotaron) y tocan
+**"Sí, voy a ir"** o **"No puedo ir"**. Cada respuesta muestra un texto fijo (el de "sí" incluye apto médico y kit list).
+Usa `tryouts.css` + `confirmar/confirmar.css`; no carga `tryouts.js`. Tiene `noindex`.
+
+**Pendiente (dev):** conectar el envío en `confirmar/confirmar.js > sendAnswer`
+(`{ name, email, answer: 'si' | 'no', sentAt }`). Sin conectar no envía y no finge éxito. `?demo` muestra las dos respuestas.
+Los `[corchetes]` (fecha límite para responder, fecha de envío de horarios) los completa el club.
+
 ## Ver localmente
 
 ```bash
