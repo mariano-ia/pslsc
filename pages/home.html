@@ -9,14 +9,14 @@
   <link rel="stylesheet" href="../tokens/fonts.css?v=67" />
 
   <!-- Tokens -->
-  <link rel="stylesheet" href="../tokens/tokens.css?v=68" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=69" />
 
   <!-- Patrones compartidos -->
   <link rel="stylesheet" href="../native/_patterns/cards.css?v=67" />
   <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
 
   <!-- Bloques nativos -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=67" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=72" />
   <link rel="stylesheet" href="../native/home/01-hero.css?v=67" />
   <link rel="stylesheet" href="../native/home/02-stats.css?v=67" />
   <link rel="stylesheet" href="../native/home/03-project.css?v=67" />
@@ -24,7 +24,6 @@
   <link rel="stylesheet" href="../native/home/04b-fixtures.css?v=67" />
   <link rel="stylesheet" href="../native/home/05-jersey.css?v=67" />
   <link rel="stylesheet" href="../native/home/06-founders.css?v=67" />
-  <link rel="stylesheet" href="../native/home/07-academy.css?v=67" />
   <link rel="stylesheet" href="../native/home/07b-school.css?v=1" />
   <link rel="stylesheet" href="../native/home/08-news.css?v=67" />
   <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
@@ -51,7 +50,7 @@
   <div data-block="04b-fixtures"></div>
   <div data-block="05-jersey"></div>
   <div data-block="06-founders"></div>
-  <div data-block="07-academy"></div>
+  <!-- 07-academy oculto: la Soccer School (07b) toma su lugar y usa la misma foto. Acceso a Academy: nav y footer. -->
   <div data-block="07b-school"></div>
   <div data-block="08-news"></div>
   <div data-block="09-cierre-footer"></div>
@@ -64,7 +63,7 @@
   <script type="module">
     const blocks = [
       '00-nav', '01-hero', '02-stats', '03-project', '04-proof', '04b-fixtures',
-      '05-jersey', '06-founders', '07-academy', '07b-school', '08-news', '09-cierre-footer',
+      '05-jersey', '06-founders', '07b-school', '08-news', '09-cierre-footer',
     ];
     const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
     await Promise.all(blocks.map(async (name) => {
@@ -86,6 +85,7 @@
     initProofTimeline();
     initProjectTimeline();
     initMotion();   // activa reveal, parallax, nav reactiva, grano, cursor — tras inyectar los bloques
+    import('../native/home/00-nav.js?v=2').then((m) => m.initNav());   // hamburguesa + banderín de la School
 
     // Aterrizaje con #ancla desde otra página: los bloques se inyectan DESPUÉS del load, así que
     // el navegador no encontró el ancla — la buscamos ahora (el scroll es suave vía CSS, motion.css).

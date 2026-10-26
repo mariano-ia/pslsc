@@ -1,19 +1,21 @@
 <!--
-  Nav — header compartido a las 5 páginas (Home, Academy, Staff, Sumate/Join Us, Partners). 🟩 Nativo.
-  Diseño adoptado de Home.dc.html: sticky con blur, badge hexagonal PSL, wordmark + est. line, CTA pill.
+  Nav — header compartido a las páginas (Home, Academy, Staff, Sumate/Join Us, Partners, Sede). 🟩 Nativo.
+  Diseño adoptado de Home.dc.html: sticky con blur, crest, links, CTA pill.
 
   Links: ya son rutas reales de WordPress (/home/, /academy/, /staff/, /joinus/, /partners/), no
-  "archivo.html#ancla" — se pegan tal cual en cualquiera de las 5 páginas. Los que apuntan a "/home/#id"
+  "archivo.html#ancla" — se pegan tal cual en cualquiera de las páginas. Los que apuntan a "/home/#id"
   (Teams, Shop, News) solo tienen sentido como anclas dentro de Home: en las otras páginas SÍ navegan
   (no hacen scroll local), van a Home y una vez ahí el navegador salta a esa sección.
 
-  JS: self-contained, ver tools/build-blocks-manual.py → SELF_CONTAINED_NAV_BLOCKS / nav_only_js().
-  No depende de psl-{page}-motion-core.html (mismo motivo que el footer: se pega en WP sin garantía
-  de que el core ya esté cargado antes en esa sección de la página). Repite el mismo bloque compilado
-  psl-home-00-nav.html en las 5 páginas, igual que se hizo con el footer (09-cierre-footer).
+  Soccer School (frente home-school, ver docs/frentes/home-school/BRIEF.md):
+  - Desktop: banderín rojo entre Academy y Staff. Al pasar el mouse (o con foco de teclado) las letras flamean
+    y se abre .nav__panel debajo de la barra, con el póster de la School. En touch, el primer toque abre el panel.
+  - Mobile (< 1000px): banderín centrado en la barra + menú hamburguesa (.nav__menu) con los links, el póster
+    de la School y el CTA. El CTA sale de la barra y pasa al menú.
+  - Link de la School: __URL_SCHOOL__ (placeholder, mismo find-and-replace que el resto, ver dist/UPLOAD.md §2).
+  - HANDOFF (WP): la nav real es la del template de USL. Ver docs/handoff-notes.md → "Nav · banderín Soccer School".
 
-  Mobile: hoy sin menú desplegable — .nav__links se oculta por completo debajo de 900px (ver
-  00-nav.css), queda solo crest + CTA. Si se pide un menú hamburguesa esto hay que revisarlo aparte.
+  JS: 00-nav.js (initNav) — hamburguesa y primer toque del banderín en touch. El hover del panel es solo CSS.
 -->
 <header class="nav">
   <div class="psl-container nav__inner">
@@ -25,12 +27,56 @@
       <a href="/home/#project">Teams</a>
       <a href="/home/#jersey">Shop</a>
       <a href="/academy/">Academy</a>
+      <a href="__URL_SCHOOL__" class="nav__school" aria-label="Soccer School">
+        <img src="/assets/school/ss-script-aqua.webp" alt="" width="678" height="182" />
+        <span class="nav__wave" aria-hidden="true"><span style="--i:0;--y:-0.000em;--s:1.000">S</span><span style="--i:1;--y:-0.013em;--s:1.033">O</span><span style="--i:2;--y:-0.025em;--s:1.063">C</span><span style="--i:3;--y:-0.034em;--s:1.085">C</span><span style="--i:4;--y:-0.039em;--s:1.098">E</span><span style="--i:5;--y:-0.040em;--s:1.099">R</span><span class="nav__sp"> </span><span style="--i:7;--y:-0.028em;--s:1.070">S</span><span style="--i:8;--y:-0.017em;--s:1.042">C</span><span style="--i:9;--y:-0.004em;--s:1.010">H</span><span style="--i:10;--y:0.010em;--s:0.976">O</span><span style="--i:11;--y:0.022em;--s:0.945">O</span><span style="--i:12;--y:0.032em;--s:0.921">L</span><span style="--i:13;--y:0.038em;--s:0.905">.</span></span>
+      </a>
       <a href="/staff/">Staff</a>
       <a href="/home/#news">News</a>
       <a href="/partners/">Partners</a>
     </nav>
     <div class="nav__right">
       <a href="/joinus/" class="psl-btn cta-primary nav__cta"><span>Get Priority Access</span> <span aria-hidden="true">→</span></a>
+      <button type="button" class="nav__burger" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu"><span></span><span></span></button>
     </div>
+  </div>
+
+  <!-- Panel de la School (desktop): se abre al pasar el mouse por el banderín -->
+  <div class="nav__panel">
+    <img class="nav__panel-photo" src="/assets/school/photo-ball.webp" alt="" width="1280" height="720" loading="lazy" decoding="async" />
+    <div class="nav__grain" aria-hidden="true"></div>
+    <div class="nav__panel-in">
+      <img class="nav__lockup" src="/assets/school/ss-stack-white.webp" alt="PSLSC Soccer School" width="846" height="402" loading="lazy" decoding="async" />
+      <p class="nav__panel-title" aria-label="Your journey starts here"><span class="nav__wave" aria-hidden="true"><span style="--i:0;--y:-0.000em;--s:1.000">Y</span><span style="--i:1;--y:-0.022em;--s:1.062">O</span><span style="--i:2;--y:-0.040em;--s:1.111">U</span><span style="--i:3;--y:-0.049em;--s:1.137">R</span><span class="nav__sp"> </span><span style="--i:5;--y:-0.038em;--s:1.106">J</span><span style="--i:6;--y:-0.019em;--s:1.054">O</span><span style="--i:7;--y:0.003em;--s:0.992">U</span><span style="--i:8;--y:0.025em;--s:0.931">R</span><span style="--i:9;--y:0.041em;--s:0.884">N</span><span style="--i:10;--y:0.049em;--s:0.861">E</span><span style="--i:11;--y:0.048em;--s:0.867">Y</span></span><span class="nav__wave nav__wave--2" aria-hidden="true"><span style="--i:0;--y:-0.039em;--s:1.110">S</span><span style="--i:1;--y:-0.049em;--s:1.138">T</span><span style="--i:2;--y:-0.047em;--s:1.132">A</span><span style="--i:3;--y:-0.033em;--s:1.094">R</span><span style="--i:4;--y:-0.011em;--s:1.032">T</span><span style="--i:5;--y:0.013em;--s:0.962">S</span><span class="nav__sp"> </span><span style="--i:7;--y:0.048em;--s:0.866">H</span><span style="--i:8;--y:0.049em;--s:0.863">E</span><span style="--i:9;--y:0.038em;--s:0.894">R</span><span style="--i:10;--y:0.017em;--s:0.951">E</span></span></p>
+      <p class="nav__caps">A place for children ages 5–13 to learn, play and enjoy soccer while becoming part of Port St. Lucie SC.</p>
+      <div class="nav__school-cta">
+        <img src="/assets/school/anchor-white.webp" alt="" width="200" height="192" />
+        <a class="nav__school-btn" href="__URL_SCHOOL__">Register now</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menú mobile (< 1000px): links + póster de la School + CTA -->
+  <div class="nav__menu" id="nav-menu" hidden>
+    <nav class="nav__menu-links" aria-label="Primary">
+      <a href="/home/">Home</a>
+      <a href="/home/#project">Teams</a>
+      <a href="/home/#jersey">Shop</a>
+      <a href="/academy/">Academy</a>
+      <a href="/staff/">Staff</a>
+      <a href="/home/#news">News</a>
+      <a href="/partners/">Partners</a>
+    </nav>
+    <a class="nav__menu-poster" href="__URL_SCHOOL__" aria-label="Soccer School — Register now">
+      <img class="nav__panel-photo" src="/assets/school/photo-kids.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async" />
+      <span class="nav__grain" aria-hidden="true"></span>
+      <span class="nav__panel-in">
+        <img class="nav__lockup" src="/assets/school/ss-stack-white.webp" alt="" width="846" height="402" loading="lazy" decoding="async" />
+        <span class="nav__panel-title"><span class="nav__wave" aria-hidden="true"><span style="--i:0;--y:-0.000em;--s:1.000">Y</span><span style="--i:1;--y:-0.022em;--s:1.062">O</span><span style="--i:2;--y:-0.040em;--s:1.111">U</span><span style="--i:3;--y:-0.049em;--s:1.137">R</span><span class="nav__sp"> </span><span style="--i:5;--y:-0.038em;--s:1.106">J</span><span style="--i:6;--y:-0.019em;--s:1.054">O</span><span style="--i:7;--y:0.003em;--s:0.992">U</span><span style="--i:8;--y:0.025em;--s:0.931">R</span><span style="--i:9;--y:0.041em;--s:0.884">N</span><span style="--i:10;--y:0.049em;--s:0.861">E</span><span style="--i:11;--y:0.048em;--s:0.867">Y</span></span><span class="nav__wave nav__wave--2" aria-hidden="true"><span style="--i:0;--y:-0.039em;--s:1.110">S</span><span style="--i:1;--y:-0.049em;--s:1.138">T</span><span style="--i:2;--y:-0.047em;--s:1.132">A</span><span style="--i:3;--y:-0.033em;--s:1.094">R</span><span style="--i:4;--y:-0.011em;--s:1.032">T</span><span style="--i:5;--y:0.013em;--s:0.962">S</span><span class="nav__sp"> </span><span style="--i:7;--y:0.048em;--s:0.866">H</span><span style="--i:8;--y:0.049em;--s:0.863">E</span><span style="--i:9;--y:0.038em;--s:0.894">R</span><span style="--i:10;--y:0.017em;--s:0.951">E</span></span></span>
+        <span class="nav__caps">A place for children ages 5–13 to learn, play and enjoy soccer while becoming part of Port St. Lucie SC.</span>
+        <span class="nav__school-cta"><img src="/assets/school/anchor-white.webp" alt="" width="200" height="192" /><span class="nav__school-btn">Register now</span></span>
+      </span>
+    </a>
+    <a href="/joinus/" class="psl-btn cta-primary nav__menu-cta"><span>Get Priority Access</span> <span aria-hidden="true">→</span></a>
   </div>
 </header>

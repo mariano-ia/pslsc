@@ -36,7 +36,8 @@ PERMALINKS = {
 BLOCKS = [
     ("home", "01-hero"), ("home", "02-stats"), ("home", "03-project"), ("home", "04-proof"),
     ("home", "04b-fixtures"), ("home", "05-jersey"), ("home", "06-founders"),
-    ("home", "07-academy"), ("home", "07b-school"), ("home", "09-cierre-footer"),
+    ("home", "07b-school"),   # 07-academy ya no va en la Home (lo reemplaza 07b)
+    ("home", "09-cierre-footer"),
     ("sumate", "s01-hero"), ("sumate", "s02-benefits"), ("sumate", "s03-plans"),
     ("sumate", "s05-faq"), ("sumate", "s06-cta"),
     ("partners", "p01-hero"), ("partners", "p01b-partners"), ("partners", "p02-opportunity"),

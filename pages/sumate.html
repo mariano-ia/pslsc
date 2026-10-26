@@ -8,14 +8,14 @@
   <!-- Fuentes de marca -->
   <link rel="stylesheet" href="../tokens/fonts.css?v=67" />
   <!-- Tokens -->
-  <link rel="stylesheet" href="../tokens/tokens.css?v=67" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=69" />
 
   <!-- Patrones compartidos -->
   <link rel="stylesheet" href="../native/_patterns/cards.css?v=67" />
   <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
 
   <!-- Nav compartido (reusa el bloque de Home) -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=67" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=69" />
   <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=67" />
 
   <!-- Bloques Sumate -->
@@ -70,6 +70,7 @@
     initHeroVideo();   // video del hero diferido (s01-hero.js)
     initNewsletter();
     initMotion();
+    import('../native/home/00-nav.js?v=2').then((m) => m.initNav());   // hamburguesa + banderín de la School
 
     // Aterrizaje con #ancla desde otra página: los bloques se inyectan DESPUÉS del load, así que
     // el navegador no encontró el ancla — la buscamos ahora (el scroll es suave vía CSS, motion.css).
