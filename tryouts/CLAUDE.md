@@ -43,8 +43,14 @@ Domingo 8 de noviembre de 2026 · jugadores de 18 a 25 años · sin costo. El de
   mail, aclarando que sean **los mismos con los que se anotaron**, y dos botones: **"Sí, voy a ir"** / **"No puedo ir"**.
 - Título: **"Quedaste seleccionado para la prueba."** ("para la prueba" para que no se lea como seleccionado para el club),
   con una línea chica debajo: es para quienes recibieron el mail (el link es el mismo para todos y puede circular).
-  La pregunta **"¿Te vemos el 8 de noviembre?"** es el título de la tarjeta, pegada a los dos botones, y es neutral a
+  La pregunta es el título de la tarjeta, pegada a los dos botones, y es neutral a
   propósito: el "no" le sirve al club tanto como el "sí".
+- Fechas: **domingo 8 y lunes 9 de noviembre** (feriado nacional). La pregunta de la tarjeta quedó sin fecha
+  (**"¿Te vemos en las pruebas?"**) para que nadie responda "no" por no poder uno de los dos días.
+- Además de nombre y mail: **posición** (texto libre, una o más, ej. "volante central") y una casilla de **términos y
+  condiciones** (link a `<dialog id="terminos">`, texto pendiente del club). En pantalla no se nombra el deslinde de
+  responsabilidad (decisión de Martín, 28-oct-2026). Los dos se exigen solo para el "sí".
+- Plazo para responder: **domingo 01/11 a las 23:59**.
 - Sede: **Benavídez**, provincia de Buenos Aires. Si confirman, les llega otro mail con el grupo asignado y el horario.
 - El apto médico se avisa **antes** de responder (es requisito para ir) y se repite en la respuesta del "sí".
 - En el "no" no se dice "nos vemos en la próxima" (sin promesas): se agradece el aviso y, en condicional, si el club

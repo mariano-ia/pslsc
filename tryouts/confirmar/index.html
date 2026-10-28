@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Quedaste seleccionado · Pruebas en Benavídez · Port St. Lucie SC</title>
-  <meta name="description" content="Jugadores seleccionados para las pruebas de Port St. Lucie SC en Benavídez, Buenos Aires: confirmá si vas a poder ir el domingo 8 de noviembre.">
+  <meta name="description" content="Jugadores seleccionados para las pruebas de Port St. Lucie SC en Benavídez, Buenos Aires: confirmá si vas a poder ir el 8 y 9 de noviembre.">
   <!-- Solo se llega desde el mail a los seleccionados: no se indexa. -->
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#0C0C0A">
@@ -26,35 +26,42 @@
              para quien lo abra sin haber recibido el mail. -->
         <p class="cf-who">Esta página es para quienes recibieron nuestro mail de selección.</p>
         <p class="lead"><b>El staff de Port St. Lucie SC te quiere ver en cancha.</b></p>
-        <p class="lead cf-lead2">La prueba va a ser el próximo domingo 8 de noviembre, en Benavídez, provincia de Buenos Aires. Si confirmás, <strong>te vamos a enviar un nuevo mail</strong> con los detalles del grupo que te asignemos: horario y todo lo que necesitás para ese día.</p>
-        <div class="chips"><span class="chip red"><i></i>Sunday · Nov 8</span><span class="chip"><i></i>Benavídez · Buenos Aires</span><span class="chip"><i></i>Grupo y horario por mail</span></div>
+        <p class="lead cf-lead2">Las pruebas van a ser el próximo domingo 8 de noviembre y lunes 9 de noviembre (feriado nacional), en Benavídez, Buenos Aires. Si confirmás, <strong>te vamos a enviar un nuevo mail</strong> con los detalles del grupo que te asignemos: horario y todo lo que necesitás para ese día.</p>
+        <div class="chips"><span class="chip red"><i></i>Nov 8 y 9</span><span class="chip"><i></i>Benavídez · Buenos Aires</span><span class="chip"><i></i>Grupo y horario por mail</span></div>
       </div>
 
 <form class="card" id="confirmar" novalidate>
   <div id="f-form">
-    <!-- La pregunta va pegada a sus dos respuestas (los botones). Neutral a propósito: el "no" le sirve al club tanto como el "sí". -->
-    <h3>¿Te vemos el 8 de noviembre?</h3>
+    <!-- La pregunta va pegada a sus dos respuestas (los botones). Neutral a propósito: el "no" le sirve al club tanto como el "sí".
+         Sin fecha: las pruebas son dos días y el día de cada jugador sale del grupo que le asignen. -->
+    <h3>¿Te vemos en las pruebas?</h3>
     <p class="sub">Usá el <b>mismo nombre y mail</b> con los que te anotaste.</p>
     <div class="f"><label for="c-name">Nombre y apellido <b>*</b></label>
       <input id="c-name" name="name" class="in" type="text" autocomplete="name" placeholder="Como te anotaste"></div>
     <div class="f"><label for="c-mail">Mail <b>*</b></label>
       <input id="c-mail" name="email" class="in" type="email" inputmode="email" autocomplete="email" placeholder="El mismo de tu solicitud"></div>
+    <div class="f"><label for="c-pos">Posición en la que jugás <b>*</b> <span>(una o más)</span></label>
+      <input id="c-pos" name="position" class="in" type="text" autocomplete="off" placeholder="Ej.: volante central, lateral derecho"></div>
     <p class="note"><i aria-hidden="true">i</i><span>Para jugar vas a necesitar un <b>apto médico vigente</b>, firmado y sellado por un médico. Sin apto no se puede jugar.</span></p>
+    <!-- Posición y términos solo se exigen para el "sí": al que no va no se le pide aceptar nada. -->
+    <div class="checks">
+      <label class="check"><input class="vh" type="checkbox" name="terms" id="c-terms"><i aria-hidden="true"></i><span><b>Leí y acepto los <a href="#terminos" class="terms-open">términos y condiciones</a></b> para participar de las pruebas.</span></label>
+    </div>
     <p class="errmsg" id="c-err" role="alert" hidden style="margin:-4px 0 14px"></p>
     <div class="cf-btns">
       <button class="btn btn-aq" type="submit" value="si">Sí, voy a ir <span aria-hidden="true">→</span></button>
       <button class="btn btn-gh" type="submit" value="no">No puedo ir</button>
     </div>
-    <p class="fine">Respondé antes del <span class="ph">[fecha límite]</span>. Si no respondés a tiempo, podemos darle tu lugar a otro jugador.</p>
+    <p class="fine">Respondé antes del domingo 01/11 a las 23:59. Si no respondés a tiempo, podemos darle tu lugar a otro jugador.</p>
   </div>
 
   <!-- Respuesta "Sí, voy a ir": la misma para todos (solo cambia el nombre y el mail que cargó). -->
   <div id="f-si" class="ok" hidden>
     <div class="ok-ic"><img src="/tryouts/assets/anchor-black.webp" alt=""></div>
-    <span class="k">Matchday · Nov 8</span>
+    <span class="k">Matchday · Nov 8 y 9</span>
     <h3 class="cf-name" data-tpl="Listo, {n}. Te esperamos.">Listo. Te esperamos.</h3>
     <p class="sub">Antes del <span class="ph">[fecha de envío de horarios]</span> te escribimos a <b class="cf-mail">tu mail</b> con los detalles del grupo que te asignemos: horario y todo lo que necesitás para ese día. Ese mail es tu confirmación final. Revisá también spam.</p>
-    <div class="pass"><div class="pl"><span>Port St. Lucie SC</span><b>PRUEBAS · BENAVÍDEZ</b><span>Grupo y horario: te llegan por mail</span></div><div class="pr">NOV<b>08</b></div></div>
+    <div class="pass"><div class="pl"><span>Port St. Lucie SC</span><b>PRUEBAS · BENAVÍDEZ</b><span>Grupo y horario: te llegan por mail</span></div><div class="pr">NOV<b>8·9</b></div></div>
     <p class="note cf-left"><i aria-hidden="true">!</i><span><b>Sacá el apto médico ya.</b> Sin apto no podés jugar, y no siempre se consigue de un día para el otro.</span></p>
     <div class="cf-kit cf-left">
       <span class="flab">Kit list · llevá</span>
@@ -69,10 +76,25 @@
     <div class="ok-ic cf-ic-gh"><img src="/tryouts/assets/crest-aqua.webp" alt=""></div>
     <span class="k">Answer sent</span>
     <h3 class="cf-name" data-tpl="Gracias por avisar, {n}.">Gracias por avisar.</h3>
-    <p class="sub">Una lástima no verte el 8. Avisarnos a tiempo nos ayuda a organizar la prueba. Si el club organiza otra, te escribimos a <b class="cf-mail">tu mail</b>.</p>
+    <p class="sub">Una lástima no verte en las pruebas. Avisarnos a tiempo nos ayuda a organizar la prueba. Si el club organiza otra, te escribimos a <b class="cf-mail">tu mail</b>.</p>
     <button class="skip cf-again" type="button">Me equivoqué: quiero cambiar mi respuesta</button>
   </div>
 </form>
+
+<!-- Términos y condiciones. Mismo dialog que las bases de /tryouts: se abren sin salir
+     del form (no se pierde lo cargado). También con /tryouts/confirmar/#terminos. El texto lo manda el club. -->
+<dialog class="bases" id="terminos" aria-labelledby="terminos-t">
+  <div class="bases-bar">
+    <span class="k">Pruebas · Buenos Aires</span>
+    <button type="button" class="bases-x" aria-label="Cerrar">×</button>
+  </div>
+  <div class="bases-body">
+    <h2 id="terminos-t">Términos y condiciones</h2>
+    <p class="bases-meta"><b>Evento:</b> pruebas de jugadores, 8 y 9 de noviembre de 2026, Benavídez, Buenos Aires, Argentina.</p>
+    <p><span class="ph">[Texto de los términos y condiciones: lo envía el club]</span></p>
+    <button type="button" class="btn btn-dk bases-ok">Volver al formulario</button>
+  </div>
+</dialog>
 
     </div>
     <span class="hero-rule"></span>
