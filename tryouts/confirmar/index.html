@@ -43,9 +43,12 @@
     <div class="f"><label for="c-pos">Posición en la que jugás <b>*</b> <span>(una o más)</span></label>
       <input id="c-pos" name="position" class="in" type="text" autocomplete="off" placeholder="Ej.: volante central, lateral derecho"></div>
     <p class="note"><i aria-hidden="true">i</i><span>Para jugar vas a necesitar un <b>apto médico vigente</b>, firmado y sellado por un médico. Sin apto no se puede jugar.</span></p>
-    <!-- Posición y términos solo se exigen para el "sí": al que no va no se le pide aceptar nada. -->
+    <!-- Posición y las dos casillas solo se exigen para el "sí": al que no va no se le pide aceptar nada.
+         1) Términos: las mismas bases y condiciones del form de inscripción (/tryouts/#bases), en otra pestaña para no
+            perder lo cargado. 2) Deslinde de responsabilidad: el documento del abogado (dialog #deslinde). -->
     <div class="checks">
-      <label class="check"><input class="vh" type="checkbox" name="terms" id="c-terms"><i aria-hidden="true"></i><span><b>Leí y acepto los <a href="#terminos" class="terms-open">términos y condiciones</a></b> para participar de las pruebas.</span></label>
+      <label class="check"><input class="vh" type="checkbox" name="terms" id="c-terms"><i aria-hidden="true"></i><span><b>Leí y acepto los <a href="/tryouts/#bases" target="_blank" rel="noopener">términos y condiciones</a></b> para participar de las pruebas.</span></label>
+      <label class="check"><input class="vh" type="checkbox" name="waiver" id="c-waiver"><i aria-hidden="true"></i><span><b>Leí y acepto el <a href="#deslinde" class="waiver-open">deslinde de responsabilidad</a>.</b></span></label>
     </div>
     <p class="errmsg" id="c-err" role="alert" hidden style="margin:-4px 0 14px"></p>
     <div class="cf-btns">
@@ -81,17 +84,17 @@
   </div>
 </form>
 
-<!-- Términos y condiciones. Mismo dialog que las bases de /tryouts: se abren sin salir
-     del form (no se pierde lo cargado). También con /tryouts/confirmar/#terminos. El texto lo manda el club. -->
-<dialog class="bases" id="terminos" aria-labelledby="terminos-t">
+<!-- Deslinde de responsabilidad. Mismo dialog que las bases de /tryouts: se abre sin salir del form (no se pierde
+     lo cargado). También con /tryouts/confirmar/#deslinde. El texto es el documento que prepara el abogado. -->
+<dialog class="bases" id="deslinde" aria-labelledby="deslinde-t">
   <div class="bases-bar">
     <span class="k">Pruebas · Buenos Aires</span>
     <button type="button" class="bases-x" aria-label="Cerrar">×</button>
   </div>
   <div class="bases-body">
-    <h2 id="terminos-t">Términos y condiciones</h2>
+    <h2 id="deslinde-t">Deslinde de responsabilidad</h2>
     <p class="bases-meta"><b>Evento:</b> pruebas de jugadores, 8 y 9 de noviembre de 2026, Benavídez, Buenos Aires, Argentina.</p>
-    <p><span class="ph">[Texto de los términos y condiciones: lo envía el club]</span></p>
+    <p><span class="ph">[Texto del deslinde de responsabilidad: documento que prepara el abogado]</span></p>
     <button type="button" class="btn btn-dk bases-ok">Volver al formulario</button>
   </div>
 </dialog>
