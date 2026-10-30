@@ -10,7 +10,8 @@
 .cf-who{margin:18px 0 0;font-size:13px;line-height:1.45;color:rgba(255,255,255,.5)}
 @media (min-width:900px){
   .cf-hero{min-height:0;padding:96px 0 110px}
-  .cf-hero .wrap{align-items:center}
+  /* El texto y el form arrancan a la misma altura. */
+  .cf-hero .wrap{align-items:start}
   /* "seleccionado" y "para la prueba." tienen que entrar en una línea cada uno en la columna de texto (al lado del form). */
   .cf-hero h1{font-size:clamp(52px,5.6vw,72px)}
   .cf-who{font-size:14px}
