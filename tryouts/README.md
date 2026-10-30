@@ -40,11 +40,12 @@ Página a la que lleva el mail que reciben los ~200 jugadores seleccionados. Es 
 Usa `tryouts.css` + `confirmar/confirmar.css`; no carga `tryouts.js`. Tiene `noindex`.
 
 **Pendiente (dev):** conectar el envío en `confirmar/confirmar.js > sendAnswer`
-(`{ name, email, position, terms, waiver, answer: 'si' | 'no', sentAt }`). `position` es texto libre (una o más posiciones),
-`terms` la casilla de términos y condiciones (las bases de `/tryouts/#bases`) y `waiver` la del deslinde de
-responsabilidad: los tres se exigen solo para el «sí». Sin conectar no envía y no finge éxito. `?demo` muestra las dos respuestas.
-Los `[corchetes]` (fecha de envío de horarios, texto del deslinde de
-responsabilidad en el `<dialog id="deslinde">`, que prepara el abogado) los completa el club.
+(`{ name, email, dni, position, terms, waiver, clause8a, clause8b, answer: 'si' | 'no', sentAt }`). `dni` va solo con
+números, `position` es texto libre (una o más posiciones), `terms` la casilla de términos y condiciones (las bases de
+`/tryouts/#bases`) `waiver` la del consentimiento y deslinde, y `clause8a` y `clause8b` las autorizaciones separadas: todos se exigen
+solo para el «sí». Sin conectar no envía y no finge éxito. `?demo` muestra las dos respuestas.
+Los `[corchetes]` (fecha de envío de horarios, texto del consentimiento y
+deslinde de responsabilidad en el `<dialog id="deslinde">`, que prepara el abogado) los completa el club.
 
 ## Ver localmente
 

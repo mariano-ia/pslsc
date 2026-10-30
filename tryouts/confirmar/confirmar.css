@@ -39,5 +39,5 @@
 .cf-kit li.hot{box-shadow:inset 0 0 0 1.5px #AAF6E6;color:#AAF6E6}
 .ok p.cf-after{margin:18px 0 0}
 
-/* Dos casillas (términos y deslinde): las dos con el texto principal en blanco, no solo la primera como en /tryouts. */
+/* Casillas: todas con el texto principal en blanco, no solo la primera como en /tryouts. */
 .checks .check span b{font-weight:600;color:#FFFFFF}

@@ -47,11 +47,12 @@ Domingo 8 de noviembre de 2026 · jugadores de 18 a 25 años · sin costo. El de
   propósito: el "no" le sirve al club tanto como el "sí".
 - Fechas: **domingo 8 y lunes 9 de noviembre** (feriado nacional). La pregunta de la tarjeta quedó sin fecha
   (**"¿Te vemos en las pruebas?"**) para que nadie responda "no" por no poder uno de los dos días.
-- Además de nombre y mail: **posición** (texto libre, una o más, ej. "volante central") y **dos casillas**
-  separadas (decisión de Martín, 29-oct-2026): **términos y condiciones**, que linkean a las mismas bases del form de
-  inscripción (`/tryouts/#bases`, en otra pestaña), y **deslinde de responsabilidad**, que linkea al documento del
-  abogado (`<dialog id="deslinde">`, texto pendiente). Posición y las dos casillas se exigen solo para el "sí".
-- Plazo para responder: **domingo 01/11 a las 23:59**.
+- Además de nombre y mail: **posición** (texto libre, una o más, ej. "volante central"), **DNI** y **cuatro
+  casillas** (texto legal, no reescribir): **términos y condiciones**, que linkean a las mismas bases del form de
+  inscripción (`/tryouts/#bases`, en otra pestaña); **consentimiento y deslinde de responsabilidad**, que linkea al
+  documento del abogado (`<dialog id="deslinde">`, texto pendiente); y las **cláusulas 8(a) y 8(b)**, autorizaciones
+  separadas y sin link. DNI, posición y las cuatro casillas se exigen solo para el "sí" (decisión de Martín, 30-oct-2026).
+- Plazo para responder: **lunes 02/11 a las 23:59**.
 - Sede: **Benavídez**, provincia de Buenos Aires. Si confirman, les llega otro mail con el grupo asignado y el horario.
 - El apto médico se avisa **antes** de responder (es requisito para ir) y se repite en la respuesta del "sí".
 - En el "no" no se dice "nos vemos en la próxima" (sin promesas): se agradece el aviso y, en condicional, si el club

@@ -40,22 +40,27 @@
       <input id="c-name" name="name" class="in" type="text" autocomplete="name" placeholder="Como te anotaste"></div>
     <div class="f"><label for="c-mail">Mail <b>*</b></label>
       <input id="c-mail" name="email" class="in" type="email" inputmode="email" autocomplete="email" placeholder="El mismo de tu solicitud"></div>
+    <div class="f"><label for="c-dni">DNI <b>*</b></label>
+      <input id="c-dni" name="dni" class="in" type="text" inputmode="numeric" autocomplete="off" placeholder="Solo números"></div>
     <div class="f"><label for="c-pos">Posición en la que jugás <b>*</b> <span>(una o más)</span></label>
       <input id="c-pos" name="position" class="in" type="text" autocomplete="off" placeholder="Ej.: volante central, lateral derecho"></div>
     <p class="note"><i aria-hidden="true">i</i><span>Para jugar vas a necesitar un <b>apto médico vigente</b>, firmado y sellado por un médico. Sin apto no se puede jugar.</span></p>
-    <!-- Posición y las dos casillas solo se exigen para el "sí": al que no va no se le pide aceptar nada.
+    <!-- DNI, posición y las cuatro casillas solo se exigen para el "sí": al que no va no se le pide aceptar nada.
          1) Términos: las mismas bases y condiciones del form de inscripción (/tryouts/#bases), en otra pestaña para no
-            perder lo cargado. 2) Deslinde de responsabilidad: el documento del abogado (dialog #deslinde). -->
+            perder lo cargado. 2) Consentimiento y deslinde: el documento del abogado (dialog #deslinde).
+         3 y 4) Cláusulas 8(a) y 8(b): autorizaciones separadas. Texto legal: no reescribir. -->
     <div class="checks">
       <label class="check"><input class="vh" type="checkbox" name="terms" id="c-terms"><i aria-hidden="true"></i><span><b>Leí y acepto los <a href="/tryouts/#bases" target="_blank" rel="noopener">términos y condiciones</a></b> para participar de las pruebas.</span></label>
-      <label class="check"><input class="vh" type="checkbox" name="waiver" id="c-waiver"><i aria-hidden="true"></i><span><b>Leí y acepto el <a href="#deslinde" class="waiver-open">deslinde de responsabilidad</a>.</b></span></label>
+      <label class="check"><input class="vh" type="checkbox" name="waiver" id="c-waiver"><i aria-hidden="true"></i><span><b>ACEPTO EL DOCUMENTO.</b> Confirmo que leí y comprendí el <a href="#deslinde" class="waiver-open">consentimiento y deslinde de responsabilidad</a> y acepto voluntariamente sus términos, incluidos la asunción de riesgos, el deslinde permitido por la ley, el uso de Vixon y el tratamiento de datos necesario para administrar la Prueba.</span></label>
+      <label class="check"><input class="vh" type="checkbox" name="clause8a" id="c-8a"><i aria-hidden="true"></i><span><b>AUTORIZO LA CLÁUSULA 8(a).</b> Autorizo separadamente la captación y el uso interno de mi imagen, voz, semejanza, actuación deportiva y contenido de los ejercicios Vixon para evaluación deportiva, scouting, administración, seguridad y análisis del entrenamiento, conforme a la cláusula 8(a).</span></label>
+      <label class="check"><input class="vh" type="checkbox" name="clause8b" id="c-8b"><i aria-hidden="true"></i><span><b>AUTORIZO LA CLÁUSULA 8(b).</b> Autorizo separadamente los usos institucionales, promocionales y comerciales de mi imagen, voz, semejanza y actuación deportiva por el Club y Vixon, conforme a la cláusula 8(b).</span></label>
     </div>
     <p class="errmsg" id="c-err" role="alert" hidden style="margin:-4px 0 14px"></p>
     <div class="cf-btns">
       <button class="btn btn-aq" type="submit" value="si">Sí, voy a ir <span aria-hidden="true">→</span></button>
       <button class="btn btn-gh" type="submit" value="no">No puedo ir</button>
     </div>
-    <p class="fine">Respondé antes del domingo 01/11 a las 23:59. Si no respondés a tiempo, podemos darle tu lugar a otro jugador.</p>
+    <p class="fine">Respondé antes del lunes 02/11 a las 23:59. Si no respondés a tiempo, podemos darle tu lugar a otro jugador.</p>
   </div>
 
   <!-- Respuesta "Sí, voy a ir": la misma para todos (solo cambia el nombre y el mail que cargó). -->
@@ -84,7 +89,7 @@
   </div>
 </form>
 
-<!-- Deslinde de responsabilidad. Mismo dialog que las bases de /tryouts: se abre sin salir del form (no se pierde
+<!-- Consentimiento y deslinde de responsabilidad. Mismo dialog que las bases de /tryouts: se abre sin salir del form (no se pierde
      lo cargado). También con /tryouts/confirmar/#deslinde. El texto es el documento que prepara el abogado. -->
 <dialog class="bases" id="deslinde" aria-labelledby="deslinde-t">
   <div class="bases-bar">
@@ -92,9 +97,9 @@
     <button type="button" class="bases-x" aria-label="Cerrar">×</button>
   </div>
   <div class="bases-body">
-    <h2 id="deslinde-t">Deslinde de responsabilidad</h2>
+    <h2 id="deslinde-t">Consentimiento y deslinde de responsabilidad</h2>
     <p class="bases-meta"><b>Evento:</b> pruebas de jugadores, 8 y 9 de noviembre de 2026, Benavídez, Buenos Aires, Argentina.</p>
-    <p><span class="ph">[Texto del deslinde de responsabilidad: documento que prepara el abogado]</span></p>
+    <p><span class="ph">[Texto del consentimiento y deslinde de responsabilidad: documento del abogado]</span></p>
     <button type="button" class="btn btn-dk bases-ok">Volver al formulario</button>
   </div>
 </dialog>
