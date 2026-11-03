@@ -1,13 +1,14 @@
-/* Bloque t02 · Leadership. Mismas tarjetas que ST01 */
+/* Bloque t02 · Front Office. Mismas tarjetas que ST01 */
 
-.staff__title { max-width: 14ch; }
+/* ── Header (oscuro) ── */
+.staff--head .psl-container { padding-block: clamp(64px, 9vw, 120px) clamp(28px, 4vw, 44px); }
+.staff__title { margin-top: 12px; max-width: 14ch; }
 .staff__intro {
-  margin: 16px 0 clamp(32px, 4vw, 48px);
+  margin: 20px 0 0;
   max-width: 48ch;
   font: 400 var(--fs-body-lg)/1.6 var(--font-body);
-  color: var(--color-text-on-paper-muted);
+  color: var(--color-text-muted);
 }
-#leadership { scroll-margin-top: 64px; }
 
 /* ── Cuerpo (claro) ── */
 .staff--body { border-top: 1px solid var(--color-line); }

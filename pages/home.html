@@ -40,6 +40,9 @@
 
   <style>
     html, body { margin: 0; padding: 0; background: var(--color-ink); }
+    /* Solo preview: los bloques se inyectan después de cargar; sin esto, al aparecer la barra de scroll
+       todo el ancho se corre unos píxeles y la nav salta. En WordPress el contenido ya está al cargar. */
+    body { overflow-y: scroll; }
     body { font-family: var(--font-body); color: var(--color-text); overflow-x: hidden; }
     ::selection { background: var(--color-aqua); color: var(--color-black); }
   </style>
@@ -68,6 +71,10 @@
       '00-nav', '01-hero', '02-stats', '03-project', '04-proof', '04b-fixtures',
       '05-jersey', '06-founders', '07b-school', '08-news', '09-cierre-footer',
     ];
+    // Solo preview: las fuentes se cargan antes de insertar los bloques, así la nav no se mueve al aplicarse.
+    const fontsReady = document.fonts ? Promise.all(['400 16px "Proxima Nova"', '600 16px "Proxima Nova"', '700 16px "Proxima Nova"',
+      '800 16px Druk', '900 16px Druk', '500 16px "Druk Text Wide"', '800 16px "Druk Text Wide"', '800 16px Ferryman']
+      .map((f) => document.fonts.load(f))).catch(() => {}) : Promise.resolve();
     const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
     // Hero de campaña (solo preview): ?cc=mon|tue|wed|thu|fri|sat simula el día, ?cc=off vuelve a 01-hero,
     // ?demo simula el envío del mail (?demo=founder, además, un founding member) y ?reset borra el progreso.
@@ -78,10 +85,11 @@
     await Promise.all(blocks.map(async (name) => {
       const file = name === '01-hero' && cc !== 'off' ? '01b-hero-coleccion' : name;
       const html = await fetch(`../native/home/${file}.html${bust}`).then((r) => r.text());
+      await fontsReady;   // el bloque se baja en paralelo con las fuentes y se inserta cuando están
       document.querySelector(`[data-block="${name}"]`).innerHTML = html
         .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${cc}.json`)
         .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${cc}`)
-        .replaceAll('__URL_TEAM__', `team.html?cc=${cc}`);
+        .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${cc}`);
     }));
     // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.
     // (El sitio es English-only: no hay init de idioma.)

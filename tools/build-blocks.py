@@ -47,7 +47,9 @@ BLOCKS = [
     ("academy", "a01-hero"), ("academy", "a02-pathway"), ("academy", "a03-method"),
     ("academy", "a05-parents"), ("academy", "a06-faq"), ("academy", "a07-tryouts"),
     ("staff", "st01-staff"),
-    ("team", "t00-team"), ("team", "t01-coach"), ("team", "t02-leadership"),   # se publican recién el viernes del reveal
+    ("team", "t02-front-office"),                          # Front Office: reemplaza a /staff/, se puede publicar ya
+    ("team", "t00-soccer-staff"), ("team", "t01-coach"),   # Soccer Staff y ficha del DT: desde el viernes del reveal
+    ("team", "t03-roster"),                                # Roster: desde el primer jugador anunciado
     ("sede", "v01-hero"), ("sede", "v02-glance"), ("sede", "v03-tour"), ("sede", "v04-matches"),
     ("sede", "v05-tickets"), ("sede", "v06-getting-here"), ("sede", "v07-faq"), ("sede", "v08-home-port"),
 ]

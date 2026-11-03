@@ -1,10 +1,10 @@
 /**
- * Bloque t00 · Team. Lee el mismo estado que el hero y, si ya está la ficha, pinta al Head Coach.
+ * Bloque t00 · Soccer Staff. Lee el mismo estado que el hero y, si ya está la ficha, pinta al Head Coach.
  * Antes del viernes el bloque no se publica; si igual se abre, queda en TBA y sin nada de él.
  */
 const tmhEsc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
-async function initTeam(root = document) {
+async function initSoccerStaff(root = document) {
   const el = root.querySelector('.tmh');
   if (!el) return;
   const src = el.dataset.ccState;
@@ -15,7 +15,7 @@ async function initTeam(root = document) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     state = await res.json();
   } catch (err) {
-    console.error('[team] no se pudo leer el estado', err);
+    console.error('[soccer-staff] no se pudo leer el estado', err);
     return;
   }
   const { profile, card, presentation } = state;
@@ -42,4 +42,4 @@ async function initTeam(root = document) {
   el.querySelector('[data-tmh-card]').data = card;
 }
 
-export { initTeam };
+export { initSoccerStaff };

@@ -218,7 +218,7 @@ function ccgPanelHTML(st, S, state) {
         ? '<button type="button" class="ccg__ghost" data-act="mycard">My Collector Card</button>'
         : (state.closed ? '' : '<button type="button" class="ccg__ghost" data-act="claim">Claim my card</button>');
       return `<p class="ccg__panel-lead">${verdict}The first Head Coach in Port St. Lucie SC history.</p>
-        <div class="ccg__row"><a class="psl-btn cta-primary" href="${ccgEsc(state.coachUrl)}"><span>Meet the coach</span> <span aria-hidden="true">→</span></a><a class="psl-btn cta-secondary" href="${ccgEsc(state.teamUrl)}">Meet the team</a>${mine}</div>`;
+        <div class="ccg__row"><a class="psl-btn cta-primary" href="${ccgEsc(state.coachUrl)}"><span>Meet the coach</span> <span aria-hidden="true">→</span></a><a class="psl-btn cta-secondary" href="${ccgEsc(state.teamUrl)}">Meet the staff</a>${mine}</div>`;
     }
     default:
       return '';

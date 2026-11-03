@@ -1,4 +1,4 @@
-<!-- PSL SC - bloque team/t02-leadership. Pegar en un widget HTML de WordPress.
+<!-- PSL SC - bloque team/t02-front-office. Pegar en un widget HTML de WordPress.
      Assets y fuentes hosteados en __PSL_ASSET_BASE__/ (ver dist/UPLOAD.md).
      El JS va como data: URI en el src (WordPress corrompe el JS que va como texto). -->
 <style>
@@ -294,12 +294,12 @@
     transition: none !important;}
 .pslsc .psl-grain, .pslsc .psl-cursor-glow{display: none !important;}
 .pslsc .nav__inner{transition: none !important;}}
-.pslsc .staff__title{max-width: 14ch;}
-.pslsc .staff__intro{margin: 16px 0 clamp(32px, 4vw, 48px);
+.pslsc .staff--head .psl-container{padding-block: clamp(64px, 9vw, 120px) clamp(28px, 4vw, 44px);}
+.pslsc .staff__title{margin-top: 12px; max-width: 14ch;}
+.pslsc .staff__intro{margin: 20px 0 0;
   max-width: 48ch;
   font: 400 var(--fs-body-lg)/1.6 var(--font-body);
-  color: var(--color-text-on-paper-muted);}
-.pslsc #leadership{scroll-margin-top: 64px;}
+  color: var(--color-text-muted);}
 .pslsc .staff--body{border-top: 1px solid var(--color-line);}
 .pslsc .staff--body .psl-container{padding-block: clamp(40px, 5vw, 64px) var(--section-pad);}
 .pslsc .staff__group + .staff__group{margin-top: clamp(44px, 6vw, 84px);}
@@ -378,11 +378,16 @@
 </style>
 
 <div class="pslsc pslsc--bleed">
-<section class="staff staff--body surface-paper" id="leadership">
+<section class="staff staff--head surface-ink">
   <div class="psl-container">
-    <h2 class="psl-h2 staff__title">Leadership</h2>
+    <span class="psl-kicker">Club</span>
+    <h1 class="psl-h2 staff__title">Front Office</h1>
     <p class="staff__intro">The people building Port St. Lucie SC, from the executive team to the sporting side.</p>
+  </div>
+</section>
 
+<section class="staff staff--body surface-paper" id="front-office">
+  <div class="psl-container">
     <div class="staff__group">
       <span class="psl-kicker staff__grouplabel">Executive Leadership</span>
       <div class="staff__grid">

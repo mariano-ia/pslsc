@@ -19,6 +19,9 @@
 
   <style>
     html, body { margin: 0; padding: 0; background: var(--color-ink); }
+    /* Solo preview: los bloques se inyectan después de cargar; sin esto, al aparecer la barra de scroll
+       todo el ancho se corre unos píxeles y la nav salta. En WordPress el contenido ya está al cargar. */
+    body { overflow-y: scroll; }
     body { font-family: var(--font-body); color: var(--color-text); overflow-x: hidden; }
     ::selection { background: var(--color-aqua); color: var(--color-black); }
   </style>
@@ -38,12 +41,17 @@
       { slot: 't01-coach', path: '../native/team/t01-coach.html' },
       { slot: 'footer',    path: '../native/home/09-cierre-footer.html' },
     ];
+    // Solo preview: las fuentes se cargan antes de insertar los bloques, así la nav no se mueve al aplicarse.
+    const fontsReady = document.fonts ? Promise.all(['400 16px "Proxima Nova"', '600 16px "Proxima Nova"', '700 16px "Proxima Nova"',
+      '800 16px Druk', '900 16px Druk', '500 16px "Druk Text Wide"', '800 16px "Druk Text Wide"', '800 16px Ferryman']
+      .map((f) => document.fonts.load(f))).catch(() => {}) : Promise.resolve();
     const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
     await Promise.all(blocks.map(async ({ slot, path }) => {
       const html = await fetch(path + bust).then((r) => r.text());
+      await fontsReady;   // el bloque se baja en paralelo con las fuentes y se inserta cuando están
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html
         .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${cc}.json`)
-        .replaceAll('__URL_TEAM__', `team.html?cc=${cc}`);
+        .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${cc}`);
     }));
     const [{ initCoach }, { initNewsletter }, { initMotion }] = await Promise.all([
       import('../native/team/t01-coach.js?v=1'),
