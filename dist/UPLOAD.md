@@ -76,6 +76,12 @@ Qué bloque va en qué página:
 
 Nav (00) y News (08) no están en la lista: son bloques nativos del template de USL.
 
+**Charter Collection (solo durante la campaña):** en Home, `01b-hero-coleccion` se pega **en lugar de** `01-hero`,
+nunca los dos: el juego se juega ahí. `t01-coach` es la ficha del Head Coach y se publica recién el viernes del reveal.
+Reemplazos: `__COLECCION_API__` (URL del estado por fecha), `__URL_COACH__` (permalink de la ficha), `__URL_TEAM__` (equipo, hoy `/staff/`) y, en el hero,
+`__AC_ACCOUNT__`, `__AC_COLLECTION_FORM__`, `__AC_FIELD_CONSENT__` y `__AC_FIELD_GUESS__` (`field[NN]` del form de
+ActiveCampaign, que además es el que pone la etiqueta). Sin esos datos el form valida, pero no envía.
+
 ---
 
 ## ⚠️ La trampa de WordPress (por qué el JS va como lo va)

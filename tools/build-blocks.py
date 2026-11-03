@@ -34,7 +34,9 @@ PERMALINKS = {
 
 # Bloques a compilar. Nav (00) y News (08) quedan fuera: son nativos del template de USL.
 BLOCKS = [
-    ("home", "01-hero"), ("home", "02-stats"), ("home", "03-project"), ("home", "04-proof"),
+    ("home", "01-hero"),
+    ("home", "01b-hero-coleccion"),   # campaña Charter Collection: se pega EN LUGAR de 01-hero
+    ("home", "02-stats"), ("home", "03-project"), ("home", "04-proof"),
     ("home", "04b-fixtures"), ("home", "05-jersey"), ("home", "06-founders"),
     ("home", "07b-school"),   # 07-academy ya no va en la Home (lo reemplaza 07b)
     ("home", "09-cierre-footer"),
@@ -45,6 +47,7 @@ BLOCKS = [
     ("academy", "a01-hero"), ("academy", "a02-pathway"), ("academy", "a03-method"),
     ("academy", "a05-parents"), ("academy", "a06-faq"), ("academy", "a07-tryouts"),
     ("staff", "st01-staff"),
+    ("team", "t01-coach"),            # se publica recién el viernes del reveal
     ("sede", "v01-hero"), ("sede", "v02-glance"), ("sede", "v03-tour"), ("sede", "v04-matches"),
     ("sede", "v05-tickets"), ("sede", "v06-getting-here"), ("sede", "v07-faq"), ("sede", "v08-home-port"),
 ]
@@ -66,6 +69,8 @@ COMPONENTS = {
     "psl-jersey-viewer":    ["jersey-viewer/jersey-viewer.js"],
     "psl-founder-id":       ["founder-id/founder-id.js"],
     "psl-departures-board": ["departures-board/departures-board.js"],
+    "psl-card":             ["card/card.js"],
+    "psl-photo-capture":    ["card/photo-capture.js"],
 }
 # CSS de cada componente (va junto con su JS; sin esto el componente monta pero queda sin estilar)
 COMPONENT_CSS = {
@@ -74,6 +79,8 @@ COMPONENT_CSS = {
     "psl-jersey-viewer":    "jersey-viewer/jersey-viewer.css",
     "psl-founder-id":       "founder-id/founder-id.css",
     "psl-departures-board": "departures-board/departures-board.css",
+    "psl-card":             "card/card.css",
+    "psl-photo-capture":    "card/photo-capture.css",
 }
 
 def read(p): return open(os.path.join(REPO, p), encoding="utf-8").read()

@@ -1,0 +1,262 @@
+/* Bloque 01b · Hero de campaña — Charter Collection. El juego se juega acá. */
+
+.hcc {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Fondo: la misma noche del set de la carta (franjas aqua + halftone), concentrado detrás de ella */
+.hcc__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(55% 75% at 76% 50%, rgba(170,246,230,.2), transparent 72%),
+    radial-gradient(90% 90% at 76% 50%, #123A34 0%, transparent 70%);
+}
+.hcc__bg::before,
+.hcc__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: radial-gradient(60% 85% at 76% 50%, #000 15%, transparent 75%);
+  mask-image: radial-gradient(60% 85% at 76% 50%, #000 15%, transparent 75%);
+}
+.hcc__bg::before {
+  background: repeating-linear-gradient(122deg, rgba(170,246,230,.07) 0 34px, transparent 34px 110px);
+}
+.hcc__bg::after {
+  background: radial-gradient(circle, rgba(170,246,230,.3) 1.5px, transparent 2px) 0 0 / 16px 16px;
+  opacity: .5;
+}
+
+.hcc__grid {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: start;
+  padding-top: clamp(104px, 12vh, 136px);
+  padding-bottom: clamp(40px, 6vh, 64px);
+}
+.hcc__copy { min-width: 0; }
+
+.hcc__kicker {
+  margin: 0;
+  font: 800 var(--fs-kicker)/1.4 var(--font-label);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--color-aqua);
+}
+.hcc__title {
+  margin: 14px 0 0;
+  font: 800 clamp(40px, 4.8vw, 72px)/.98 var(--font-hero);
+  letter-spacing: -.01em;
+  text-wrap: balance;
+}
+.hcc__sub {
+  margin: 14px 0 0;
+  font: 400 var(--fs-body-lg)/1.45 var(--font-body);
+  color: var(--color-text-muted);
+}
+.hcc__more {
+  display: inline-block;
+  margin-top: 16px;
+  font: 400 14px/1.4 var(--font-body);
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.hcc__more[hidden] { display: none; }
+
+/* La carta nunca pasa de lo que entra en la altura de la pantalla */
+.hcc__card {
+  position: sticky;
+  top: 90px;
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  width: min(30vw, 400px, calc((100vh - 230px) * 63 / 88));
+  min-width: 260px;
+  scroll-margin-top: 84px;
+}
+
+.hcc__divider {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5px;
+  background: linear-gradient(90deg,
+    var(--color-aqua), var(--color-red-marine), var(--color-aqua),
+    var(--color-red-marine), var(--color-aqua));
+  background-size: 200% 100%;
+  animation: psl-grad-flow 5s linear infinite;
+}
+
+.ccg__kicker { margin: 0; font: 800 var(--fs-kicker)/1.4 var(--font-label); letter-spacing: .18em; text-transform: uppercase; color: var(--color-aqua); }
+
+
+.ccg__card-actions { display: flex; gap: 14px; align-items: center; font: 400 12.5px/1.3 var(--font-body); color: var(--color-text-faint); }
+.ccg__ghost {
+  padding: 8px 14px; border: 1px solid var(--color-line-strong); border-radius: var(--radius-pill); background: none; cursor: pointer;
+  font: 500 10.5px/1.3 var(--font-label); letter-spacing: .12em; text-transform: uppercase; color: var(--color-text);
+}
+.ccg__ghost:hover { border-color: var(--color-aqua); color: var(--color-aqua); }
+
+.ccg__panel { display: grid; gap: 18px; min-width: 0; padding: clamp(20px, 3vw, 34px); background: var(--color-ink-2); border: 1px solid var(--color-line); border-radius: 18px; scroll-margin-top: 84px; }
+.ccg__panel h2 { margin: 0; font: 900 clamp(30px, 3.6vw, 46px)/.95 var(--font-display); letter-spacing: .02em; text-transform: uppercase; outline: none; }
+.ccg__panel p { margin: 0; }
+.ccg__panel-lead { font: 400 16px/1.5 var(--font-body); color: var(--color-text-muted); }
+.ccg__panel-lead b { color: var(--color-text); }
+.ccg__label { font: 500 10.5px/1.4 var(--font-label); letter-spacing: .14em; text-transform: uppercase; color: var(--color-text-faint); }
+
+.ccg__opts { display: grid; gap: 8px; }
+.ccg__opt {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; padding: 14px 16px; text-align: left; cursor: pointer;
+  background: var(--color-ink-3); border: 1px solid var(--color-line); border-radius: 12px;
+  font: 600 16px/1.3 var(--font-body); color: var(--color-text);
+  transition: border-color .2s, background .2s;
+}
+.ccg__opt:hover:not([disabled]) { border-color: var(--color-aqua); }
+.ccg__opt i { font: normal 500 10px/1 var(--font-label); letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-faint); }
+.ccg__opt[disabled] { cursor: default; }
+.ccg__opt.is-right { border-color: var(--color-aqua); background: rgba(170,246,230,.1); }
+.ccg__opt.is-wrong { border-color: var(--color-red-marine); background: rgba(255,0,51,.08); }
+
+.ccg__result { display: grid; gap: 6px; padding: 16px; border: 1px solid var(--color-line-strong); border-radius: 12px; font: 400 15px/1.45 var(--font-body); }
+.ccg__result b { font: 900 26px/1 var(--font-display); letter-spacing: .02em; text-transform: uppercase; }
+.ccg__result.is-ok b { color: var(--color-aqua); }
+.ccg__clue { padding: 14px 16px; border-radius: 12px; background: var(--color-aqua); color: var(--color-black); }
+.ccg__clue span { display: block; margin-bottom: 2px; font: 800 10px/1.4 var(--font-label); letter-spacing: .14em; text-transform: uppercase; }
+.ccg__clue p { font: 600 16px/1.35 var(--font-body); }
+
+.ccg__row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+.ccg__link { padding: 0; border: 0; background: none; cursor: pointer; font: 400 13px/1.4 var(--font-body); color: var(--color-text-muted); text-decoration: underline; text-underline-offset: 3px; }
+
+.ccg__form { display: grid; gap: 12px; }
+.ccg__field { display: grid; gap: 6px; }
+.ccg__field label { font: 500 10px/1.3 var(--font-label); letter-spacing: .14em; text-transform: uppercase; color: var(--color-text-faint); }
+.ccg__field input { width: 100%; padding: 14px 16px; background: var(--color-ink-3); border: 1px solid var(--color-line-strong); border-radius: 12px; font: 400 16px/1.3 var(--font-body); color: var(--color-text); }
+.ccg__field input:focus { border-color: var(--color-aqua); outline: none; }
+.ccg__consent { display: flex; gap: 10px; align-items: flex-start; font: 400 13px/1.4 var(--font-body); color: var(--color-text-muted); }
+.ccg__consent input { margin-top: 3px; accent-color: var(--color-aqua); }
+.ccg__err { margin: 0; font: 400 13px/1.4 var(--font-body); color: #ff6b86; }
+.ccg__gets { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.ccg__gets li { display: flex; gap: 10px; align-items: flex-start; font: 400 14.5px/1.4 var(--font-body); color: var(--color-text-muted); }
+.ccg__gets li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 6px; border-radius: 2px; background: var(--color-aqua); transform: rotate(45deg); }
+
+.ccg__split { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 20px; align-items: center; }
+.ccg__mini { display: block; width: 200px; }
+.ccg__count { font: 900 44px/1 var(--font-display); color: var(--color-aqua); font-variant-numeric: tabular-nums; }
+
+/* Compartir */
+.ccg__share { width: min(340px, calc(100vw - 32px)); max-height: 94vh; padding: 16px; overflow: auto; background: var(--color-ink-2); border: 1px solid var(--color-line-strong); border-radius: 18px; color: var(--color-text); }
+.ccg__share::backdrop { background: rgba(0,0,0,.78); }
+.ccg__story { display: block; width: 100%; height: auto; border-radius: 10px; }
+.ccg__share-actions { display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 14px; }
+.ccg__share .ccg__err { margin-top: 10px; text-align: center; }
+
+/* El panel vive sobre el fondo del hero */
+.hcc .ccg__panel { margin-top: 20px; gap: 14px; background: rgba(19,17,24,.86); }
+.hcc .ccg__panel h2 { font-size: clamp(26px, 2.6vw, 38px); }
+.hcc__sub[hidden] { display: none; }
+.ccg__opts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* Pasado el reveal: la persona es la protagonista y la carta, un accesorio */
+.hcc__photo { display: none; }
+.hcc--coach .hcc__photo {
+  display: block;
+  position: absolute;
+  right: max(2vw, calc((100% - var(--container)) / 2));
+  bottom: 0;
+  height: 96%;
+  width: auto;
+  max-width: none;
+  animation: hcc-photo-in .9s var(--ease-out-soft) both;
+}
+@keyframes hcc-photo-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.hcc--coach .hcc__grid { grid-template-columns: minmax(0, 1fr); padding-top: clamp(150px, 24vh, 240px); }
+.hcc--coach .hcc__copy { position: relative; max-width: 620px; }
+.hcc--coach .hcc__title { font-size: clamp(56px, 7.2vw, 112px); max-width: 9ch; }
+.hcc--coach:not(.hcc--step) .ccg__panel { padding: 0; background: none; border: 0; }
+.hcc--coach .ccg__panel-lead { font-size: var(--fs-body-lg); }
+.hcc--coach .hcc__card {
+  position: absolute;
+  right: max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter)));
+  bottom: clamp(24px, 5vh, 48px);
+  top: auto;
+  z-index: 2;
+  width: clamp(120px, 11vw, 160px);
+  min-width: 0;
+  gap: 6px;
+}
+.hcc--coach .ccg__card-actions { font-size: 11px; }
+.hcc--coach [data-ccg-flip] { display: none; }
+
+/* Entrada al cargar: misma cascada que 01-hero */
+.psl-motion .hcc__kicker,
+.psl-motion .hcc__title,
+.psl-motion .hcc__sub,
+.psl-motion .ccg__panel,
+.psl-motion .hcc__more,
+.psl-motion .hcc__card {
+  opacity: 0;
+  animation: psl-hero-in var(--dur-reveal) var(--ease-out-soft) both;
+}
+.psl-motion .hcc__title { animation-delay: 90ms; }
+.psl-motion .hcc__card  { animation-delay: 180ms; }
+.psl-motion .hcc__sub   { animation-delay: 180ms; }
+.psl-motion .psl-motion .ccg__panel { animation-delay: 300ms; }
+.psl-motion .hcc__more  { animation-delay: 360ms; }
+
+/* Mobile: una columna. Título, carta y debajo el panel del juego */
+@media (max-width: 860px) {
+  .hcc { min-height: 0; justify-content: flex-start; }
+  .hcc__bg { background:
+    radial-gradient(90% 26% at 50% 30%, rgba(170,246,230,.2), transparent 72%),
+    radial-gradient(120% 40% at 50% 30%, #123A34 0%, transparent 70%); }
+  .hcc__bg::before,
+  .hcc__bg::after {
+    -webkit-mask-image: radial-gradient(90% 26% at 50% 30%, #000 15%, transparent 75%);
+    mask-image: radial-gradient(90% 26% at 50% 30%, #000 15%, transparent 75%);
+  }
+  .hcc__grid { display: flex; flex-direction: column; align-items: stretch; gap: 0; padding-top: 92px; padding-bottom: 40px; }
+  .hcc__copy { display: contents; }
+  .hcc__kicker { order: 1; font-size: 10px; letter-spacing: .14em; }
+  .hcc__title { order: 2; margin-top: 10px; font-size: clamp(36px, 10.6vw, 56px); }
+  .hcc__sub { order: 3; margin-top: 8px; font-size: 15px; }
+  .hcc__card { order: 4; position: static; width: min(52vw, 240px); min-width: 0; margin: 18px auto 0; gap: 10px; }
+    .hcc .ccg__panel { order: 6; margin-top: 14px; }
+  .hcc__more { order: 7; align-self: center; }
+  /* Coach: la foto arriba, el texto abajo y la carta chica sobre el borde de la foto */
+  .hcc--coach .hcc__photo { right: 50%; transform: translateX(50%); bottom: auto; top: 76px; height: 58vh; animation: none; }
+  .hcc--coach .hcc__grid { padding-top: calc(76px + 50vh); }
+  .hcc--coach .hcc__title { font-size: clamp(48px, 14vw, 72px); max-width: none; }
+  .hcc--coach .hcc__card { top: calc(76px + 50vh - 170px); bottom: auto; right: var(--gutter); width: 92px; margin: 0; }
+  /* Mientras hay una pregunta abierta, la carta se achica para que las opciones entren en la primera pantalla.
+     Al responder vuelve a su tamaño, y se ve cómo se destraba la pista. */
+  .hcc__card { transition: width .4s var(--ease-out-soft); }
+  .hcc--asking .hcc__card { width: min(32vw, 150px); margin-top: 12px; }
+  .hcc--asking .hcc__sub,
+  .hcc--asking .ccg__card-actions { display: none; }
+  .hcc--asking   .hcc--asking .ccg__panel { margin-top: 10px; padding: 16px; gap: 10px; }
+  .hcc--asking .ccg__panel h2 { font-size: 24px; }
+}
+@media (max-width: 520px) {
+  .ccg__kicker { font-size: 10px; letter-spacing: .14em; }
+        .ccg__split { grid-template-columns: minmax(0, 1fr); }
+  .ccg__mini { margin-inline: auto; }
+  .ccg__panel .psl-btn { width: 100%; justify-content: center; }
+  .ccg__opt { padding: 12px; font-size: 15px; }
+  .ccg__opt i { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hcc__kicker, .hcc__title, .hcc__sub,   .hcc__divider { animation: none !important; }
+  .hcc__card { transition: none; }
+}

@@ -18,6 +18,7 @@
   <!-- Bloques nativos -->
   <link rel="stylesheet" href="../native/home/00-nav.css?v=77" />
   <link rel="stylesheet" href="../native/home/01-hero.css?v=67" />
+  <link rel="stylesheet" href="../native/home/01b-hero-coleccion.css?v=1" />
   <link rel="stylesheet" href="../native/home/02-stats.css?v=67" />
   <link rel="stylesheet" href="../native/home/03-project.css?v=67" />
   <link rel="stylesheet" href="../native/home/04-proof.css?v=67" />
@@ -29,6 +30,8 @@
   <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
 
   <!-- Piezas a medida -->
+  <link rel="stylesheet" href="../custom/card/card.css?v=1" />
+  <link rel="stylesheet" href="../custom/card/photo-capture.css?v=1" />
   <link rel="stylesheet" href="../custom/live-counter/live-counter.css?v=67" />
   <link rel="stylesheet" href="../custom/jersey-viewer/jersey-viewer.css?v=67" />
   <link rel="stylesheet" href="../custom/departures-board/departures-board.css?v=68" />
@@ -66,15 +69,26 @@
       '05-jersey', '06-founders', '07b-school', '08-news', '09-cierre-footer',
     ];
     const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
+    // Hero de campaña (solo preview): ?cc=mon|tue|wed|thu|fri|sat simula el día, ?cc=off vuelve a 01-hero,
+    // ?demo simula el envío del mail (?demo=founder, además, un founding member) y ?reset borra el progreso.
+    // En WordPress se pega un bloque u otro. El estado sale de .local/ (privado, fuera de git).
+    const params = new URLSearchParams(location.search);
+    const cc = params.get('cc') || 'mon';
+    if (params.has('reset')) { try { localStorage.removeItem('pslsc-charter-001'); } catch (err) { /* sin storage */ } }
     await Promise.all(blocks.map(async (name) => {
-      const html = await fetch(`../native/home/${name}.html${bust}`).then((r) => r.text());
-      document.querySelector(`[data-block="${name}"]`).innerHTML = html;
+      const file = name === '01-hero' && cc !== 'off' ? '01b-hero-coleccion' : name;
+      const html = await fetch(`../native/home/${file}.html${bust}`).then((r) => r.text());
+      document.querySelector(`[data-block="${name}"]`).innerHTML = html
+        .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${cc}.json`)
+        .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${cc}`)
+        .replaceAll('__URL_TEAM__', 'staff.html');
     }));
     // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.
     // (El sitio es English-only: no hay init de idioma.)
-    const [{ initNewsletter }, { initHeroMorph, initHeroVideo }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
+    const [{ initNewsletter }, { initHeroMorph, initHeroVideo }, { initHeroColeccion }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
       import('../native/home/09-cierre-footer.js?v=67'),
       import('../native/home/01-hero.js?v=67'),
+      import('../native/home/01b-hero-coleccion.js?v=1'),
       import('../native/home/04-proof.js?v=67'),
       import('../native/home/03-project.js?v=67'),
       import('../native/_patterns/motion.js?v=67'),
@@ -82,6 +96,7 @@
     initNewsletter();
     initHeroMorph();
     initHeroVideo();   // video del hero diferido (01-hero.js): sin esto queda solo el poster
+    initHeroColeccion();
     initProofTimeline();
     initProjectTimeline();
     initMotion();   // activa reveal, parallax, nav reactiva, grano, cursor — tras inyectar los bloques
@@ -93,6 +108,8 @@
   </script>
 
   <!-- Web components a medida -->
+  <script type="module" src="../custom/card/card.js?v=1"></script>
+  <script type="module" src="../custom/card/photo-capture.js?v=1"></script>
   <script type="module" src="../custom/live-counter/live-counter.js?v=70"></script>
   <script type="module" src="../custom/jersey-viewer/jersey-viewer.js?v=67"></script>
   <script type="module" src="../custom/departures-board/departures-board.js?v=68"></script>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Port St. Lucie SC — Head Coach</title>
+
+  <link rel="stylesheet" href="../tokens/fonts.css?v=67" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=69" />
+  <link rel="stylesheet" href="../native/_patterns/cards.css?v=67" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
+
+  <!-- Nav + footer compartidos (reusan los bloques de Home) -->
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=77" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
+
+  <link rel="stylesheet" href="../custom/card/card.css?v=1" />
+  <link rel="stylesheet" href="../native/team/t01-coach.css?v=1" />
+
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--color-ink); }
+    body { font-family: var(--font-body); color: var(--color-text); overflow-x: hidden; }
+    ::selection { background: var(--color-aqua); color: var(--color-black); }
+  </style>
+</head>
+<body>
+  <div data-block="00-nav"></div>
+  <div data-block="t01-coach"></div>
+  <div data-block="footer"></div>
+
+  <script src="../custom/ac-forms/ac-forms.js?v=1"></script>
+  <script type="module" src="../custom/card/card.js?v=1"></script>
+  <script type="module">
+    // Solo preview: ?cc=mon|...|sat simula el día (estado privado en .local/, fuera de git).
+    const cc = new URLSearchParams(location.search).get('cc') || 'fri';
+    const blocks = [
+      { slot: '00-nav',    path: '../native/home/00-nav.html' },
+      { slot: 't01-coach', path: '../native/team/t01-coach.html' },
+      { slot: 'footer',    path: '../native/home/09-cierre-footer.html' },
+    ];
+    const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
+    await Promise.all(blocks.map(async ({ slot, path }) => {
+      const html = await fetch(path + bust).then((r) => r.text());
+      document.querySelector(`[data-block="${slot}"]`).innerHTML = html
+        .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${cc}.json`);
+    }));
+    const [{ initCoach }, { initNewsletter }, { initMotion }] = await Promise.all([
+      import('../native/team/t01-coach.js?v=1'),
+      import('../native/home/09-cierre-footer.js?v=67'),
+      import('../native/_patterns/motion.js?v=67'),
+    ]);
+    initCoach();
+    initNewsletter();
+    initMotion();
+    import('../native/home/00-nav.js?v=4').then((m) => m.initNav());
+  </script>
+</body>
+</html>

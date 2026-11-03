@@ -1,0 +1,44 @@
+<!--
+  Bloque 01b · Hero de campaña — Charter Collection. 🟦 A medida.
+  REEMPLAZA a 01-hero mientras dura la campaña: en WordPress se pega uno u otro, nunca los dos.
+  El juego se juega acá. Preguntas, pistas, nombre y foto llegan por datos, según la fecha: en este
+  archivo y en su JS no va contenido de la carta. Reemplazos en el find-and-replace:
+  __COLECCION_API__ (estado), __URL_COACH__ (ficha del DT), __URL_TEAM__ (equipo) y los __AC_...__.
+-->
+<section class="hcc surface-ink" id="hero" data-cc-state="__COLECCION_API__" data-cc-coach="__URL_COACH__" data-cc-team="__URL_TEAM__"
+  data-ac-account="__AC_ACCOUNT__" data-ac-form="__AC_COLLECTION_FORM__"
+  data-ac-consent="__AC_FIELD_CONSENT__" data-ac-guess="__AC_FIELD_GUESS__" aria-labelledby="hcc-title">
+  <div class="hcc__bg" aria-hidden="true"></div>
+  <img class="hcc__photo" data-cc-photo alt="" decoding="async">
+
+  <div class="psl-container hcc__grid">
+    <div class="hcc__copy">
+      <p class="hcc__kicker" data-cc-kicker>Charter Collection · No. 001</p>
+      <h1 class="hcc__title" id="hcc-title" data-cc-title>Who is our first Head Coach?</h1>
+      <p class="hcc__sub" data-cc-sub>A new clue every day. Reveal Friday at 10:00 AM ET.</p>
+      <div class="ccg__panel" data-ccg-panel aria-live="polite"></div>
+      <a href="#project" class="hcc__more" data-cc-more>Keep exploring <span aria-hidden="true">↓</span></a>
+    </div>
+
+    <div class="hcc__card ccg__card-col">
+      <psl-card flippable data-ccg-card></psl-card>
+      <div class="ccg__card-actions">
+        <button type="button" class="ccg__ghost" data-ccg-flip>Flip card</button>
+        <span data-ccg-count></span>
+      </div>
+    </div>
+  </div>
+
+  <psl-photo-capture data-ccg-capture hidden></psl-photo-capture>
+
+  <dialog class="ccg__share" data-ccg-share aria-label="Share your Collector Card">
+    <canvas class="ccg__story" width="1080" height="1920" data-ccg-story></canvas>
+    <div class="ccg__share-actions">
+      <button type="button" class="psl-btn cta-primary" data-ccg-share-go>Share</button>
+      <button type="button" class="ccg__ghost" data-ccg-share-close>Close</button>
+    </div>
+    <p class="ccg__err" data-ccg-share-msg hidden></p>
+  </dialog>
+
+  <div class="hcc__divider" role="presentation"></div>
+</section>
