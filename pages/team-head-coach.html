@@ -42,7 +42,8 @@
     await Promise.all(blocks.map(async ({ slot, path }) => {
       const html = await fetch(path + bust).then((r) => r.text());
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html
-        .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${cc}.json`);
+        .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${cc}.json`)
+        .replaceAll('__URL_TEAM__', `team.html?cc=${cc}`);
     }));
     const [{ initCoach }, { initNewsletter }, { initMotion }] = await Promise.all([
       import('../native/team/t01-coach.js?v=1'),

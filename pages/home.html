@@ -81,7 +81,7 @@
       document.querySelector(`[data-block="${name}"]`).innerHTML = html
         .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${cc}.json`)
         .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${cc}`)
-        .replaceAll('__URL_TEAM__', 'staff.html');
+        .replaceAll('__URL_TEAM__', `team.html?cc=${cc}`);
     }));
     // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.
     // (El sitio es English-only: no hay init de idioma.)
