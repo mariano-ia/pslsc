@@ -80,7 +80,8 @@ Nav (00) y News (08) no están en la lista: son bloques nativos del template de 
 nunca los dos: el juego se juega ahí. El equipo se divide como en la USL League One, en tres páginas del menú "Club": **Front Office** (`t02-front-office`, reemplaza a `/staff/`, se puede publicar ya), **Soccer Staff** (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`), desde el viernes del reveal, y **Roster** (`t03-roster`, con `__ROSTER_API__`), desde el primer jugador anunciado.
 Reemplazos: `__COLECCION_API__` (URL del estado por fecha), `__URL_COACH__` (permalink de la ficha), `__URL_TEAM__` (equipo, hoy `/staff/`) y, en el hero,
 `__AC_ACCOUNT__`, `__AC_COLLECTION_FORM__`, `__AC_FIELD_CONSENT__` y `__AC_FIELD_GUESS__` (`field[NN]` del form de
-ActiveCampaign, que además es el que pone la etiqueta). Sin esos datos el form valida, pero no envía.
+ActiveCampaign, que además es el que pone la etiqueta). Sin esos datos el form valida, pero no envía. Qué crear en
+ActiveCampaign (form, campos, etiqueta y mails): `docs/charter-collection-activecampaign.md`.
 
 ---
 

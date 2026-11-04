@@ -42,6 +42,9 @@ const FALLBACK_CARD = {
 };
 const CCG_KEY = 'pslsc-charter-001';
 const CCG_FULL_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+// Hora de cada pista y del reveal (Etapa 0: la confirma el club). Se usa en todo el copy del hero y del panel.
+const CCG_TIME = '10:00 AM ET';
+const CCG_REVEAL = `Friday at ${CCG_TIME}`;
 const CCG_EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const CCG_CREST = '/assets/brand/crest-aqua.webp';
 // Tribuna de Collector/Founder. PENDIENTE DE APROBACIÓN: es un render del micrositio del Groundbreaking, no una
@@ -82,14 +85,24 @@ async function ccgSendLead(hero, { email, guess }) {
   const ac = ccgAcConfig(hero);
   if (!ac) {
     console.error('[charter] Falta configurar ActiveCampaign: el mail NO se envió.');
-    throw new Error('Something went wrong on our end. Your email was not saved, please try again later.');
+    throw new Error('Something went wrong on our end. Nothing was saved, please try again later.');
   }
   const body = new FormData();
   Object.entries({ u: ac.form, f: ac.form, s: '', c: '0', m: '0', act: 'sub', v: '2', email }).forEach(([k, v]) => body.append(k, v));
   if (ac.consent && !ac.consent.startsWith('__')) body.append(ac.consent, 'Yes');
   if (guess && ac.guess && !ac.guess.startsWith('__')) body.append(ac.guess, guess);
-  const res = await fetch(`https://${ac.account}.activehosted.com/proc.php?jsonp=true`, { method: 'POST', body, headers: { Accept: 'application/json' } });
-  const data = await res.json();
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), 15000);
+  let data;
+  try {
+    const res = await fetch(`https://${ac.account}.activehosted.com/proc.php?jsonp=true`, { method: 'POST', body, headers: { Accept: 'application/json' }, signal: ctl.signal });
+    data = await res.json();
+  } catch (err) {
+    console.error('[charter] ActiveCampaign no respondió', err);
+    throw new Error('We could not reach our server. Check your connection and try again.');
+  } finally {
+    clearTimeout(timer);
+  }
   if (data?.action !== 'show_thank_you') throw new Error(data?.data?.message || 'We could not send that, please try again in a moment.');
 }
 
@@ -148,6 +161,35 @@ function ccgNextStep(S, state, step) {
   return { t: 'wait' };
 }
 
+/* Copy del hero según dónde está la persona. El título (h1) no cambia hasta el reveal: no hay salto de layout
+   y es lo que se comparte. Cambian el kicker y la bajada. Nunca revela nada de la carta. */
+function ccgHeroCopy(S, state) {
+  const st = ccgNextStep(S, state, null);
+  const kicker = 'Charter Collection · Card No. 001';
+  const today = CCG_FULL_NAMES[state.day] || '';
+  switch (st.t) {
+    case 'q': {
+      if (st.i < state.day) {
+        const left = state.day - st.i;
+        return { kicker, sub: `Joining on ${today}? Catch up first: ${left} question${left > 1 ? 's' : ''} to go before today’s.` };
+      }
+      if (st.i === 0) return { kicker, sub: `The first Head Coach in club history is card No. 001. One question a day unlocks a clue. Reveal ${CCG_REVEAL}.` };
+      if (st.i === 3) return { kicker, sub: `Last question of the week. Then lock in your guess before the reveal.` };
+      return { kicker, sub: `Day ${st.i + 1} of 4. Today’s question unlocks a new clue.` };
+    }
+    case 'guess':
+      return { kicker, sub: `All four clues are in. Lock in your guess before ${CCG_REVEAL}.` };
+    case 'wait':
+      return Object.keys(S.answers).length === 4
+        ? { kicker, sub: `Your guess is locked. Card No. 001 drops ${CCG_REVEAL}.` }
+        : { kicker, sub: `Today’s clue is yours. Come back tomorrow for the next question.` };
+    case 'reveal':
+      return { kicker: 'Charter Collection · Reveal day', sub: 'It’s reveal day. Four clues, one card.' };
+    default:
+      return { kicker, sub: '' };
+  }
+}
+
 function ccgEmailFields(id) {
   return `<div class="ccg__field"><label for="${id}-em">Email</label><input type="email" id="${id}-em" name="email" autocomplete="email" placeholder="you@email.com" required></div>
     <label class="ccg__consent"><input type="checkbox" name="consent" required><span>I agree to receive emails from Port St. Lucie SC about the Charter Collection and club news. Unsubscribe anytime.</span></label>`;
@@ -164,7 +206,7 @@ function ccgPanelHTML(st, S, state) {
         : `<span class="ccg__kicker">${ccgEsc(D.full)} · Question ${st.i + 1} of 4</span>`;
       return `${head}<h2 tabindex="-1">${ccgEsc(D.q)}</h2>
         <div class="ccg__opts">${D.opts.map((o, k) => `<button type="button" class="ccg__opt" data-k="${k}"><span>${ccgEsc(o)}</span><i>${'ABCD'[k]}</i></button>`).join('')}</div>
-        <p class="ccg__label">Right or wrong, you unlock today&rsquo;s clue: ${ccgEsc(D.clueTitle)}.</p>`;
+        <p class="ccg__label">Right or wrong, you unlock ${st.i < state.day ? `${ccgEsc(D.full)}&rsquo;s` : 'today&rsquo;s'} clue: ${ccgEsc(D.clueTitle)}.</p>`;
     }
     case 'result': {
       const D = days[st.i];
@@ -180,7 +222,7 @@ function ccgPanelHTML(st, S, state) {
         <p class="ccg__panel-lead">Leave your email and get your own card in the Charter Collection.</p>
         <ul class="ccg__gets"><li>Your Collector Card, right now</li><li>An email when the next clue unlocks</li><li>A reminder on reveal day</li></ul>
         <form class="ccg__form" data-form="claim" novalidate>${ccgEmailFields('ccg-claim')}
-          <p class="ccg__err" data-err hidden></p>
+          <p class="ccg__err" data-err role="alert" hidden></p>
           <div class="ccg__row"><button class="psl-btn cta-primary" type="submit">Claim my card</button><button type="button" class="ccg__link" data-act="skip">Keep playing without saving</button></div>
         </form>`;
     case 'collector':
@@ -191,25 +233,25 @@ function ccgPanelHTML(st, S, state) {
             <div class="ccg__row"><button type="button" class="psl-btn cta-primary" data-act="continue">Back to the game</button><button type="button" class="ccg__ghost" data-act="share">Share</button></div></div></div>`;
     case 'guess':
       return `<span class="ccg__kicker">Thursday · Last step before the reveal</span><h2 tabindex="-1">Lock in your guess</h2>
-        <p class="ccg__panel-lead">You have all four clues. Who is card No. 001? We&rsquo;ll tell you Friday at 10:00 AM ET if you got it right.</p>
+        <p class="ccg__panel-lead">You have all four clues. Who is card No. 001? We&rsquo;ll tell you ${CCG_REVEAL} if you got it right.</p>
         <form class="ccg__form" data-form="guess" novalidate>
-          <div class="ccg__field"><label for="ccg-guess">Your guess</label><input type="text" id="ccg-guess" name="guess" placeholder="Full name" autocomplete="off" required></div>
+          <div class="ccg__field"><label for="ccg-guess">Your guess</label><input type="text" id="ccg-guess" name="guess" placeholder="Full name" autocomplete="off" maxlength="60" required></div>
           ${S.email ? '' : ccgEmailFields('ccg-guess')}
-          <p class="ccg__err" data-err hidden></p>
+          <p class="ccg__err" data-err role="alert" hidden></p>
           <div class="ccg__row"><button class="psl-btn cta-primary" type="submit">Lock it in</button></div>
         </form>`;
     case 'wait': {
       const allDone = clues === 4;
       const next = CCG_FULL_NAMES[state.day + 1] || 'Friday';
       return `<span class="ccg__kicker">${allDone ? 'Guess locked' : 'Done for today'}</span>
-        <h2 tabindex="-1">${allDone ? 'See you Friday.' : `Next clue: ${next}, 10:00 AM ET`}</h2>
+        <h2 tabindex="-1">${allDone ? 'See you Friday.' : `Next clue: ${next}, ${CCG_TIME}`}</h2>
         <div class="ccg__split"><div class="ccg__count">${clues}/4</div><p class="ccg__panel-lead">${allDone
-          ? `Your guess: <b>${ccgEsc(S.guess)}</b>. The full card drops Friday at 10:00 AM ET.`
+          ? `Your guess: <b>${ccgEsc(S.guess)}</b>. The full card drops ${CCG_REVEAL}.`
           : `clues unlocked. ${S.email ? 'We&rsquo;ll email you when the next one is live.' : 'Claim your card to get an email when the next clue is live.'}`}</p></div>
         <div class="ccg__row">${S.email ? '<button type="button" class="ccg__ghost" data-act="mycard">My Collector Card</button>' : '<button type="button" class="psl-btn cta-primary" data-act="claim">Claim my card</button>'}</div>`;
     }
     case 'reveal':
-      return `<span class="ccg__kicker">Friday · 10:00 AM ET</span><h2 tabindex="-1">Card No. 001 is ready.</h2>
+      return `<span class="ccg__kicker">Friday · ${CCG_TIME}</span><h2 tabindex="-1">Card No. 001 is ready.</h2>
         <p class="ccg__panel-lead">${clues} of 4 clues unlocked${S.guess ? ` · your guess: <b>${ccgEsc(S.guess)}</b>` : ''}.</p>
         <div class="ccg__row"><button type="button" class="psl-btn cta-primary" data-act="reveal">Reveal card No. 001</button></div>`;
     case 'revealed':
@@ -409,7 +451,9 @@ async function initHeroColeccion(root = document) {
   }
   if (!state) {
     cardEl.data = FALLBACK_CARD;
-    panel.innerHTML = '<h2>A new clue every day</h2><p class="ccg__panel-lead">The game could not load. Please try again in a moment.</p>';
+    hero.classList.add('is-ready');
+    panel.innerHTML = '<h2 tabindex="-1">A new clue every day</h2><p class="ccg__panel-lead">The game could not load. Please try again in a moment.</p><div class="ccg__row"><button type="button" class="ccg__ghost" data-ccg-retry>Try again</button></div>';
+    panel.querySelector('[data-ccg-retry]').addEventListener('click', () => location.reload());
     return;
   }
   state.coachUrl = hero.dataset.ccCoach;
@@ -447,14 +491,20 @@ async function initHeroColeccion(root = document) {
     target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
   }
 
-  function paint(scrollTarget) {
+  const status = $('[data-ccg-status]');
+  const say = (msg) => { status.textContent = ''; setTimeout(() => { status.textContent = msg; }, 60); };   // vaciar antes: se anuncia aunque se repita
+
+  // focus: true cuando el cambio lo provocó la persona (no al cargar): el foco pasa al título del panel.
+  function paint(scrollTarget, focus) {
     paintCard();
     const shown = state.revealed && S.revealed;
     const coach = shown && !spinning && Boolean(state.presentation);
     hero.classList.toggle('hcc--coach', coach);
-    $('[data-cc-kicker]').textContent = shown ? 'Our first Head Coach' : 'Charter Collection · No. 001';
+    const copy = ccgHeroCopy(S, state);
+    $('[data-cc-kicker]').textContent = shown ? 'Our first Head Coach' : copy.kicker;
     $('[data-cc-title]').textContent = shown ? `${state.card.first} ${state.card.last}` : 'Who is our first Head Coach?';
-    $('[data-cc-sub]').hidden = shown;
+    $('[data-cc-sub]').textContent = copy.sub;
+    $('[data-cc-sub]').hidden = shown || !copy.sub;
     $('[data-cc-more]').hidden = shown;
     const st = ccgNextStep(S, state, step);
     hero.classList.toggle('hcc--asking', st.t === 'q');   // mobile: carta chica para que entre la pregunta
@@ -463,6 +513,8 @@ async function initHeroColeccion(root = document) {
     capture.hidden = true;
     panel.innerHTML = ccgPanelHTML(st, S, state);
     bindPanel(st);
+    hero.classList.add('is-ready');
+    if (focus) panel.querySelector('h2')?.focus({ preventScroll: true });
     if (scrollTarget && innerWidth <= 860) goTo(scrollTarget);
   }
 
@@ -479,7 +531,9 @@ async function initHeroColeccion(root = document) {
         flashZone = state.days[st.i].zone;
         step = { t: 'result', i: st.i };
         ccgSave(S);
-        paint($('.ccg__card-col'));
+        paint($('.ccg__card-col'), true);
+        const D = state.days[st.i];
+        say(`${S.answers[st.i] === D.a ? 'That’s right.' : 'Not quite.'} Clue unlocked, ${D.clueTitle}: ${D.clue}`);
         // Mobile: primero se ve la carta destrabándose; después baja a la respuesta y la pista.
         if (innerWidth <= 860) setTimeout(() => panel.querySelector('.ccg__result')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }), reduce ? 0 : 1300);
       });
@@ -497,6 +551,7 @@ async function initHeroColeccion(root = document) {
           paint();
           cardEl.reveal();
           if (spinning) setTimeout(() => { spinning = false; paint(); }, 1700);
+          say('Card No. 001 revealed.');
           return;
         }
         if (a === 'continue') step = step?.t === 'result' && !S.email && !S.skipClaim ? { t: 'claim' } : null;
@@ -504,7 +559,7 @@ async function initHeroColeccion(root = document) {
         if (a === 'claim') step = { t: 'claim' };
         if (a === 'mycard') step = { t: 'collector' };
         ccgSave(S);
-        paint(panel);
+        paint(panel, true);
       });
     });
 
@@ -519,6 +574,7 @@ async function initHeroColeccion(root = document) {
     panel.querySelectorAll('[data-form]').forEach((form) => {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (form.dataset.busy) return;   // doble envío (doble click, Enter repetido)
         const isGuess = form.dataset.form === 'guess';
         const guess = isGuess ? form.elements.guess.value.trim() : null;
         if (isGuess && !guess) { showError(form, 'Type a name to lock in your guess.'); return; }
@@ -529,11 +585,17 @@ async function initHeroColeccion(root = document) {
           if (!form.elements.consent.checked) { showError(form, 'Tick the box to agree to receive emails.'); return; }
         }
         const submit = form.querySelector('[type="submit"]');
+        const label = submit.textContent;
+        form.dataset.busy = '1';
         submit.disabled = true;
+        submit.textContent = 'Sending…';
+        form.querySelector('[data-err]').hidden = true;
         try {
           await ccgSendLead(hero, { email, guess });
         } catch (err) {
+          delete form.dataset.busy;
           submit.disabled = false;
+          submit.textContent = label;
           showError(form, err.message);
           return;
         }
@@ -541,7 +603,8 @@ async function initHeroColeccion(root = document) {
         S.founder = await ccgFounderLookup(email);
         if (isGuess) { S.guess = guess; step = null; } else { step = { t: 'collector' }; }
         ccgSave(S);
-        paint(panel);
+        paint(panel, true);
+        say(isGuess ? 'Your guess is locked.' : 'Card claimed.');
       });
     });
   }
