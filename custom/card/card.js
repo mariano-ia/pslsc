@@ -6,25 +6,16 @@
  * pistas e íconos de los sellos llegan por datos desde el servidor, según la fecha. Acá no va
  * ningún contenido de una carta puntual.
  *
- * Datos:
- *   code, set, parallel ('base' | 'aqua' | 'gold' | 'holo'),
- *   background ('base' | 'wall' | 'wallGold' | 'diamond' | 'shatter' | 'target' | 'bolt'), o la
- *   estructura de la colección: { photo, tone ('sea' | 'aqua' | 'gold' | 'ink'), pattern (idem
- *   kinds), big }: foto del club en duotono + miscelánea encima. backgroundPhoto (url) a color, seed,
- *   frame (true: marco interior que la figura rompe),
- *   edition, figure ({ src, kind: 'silhouette' | 'crest' | 'player' | 'luca' | 'fan', alt }),
- *   photo ({ src, alt }), revealed,
- *   flag ({ code, background } o null = bloqueada),
- *   first, last (o null = barras rayadas), nameBars ([56, 26]), sub,
- *   stamps ([{ word, icon } o { locked: true }]),
- *   back ({ name, bio: [[label, valor o null]], table: { rows } o { locked, unlock },
- *           fact: { text } o { locked, unlock } }),
- *   flash ('nation' | 'stamp' | 'career' | 'fact', zona recién destrabada).
+ * Datos: el esquema completo y congelado está en docs/charter-card-schema.md (contrato con el servidor).
+ *   code, set, parallel, badge, edition · background / backgroundPhoto / big / seed / frame ·
+ *   figure, photo, revealed · flag (+ isNew) · first, last, namePlaceholder, nameBars, sub ·
+ *   stamps ([{ word, icon, isNew } o { locked }]) · back ({ name, bio, table, fact }) · flash.
  *
  * Métodos: flip(bool), reveal() (giro y silueta que pasa a foto).
  * Respeta prefers-reduced-motion (sin tilt; CSS corta los giros).
  */
 const CREST_SRC = '/assets/brand/crest-aqua.webp';
+const NEW_TAG = '<em class="tc__new">New</em>';
 const LOCK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
@@ -154,10 +145,10 @@ const lockedBars = (lines, text) => `<div class="tc__lkb">${Array.from({ length:
 
 function stampsHTML(d) {
   return (d.stamps || []).map((s) => {
-    const flash = !s.locked && d.flash === 'stamp' && s.isNew ? ' tc-flash' : '';
-    return s.locked
-      ? `<span class="tc__stamp is-locked">${LOCK_ICON}Locked</span>`
-      : `<span class="tc__stamp${flash}">${s.icon || ''}${esc(s.word)}</span>`;   // icon: SVG de nuestro servidor
+    if (s.locked) return `<span class="tc__stamp is-locked">${LOCK_ICON}<span class="tc__stamp-w">Locked</span></span>`;
+    // isNew: recién destrabado (etiqueta "New"); flash 'stamp' además lo hace destellar
+    const cls = s.isNew ? ` is-new${d.flash === 'stamp' ? ' tc-flash' : ''}` : '';
+    return `<span class="tc__stamp${cls}">${s.icon || ''}<span class="tc__stamp-w">${esc(s.word)}</span>${s.isNew ? NEW_TAG : ''}</span>`;   // icon: SVG de nuestro servidor
   }).join('');
 }
 
@@ -175,13 +166,22 @@ function figureHTML(d) {
 
 function flagHTML(d) {
   if (d.flag === undefined) return '';
-  if (d.flag === null) return `<span class="tc__flag is-locked">${LOCK_ICON}???</span>`;
-  return `<span class="tc__flag${d.flash === 'nation' ? ' tc-flash' : ''}"><span class="tc__flag-img" style="background:${esc(d.flag.background)}"></span>${esc(d.flag.code)}</span>`;
+  if (d.flag === null) return `<span class="tc__flag is-locked">${LOCK_ICON}<span class="tc__flag-code">???</span></span>`;
+  const isNew = d.flag.isNew || d.flash === 'nation';
+  const cls = isNew ? ` is-new${d.flash === 'nation' ? ' tc-flash' : ''}` : '';
+  return `<span class="tc__flag${cls}"><span class="tc__flag-img" style="background:${esc(d.flag.background)}"></span><span class="tc__flag-code">${esc(d.flag.code)}</span>${isNew ? NEW_TAG : ''}</span>`;
 }
 
 function nameHTML(d) {
   if (d.last) return esc(d.last);
+  if (d.namePlaceholder) return `<span class="tc__ph">${esc(d.namePlaceholder)}</span>`;
   return (d.nameBars || [56, 26]).map((w) => `<span class="tc__bar" style="width:${Number(w)}%"></span>`).join('');
+}
+
+// Apellidos largos (el nombre del hincha llega a 14 letras): achica la letra para que entre sin cortarse.
+function nameFit(d) {
+  const n = String(d.last || d.namePlaceholder || '').length;
+  return n > 11 ? ` style="--tc-len:${n}"` : '';
 }
 
 function backHTML(d) {
@@ -190,17 +190,19 @@ function backHTML(d) {
   let table = '';
   if (b.table) {
     const flash = d.flash === 'career' ? ' tc-flash' : '';
+    const isNew = !b.table.locked && (b.table.isNew || d.flash === 'career');
     table = b.table.locked
       ? `<div class="${flash}">${lockedBars(4, b.table.unlock)}</div>`
-      : `<table class="tc__table${flash}"><thead><tr><th>Year</th><th>Club</th><th>Role</th></tr></thead><tbody>${b.table.rows.map((r) => `<tr class="${r[3] ? 'is-hl' : ''}"><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table>`;
+      : `<table class="tc__table${flash}"><thead><tr><th>Year${isNew ? NEW_TAG : ''}</th><th>Club</th><th>Role</th></tr></thead><tbody>${b.table.rows.map((r) => `<tr class="${r[3] ? 'is-hl' : ''}"><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table>`;
   }
   let fact = '';
   if (b.fact) {
-    fact = `<div class="tc__fact${d.flash === 'fact' ? ' tc-flash' : ''}"><span>Did you know?</span>${b.fact.locked ? lockedBars(2, b.fact.unlock) : esc(b.fact.text)}</div>`;
+    const isNew = !b.fact.locked && (b.fact.isNew || d.flash === 'fact');
+    fact = `<div class="tc__fact${d.flash === 'fact' ? ' tc-flash' : ''}"><span>Did you know?${isNew ? NEW_TAG : ''}</span>${b.fact.locked ? lockedBars(2, b.fact.unlock) : esc(b.fact.text)}</div>`;
   }
   return `<div class="tc__bk">
     <div class="tc__bk-head"><span class="tc__bk-code">${esc(d.code)}</span><div><div class="tc__bk-name">${esc(b.name || d.last || '')}</div><div class="tc__bk-sub">${esc(d.sub)}</div></div></div>
-    ${bio ? `<div class="tc__bk-bio">${bio}</div>` : ''}${table}${fact}
+    ${bio ? `<div class="tc__bk-bio">${bio}</div>` : ''}${table || `<div class="tc__bk-mark"><img src="${CREST_SRC}" alt=""></div>`}${fact}
     <div class="tc__bk-foot">© 2026 Port St. Lucie SC · Charter Collection · ${esc(d.set)}</div>
   </div>`;
 }
@@ -238,14 +240,14 @@ class PSLCard extends HTMLElement {
     }
     this.innerHTML = `<div class="tc__tilt"><div class="tc__inner">
       <div class="tc__face tc__front">
-        <div class="tc__win">${d.backgroundPhoto ? `<img class="tc__bg" src="${esc(d.backgroundPhoto)}" alt="">` : (d.background && typeof d.background === 'object' ? structuredBackground(d.background, d.seed) : backgroundSVG(d.background, d.seed, d.big))}${d.frame ? '<span class="tc__frame"></span>' : ''}<span class="tc__vert">${esc(d.set)}</span></div>
+        <div class="tc__win">${d.backgroundPhoto ? `<img class="tc__bg tc__bg-own" src="${esc(d.backgroundPhoto)}" alt=""><span class="tc__bg-vignette"></span>` : (d.background && typeof d.background === 'object' ? structuredBackground(d.background, d.seed) : backgroundSVG(d.background, d.seed, d.big))}${d.frame ? '<span class="tc__frame"></span>' : ''}<span class="tc__vert">${esc(d.set)}</span></div>
         ${figureHTML(d)}
         <div class="tc__tl">${flagHTML(d)}${d.badge ? `<span class="tc__shield"><b>${esc(d.badge[0])}</b><i>${esc(d.badge[1])}</i></span>` : ''}</div>
         <div class="tc__tr"><span class="tc__brand">Charter<br>Collection</span><span class="tc__code">${esc(d.code)}</span>${d.edition ? `<span class="tc__edition">${esc(d.edition)}</span>` : ''}</div>
         <div class="tc__stamps">${stampsHTML(d)}</div>
         <div class="tc__bolt"></div>
         <div class="tc__banner"><span class="tc__logo"><img src="${CREST_SRC}" alt=""></span>
-          <div class="tc__nm"><div class="tc__first">${esc(d.first) || '&nbsp;'}</div><div class="tc__last">${nameHTML(d)}</div><div class="tc__sub">${esc(d.sub)}</div></div></div>
+          <div class="tc__nm"><div class="tc__first">${esc(d.first) || '&nbsp;'}</div><div class="tc__last"${nameFit(d)}>${nameHTML(d)}</div><div class="tc__sub">${esc(d.sub)}</div></div></div>
       </div>
       <div class="tc__face tc__back">${backHTML(d)}</div>
     </div></div>`;

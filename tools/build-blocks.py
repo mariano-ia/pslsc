@@ -103,7 +103,7 @@ def namespace_css(css):
     css = strip_comments(css)
     out, i, n = [], 0, len(css)
     while i < n:
-        m = re.match(r"\s*@(font-face|keyframes|-webkit-keyframes|media|supports)([^{]*)\{", css[i:])
+        m = re.match(r"\s*@(font-face|keyframes|-webkit-keyframes|media|supports|container)([^{]*)\{", css[i:])
         if m:
             at = m.group(1); head = css[i:i + m.end()]
             depth, j = 1, i + m.end()

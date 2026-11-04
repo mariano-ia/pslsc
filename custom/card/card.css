@@ -52,6 +52,7 @@ psl-card.is-revealing .tc__inner { animation: tc-spin 1.3s var(--ease-out-soft);
 .tc__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .tc__defs { position: absolute; width: 0; height: 0; }
 .tc__bg-photo { object-position: 50% 40%; }
+.tc__bg-own { object-position: 50% 25%; }   /* foto del hincha sin recorte: la cara queda arriba, sobre el marco */
 .tc__bg--overlay { opacity: .45; mix-blend-mode: screen; }
 .tc__bg-vignette { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(12,12,10,.5) 0%, rgba(12,12,10,0) 30%, rgba(12,12,10,0) 58%, rgba(12,12,10,.72) 100%); }
 /* Marco interior: la figura lo rompe por arriba y por los costados */
@@ -70,7 +71,7 @@ psl-card.is-revealing .tc__inner { animation: tc-spin 1.3s var(--ease-out-soft);
 .tc__fig { position: absolute; left: 50%; transform: translateX(-50%); bottom: 29.5cqw; height: 108cqw; max-width: none; z-index: 3; pointer-events: none; }
 .tc__fig.is-silhouette { filter: brightness(0) drop-shadow(0 0 .45cqw #fff) drop-shadow(0 0 3cqw rgba(170,246,230,.6)); }
 .tc__fig.is-photo { opacity: 0; transition: opacity 1s ease .2s; }
-.tc__fig.is-crest { height: auto; width: 54cqw; bottom: 46cqw; filter: drop-shadow(0 2cqw 4cqw rgba(0,0,0,.6)); }
+.tc__fig.is-crest { height: auto; width: 48cqw; left: 46%; bottom: 52cqw; filter: drop-shadow(0 2cqw 4cqw rgba(0,0,0,.6)); }
 .tc__fig.is-luca { height: 100cqw; bottom: 26cqw; }
 .tc__fig.is-player, .tc__fig.is-luca, .tc__fig.is-fan, .tc__fig.is-photo { filter: drop-shadow(1.4cqw 1.6cqw 0 rgba(12,12,10,.55)) drop-shadow(0 0 2.4cqw rgba(0,0,0,.45)); }
 .tc__fig.is-fan { height: 102cqw; filter: drop-shadow(0 0 2cqw rgba(0,0,0,.55)); }
@@ -84,6 +85,17 @@ psl-card.is-revealed .tc__fig.is-silhouette { opacity: 0; transition: opacity .6
   background: rgba(12,12,10,.82); border: 1px solid rgba(255,255,255,.3); border-radius: 100px;
 }
 .tc__flag.is-locked { color: var(--color-text-faint); }
+.tc__flag.is-new, .tc__stamp.is-new { border-color: var(--tc-hl); animation: tc-new 2.4s ease-in-out infinite; }
+.tc__flag.is-new.tc-flash, .tc__stamp.is-new.tc-flash { animation: tc-flash 1.4s var(--ease-out-soft), tc-new 2.4s ease-in-out 1.4s infinite; }
+/* Etiqueta "New" de lo que se acaba de destrabar (bandera y sellos) */
+.tc__new {
+  margin-left: .2cqw; padding: .55cqw 1.1cqw; border-radius: 100px; background: #FF0033; color: #fff;
+  font: normal 800 1.75cqw/1 var(--font-label); letter-spacing: .1em; text-transform: uppercase;
+}
+@keyframes tc-new {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(170,246,230,0); }
+  50% { box-shadow: 0 0 2.4cqw .3cqw rgba(170,246,230,.55); }
+}
 .tc__flag svg { width: 3cqw; height: 3cqw; }
 .tc__flag-img { width: 5cqw; height: 3.4cqw; border-radius: .5cqw; }
 .tc__shield {
@@ -102,7 +114,7 @@ psl-card.is-revealed .tc__fig.is-silhouette { opacity: 0; transition: opacity .6
 
 .tc__stamps { position: absolute; right: 5.8cqw; bottom: 36.5cqw; z-index: 4; display: grid; gap: 1.1cqw; justify-items: end; }
 .tc__stamp {
-  display: flex; align-items: center; gap: 1.4cqw; padding: .9cqw 2cqw .9cqw 1.4cqw;
+  position: relative; display: flex; align-items: center; gap: 1.4cqw; padding: .9cqw 2cqw .9cqw 1.4cqw;
   font: 800 2.4cqw/1 var(--font-label); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; color: #fff;
   background: rgba(12,12,10,.9); border: 1px solid rgba(255,255,255,.55); border-radius: .9cqw;
 }
@@ -125,7 +137,10 @@ psl-card.is-revealed .tc__fig.is-silhouette { opacity: 0; transition: opacity .6
   margin-top: .6cqw; min-height: 9.4cqw;
   font: 900 10cqw/.9 var(--font-display); letter-spacing: .02em; text-transform: uppercase;
   color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  /* --tc-len (lo pone card.js en apellidos de 12+ letras): achica hasta que entra en el banner */
+  font-size: clamp(6.6cqw, calc(124cqw / var(--tc-len, 10)), 10cqw);
 }
+.tc__ph { color: rgba(243,240,234,.3); }   /* namePlaceholder: "Your name" mientras el hincha no lo escribe */
 .tc__bar {
   display: inline-block; height: 7cqw; margin-right: 1.6cqw; vertical-align: -.6cqw; border-radius: .8cqw;
   background: repeating-linear-gradient(90deg, rgba(243,240,234,.26) 0 2px, rgba(243,240,234,.14) 2px 4px);
@@ -136,7 +151,8 @@ psl-card.is-revealed .tc__fig.is-silhouette { opacity: 0; transition: opacity .6
 psl-card[data-parallel="gold"] .tc__front::after,
 psl-card[data-parallel="holo"] .tc__front::after {
   z-index: 2; inset: 3.6cqw; border-radius: 1.6cqw; mix-blend-mode: color-dodge; opacity: .5;
-  background: linear-gradient(115deg, rgba(255,255,255,0) 18%, rgba(255,236,170,.75) 30%, rgba(170,246,230,.55) 40%, rgba(255,160,190,.4) 50%, rgba(255,236,170,.75) 60%, rgba(255,255,255,0) 74%);
+  /* Gold: brillo metálico cálido. El irisado (tornasol) queda solo para data-parallel="holo", más abajo */
+  background: linear-gradient(115deg, rgba(255,255,255,0) 22%, rgba(255,236,170,.7) 36%, rgba(255,250,228,.85) 46%, rgba(216,194,126,.6) 56%, rgba(255,255,255,0) 70%);
   background-size: 250% 250%;
   background-position: var(--mx, 40%) var(--my, 40%);
   animation: tc-shimmer 6s ease-in-out infinite alternate;
@@ -145,7 +161,7 @@ psl-card[data-parallel="gold"]:hover .tc__front::after,
 psl-card[data-parallel="holo"]:hover .tc__front::after { animation: none; }
 @keyframes tc-shimmer { from { background-position: 10% 20%; } to { background-position: 90% 80%; } }
 
-/* Brillo que sigue al puntero */
+/* Brillo que sigue al puntero (todas: es luz blanca, no tornasol) */
 .tc__front::after {
   content: ""; position: absolute; inset: 0; z-index: 6; pointer-events: none;
   mix-blend-mode: overlay; opacity: .35;
@@ -178,7 +194,11 @@ psl-card[data-parallel="holo"] .tc__front::after {
 .tc__table tr:nth-child(even) td { background: rgba(12,12,10,.06); }
 .tc__table tr.is-hl td { font-weight: 700; background: rgba(170,246,230,.5); }
 .tc__fact { margin-top: auto; padding: 2.4cqw 3cqw; border-radius: 1.4cqw; background: #0C0C0A; color: #F3F0EA; font: 400 2.9cqw/1.3 var(--font-body); }
+.tc__table th .tc__new, .tc__fact > span .tc__new { position: static; display: inline-block; width: auto; height: auto; margin-left: 1.2cqw; padding: .5cqw 1cqw; border: 0; font-size: 1.7cqw; vertical-align: .1em; }
 .tc__fact > span { display: block; margin-bottom: .8cqw; font: 800 2cqw/1.2 var(--font-label); letter-spacing: .14em; text-transform: uppercase; color: var(--tc-hl); }
+/* Dorso sin tabla (Collector, Founder): el escudo como marca de agua llena el medio */
+.tc__bk-mark { flex: 1; display: grid; place-items: center; min-height: 0; }
+.tc__bk-mark img { width: 42%; max-height: 100%; object-fit: contain; opacity: .09; filter: grayscale(1); }
 .tc__bk-foot { font: 400 1.9cqw/1.2 var(--font-body); letter-spacing: .02em; color: #7a786f; }
 .tc__lkb { display: grid; gap: 1.3cqw; padding: 1cqw 0; }
 .tc__lkb i { display: block; height: 2.4cqw; border-radius: .8cqw; background: repeating-linear-gradient(90deg, rgba(12,12,10,.16) 0 2px, rgba(12,12,10,.08) 2px 4px); }
@@ -192,7 +212,53 @@ psl-card[data-parallel="holo"] .tc__front::after {
   100% { box-shadow: 0 0 0 3cqw rgba(170,246,230,0); filter: none; }
 }
 
+/* ---------- Carta chica ----------
+   Mobile la usa a 200-240 px (hero, Collector recién reclamada) y a 92-150 px (mientras se contesta, junto a la
+   foto del coach). Ahí la letra en cqw baja de 6 px: se saca lo accesorio y lo que queda sube de cuerpo. */
+@container (max-width: 280px) {
+  .tc__vert, .tc__code, .tc__sub, .tc__shield i, .tc__flag-code, .tc__stamp-w, .tc__bk-foot { display: none; }
+  .tc__shield { height: 12cqw; padding-top: 2.4cqw; }
+  .tc__shield b { font-size: 6.2cqw; }
+  .tc__brand { font-size: 5.2cqw; }
+  .tc__edition { padding: 1.2cqw 2.4cqw; font-size: 3cqw; }
+  .tc__flag { gap: 0; padding: 1.4cqw; }
+  .tc__flag svg { width: 4.4cqw; height: 4.4cqw; }
+  .tc__flag-img { width: 7cqw; height: 4.8cqw; }
+  .tc__stamps { gap: 1.6cqw; }
+  .tc__stamp { gap: 0; padding: 1.5cqw; border-radius: 1.2cqw; }
+  .tc__stamp svg { width: 5.6cqw; height: 5.6cqw; }
+  .tc__new { position: absolute; top: -1.4cqw; right: -1.4cqw; width: 3cqw; height: 3cqw; margin: 0; padding: 0; font-size: 0; border: .5cqw solid #0C0C0A; }
+  .tc__first { font-size: 3cqw; letter-spacing: .08em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tc__banner { align-items: center; padding-bottom: 0; padding-top: 3.6cqw; }
+  .tc__last { margin-top: 1cqw; }
+
+  /* Dorso: menos aire y letra de 7 px como mínimo a 200 px */
+  .tc__bk { gap: 2.2cqw; padding: 3.6cqw 3.8cqw; }
+  .tc__bk-head { gap: 2cqw; padding-bottom: 2cqw; }
+  .tc__bk-code { padding: 1.4cqw; font-size: 3cqw; }
+  .tc__bk-name { font-size: 8.6cqw; }
+  .tc__bk-sub { font-size: 2.9cqw; letter-spacing: .06em; }
+  .tc__bk-bio { gap: 1.6cqw 3cqw; }
+  .tc__bk-bio span, .tc__bk-bio em { font-size: 2.9cqw; letter-spacing: .06em; }
+  .tc__bk-bio b { font-size: 3.7cqw; }
+  .tc__table { font-size: 3.5cqw; line-height: 1.15; }
+  .tc__table th { padding: .8cqw 1.2cqw; font-size: 2.8cqw; letter-spacing: .06em; }
+  .tc__table td { padding: .7cqw 1.2cqw; }
+  .tc__fact { padding: 2.4cqw 2.8cqw; font-size: 3.6cqw; line-height: 1.25; }
+  .tc__fact > span { font-size: 2.9cqw; letter-spacing: .08em; }
+  .tc__lkb i { height: 3cqw; }
+  .tc__lkb small { font-size: 2.9cqw; letter-spacing: .06em; }
+  .tc__table th .tc__new, .tc__fact > span .tc__new { font-size: 2.6cqw; }
+}
+/* Miniatura (92-150 px): queda la figura, el escudo de edición y el apellido */
+@container (max-width: 150px) {
+  .tc__tr, .tc__stamps, .tc__first, .tc__frame::after { display: none; }
+  .tc__flag.is-locked { display: none; }
+  .tc__last { font-size: clamp(8cqw, calc(150cqw / var(--tc-len, 10)), 12cqw); min-height: 11cqw; }
+  .tc__bar { height: 8cqw; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tc__tilt, .tc__inner, .tc__fig.is-photo, .tc__fig.is-silhouette { transition: none !important; }
-  psl-card.is-revealing .tc__inner, .tc-flash, .tc__front::after, .tc__bolt { animation: none !important; }
+  psl-card.is-revealing .tc__inner, .tc-flash, .tc__front::after, .tc__bolt, .tc__flag.is-new, .tc__stamp.is-new { animation: none !important; }
 }

@@ -44,6 +44,8 @@ const CCG_KEY = 'pslsc-charter-001';
 const CCG_FULL_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 const CCG_EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const CCG_CREST = '/assets/brand/crest-aqua.webp';
+// Tribuna de Collector/Founder. PENDIENTE DE APROBACIÓN: es un render del micrositio del Groundbreaking, no una
+// foto del club. Va recortada al centro (640x800) y en grises, porque la carta siempre la pasa a duotono.
 const CCG_COLLECTOR_PHOTO = '/assets/cards/terrace.webp';
 const CCG_ICONS = {
   star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.8-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.8z"/></svg>',
@@ -123,10 +125,10 @@ function ccgCollectorCard(S, fan) {
     backgroundPhoto: fan.cutout ? null : fan.photo,
     figure: fan.cutout ? { src: fan.cutout, kind: 'fan', alt: '' } : (fan.photo ? null : { src: CCG_CREST, kind: 'crest', alt: '' }),
     badge: f ? ['F', `#${no}`] : null, edition: f ? 'Gold' : '',
-    first: f ? `Founding Member #${no}` : 'Inaugural Collector', last: fan.name || 'Your name', sub: 'Port St. Lucie SC | 2027',
+    first: f ? `Founding Member #${no}` : 'Inaugural Collector', last: fan.name || null, namePlaceholder: 'Your name', sub: 'Port St. Lucie SC | 2027',
     stamps: [{ word: 'Collector', icon: CCG_ICONS.star }, { word: 'Week One', icon: CCG_ICONS.sun }, f ? { word: 'Founder', icon: CCG_ICONS.anchor } : { word: 'Card 001', icon: CCG_ICONS.bolt }],
     back: {
-      name: f ? 'Founder' : 'Collector', bio,
+      name: fan.name || (f ? 'Founder' : 'Collector'), bio,
       fact: { text: f ? 'A special edition for the Founding Members of Port St. Lucie SC.' : 'Inaugural Collector cards are for the fans who played the first card of the Charter Collection.' },
     },
   };
