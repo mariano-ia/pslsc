@@ -16,6 +16,8 @@
 
   <link rel="stylesheet" href="../native/team/t03-roster.css?v=1" />
 
+  <link rel="stylesheet" href="../native/_patterns/club-nav.css?v=1" />
+
   <style>
     html, body { margin: 0; padding: 0; background: var(--color-ink); }
     /* Solo preview: los bloques se inyectan después de cargar; sin esto, al aparecer la barra de scroll
@@ -48,6 +50,9 @@
       const html = await fetch(path + bust).then((r) => r.text());
       await fontsReady;   // el bloque se baja en paralelo con las fuentes y se inserta cuando están
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html
+        .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${cc}`)
+        .replaceAll('__URL_FRONT_OFFICE__', 'front-office.html')
+        .replaceAll('__URL_ROSTER__', 'roster.html')
         .replaceAll('__ROSTER_API__', new URLSearchParams(location.search).get('roster') === 'sample' ? '/.local/coleccion/roster-sample.json' : '/.local/coleccion/roster-empty.json')
         .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${cc}`);
     }));

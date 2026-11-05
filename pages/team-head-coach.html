@@ -16,6 +16,7 @@
 
   <link rel="stylesheet" href="../custom/card/card.css?v=1" />
   <link rel="stylesheet" href="../native/team/t01-coach.css?v=1" />
+  <link rel="stylesheet" href="../native/_patterns/club-nav.css?v=1" />
 
   <style>
     html, body { margin: 0; padding: 0; background: var(--color-ink); }
@@ -50,8 +51,11 @@
       const html = await fetch(path + bust).then((r) => r.text());
       await fontsReady;   // el bloque se baja en paralelo con las fuentes y se inserta cuando están
       document.querySelector(`[data-block="${slot}"]`).innerHTML = html
+        .replaceAll('__URL_FRONT_OFFICE__', 'front-office.html')
+        .replaceAll('__URL_ROSTER__', 'roster.html')
         .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${cc}.json`)
-        .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${cc}`);
+        .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${cc}`)
+        .replaceAll('home.html#hero', `home.html?cc=${cc}&demo#hero`);
     }));
     const [{ initCoach }, { initNewsletter }, { initMotion }] = await Promise.all([
       import('../native/team/t01-coach.js?v=1'),

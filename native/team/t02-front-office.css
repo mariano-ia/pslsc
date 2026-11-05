@@ -1,14 +1,8 @@
 /* Bloque t02 · Front Office. Mismas tarjetas que ST01 */
 
 /* ── Header (oscuro) ── */
-.staff--head .psl-container { padding-block: clamp(64px, 9vw, 120px) clamp(28px, 4vw, 44px); }
-.staff__title { margin-top: 12px; max-width: 14ch; }
-.staff__intro {
-  margin: 20px 0 0;
-  max-width: 48ch;
-  font: 400 var(--fs-body-lg)/1.6 var(--font-body);
-  color: var(--color-text-muted);
-}
+/* Misma cabecera que Soccer Staff y Roster (native/_patterns/club-nav.css) */
+.staff--head .psl-container { padding-block: clamp(104px, 13vh, 148px) clamp(40px, 5vw, 64px); }
 
 /* ── Cuerpo (claro) ── */
 .staff--body { border-top: 1px solid var(--color-line); }

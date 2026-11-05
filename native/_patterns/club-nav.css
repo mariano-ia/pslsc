@@ -1,0 +1,46 @@
+/* Club · navegación común de Front Office, Soccer Staff, Roster y la ficha del Head Coach.
+   Va arriba de la cabecera de cada página (dentro de cada bloque, con aria-current en la que corresponde).
+   La compila build-blocks.py en todo bloque que use .clubnav. */
+
+.clubnav {
+  display: flex;
+  gap: clamp(18px, 3vw, 36px);
+  margin: 0 0 clamp(32px, 5vw, 56px);
+  border-bottom: 1px solid var(--color-line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.clubnav::-webkit-scrollbar { display: none; }
+.clubnav a {
+  position: relative;
+  flex: none;
+  padding: 0 0 14px;
+  font: 500 11px/1.3 var(--font-label);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color .2s;
+}
+.clubnav a:hover { color: var(--color-text); }
+.clubnav a[aria-current] { color: var(--color-text); }
+.clubnav a[aria-current]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--color-aqua);
+}
+.clubnav a:focus-visible { outline: 2px solid var(--color-aqua); outline-offset: 4px; }
+.clubnav [hidden] { display: none; }
+
+/* Cabecera común (la misma que ya usaban Soccer Staff y Roster) */
+.clubhead__kicker { margin: 0; font: 800 var(--fs-kicker)/1.4 var(--font-label); letter-spacing: .18em; text-transform: uppercase; color: var(--color-aqua); }
+.clubhead__title { margin: 12px 0 0; font: 900 clamp(64px, 9vw, 136px)/.85 var(--font-display); letter-spacing: var(--ls-display); text-transform: uppercase; }
+.clubhead__lead { margin: 18px 0 0; max-width: 54ch; font: 400 var(--fs-body-lg)/1.5 var(--font-body); color: var(--color-text-muted); }
+
+@media (max-width: 860px) {
+  .clubnav { margin-right: calc(var(--gutter) * -1); padding-right: var(--gutter); }
+}

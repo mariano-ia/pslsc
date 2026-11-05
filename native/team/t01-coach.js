@@ -10,13 +10,34 @@ function tcoProfileHTML(p, teamUrl) {
       ${p.quote ? `<p class="tco__quote">&ldquo;${tcoEsc(p.quote)}&rdquo;${p.quoteDraft ? '<span class="tco__draft">Draft quote</span>' : ''}</p>` : ''}
       <div class="tco__row"><a class="psl-btn cta-primary" href="/joinus/"><span>Get Priority Access</span> <span aria-hidden="true">→</span></a><a class="psl-btn cta-secondary" href="${tcoEsc(teamUrl)}">Meet the staff</a></div>
     </div>
-    <div><div class="tco__label">His card</div>
-      <psl-card class="tco__card" flippable data-tco-card></psl-card>
+    <div><section class="tco__cc" aria-labelledby="tco-cc-title">
+        <h2 class="tco__label" id="tco-cc-title">Card No. 001 · Charter Collection</h2>
+        <psl-card class="tco__card" flippable data-tco-card></psl-card>
+        <div class="tco__own" data-tco-own></div>
+      </section>
       <div class="tco__label tco__card-label">Career path</div>
       <ul class="tco__timeline">${p.career.map((c) => `<li class="${c[2] ? 'is-now' : ''}"><small>${tcoEsc(c[0])}</small>${tcoEsc(c[1])}</li>`).join('')}</ul>
       <div class="tco__label tco__card-label">Stamps</div>
       <div class="tco__stamps">${p.stamps.map((s) => `<div class="tco__stamp"><span class="tco__stamp-icon">${s.icon}</span><div><b>${tcoEsc(s.word)}</b><p>${tcoEsc(s.text)}</p></div></div>`).join('')}</div>
     </div></div>`;
+}
+
+// Estado de la carta en la colección de la persona. Hoy vive en este dispositivo (la misma clave que el hero);
+// con la etapa 6 lo responde el servidor.
+function tcoOwnHTML(el, state) {
+  let S = {};
+  try { S = JSON.parse(localStorage.getItem('pslsc-charter-001') || '{}'); } catch (err) { /* sin storage */ }
+  const collection = el.dataset.ccCollection;
+  const hasCollection = collection && !collection.startsWith('__');
+  if (S.email) {
+    return `<p class="tco__chip is-in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>In your collection</p>
+      ${hasCollection ? `<a class="tco__link" href="${tcoEsc(collection)}">See my collection <span aria-hidden="true">→</span></a>` : ''}`;
+  }
+  if (state.claimOpen === false) {   // terminó la campaña: el reclamo de la Collector está cerrado
+    return '<p class="tco__chip">Not in your collection</p>';
+  }
+  return `<p class="tco__own-lead">Claim your free Collector Card and Card No. 001 joins your collection.</p>
+    <a class="psl-btn cta-secondary" href="${tcoEsc(el.dataset.ccHome)}">Claim your Collector Card</a>`;
 }
 
 async function initCoach(root = document) {
@@ -32,6 +53,7 @@ async function initCoach(root = document) {
     await customElements.whenDefined('psl-card');
     el.querySelector('[data-tco-profile]').innerHTML = tcoProfileHTML(state.profile, el.dataset.ccTeam);
     el.querySelector('[data-tco-card]').data = state.card;
+    el.querySelector('[data-tco-own]').innerHTML = tcoOwnHTML(el, state);
   } catch (err) {
     console.error('[coach] no se pudo leer la ficha', err);
   }

@@ -92,7 +92,22 @@ no hay que tocar bloques entre lunes y sábado):
 
 `01c-coleccion` usa el mismo `__COLECCION_API__` (tiene que seguir respondiendo con la carta revelada después de la
 campaña), `__URL_COACH__` y `__URL_COLLECTION__` (Mi colección: mientras esa página no exista, el botón no aparece).
-Si el estado no responde, el bloque queda oculto. El equipo se divide como en la USL League One, en tres páginas del menú "Club": **Front Office** (`t02-front-office`, reemplaza a `/staff/`, se puede publicar ya), **Soccer Staff** (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`), desde el viernes del reveal, y **Roster** (`t03-roster`, con `__ROSTER_API__`), desde el primer jugador anunciado.
+Si el estado no responde, el bloque queda oculto.
+
+**Club (menú de USL y las tres páginas):**
+
+- En el menú de USL, el ítem "Staff" pasa a ser **"Club"**, con tres subítems: Front Office (`/front-office/`),
+  Soccer Staff (`/soccer-staff/`) y Roster (`/roster/`). Roster no se muestra hasta el primer jugador anunciado.
+- `/staff/` redirige (301) a `/front-office/`. **Antes del lunes de arranque:** Front Office reemplaza a la página
+  `/staff/` actual, que hoy muestra al futuro Head Coach como Academy Director. `st01-staff` se retira. Coordinar con
+  marketing.
+- Cada página del Club y la ficha llevan arriba la misma navegación ("Front Office · Soccer Staff · Roster"). Reemplazos:
+  `__URL_FRONT_OFFICE__`, `__URL_TEAM__` (Soccer Staff) y `__URL_ROSTER__`. El link a Roster está con `hidden` en
+  t00, t01 y t02: el día del primer jugador se borra ese `hidden` en los tres bloques y se publica `t03-roster`.
+- La ficha (`t01-coach`) tiene el módulo "Card No. 001 · Charter Collection": muestra "In your collection" si la persona
+  reclamó su Collector en ese dispositivo, o "Claim your Collector Card" con link a la home. Cuando termina la campaña,
+  el estado tiene que mandar `claimOpen: false` para que deje de ofrecer el reclamo. `__URL_COLLECTION__` (Mi colección)
+  agrega el link "See my collection" cuando exista. El equipo se divide como en la USL League One, en tres páginas del menú "Club": **Front Office** (`t02-front-office`, reemplaza a `/staff/`, se puede publicar ya), **Soccer Staff** (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`), desde el viernes del reveal, y **Roster** (`t03-roster`, con `__ROSTER_API__`), desde el primer jugador anunciado.
 Reemplazos: `__COLECCION_API__` (URL del estado por fecha), `__URL_COACH__` (permalink de la ficha), `__URL_TEAM__` (equipo, hoy `/staff/`) y, en el hero,
 `__AC_ACCOUNT__`, `__AC_COLLECTION_FORM__`, `__AC_FIELD_CONSENT__` y `__AC_FIELD_GUESS__` (`field[NN]` del form de
 ActiveCampaign, que además es el que pone la etiqueta). Sin esos datos el form valida, pero no envía. Qué crear en

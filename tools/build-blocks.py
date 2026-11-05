@@ -267,6 +267,7 @@ def build_block(page, name):
     live = re.sub(r"<!--.*?-->", " ", html, flags=re.S)
     comps = sorted(set(re.findall(r"<(psl-[a-z-]+)", live)))
     uses_pcard = bool(re.search(r"\bpcard\b", live))
+    uses_clubnav = bool(re.search(r"\bclubnav\b", live))   # navegación común del Club (t00–t03)
     uses_ptl   = bool(re.search(r"\bptl\b", live)) and name != "03-project"
     needs_motion = bool(re.search(r"data-(reveal|parallax|tilt|spotlight|magnetic|countdown)", live))
 
@@ -274,6 +275,7 @@ def build_block(page, name):
     # Algunos bloques no tienen CSS propio (ej. a02-pathway reusa .ptl de 03-project).
     css_files = ["tokens/tokens.css", "native/_patterns/motion.css"]
     if uses_pcard: css_files.append("native/_patterns/cards.css")
+    if uses_clubnav: css_files.append("native/_patterns/club-nav.css")
     if uses_ptl:   css_files.append("native/home/03-project.css")
     own_css = f"native/{src_page}/{name}.css"
     if os.path.exists(os.path.join(REPO, own_css)): css_files.append(own_css)
