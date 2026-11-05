@@ -154,6 +154,13 @@
 .ccg__mini { display: block; width: 200px; }
 .ccg__count { font: 900 44px/1 var(--font-display); color: var(--color-aqua); font-variant-numeric: tabular-nums; }
 
+/* Viernes: resultado de la apuesta y el nombre que entra después del giro */
+.ccg__verdict { font: 400 15px/1.45 var(--font-body); color: var(--color-text-muted); }
+.ccg__verdict b { display: block; font: 900 26px/1 var(--font-display); letter-spacing: .02em; text-transform: uppercase; color: var(--color-text); }
+.ccg__verdict.is-hit b { color: var(--color-aqua); }
+.hcc__title.is-named { animation: hcc-name-in .9s var(--ease-out-soft) both; }
+@keyframes hcc-name-in { from { opacity: 0; transform: translateY(18px); letter-spacing: .04em; } to { opacity: 1; transform: none; } }
+
 /* Accesibilidad: anuncios del juego y foco visible con teclado */
 .ccg__sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .ccg__opt:focus-visible, .ccg__ghost:focus-visible, .ccg__link:focus-visible, .hcc psl-card:focus-visible { outline: 2px solid var(--color-aqua); outline-offset: 3px; }
@@ -268,6 +275,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hcc__kicker, .hcc__title, .hcc__sub,   .hcc__divider { animation: none !important; }
+  .hcc__kicker, .hcc__title, .hcc__sub, .hcc__divider, .hcc__title.is-named { animation: none !important; }
   .hcc__card { transition: none; }
 }

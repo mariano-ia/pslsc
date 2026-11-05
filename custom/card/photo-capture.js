@@ -6,9 +6,10 @@
  * El video se ve adentro de la carta: el.stage = <psl-card>.
  * Evento 'fanchange' con detail { photo, cutout, name } cuando cambia la foto o el nombre.
  *
- * RECORTE: la persona se separa del fondo en el navegador (MediaPipe, Apache 2.0). De la red se baja
- * solo el modelo; la foto no sale. Si el recorte falla o no encuentra a nadie, queda la foto entera.
- * ANTES DE PUBLICAR: alojar el modelo y el wasm en ASSET_BASE, hoy vienen de jsDelivr y de Google.
+ * RECORTE: la persona se separa del fondo en el navegador (MediaPipe, Apache 2.0). La foto no sale.
+ * El modelo y el wasm los alojamos nosotros en assets/vendor/mediapipe/ (los baja tools/fetch-mediapipe.sh,
+ * no van al repo): no hay pedidos a jsDelivr ni a Google. Si faltan, o el recorte falla o no encuentra a
+ * nadie, queda la foto entera.
  *
  * PRIVACIDAD: todo es client-side y vive en memoria. La foto y el nombre nunca salen del dispositivo
  * ni van a localStorage: al recargar se pierden, como dice el aviso. La cámara se apaga al capturar,
@@ -36,8 +37,9 @@ const PCAP_PARAS = [
 const PCAP_W = 1000;
 const PCAP_H = 1428;
 
-const PCAP_VISION = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
-const PCAP_MODEL = 'https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite';
+// @mediapipe/tasks-vision 0.10.14 (la versión la fija tools/fetch-mediapipe.sh)
+const PCAP_VISION = '/assets/vendor/mediapipe';
+const PCAP_MODEL = '/assets/vendor/mediapipe/selfie_segmenter.tflite';
 // Lienzo del recorte: misma proporción que .tc__fig.is-fan
 const PCAP_CUT_W = 900;
 const PCAP_CUT_H = 1000;

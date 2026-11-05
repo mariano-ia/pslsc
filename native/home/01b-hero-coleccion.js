@@ -147,8 +147,13 @@ function ccgCollectorCard(S, fan) {
   };
 }
 
+// guessMatch (del estado del viernes): texto o lista de textos; acierta si la apuesta contiene alguno.
+// Sin mayúsculas ni tildes: "Pérez", "perez" y "PEREZ" valen lo mismo.
+const ccgFold = (t) => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 function ccgGuessHit(S, state) {
-  return Boolean(S.guess && state.guessMatch && S.guess.toLowerCase().includes(state.guessMatch));
+  if (!S.guess || !state.guessMatch) return false;
+  const guess = ccgFold(S.guess);
+  return [].concat(state.guessMatch).some((m) => ccgFold(m) && guess.includes(ccgFold(m)));
 }
 
 function ccgNextStep(S, state, step) {
@@ -220,7 +225,9 @@ function ccgPanelHTML(st, S, state) {
     case 'claim':
       return `<span class="ccg__kicker">Free · takes 10 seconds</span><h2 tabindex="-1">Claim your Collector Card</h2>
         <p class="ccg__panel-lead">Leave your email and get your own card in the Charter Collection.</p>
-        <ul class="ccg__gets"><li>Your Collector Card, right now</li><li>An email when the next clue unlocks</li><li>A reminder on reveal day</li></ul>
+        <ul class="ccg__gets">${state.revealed
+          ? '<li>Your Collector Card, right now</li><li>Your name and photo on it, only on your device</li><li>First to know when the next card drops</li>'
+          : '<li>Your Collector Card, right now</li><li>An email when the next clue unlocks</li><li>A reminder on reveal day</li>'}</ul>
         <form class="ccg__form" data-form="claim" novalidate>${ccgEmailFields('ccg-claim')}
           <p class="ccg__err" data-err role="alert" hidden></p>
           <div class="ccg__row"><button class="psl-btn cta-primary" type="submit">Claim my card</button><button type="button" class="ccg__link" data-act="skip">Keep playing without saving</button></div>
@@ -230,7 +237,7 @@ function ccgPanelHTML(st, S, state) {
         <div class="ccg__split"><psl-card class="ccg__mini" flippable data-ccg-collector></psl-card>
           <div style="display:grid;gap:14px;min-width:0"><p class="ccg__panel-lead">${S.founder ? 'Your Founding Member number makes this card one of a kind.' : 'This one is yours.'} Add your name and a photo, then share it.</p>
             <div data-ccg-capture-slot></div>
-            <div class="ccg__row"><button type="button" class="psl-btn cta-primary" data-act="continue">Back to the game</button><button type="button" class="ccg__ghost" data-act="share">Share</button></div></div></div>`;
+            <div class="ccg__row"><button type="button" class="psl-btn cta-primary" data-act="continue">${state.revealed ? 'Done' : 'Back to the game'}</button><button type="button" class="ccg__ghost" data-act="share">Share</button></div></div></div>`;
     case 'guess':
       return `<span class="ccg__kicker">Thursday · Last step before the reveal</span><h2 tabindex="-1">Lock in your guess</h2>
         <p class="ccg__panel-lead">You have all four clues. Who is card No. 001? We&rsquo;ll tell you ${CCG_REVEAL} if you got it right.</p>
@@ -252,16 +259,20 @@ function ccgPanelHTML(st, S, state) {
     }
     case 'reveal':
       return `<span class="ccg__kicker">Friday · ${CCG_TIME}</span><h2 tabindex="-1">Card No. 001 is ready.</h2>
-        <p class="ccg__panel-lead">${clues} of 4 clues unlocked${S.guess ? ` · your guess: <b>${ccgEsc(S.guess)}</b>` : ''}.</p>
+        <p class="ccg__panel-lead">${clues
+          ? `${clues} of 4 clues unlocked${S.guess ? ` · your guess: <b>${ccgEsc(S.guess)}</b>` : ''}.`
+          : 'Missed the clues this week? No problem: the card is ready for everyone.'}</p>
         <div class="ccg__row"><button type="button" class="psl-btn cta-primary" data-act="reveal">Reveal card No. 001</button></div>`;
     case 'revealed':
     case 'closed': {
       const hit = ccgGuessHit(S, state);
-      const verdict = S.guess && !state.closed ? (hit ? '<b>You called it.</b> ' : 'Not this time. ') : '';
+      const verdict = S.guess && !state.closed
+        ? `<p class="ccg__verdict ${hit ? 'is-hit' : ''}"><b>${hit ? 'You called it.' : 'Not this time.'}</b> Your guess: ${ccgEsc(S.guess)}</p>`
+        : '';
       const mine = S.email
         ? '<button type="button" class="ccg__ghost" data-act="mycard">My Collector Card</button>'
         : (state.closed ? '' : '<button type="button" class="ccg__ghost" data-act="claim">Claim my card</button>');
-      return `<p class="ccg__panel-lead">${verdict}The first Head Coach in Port St. Lucie SC history.</p>
+      return `${verdict}<p class="ccg__panel-lead">The first Head Coach in Port St. Lucie SC history.</p>
         <div class="ccg__row"><a class="psl-btn cta-primary" href="${ccgEsc(state.coachUrl)}"><span>Meet the coach</span> <span aria-hidden="true">→</span></a><a class="psl-btn cta-secondary" href="${ccgEsc(state.teamUrl)}">Meet the staff</a>${mine}</div>`;
     }
     default:
@@ -402,7 +413,8 @@ async function ccgDrawStory(canvas, S, state, fan) {
   ctx.fillText(f ? `FOUNDING MEMBER #${no}` : 'INAUGURAL COLLECTOR', tx, by + 16.4 * u);
   ctx.fillStyle = '#fff';
   ctx.font = `900 ${10 * u}px Druk`;
-  ctx.fillText((fan.name || 'Your name').toUpperCase(), tx, by + 25.4 * u, bw - 8 * u);
+  // Sin nombre no hay placeholder en la imagen: va lo que es la carta (como el dorso).
+  ctx.fillText((fan.name || (f ? 'Founder' : 'Collector')).toUpperCase(), tx, by + 25.4 * u, bw - 8 * u);
   ctx.fillStyle = 'rgba(255,255,255,.66)';
   ctx.font = `500 ${2.2 * u}px "Druk Text Wide"`;
   ctx.fillText('PORT ST. LUCIE SC | 2027', tx, by + 28.8 * u);
@@ -498,7 +510,7 @@ async function initHeroColeccion(root = document) {
   function paint(scrollTarget, focus) {
     paintCard();
     const shown = state.revealed && S.revealed;
-    const coach = shown && !spinning && Boolean(state.presentation);
+    const coach = shown && Boolean(state.presentation);
     hero.classList.toggle('hcc--coach', coach);
     const copy = ccgHeroCopy(S, state);
     $('[data-cc-kicker]').textContent = shown ? 'Our first Head Coach' : copy.kicker;
@@ -544,14 +556,25 @@ async function initHeroColeccion(root = document) {
         const a = b.dataset.act;
         if (a === 'share') { openShare(); return; }
         if (a === 'reveal') {
+          if (spinning) return;
           S.revealed = true;
           step = null;
-          ccgSave(S);
-          spinning = !reduce;
-          paint();
+          ccgSave(S);   // guardado ya: si recarga en medio del giro, vuelve revelada
+          const done = () => {
+            spinning = false;
+            paint(null, true);
+            $('[data-cc-title]').classList.add('is-named');
+            say(`Card No. 001 revealed: ${state.card.first} ${state.card.last}.`);
+          };
+          if (reduce) { paintCard(); done(); return; }
+          // 1) la carta gira grande y la silueta se apaga; el título sigue siendo la pregunta
+          spinning = true;
+          b.disabled = true;
+          b.textContent = 'Revealing…';
+          paintCard();
           cardEl.reveal();
-          if (spinning) setTimeout(() => { spinning = false; paint(); }, 1700);
-          say('Card No. 001 revealed.');
+          // 2) termina el giro (1,3 s), un respiro, y aparecen el nombre y la foto de presentación
+          setTimeout(done, 1700);
           return;
         }
         if (a === 'continue') step = step?.t === 'result' && !S.email && !S.skipClaim ? { t: 'claim' } : null;

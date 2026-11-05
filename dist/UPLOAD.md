@@ -83,6 +83,13 @@ Reemplazos: `__COLECCION_API__` (URL del estado por fecha), `__URL_COACH__` (per
 ActiveCampaign, que además es el que pone la etiqueta). Sin esos datos el form valida, pero no envía. Qué crear en
 ActiveCampaign (form, campos, etiqueta y mails): `docs/charter-collection-activecampaign.md`.
 
+**Recorte de la foto de la Collector (MediaPipe):** correr `tools/fetch-mediapipe.sh`. Baja unos 19 MB a
+`assets/vendor/mediapipe/`, que no van al repo, y esa carpeta se sube junto con el resto de `assets/` a `ASSET_BASE`.
+WordPress no deja subir `.mjs`, `.wasm` ni `.tflite` por defecto, así que hay que habilitar esos tipos o subirlos por
+FTP. El servidor tiene que mandar `application/wasm` para el `.wasm` y `text/javascript` para el `.mjs`. Si
+`ASSET_BASE` es otro dominio, además tiene que mandar `Access-Control-Allow-Origin` (también lo necesita la imagen
+para compartir). Si falta algo de esto, el recorte no corre y la carta usa la foto entera: no se rompe.
+
 ---
 
 ## ⚠️ La trampa de WordPress (por qué el JS va como lo va)
