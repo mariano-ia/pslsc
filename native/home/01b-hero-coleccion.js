@@ -16,10 +16,11 @@
  * jueves. Sin config de ActiveCampaign valida pero NO envía ni finge éxito; ?demo simula el envío.
  * La etiqueta de la colección la pone el form en ActiveCampaign.
  *
- * Collector Card: sin número. El número es solo de la edición Founding Member, y es su número de
- * socio fundador. La foto y el nombre los carga <psl-photo-capture> y quedan solo en memoria.
+ * Collector Card y progreso en el dispositivo: custom/card/charter.js (compartido con Mi colección).
  * Sin fuente (o si falla) queda la carta genérica de abajo y un aviso: el hero nunca se rompe.
  */
+import { CHARTER_CREST, CHARTER_COLLECTOR_PHOTO, charterLoad, charterSave, charterPad, charterCollectorCard } from '../../custom/card/charter.js';
+
 const FALLBACK_CARD = {
   code: 'CC-001',
   set: 'Charter Season 2027',
@@ -40,34 +41,12 @@ const FALLBACK_CARD = {
     fact: { locked: true, unlock: 'Unlocks Thursday' },
   },
 };
-const CCG_KEY = 'pslsc-charter-001';
 const CCG_FULL_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 // Hora de cada pista y del reveal (Etapa 0: la confirma el club). Se usa en todo el copy del hero y del panel.
 const CCG_TIME = '10:00 AM ET';
 const CCG_REVEAL = `Friday at ${CCG_TIME}`;
 const CCG_EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-const CCG_CREST = '/assets/brand/crest-aqua.webp';
-// Tribuna de Collector/Founder. PENDIENTE DE APROBACIÓN: es un render del micrositio del Groundbreaking, no una
-// foto del club. Va recortada al centro (640x800) y en grises, porque la carta siempre la pasa a duotono.
-const CCG_COLLECTOR_PHOTO = '/assets/cards/terrace.webp';
-const CCG_ICONS = {
-  star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.8-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.8z"/></svg>',
-  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M5 19l1.4-1.4M17.6 6.4L19 5"/></svg>',
-  anchor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 7v14M8 11h8M5 14c0 4 3 7 7 7s7-3 7-7"/></svg>',
-  bolt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>',
-};
 const ccgEsc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
-
-function ccgLoad() {
-  try {
-    return { answers: {}, email: null, skipClaim: false, guess: null, revealed: false, ...JSON.parse(localStorage.getItem(CCG_KEY) || '{}') };
-  } catch (err) {
-    return { answers: {}, email: null, skipClaim: false, guess: null, revealed: false };
-  }
-}
-function ccgSave(S) {
-  try { localStorage.setItem(CCG_KEY, JSON.stringify(S)); } catch (err) { /* sin storage se juega igual */ }
-}
 
 /* ActiveCampaign: POST directo a proc.php, como el newsletter (ver acSubmitDirect en ac-forms.js). */
 function ccgAcConfig(hero) {
@@ -122,29 +101,6 @@ function ccgComposeCard(state, S, flashZone) {
   });
   if (flashZone) card.flash = flashZone;
   return card;
-}
-
-const ccgPad = (n) => String(n).padStart(4, '0');
-
-function ccgCollectorCard(S, fan) {
-  const f = S.founder;
-  const no = f && ccgPad(f.no);
-  const bio = [['Joined', 'Week One'], ['Status', f ? 'Founding Member' : 'Inaugural Collector'], ['First card', 'No. 001']];
-  if (f) bio.unshift(['Founder no.', no]);
-  return {
-    code: f ? `FM-${no}` : 'COLLECTOR', set: f ? 'Founding Member' : 'Inaugural Collector',
-    parallel: f ? 'gold' : 'aqua', seed: 23, frame: true,
-    background: { photo: CCG_COLLECTOR_PHOTO, tone: f ? 'gold' : 'aqua', pattern: f ? 'wallGold' : 'wall' },
-    backgroundPhoto: fan.cutout ? null : fan.photo,
-    figure: fan.cutout ? { src: fan.cutout, kind: 'fan', alt: '' } : (fan.photo ? null : { src: CCG_CREST, kind: 'crest', alt: '' }),
-    badge: f ? ['F', `#${no}`] : null, edition: f ? 'Gold' : '',
-    first: f ? `Founding Member #${no}` : 'Inaugural Collector', last: fan.name || null, namePlaceholder: 'Your name', sub: 'Port St. Lucie SC | 2027',
-    stamps: [{ word: 'Collector', icon: CCG_ICONS.star }, { word: 'Week One', icon: CCG_ICONS.sun }, f ? { word: 'Founder', icon: CCG_ICONS.anchor } : { word: 'Card 001', icon: CCG_ICONS.bolt }],
-    back: {
-      name: fan.name || (f ? 'Founder' : 'Collector'), bio,
-      fact: { text: f ? 'A special edition for the Founding Members of Port St. Lucie SC.' : 'Inaugural Collector cards are for the fans who played the first card of the Charter Collection.' },
-    },
-  };
 }
 
 // guessMatch (del estado del viernes): texto o lista de textos; acierta si la apuesta contiene alguno.
@@ -233,7 +189,7 @@ function ccgPanelHTML(st, S, state) {
           <div class="ccg__row"><button class="psl-btn cta-primary" type="submit">Claim my card</button><button type="button" class="ccg__link" data-act="skip">Keep playing without saving</button></div>
         </form>`;
     case 'collector':
-      return `<span class="ccg__kicker">${S.founder ? 'Special edition' : 'Card claimed'}</span><h2 tabindex="-1">${S.founder ? `Founding Member No. ${ccgPad(S.founder.no)}` : 'You&rsquo;re an Inaugural Collector'}</h2>
+      return `<span class="ccg__kicker">${S.founder ? 'Special edition' : 'Card claimed'}</span><h2 tabindex="-1">${S.founder ? `Founding Member No. ${charterPad(S.founder.no)}` : 'You&rsquo;re an Inaugural Collector'}</h2>
         <div class="ccg__split"><psl-card class="ccg__mini" flippable data-ccg-collector></psl-card>
           <div style="display:grid;gap:14px;min-width:0"><p class="ccg__panel-lead">${S.founder ? 'Your Founding Member number makes this card one of a kind.' : 'This one is yours.'} Add your name and a photo, then share it.</p>
             <div data-ccg-capture-slot></div>
@@ -317,12 +273,12 @@ function ccgDuotone(img, w, h, [dark, light]) {
 }
 async function ccgDrawStory(canvas, S, state, fan) {
   await Promise.all(['900 120px Druk', '800 30px "Druk Text Wide"', '500 30px "Druk Text Wide"'].map((f) => document.fonts.load(f)));
-  const crest = await ccgLoadImage(CCG_CREST);
-  const club = await ccgLoadImage(CCG_COLLECTOR_PHOTO);
+  const crest = await ccgLoadImage(CHARTER_CREST);
+  const club = await ccgLoadImage(CHARTER_COLLECTOR_PHOTO);
   const cutout = fan.cutout ? await ccgLoadImage(fan.cutout) : null;
   const photo = !cutout && fan.photo ? await ccgLoadImage(fan.photo) : null;
   const f = S.founder;
-  const no = f && ccgPad(f.no);
+  const no = f && charterPad(f.no);
   const ctx = canvas.getContext('2d');
   const W = 1080, H = 1920, AQUA = '#AAF6E6', GOLD = '#D8C27E';
 
@@ -477,7 +433,7 @@ async function initHeroColeccion(root = document) {
   const photo = $('[data-cc-photo]');
   if (state.presentation) { photo.src = state.presentation.src; photo.alt = state.presentation.alt || ''; }
 
-  const S = ccgLoad();
+  const S = charterLoad();
   // Una respuesta guardada de un día que la fuente ya no libera (ej. reloj o pruebas) no cuenta.
   Object.keys(S.answers).forEach((k) => { if (!state.days?.[k]) delete S.answers[k]; });
   if (!state.revealed) S.revealed = false;
@@ -546,7 +502,7 @@ async function initHeroColeccion(root = document) {
         S.answers[st.i] = Number(b.dataset.k);
         flashZone = state.days[st.i].zone;
         step = { t: 'result', i: st.i };
-        ccgSave(S);
+        charterSave(S);
         paint($('.ccg__card-col'), true);
         const D = state.days[st.i];
         say(`${S.answers[st.i] === D.a ? 'That’s right.' : 'Not quite.'} Clue unlocked, ${D.clueTitle}: ${D.clue}`);
@@ -563,7 +519,7 @@ async function initHeroColeccion(root = document) {
           if (spinning) return;
           S.revealed = true;
           step = null;
-          ccgSave(S);   // guardado ya: si recarga en medio del giro, vuelve revelada
+          charterSave(S);   // guardado ya: si recarga en medio del giro, vuelve revelada
           const done = () => {
             spinning = false;
             paint(null, true);
@@ -585,14 +541,14 @@ async function initHeroColeccion(root = document) {
         if (a === 'skip') { S.skipClaim = true; step = null; }
         if (a === 'claim') step = { t: 'claim' };
         if (a === 'mycard') step = { t: 'collector' };
-        ccgSave(S);
+        charterSave(S);
         paint(panel, true);
       });
     });
 
     const collector = panel.querySelector('[data-ccg-collector]');
     if (collector) {
-      collector.data = ccgCollectorCard(S, capture.fan);
+      collector.data = charterCollectorCard(S, capture.fan);
       capture.stage = collector;
       capture.hidden = false;
       panel.querySelector('[data-ccg-capture-slot]').append(capture);
@@ -629,7 +585,7 @@ async function initHeroColeccion(root = document) {
         S.email = email;
         S.founder = await ccgFounderLookup(email);
         if (isGuess) { S.guess = guess; step = null; } else { step = { t: 'collector' }; }
-        ccgSave(S);
+        charterSave(S);
         paint(panel, true);
         say(isGuess ? 'Your guess is locked.' : 'Card claimed.');
       });
@@ -666,7 +622,7 @@ async function initHeroColeccion(root = document) {
   });
   capture.addEventListener('fanchange', (e) => {
     const collector = panel.querySelector('[data-ccg-collector]');
-    if (collector) collector.data = ccgCollectorCard(S, e.detail);
+    if (collector) collector.data = charterCollectorCard(S, e.detail);
   });
   // Baja a lo que sigue del hero, sea cual sea el bloque siguiente en WordPress.
   $('[data-cc-more]').addEventListener('click', (e) => {

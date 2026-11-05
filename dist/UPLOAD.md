@@ -89,10 +89,17 @@ no hay que tocar bloques entre lunes y sábado):
 | Viernes 10:00 AM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
 | Sábado hasta el fin de campaña | Nada: el hero pasa solo a la foto del coach, sin preguntas. La Collector se sigue pudiendo reclamar |
 | Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion`, volver a pegar `01-hero` y pegar `01c-coleccion` **debajo**. Con eso se cierra el reclamo de la Collector |
+| Junto con `01c` (o antes, si se quiere) | Publicar **Mi colección** en `/collection/` (`c01-collection`) y reemplazar `__URL_COLLECTION__` en `01c` y `t01` por esa URL |
 
 `01c-coleccion` usa el mismo `__COLECCION_API__` (tiene que seguir respondiendo con la carta revelada después de la
 campaña), `__URL_COACH__` y `__URL_COLLECTION__` (Mi colección: mientras esa página no exista, el botón no aparece).
 Si el estado no responde, el bloque queda oculto.
+
+**Mi colección (`c01-collection`, `/collection/`):** las cartas de la persona, las que faltan como siluetas y el link
+para abrirla en otro dispositivo. Reemplazos: `__COLECCION_API__`, `__URL_COACH__` y `__COLLECTION_API__` (el servidor
+del link). Sin `__COLLECTION_API__` la página funciona con lo guardado en el dispositivo y no ofrece el link: se puede
+publicar así y sumar el servidor después. Contrato del servidor (endpoints, tokens, errores):
+`docs/charter-collection-server.md`. Usa el recorte de MediaPipe igual que el hero (la persona puede sumar su foto ahí).
 
 **Club (menú de USL y las tres páginas):**
 

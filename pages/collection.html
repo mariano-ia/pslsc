@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Port St. Lucie SC — My collection</title>
+
+  <link rel="stylesheet" href="../tokens/fonts.css?v=67" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=69" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
+
+  <!-- Nav + footer compartidos (reusan los bloques de Home) -->
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=77" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
+
+  <link rel="stylesheet" href="../custom/card/card.css?v=1" />
+  <link rel="stylesheet" href="../custom/card/photo-capture.css?v=1" />
+  <link rel="stylesheet" href="../native/collection/c01-collection.css?v=1" />
+
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--color-ink); }
+    /* Solo preview: los bloques se inyectan después de cargar; sin esto, al aparecer la barra de scroll
+       todo el ancho se corre unos píxeles y la nav salta. En WordPress el contenido ya está al cargar. */
+    body { overflow-y: scroll; }
+    body { font-family: var(--font-body); color: var(--color-text); overflow-x: hidden; }
+    ::selection { background: var(--color-aqua); color: var(--color-black); }
+  </style>
+</head>
+<body>
+  <div data-block="00-nav"></div>
+  <div data-block="c01-collection"></div>
+  <div data-block="footer"></div>
+
+  <script src="../custom/ac-forms/ac-forms.js?v=1"></script>
+  <script type="module" src="../custom/card/card.js?v=1"></script>
+  <script type="module" src="../custom/card/photo-capture.js?v=1"></script>
+  <script type="module">
+    /* Solo preview.
+       ?cc=mon|...|sat        día del estado de la campaña (privado, en .local/, fuera de git). Por defecto sat.
+       &claim=closed          terminó la campaña: el estado dice claimOpen: false.
+       &me=collector|founder|none  qué hay guardado en este dispositivo (se escribe en localStorage al cargar).
+       &api                   con servidor simulado (si no, la colección vive solo en el dispositivo, sin link).
+       &t=ok|founder|expired|offline  abre la página desde el link del mail (necesita &api).
+       &slow                  el servidor simulado tarda 2 s (para ver "Opening your collection…" y "Sending…"). */
+    const q = new URLSearchParams(location.search);
+    const cc = q.get('cc') || 'sat';
+    const KEY = 'pslsc-charter-001';
+    const me = q.get('me');
+    if (me === 'none') localStorage.removeItem(KEY);
+    if (me === 'collector' || me === 'founder') {
+      localStorage.setItem(KEY, JSON.stringify({ answers: { 0: 1, 1: 0, 2: 2, 3: 1 }, email: 'fan@example.com', revealed: true,
+        founder: me === 'founder' ? { no: 42 } : null }));
+    }
+
+    const STATE = `/.local/coleccion/state-${cc}.json`;
+    const API = '/mock-api/collection';
+    const realFetch = window.fetch.bind(window);
+    const wait = (ms) => new Promise((r) => setTimeout(r, q.has('slow') ? 2000 : ms));
+    const json = (status, body) => new Response(body ? JSON.stringify(body) : null, { status, headers: { 'Content-Type': 'application/json' } });
+    window.fetch = async (url, opts = {}) => {
+      const u = String(url);
+      if (u.startsWith(STATE) && q.get('claim') === 'closed') {
+        const s = await realFetch(u, opts).then((r) => r.json());
+        return json(200, { ...s, claimOpen: false });
+      }
+      if (!u.startsWith(API)) return realFetch(url, opts);
+      const body = opts.body ? JSON.parse(opts.body) : {};
+      if (u.endsWith('/link')) { await wait(700); return json(202); }
+      if (u.endsWith('/verify')) {
+        await wait(900);
+        if (body.token === 'offline') throw new TypeError('Failed to fetch');
+        if (body.token === 'ok' || body.token === 'founder') {
+          return json(200, { email: 'fan@example.com', founder: body.token === 'founder' ? { no: 42 } : null, cards: ['collector', '001'], device: 'dev-demo' });
+        }
+        return json(410, { error: 'expired' });
+      }
+      if (u.endsWith('/me')) { await wait(400); const s = JSON.parse(localStorage.getItem(KEY) || '{}'); return json(200, { email: s.email, founder: s.founder, cards: s.cards }); }
+      return json(404);
+    };
+
+    const blocks = [
+      { slot: '00-nav',         path: '../native/home/00-nav.html' },
+      { slot: 'c01-collection', path: '../native/collection/c01-collection.html' },
+      { slot: 'footer',         path: '../native/home/09-cierre-footer.html' },
+    ];
+    // Solo preview: las fuentes se cargan antes de insertar los bloques, así la nav no se mueve al aplicarse.
+    const fontsReady = document.fonts ? Promise.all(['400 16px "Proxima Nova"', '600 16px "Proxima Nova"', '700 16px "Proxima Nova"',
+      '800 16px Druk', '900 16px Druk', '500 16px "Druk Text Wide"', '800 16px "Druk Text Wide"', '800 16px Ferryman']
+      .map((f) => document.fonts.load(f))).catch(() => {}) : Promise.resolve();
+    const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
+    await Promise.all(blocks.map(async ({ slot, path }) => {
+      const html = await realFetch(path + bust).then((r) => r.text());
+      await fontsReady;   // el bloque se baja en paralelo con las fuentes y se inserta cuando están
+      document.querySelector(`[data-block="${slot}"]`).innerHTML = html
+        .replaceAll('__COLECCION_API__', STATE)
+        .replaceAll('__COLLECTION_API__', q.has('api') ? API : '__COLLECTION_API__')
+        .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${cc}`)
+        .replaceAll('home.html#hero', `home.html?cc=${cc}&demo#hero`);
+    }));
+    const [{ initCollection }, { initNewsletter }, { initMotion }] = await Promise.all([
+      import('../native/collection/c01-collection.js?v=1'),
+      import('../native/home/09-cierre-footer.js?v=67'),
+      import('../native/_patterns/motion.js?v=67'),
+    ]);
+    initCollection();
+    initNewsletter();
+    initMotion();
+    import('../native/home/00-nav.js?v=4').then((m) => m.initNav());
+  </script>
+</body>
+</html>

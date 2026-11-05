@@ -51,6 +51,7 @@ BLOCKS = [
     ("team", "t02-front-office"),                          # Front Office: reemplaza a /staff/, se puede publicar ya
     ("team", "t00-soccer-staff"), ("team", "t01-coach"),   # Soccer Staff y ficha del DT: desde el viernes del reveal
     ("team", "t03-roster"),                                # Roster: desde el primer jugador anunciado
+    ("collection", "c01-collection"),                      # Mi colección (/collection): junto con 01c, al terminar la semana del reveal
     ("sede", "v01-hero"), ("sede", "v02-glance"), ("sede", "v03-tour"), ("sede", "v04-matches"),
     ("sede", "v05-tickets"), ("sede", "v06-getting-here"), ("sede", "v07-faq"), ("sede", "v08-home-port"),
 ]
@@ -200,6 +201,18 @@ REPORTER = """
 """
 
 # ─────────────────────────────────────────────────────────────── JS propio de bloque
+def inline_imports(src, path, seen):
+    """`import { a, b } from './rel.js';` (ruta relativa, sin alias) -> el código del módulo, sin sus exports.
+       WordPress no puede importar módulos: lo compartido (ej. custom/card/charter.js) va dentro de cada bloque."""
+    def repl(m):
+        rel = os.path.relpath(os.path.normpath(os.path.join(os.path.dirname(os.path.join(REPO, path)),
+                                                            m.group(2).split("?")[0])), REPO)
+        if rel in seen: return ""
+        seen.add(rel)
+        dep = inline_imports(read(rel), rel, seen)
+        return re.sub(r"export\s+\{[^}]+\};", "", dep)
+    return re.sub(r"import\s+\{([^}]+)\}\s+from\s+'(\.[^']+)';\n?", repl, src)
+
 def block_js(path):
     """JS de un bloque que NO es web component (scramble del hero, scrubbing de la timeline,
        linterna de proof, forms). Saca el `export` y el auto-init de DOMContentLoaded (el boot lo
@@ -210,6 +223,7 @@ def block_js(path):
     m = re.search(r"export\s*\{([^}]+)\}", src)
     inits = [n.strip() for n in m.group(1).split(",") if n.strip()] if m else []
     src = re.sub(r"export\s+\{[^}]+\};", "", src)
+    src = inline_imports(src, path, set())
     src = re.sub(r"document\.addEventListener\('DOMContentLoaded'[^;]*;", "", src)
     return rewrite_assets(src), inits
 

@@ -55,6 +55,7 @@
         .replaceAll('__URL_ROSTER__', 'roster.html')
         .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${cc}.json`)
         .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${cc}`)
+        .replaceAll('__URL_COLLECTION__', `collection.html?cc=${cc}`)
         .replaceAll('home.html#hero', `home.html?cc=${cc}&demo#hero`);
     }));
     const [{ initCoach }, { initNewsletter }, { initMotion }] = await Promise.all([

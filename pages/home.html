@@ -95,6 +95,7 @@
       document.querySelector(`[data-block="${name}"]`).innerHTML = html
         .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${stateDay}.json`)
         .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${stateDay}`)
+        .replaceAll('__URL_COLLECTION__', `collection.html?cc=${stateDay}`)
         .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${stateDay}`);
     }));
     // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.

@@ -153,7 +153,7 @@ día. Al volver a dibujar sin pregunta nueva no las manda.
 
 ### Collector (hincha, aqua) y Founding Member (gold)
 
-Las arma el front con `ccgCollectorCard(S, fan)`. Del servidor solo hace falta saber si el mail es de un socio
+Las arma el front con `charterCollectorCard(S, fan)` (`custom/card/charter.js`, compartido por el hero y Mi colección). Del servidor solo hace falta saber si el mail es de un socio
 fundador y su número (`S.founder = { no }`). La foto y el nombre del hincha **no salen del dispositivo**.
 
 | Estado | Cómo se arma |
