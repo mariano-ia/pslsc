@@ -1,45 +1,34 @@
-/* Bloque t00 · Soccer Staff: el cuerpo técnico */
+/* Bloque t00 · Soccer Staff. La cabecera, la grilla y las tarjetas .scard son las de Front Office (t02-front-office.css). */
 
-.tmh__wrap { padding-top: clamp(104px, 13vh, 148px); padding-bottom: clamp(56px, 7vw, 96px); }
-.tmh__kicker { margin: 0; font: 800 var(--fs-kicker)/1.4 var(--font-label); letter-spacing: .18em; text-transform: uppercase; color: var(--color-aqua); }
-.tmh__title { margin: 12px 0 0; font: 900 clamp(64px, 9vw, 136px)/.85 var(--font-display); letter-spacing: var(--ls-display); text-transform: uppercase; }
-.tmh__lead { margin: 18px 0 0; max-width: 54ch; font: 400 var(--fs-body-lg)/1.5 var(--font-body); color: var(--color-text-muted); }
+/* Por anunciar: la misma tarjeta, apagada y con borde punteado */
+.scard--tba { border-style: dashed; border-color: rgba(0,0,0,.2); background: transparent; }
+.scard--tba .scard__media--ph { background: var(--color-paper-2); }
+.scard--tba .scard__initials { color: rgba(12,12,10,.18); }
+.scard--tba .scard__name { color: var(--color-text-on-paper-faint); }
 
+/* Head Coach: la tarjeta entera lleva a su ficha */
+.scard--link { display: block; color: inherit; text-decoration: none; transition: box-shadow .2s, transform .2s; }
+.scard--link:hover { box-shadow: 0 16px 30px rgba(18,17,13,.1); transform: translateY(-2px); }
+.scard--link:focus-visible { outline: 2px solid var(--color-aqua-deep); outline-offset: 3px; }
+.tmh__media { position: relative; overflow: hidden; background: radial-gradient(90% 70% at 50% 30%, #1E4B44 0%, #0F1C1A 70%, #0C0C0A); }
+.tmh__media img { position: absolute; left: 50%; bottom: 0; height: 100%; width: auto; max-width: none; transform: translateX(-50%); }
+.scard__go { flex: none; font: 400 22px/1 var(--font-body); color: var(--color-text-on-paper); transition: transform .2s; }
+.scard--link:hover .scard__go { transform: translateX(3px); }
+.tmh__summary { margin: 0; padding: 0 17px 20px; font: 400 var(--fs-body)/1.55 var(--font-body); color: var(--color-text-on-paper-muted); }
+.tmh__more { display: block; margin-top: 10px; font: 600 14px/1.3 var(--font-body); color: var(--color-aqua-deep); text-decoration: underline; text-underline-offset: 3px; }
 
-.tmh__group { margin-top: clamp(44px, 6vw, 72px); scroll-margin-top: 84px; }
-.tmh__gh { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--color-line); }
-.tmh__gh h2 { margin: 0; font: 900 clamp(28px, 3.4vw, 40px)/1 var(--font-display); letter-spacing: var(--ls-display); text-transform: uppercase; }
-.tmh__gh span { font: 500 10.5px/1.4 var(--font-label); letter-spacing: .14em; text-transform: uppercase; color: var(--color-text-faint); white-space: nowrap; }
+/* Acceso a Mi colección: chico, al pie del staff (la carta vive en la ficha del DT) */
+.tmh__cc { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 32px;
+  margin-top: clamp(48px, 6vw, 80px); padding: clamp(20px, 3vw, 28px) clamp(20px, 3vw, 32px);
+  border: 1px solid var(--color-paper-line); border-radius: var(--radius-md); background: var(--color-paper-2); }
+.tmh__cc[hidden] { display: none; }
+.tmh__cc-title { margin: 8px 0 0; font: 800 clamp(26px, 2.6vw, 34px)/1 var(--font-display); letter-spacing: var(--ls-display); text-transform: uppercase; }
+.tmh__cc-lead { margin: 8px 0 0; max-width: 56ch; font: 400 15px/1.5 var(--font-body); color: var(--color-text-on-paper-muted); }
+.tmh__cc .cta-secondary { border-color: rgba(0,0,0,.22); }
 
-.tmh__staff { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1fr); gap: 22px; margin-top: 18px; align-items: stretch; }
-.tmh__tba { display: grid; place-content: center; height: 100%; min-height: 220px; padding: 18px; text-align: center; border: 1.5px dashed var(--color-line-strong); border-radius: 12px; font: 400 14px/1.4 var(--font-body); color: var(--color-text-faint); }
-.tmh__tba b { display: block; margin-bottom: 8px; font: 900 30px/1 var(--font-display); letter-spacing: var(--ls-display); text-transform: uppercase; color: var(--color-text-muted); }
-
-/* Head Coach: la persona primero, la carta como accesorio */
-.tmh__coach { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr) auto; gap: clamp(20px, 3vw, 36px); align-items: end; padding-right: clamp(0px, 2vw, 24px); border-radius: 12px; background: var(--color-ink-2); overflow: hidden; }
-.tmh__photo { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: linear-gradient(180deg, #1A3A34 0%, #0F1C1A 60%, #0C0C0A); }
-.tmh__photo img.tmh__person { position: absolute; left: 50%; bottom: 0; height: 104%; width: auto; max-width: none; transform: translateX(-50%); }
-.tmh__crest { position: absolute; right: 14px; top: 14px; width: 30px; opacity: .9; }
-.tmh__info { min-width: 0; padding-block: clamp(20px, 3vw, 32px); }
-.tmh__role { margin: 0; font: 800 10.5px/1.4 var(--font-label); letter-spacing: .14em; text-transform: uppercase; color: var(--color-aqua); }
-.tmh__first { margin: 10px 0 0; font: 600 18px/1.2 var(--font-body); color: var(--color-text-muted); }
-.tmh__last { margin: 0; font: 900 clamp(48px, 6vw, 84px)/.92 var(--font-display); letter-spacing: var(--ls-display); text-transform: uppercase; }
-.tmh__nat { display: flex; gap: 8px; align-items: center; margin: 12px 0 0; font: 400 14.5px/1.3 var(--font-body); color: var(--color-text-muted); }
-.tmh__flag { width: 20px; height: 13px; border-radius: 2px; }
-.tmh__summary { margin: 14px 0 0; max-width: 46ch; font: 400 15.5px/1.5 var(--font-body); color: var(--color-text-muted); }
-.tmh__info .psl-btn { margin-top: 20px; }
-.tmh__cardwrap { width: clamp(110px, 11vw, 150px); padding-block: clamp(20px, 3vw, 32px); }
-.tmh__cardwrap small { display: block; margin-top: 8px; text-align: center; font: 500 9.5px/1.3 var(--font-label); letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-faint); }
-.tmh psl-card[hidden], .tmh__group psl-card[hidden] { display: none; }
-
-
-@media (max-width: 860px) {
-  .tmh__staff { grid-template-columns: minmax(0, 1fr); }
-  .tmh__tba { min-height: 130px; }
-  .tmh__coach { grid-template-columns: minmax(0, 1fr); align-items: start; padding-right: 0; }
-  .tmh__photo { aspect-ratio: 1 / 1; }
-  .tmh__photo img.tmh__person { height: 118%; bottom: -18%; }
-  .tmh__info { padding: 20px 20px 4px; }
-  .tmh__info .psl-btn { width: 100%; justify-content: center; }
-  .tmh__cardwrap { width: 130px; padding: 8px 20px 22px; box-sizing: content-box; }
+@media (max-width: 560px) {
+  .tmh__cc .psl-btn { width: 100%; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scard--link, .scard__go { transition: none; }
 }

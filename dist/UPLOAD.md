@@ -101,20 +101,25 @@ del link). Sin `__COLLECTION_API__` la página funciona con lo guardado en el di
 publicar así y sumar el servidor después. Contrato del servidor (endpoints, tokens, errores):
 `docs/charter-collection-server.md`. Usa el recorte de MediaPipe igual que el hero (la persona puede sumar su foto ahí).
 
-**Club (menú de USL y las tres páginas):**
+**Club (menú de USL y las páginas):**
 
-- En el menú de USL, el ítem "Staff" pasa a ser **"Club"**, con tres subítems: Front Office (`/front-office/`),
-  Soccer Staff (`/soccer-staff/`) y Roster (`/roster/`). Roster no se muestra hasta el primer jugador anunciado.
+- En el menú de USL, el ítem "Staff" pasa a ser **"Club"**, con Front Office (`/front-office/`). **Soccer Staff**
+  (`/soccer-staff/`) se suma al menú recién el viernes del reveal: antes no existe para nadie. Roster está en pausa
+  (no se publica ni se enlaza; `t03-roster` queda en el repo).
 - `/staff/` redirige (301) a `/front-office/`. **Antes del lunes de arranque:** Front Office reemplaza a la página
   `/staff/` actual, que hoy muestra al futuro Head Coach como Academy Director. `st01-staff` se retira. Coordinar con
   marketing.
-- Cada página del Club y la ficha llevan arriba la misma navegación ("Front Office · Soccer Staff · Roster"). Reemplazos:
-  `__URL_FRONT_OFFICE__`, `__URL_TEAM__` (Soccer Staff) y `__URL_ROSTER__`. El link a Roster está con `hidden` en
-  t00, t01 y t02: el día del primer jugador se borra ese `hidden` en los tres bloques y se publica `t03-roster`.
-- La ficha (`t01-coach`) tiene el módulo "Card No. 001 · Charter Collection": muestra "In your collection" si la persona
-  reclamó su Collector en ese dispositivo, o "Claim your Collector Card" con link a la home. Cuando termina la campaña,
-  el estado tiene que mandar `claimOpen: false` para que deje de ofrecer el reclamo. `__URL_COLLECTION__` (Mi colección)
-  agrega el link "See my collection" cuando exista. El equipo se divide como en la USL League One, en tres páginas del menú "Club": **Front Office** (`t02-front-office`, reemplaza a `/staff/`, se puede publicar ya), **Soccer Staff** (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`), desde el viernes del reveal, y **Roster** (`t03-roster`, con `__ROSTER_API__`), desde el primer jugador anunciado.
+- Cada página del Club y la ficha llevan arriba la misma navegación ("Front Office · Soccer Staff"). Reemplazos:
+  `__URL_FRONT_OFFICE__` y `__URL_TEAM__` (Soccer Staff). En Front Office esa navegación aparece sola cuando
+  `__COLECCION_API__` dice que el Head Coach ya se reveló (antes queda oculta): no hay que tocar el bloque el viernes.
+- **Soccer Staff** (`t00-soccer-staff`) tiene el mismo formato que Front Office (cabecera oscura, tarjetas sobre claro;
+  reusa el CSS de `t02`, lo suma `build-blocks.py`). El Head Coach es una tarjeta que lleva a su ficha. Al pie, un acceso
+  a Mi colección (`__URL_COLLECTION__`; sin reemplazar no aparece). La carta no va en esta página.
+- La ficha (`t01-coach`) tiene, al pie, el apartado "Charter Collection · Card No. 001": la carta, y "In your
+  collection" si la persona reclamó su Collector en ese dispositivo o "Claim your Collector Card" (lleva a `home#claim`).
+  Cuando termina la campaña, el estado tiene que mandar `claimOpen: false` para que deje de ofrecer el reclamo.
+  `__URL_COLLECTION__` (Mi colección) agrega el link "See my collection" cuando exista. Front Office
+  (`t02-front-office`) reemplaza a `/staff/` y se puede publicar ya; Soccer Staff y la ficha, desde el viernes del reveal.
 Reemplazos: `__COLECCION_API__` (URL del estado por fecha), `__URL_COACH__` (permalink de la ficha), `__URL_TEAM__` (equipo, hoy `/staff/`) y, en el hero,
 `__AC_ACCOUNT__`, `__AC_COLLECTION_FORM__` y `__AC_FIELD_CONSENT__` (`field[NN]` del form de
 ActiveCampaign, que además es el que pone la etiqueta). Sin esos datos el form valida, pero no envía. Qué crear en

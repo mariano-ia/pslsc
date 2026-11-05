@@ -2,14 +2,14 @@
   Bloque t01 · Ficha del Head Coach. 🟦 A medida. La página /team empieza a vivir con este bloque, el
   viernes del reveal: no se publica antes. El contenido llega por datos desde __COLECCION_API__,
   y sin ficha liberada el bloque no muestra nada del DT.
-  Módulo "Card No. 001 · Charter Collection": la carta revelada y si la persona ya la tiene (reclamó su Collector en
-  este dispositivo) o no. Es el patrón para las cartas de jugadores que vengan. Reemplazos: __URL_TEAM__,
-  __URL_FRONT_OFFICE__, __URL_ROSTER__, __URL_COLLECTION__ (Mi colección, etapa 6) y el link a la home (permalink).
+  Apartado "Charter Collection", al pie de la ficha: la carta revelada y si la persona ya la tiene (reclamó su
+  Collector en este dispositivo) o no. Es el patrón para las cartas de jugadores que vengan. Reemplazos: __URL_TEAM__,
+  __URL_FRONT_OFFICE__, __URL_COLLECTION__ (Mi colección) y el link a la home (permalink).
 -->
 <section class="tco surface-ink" id="coach" data-cc-state="__COLECCION_API__" data-cc-team="__URL_TEAM__"
   data-cc-home="home.html#claim" data-cc-collection="__URL_COLLECTION__">
   <div class="psl-container tco__wrap">
-    <nav class="clubnav" aria-label="Club"><a href="__URL_FRONT_OFFICE__">Front Office</a><a href="__URL_TEAM__" aria-current="true">Soccer Staff</a><a href="__URL_ROSTER__" data-clubnav-roster hidden>Roster</a></nav>
+    <nav class="clubnav" aria-label="Club"><a href="__URL_FRONT_OFFICE__">Front Office</a><a href="__URL_TEAM__" aria-current="true">Soccer Staff</a></nav>
     <div data-tco-profile><p class="tco__soon">Coming soon.</p></div>
     <psl-card hidden aria-hidden="true"></psl-card>
   </div>

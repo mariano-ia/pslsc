@@ -1,6 +1,7 @@
 /**
- * Bloque t00 · Soccer Staff. Lee el mismo estado que el hero y, si ya está la ficha, pinta al Head Coach.
- * Antes del viernes el bloque no se publica; si igual se abre, queda en TBA y sin nada de él.
+ * Bloque t00 · Soccer Staff. Lee el mismo estado que el hero y, revelado el Head Coach, lo pinta como una tarjeta más
+ * del staff (como Front Office) que lleva a su ficha. Sin estado o antes del reveal queda en "To be announced".
+ * También muestra el acceso a Mi colección, si la página existe.
  */
 const tmhEsc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
@@ -21,25 +22,18 @@ async function initSoccerStaff(root = document) {
   const { profile, card, presentation } = state;
   if (!profile || !presentation) return;
 
-  await customElements.whenDefined('psl-card');
-  const country = card.back?.bio?.find(([k]) => k === 'Country')?.[1];
-  el.querySelector('[data-tmh-count]').textContent = '1 announced';
-  el.querySelector('[data-tmh-coach]').innerHTML = `<article class="tmh__coach">
-      <div class="tmh__photo">
-        <img class="tmh__person" src="${tmhEsc(presentation.src)}" alt="${tmhEsc(presentation.alt)}" decoding="async">
-        <img class="tmh__crest" src="/assets/brand/crest-aqua.webp" alt="">
-      </div>
-      <div class="tmh__info">
-        <p class="tmh__role">Head Coach</p>
-        <p class="tmh__first">${tmhEsc(card.first)}</p>
-        <h3 class="tmh__last">${tmhEsc(card.last)}</h3>
-        ${country ? `<p class="tmh__nat"><span class="tmh__flag" style="background:${tmhEsc(card.flag?.background)}"></span>${tmhEsc(country)}</p>` : ''}
-        <p class="tmh__summary">${tmhEsc(profile.summary)}</p>
-        <a class="psl-btn cta-primary" href="${tmhEsc(el.dataset.ccCoach)}"><span>Meet the coach</span> <span aria-hidden="true">→</span></a>
-      </div>
-      <div class="tmh__cardwrap"><psl-card flippable data-tmh-card></psl-card><small>Card ${tmhEsc(card.code)}</small></div>
-    </article>`;
-  el.querySelector('[data-tmh-card]').data = card;
+  const name = [card.first, card.last].filter(Boolean).join(' ');
+  const coach = document.createElement('a');
+  coach.className = 'scard scard--link';
+  coach.href = el.dataset.ccCoach;
+  coach.innerHTML = `<div class="scard__media tmh__media"><img src="${tmhEsc(presentation.src)}" alt="${tmhEsc(presentation.alt || name)}" decoding="async"></div>
+    <div class="scard__bar"><div class="scard__id"><p class="scard__name">${tmhEsc(name)}</p><p class="scard__role">Head Coach</p></div>
+      <span class="scard__go" aria-hidden="true">&rarr;</span></div>
+    <p class="tmh__summary">${tmhEsc(profile.summary)} <span class="tmh__more">Meet the coach</span></p>`;
+  el.querySelector('[data-tmh-coach]').replaceWith(coach);
+
+  const collection = el.dataset.ccCollection;
+  if (collection && !collection.startsWith('__')) el.querySelector('[data-tmh-cc]').hidden = false;
 }
 
 export { initSoccerStaff };

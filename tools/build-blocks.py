@@ -50,7 +50,7 @@ BLOCKS = [
     ("staff", "st01-staff"),
     ("team", "t02-front-office"),                          # Front Office: reemplaza a /staff/, se puede publicar ya
     ("team", "t00-soccer-staff"), ("team", "t01-coach"),   # Soccer Staff y ficha del DT: desde el viernes del reveal
-    ("team", "t03-roster"),                                # Roster: desde el primer jugador anunciado
+    # ("team", "t03-roster"),                              # Roster: en pausa (Martín, 05/11), no se publica ni se enlaza
     ("collection", "c01-collection"),                      # Mi colección (/collection): junto con 01c, al terminar la semana del reveal
     ("sede", "v01-hero"), ("sede", "v02-glance"), ("sede", "v03-tour"), ("sede", "v04-matches"),
     ("sede", "v05-tickets"), ("sede", "v06-getting-here"), ("sede", "v07-faq"), ("sede", "v08-home-port"),
@@ -282,6 +282,7 @@ def build_block(page, name):
     comps = sorted(set(re.findall(r"<(psl-[a-z-]+)", live)))
     uses_pcard = bool(re.search(r"\bpcard\b", live))
     uses_clubnav = bool(re.search(r"\bclubnav\b", live))   # navegación común del Club (t00–t03)
+    uses_scard = bool(re.search(r"\bscard\b", live)) and name != "t02-front-office"   # Soccer Staff usa las tarjetas de Front Office
     uses_ptl   = bool(re.search(r"\bptl\b", live)) and name != "03-project"
     needs_motion = bool(re.search(r"data-(reveal|parallax|tilt|spotlight|magnetic|countdown)", live))
 
@@ -290,6 +291,7 @@ def build_block(page, name):
     css_files = ["tokens/tokens.css", "native/_patterns/motion.css"]
     if uses_pcard: css_files.append("native/_patterns/cards.css")
     if uses_clubnav: css_files.append("native/_patterns/club-nav.css")
+    if uses_scard: css_files.append("native/team/t02-front-office.css")
     if uses_ptl:   css_files.append("native/home/03-project.css")
     own_css = f"native/{src_page}/{name}.css"
     if os.path.exists(os.path.join(REPO, own_css)): css_files.append(own_css)

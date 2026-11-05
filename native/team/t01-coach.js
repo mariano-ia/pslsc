@@ -10,16 +10,17 @@ function tcoProfileHTML(p, teamUrl) {
       ${p.quote ? `<p class="tco__quote">&ldquo;${tcoEsc(p.quote)}&rdquo;${p.quoteDraft ? '<span class="tco__draft">Draft quote</span>' : ''}</p>` : ''}
       <div class="tco__row"><a class="psl-btn cta-primary" href="/joinus/"><span>Get Priority Access</span> <span aria-hidden="true">→</span></a><a class="psl-btn cta-secondary" href="${tcoEsc(teamUrl)}">Meet the staff</a></div>
     </div>
-    <div><section class="tco__cc" aria-labelledby="tco-cc-title">
-        <h2 class="tco__label" id="tco-cc-title">Card No. 001 · Charter Collection</h2>
-        <psl-card class="tco__card" flippable data-tco-card></psl-card>
-        <div class="tco__own" data-tco-own></div>
-      </section>
-      <div class="tco__label tco__card-label">Career path</div>
+    <div><h2 class="tco__label">Career path</h2>
       <ul class="tco__timeline">${p.career.map((c) => `<li class="${c[2] ? 'is-now' : ''}"><small>${tcoEsc(c[0])}</small>${tcoEsc(c[1])}</li>`).join('')}</ul>
-      <div class="tco__label tco__card-label">Stamps</div>
-      <div class="tco__stamps">${p.stamps.map((s) => `<div class="tco__stamp"><span class="tco__stamp-icon">${s.icon}</span><div><b>${tcoEsc(s.word)}</b><p>${tcoEsc(s.text)}</p></div></div>`).join('')}</div>
-    </div></div>`;
+    </div></div>
+    <section class="tco__cc" aria-labelledby="tco-cc-title">
+      <psl-card class="tco__card" flippable data-tco-card></psl-card>
+      <div class="tco__cc-copy"><span class="tco__kicker">Charter Collection</span>
+        <h2 class="tco__cc-title" id="tco-cc-title">Card No. 001</h2>
+        <p class="tco__cc-lead">The first card in club history. Flip it to see the clues from reveal week.</p>
+        <div class="tco__own" data-tco-own></div>
+      </div>
+    </section>`;
 }
 
 // Estado de la carta en la colección de la persona. Hoy vive en este dispositivo (la misma clave que el hero);

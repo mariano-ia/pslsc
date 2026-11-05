@@ -1,30 +1,44 @@
 <!--
-  Bloque t00 · Soccer Staff: el cuerpo técnico. 🟦 A medida. Es la parte seria: se presenta como en
-  cualquier club profesional, y la carta queda como un accesorio de cada persona.
-  Se publica el viernes del reveal, con el Head Coach. El club se divide como en la USL League One:
-  Roster (t03, desde el primer jugador), Soccer Staff (este) y Front Office (t02).
+  Bloque t00 · Soccer Staff: el cuerpo técnico. 🟦 A medida. Mismo formato que Front Office (t02): cabecera oscura y
+  las personas en tarjetas sobre claro (usa las tarjetas .scard de t02). Se publica el viernes del reveal, con el
+  Head Coach: antes no existe en el menú ni en la navegación del Club. La carta no va acá (vive en la ficha del DT);
+  abajo, un acceso a Mi colección.
   El contenido del Head Coach llega por datos desde __COLECCION_API__; acá no va nada de él.
-  Reemplazos: __COLECCION_API__ y __URL_COACH__ (ficha del DT).
+  Reemplazos: __COLECCION_API__, __URL_COACH__ (ficha del DT), __URL_FRONT_OFFICE__, __URL_TEAM__ (esta página)
+  y __URL_COLLECTION__ (Mi colección: sin reemplazar, el acceso no aparece).
 -->
-<section class="tmh surface-ink" id="soccer-staff" data-cc-state="__COLECCION_API__" data-cc-coach="__URL_COACH__">
-  <div class="psl-container tmh__wrap">
-    <nav class="clubnav" aria-label="Club"><a href="__URL_FRONT_OFFICE__">Front Office</a><a href="__URL_TEAM__" aria-current="page">Soccer Staff</a><a href="__URL_ROSTER__" data-clubnav-roster hidden>Roster</a></nav>
-    <header class="tmh__head">
-      <p class="tmh__kicker">Club · First Team</p>
-      <h1 class="tmh__title">Soccer Staff</h1>
-      <p class="tmh__lead">The coaching staff of the first professional team in Port St. Lucie history. More names are on the way.</p>
-    </header>
+<section class="staff staff--head surface-ink" id="soccer-staff">
+  <div class="psl-container">
+    <nav class="clubnav" aria-label="Club"><a href="__URL_FRONT_OFFICE__">Front Office</a><a href="__URL_TEAM__" aria-current="page">Soccer Staff</a></nav>
+    <p class="clubhead__kicker">Club · First Team</p>
+    <h1 class="clubhead__title">Soccer Staff</h1>
+    <p class="clubhead__lead">The coaching staff of the first professional team in Port St. Lucie history. More names are on the way.</p>
+  </div>
+</section>
 
-    <section class="tmh__group" id="coaching-staff">
-      <div class="tmh__gh"><h2>Coaching Staff</h2><span data-tmh-count>0 announced</span></div>
-      <div class="tmh__staff">
-        <div data-tmh-coach>
-          <div class="tmh__tba"><b>TBA</b>Head Coach</div>
+<section class="staff staff--body surface-paper tmh" data-cc-state="__COLECCION_API__" data-cc-coach="__URL_COACH__" data-cc-collection="__URL_COLLECTION__">
+  <div class="psl-container">
+    <div class="staff__group" id="coaching-staff">
+      <span class="psl-kicker staff__grouplabel">Coaching Staff</span>
+      <div class="staff__grid">
+        <div class="scard scard--tba" data-tmh-coach>
+          <div class="scard__media scard__media--ph"><span class="scard__initials">HC</span></div>
+          <div class="scard__bar"><div class="scard__id"><p class="scard__name">To be announced</p><p class="scard__role">Head Coach</p></div></div>
         </div>
-        <div class="tmh__tba"><b>TBA</b>Assistant coaches coming soon</div>
+        <div class="scard scard--tba">
+          <div class="scard__media scard__media--ph"><span class="scard__initials">AC</span></div>
+          <div class="scard__bar"><div class="scard__id"><p class="scard__name">Coming soon</p><p class="scard__role">Assistant Coaches</p></div></div>
+        </div>
       </div>
-      <psl-card hidden aria-hidden="true"></psl-card>
-    </section>
+    </div>
 
+    <aside class="tmh__cc" data-tmh-cc hidden aria-labelledby="tmh-cc-title">
+      <div>
+        <span class="psl-kicker">Charter Collection</span>
+        <h2 class="tmh__cc-title" id="tmh-cc-title">Every first, a card.</h2>
+        <p class="tmh__cc-lead">Our first Head Coach is Card No. 001 of the Charter Collection. More cards are on the way.</p>
+      </div>
+      <a class="psl-btn cta-secondary" href="__URL_COLLECTION__" data-tmh-cc-link><span>My collection</span> <span aria-hidden="true">&rarr;</span></a>
+    </aside>
   </div>
 </section>

@@ -1,4 +1,4 @@
-/* Club · navegación común de Front Office, Soccer Staff, Roster y la ficha del Head Coach.
+/* Club · navegación común de Front Office, Soccer Staff y la ficha del Head Coach (Roster, en pausa).
    Va arriba de la cabecera de cada página (dentro de cada bloque, con aria-current en la que corresponde).
    La compila build-blocks.py en todo bloque que use .clubnav. */
 
@@ -34,7 +34,7 @@
   background: var(--color-aqua);
 }
 .clubnav a:focus-visible { outline: 2px solid var(--color-aqua); outline-offset: 4px; }
-.clubnav [hidden] { display: none; }
+.clubnav[hidden], .clubnav [hidden] { display: none; }
 
 /* Cabecera común (la misma que ya usaban Soccer Staff y Roster) */
 .clubhead__kicker { margin: 0; font: 800 var(--fs-kicker)/1.4 var(--font-label); letter-spacing: .18em; text-transform: uppercase; color: var(--color-aqua); }

@@ -1,11 +1,13 @@
 <!--
   Bloque t02 · Front Office. 🟩 Nativo. Es ST01 sin el Head Coach, que pasa a Soccer Staff (t00).
   Reemplaza a /staff/ y se puede publicar ya (sin el DT no revela nada); ST01 se retira.
-  Bio al click con details nativo (cero JS).
+  Bio al click con details nativo. El único JS muestra la navegación del Club (Front Office · Soccer Staff) cuando
+  __COLECCION_API__ dice que el Head Coach ya se reveló: antes, Soccer Staff no existe para nadie.
+  Reemplazos: __COLECCION_API__, __URL_FRONT_OFFICE__ y __URL_TEAM__ (Soccer Staff).
 -->
-<section class="staff staff--head surface-ink">
+<section class="staff staff--head surface-ink" data-cc-state="__COLECCION_API__">
   <div class="psl-container">
-    <nav class="clubnav" aria-label="Club"><a href="__URL_FRONT_OFFICE__" aria-current="page">Front Office</a><a href="__URL_TEAM__">Soccer Staff</a><a href="__URL_ROSTER__" data-clubnav-roster hidden>Roster</a></nav>
+    <nav class="clubnav" aria-label="Club" data-clubnav hidden><a href="__URL_FRONT_OFFICE__" aria-current="page">Front Office</a><a href="__URL_TEAM__">Soccer Staff</a></nav>
     <p class="clubhead__kicker">Club · Leadership</p>
     <h1 class="clubhead__title">Front Office</h1>
     <p class="clubhead__lead">The people building Port St. Lucie SC, from the executive team to the sporting side.</p>

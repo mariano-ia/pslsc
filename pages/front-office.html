@@ -56,10 +56,12 @@
         .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${cc}.json`)
         .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${cc}`);
     }));
-    const [{ initNewsletter }, { initMotion }] = await Promise.all([
+    const [{ initFrontOffice }, { initNewsletter }, { initMotion }] = await Promise.all([
+      import('../native/team/t02-front-office.js?v=1'),
       import('../native/home/09-cierre-footer.js?v=67'),
       import('../native/_patterns/motion.js?v=67'),
     ]);
+    initFrontOffice();
     initNewsletter();
     initMotion();
     import('../native/home/00-nav.js?v=4').then((m) => m.initNav());
