@@ -77,7 +77,22 @@ Qué bloque va en qué página:
 Nav (00) y News (08) no están en la lista: son bloques nativos del template de USL.
 
 **Charter Collection (solo durante la campaña):** en Home, `01b-hero-coleccion` se pega **en lugar de** `01-hero`,
-nunca los dos: el juego se juega ahí. El equipo se divide como en la USL League One, en tres páginas del menú "Club": **Front Office** (`t02-front-office`, reemplaza a `/staff/`, se puede publicar ya), **Soccer Staff** (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`), desde el viernes del reveal, y **Roster** (`t03-roster`, con `__ROSTER_API__`), desde el primer jugador anunciado.
+nunca los dos: el juego se juega ahí.
+
+Qué se pega cada día en Home (el juego cambia solo según la fecha: lo resuelve el estado de `__COLECCION_API__`,
+no hay que tocar bloques entre lunes y sábado):
+
+| Cuándo | Home |
+|---|---|
+| Lunes de arranque, antes de las 10:00 AM ET | Sacar `01-hero` y pegar `01b-hero-coleccion` en su lugar |
+| Lunes a jueves | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista |
+| Viernes 10:00 AM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
+| Sábado hasta el fin de campaña | Nada: el hero pasa solo a la foto del coach, sin preguntas. La Collector se sigue pudiendo reclamar |
+| Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion`, volver a pegar `01-hero` y pegar `01c-coleccion` **debajo**. Con eso se cierra el reclamo de la Collector |
+
+`01c-coleccion` usa el mismo `__COLECCION_API__` (tiene que seguir respondiendo con la carta revelada después de la
+campaña), `__URL_COACH__` y `__URL_COLLECTION__` (Mi colección: mientras esa página no exista, el botón no aparece).
+Si el estado no responde, el bloque queda oculto. El equipo se divide como en la USL League One, en tres páginas del menú "Club": **Front Office** (`t02-front-office`, reemplaza a `/staff/`, se puede publicar ya), **Soccer Staff** (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`), desde el viernes del reveal, y **Roster** (`t03-roster`, con `__ROSTER_API__`), desde el primer jugador anunciado.
 Reemplazos: `__COLECCION_API__` (URL del estado por fecha), `__URL_COACH__` (permalink de la ficha), `__URL_TEAM__` (equipo, hoy `/staff/`) y, en el hero,
 `__AC_ACCOUNT__`, `__AC_COLLECTION_FORM__`, `__AC_FIELD_CONSENT__` y `__AC_FIELD_GUESS__` (`field[NN]` del form de
 ActiveCampaign, que además es el que pone la etiqueta). Sin esos datos el form valida, pero no envía. Qué crear en

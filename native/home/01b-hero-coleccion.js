@@ -269,10 +269,14 @@ function ccgPanelHTML(st, S, state) {
       const verdict = S.guess && !state.closed
         ? `<p class="ccg__verdict ${hit ? 'is-hit' : ''}"><b>${hit ? 'You called it.' : 'Not this time.'}</b> Your guess: ${ccgEsc(S.guess)}</p>`
         : '';
+      // La Collector se reclama mientras viva el hero de campaña (también del sábado en adelante). Cuando el club
+      // vuelve a 01-hero, el reclamo se cierra solo: este bloque deja de estar en la página.
       const mine = S.email
-        ? '<button type="button" class="ccg__ghost" data-act="mycard">My Collector Card</button>'
-        : (state.closed ? '' : '<button type="button" class="ccg__ghost" data-act="claim">Claim my card</button>');
-      return `${verdict}<p class="ccg__panel-lead">The first Head Coach in Port St. Lucie SC history.</p>
+        ? '<button type="button" class="ccg__ghost" data-act="mycard">Your Collector Card</button>'
+        : '<button type="button" class="ccg__ghost" data-act="claim">Claim your card</button>';
+      // Una línea sobre la persona: llega con el estado (profile.summary), nunca escrita acá.
+      const line = state.profile?.summary || 'The first Head Coach in Port St. Lucie SC history.';
+      return `${verdict}<p class="ccg__panel-lead">${ccgEsc(line)}</p>
         <div class="ccg__row"><a class="psl-btn cta-primary" href="${ccgEsc(state.coachUrl)}"><span>Meet the coach</span> <span aria-hidden="true">→</span></a><a class="psl-btn cta-secondary" href="${ccgEsc(state.teamUrl)}">Meet the staff</a>${mine}</div>`;
     }
     default:
@@ -513,7 +517,7 @@ async function initHeroColeccion(root = document) {
     const coach = shown && Boolean(state.presentation);
     hero.classList.toggle('hcc--coach', coach);
     const copy = ccgHeroCopy(S, state);
-    $('[data-cc-kicker]').textContent = shown ? 'Our first Head Coach' : copy.kicker;
+    $('[data-cc-kicker]').textContent = shown ? 'First Head Coach in club history' : copy.kicker;
     $('[data-cc-title]').textContent = shown ? `${state.card.first} ${state.card.last}` : 'Who is our first Head Coach?';
     $('[data-cc-sub]').textContent = copy.sub;
     $('[data-cc-sub]').hidden = shown || !copy.sub;
