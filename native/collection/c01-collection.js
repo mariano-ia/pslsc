@@ -107,7 +107,7 @@ function ccoEmptyHTML(S, state, ctx) {
     cta = ctx.coach ? `<a class="psl-btn cta-primary" href="${ccoEsc(ctx.coach)}"><span>Meet Card No. 001</span> <span aria-hidden="true">&rarr;</span></a>` : '';
   } else if (state?.revealed) {
     lead = 'Card No. 001 is out. Claim your free Collector Card on the home page and Card No. 001 starts your collection.';
-    cta = `<a class="psl-btn cta-primary" href="${ccoEsc(ctx.home)}"><span>Claim your card</span> <span aria-hidden="true">&rarr;</span></a>`;
+    cta = `<a class="psl-btn cta-primary" href="${ccoEsc(ctx.home.replace(/#hero$/, '#claim'))}"><span>Claim your card</span> <span aria-hidden="true">&rarr;</span></a>`;
   } else if (answered) {
     lead = `You&rsquo;ve answered ${answered} of 4. Claim your free Collector Card on the home page and Card No. 001 starts your collection.`;
     cta = `<a class="psl-btn cta-primary" href="${ccoEsc(ctx.home)}"><span>Keep playing</span> <span aria-hidden="true">&rarr;</span></a>`;

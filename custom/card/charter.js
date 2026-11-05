@@ -1,6 +1,6 @@
 /**
  * Charter Collection · lo que comparten el hero de campaña (01b) y Mi colección (c01).
- * - El progreso en el dispositivo (localStorage): { answers, email, skipClaim, guess, revealed, founder, cards?, device? }.
+ * - El progreso en el dispositivo (localStorage): { answers, email, skipClaim, revealed, founder, cards?, device? }.
  *   cards y device los escribe Mi colección cuando el servidor verifica el link (ver docs/charter-collection-server.md).
  * - La Collector Card (o Founding Member, edición gold) de la persona.
  * Los bloques lo importan con `import { … } from '../../custom/card/charter.js';`: en el preview es un módulo
@@ -22,7 +22,7 @@ const CHARTER_ICONS = {
 };
 
 function charterLoad() {
-  const base = { answers: {}, email: null, skipClaim: false, guess: null, revealed: false };
+  const base = { answers: {}, email: null, skipClaim: false, revealed: false };
   try {
     return { ...base, ...JSON.parse(localStorage.getItem(CHARTER_KEY) || '{}') };
   } catch (err) {

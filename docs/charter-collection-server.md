@@ -99,7 +99,7 @@ del mail. Un link nuevo no invalida los anteriores que sigan vigentes.
 
 | Campo | De dónde sale |
 |---|---|
-| `answers`, `guess`, `revealed`, `skipClaim` | El juego del hero. El servidor no los usa |
+| `answers`, `revealed`, `skipClaim` | El juego del hero. El servidor no los usa |
 | `email` | Al reclamar en el hero, o de `/verify` |
 | `founder` | De `/verify` o `/me` (en el preview, `?demo=founder`) |
 | `cards` | De `/verify` o `/me`. Si no está y hay `email`, el front asume `["collector", "001"]` |

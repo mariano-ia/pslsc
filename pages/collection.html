@@ -95,7 +95,7 @@
         .replaceAll('__COLECCION_API__', STATE)
         .replaceAll('__COLLECTION_API__', q.has('api') ? API : '__COLLECTION_API__')
         .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${cc}`)
-        .replaceAll('home.html#hero', `home.html?cc=${cc}&demo#hero`);
+        .replaceAll('home.html#', `home.html?cc=${cc}&demo#`);
     }));
     const [{ initCollection }, { initNewsletter }, { initMotion }] = await Promise.all([
       import('../native/collection/c01-collection.js?v=1'),

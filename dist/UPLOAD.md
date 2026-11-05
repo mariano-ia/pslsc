@@ -87,7 +87,7 @@ no hay que tocar bloques entre lunes y sábado):
 | Lunes de arranque, antes de las 10:00 AM ET | Sacar `01-hero` y pegar `01b-hero-coleccion` en su lugar |
 | Lunes a jueves | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista |
 | Viernes 10:00 AM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
-| Sábado hasta el fin de campaña | Nada: el hero pasa solo a la foto del coach, sin preguntas. La Collector se sigue pudiendo reclamar |
+| Sábado hasta el fin de campaña | Nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector se sigue pudiendo reclamar desde la ficha del DT y Mi colección, que llevan a `home#claim` (abre el modal del hero) |
 | Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion`, volver a pegar `01-hero` y pegar `01c-coleccion` **debajo**. Con eso se cierra el reclamo de la Collector |
 | Junto con `01c` (o antes, si se quiere) | Publicar **Mi colección** en `/collection/` (`c01-collection`) y reemplazar `__URL_COLLECTION__` en `01c` y `t01` por esa URL |
 
@@ -116,7 +116,7 @@ publicar así y sumar el servidor después. Contrato del servidor (endpoints, to
   el estado tiene que mandar `claimOpen: false` para que deje de ofrecer el reclamo. `__URL_COLLECTION__` (Mi colección)
   agrega el link "See my collection" cuando exista. El equipo se divide como en la USL League One, en tres páginas del menú "Club": **Front Office** (`t02-front-office`, reemplaza a `/staff/`, se puede publicar ya), **Soccer Staff** (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`), desde el viernes del reveal, y **Roster** (`t03-roster`, con `__ROSTER_API__`), desde el primer jugador anunciado.
 Reemplazos: `__COLECCION_API__` (URL del estado por fecha), `__URL_COACH__` (permalink de la ficha), `__URL_TEAM__` (equipo, hoy `/staff/`) y, en el hero,
-`__AC_ACCOUNT__`, `__AC_COLLECTION_FORM__`, `__AC_FIELD_CONSENT__` y `__AC_FIELD_GUESS__` (`field[NN]` del form de
+`__AC_ACCOUNT__`, `__AC_COLLECTION_FORM__` y `__AC_FIELD_CONSENT__` (`field[NN]` del form de
 ActiveCampaign, que además es el que pone la etiqueta). Sin esos datos el form valida, pero no envía. Qué crear en
 ActiveCampaign (form, campos, etiqueta y mails): `docs/charter-collection-activecampaign.md`.
 
