@@ -11,9 +11,10 @@ Lo que tiene que existir en ActiveCampaign para que el mail del juego se guarde.
 | Campo **Email** | El estándar del form |
 | Campo **Consent** (texto o checkbox) | El hero manda `Yes` cuando la persona tilda "I agree to receive emails…" (el tilde es obligatorio para enviar) |
 
-El mail se pide **una sola vez**, en el modal "Claim your Collector Card": se abre solo después de la primera
-respuesta (si la persona lo cierra con "Not now" no vuelve a abrirse solo, pero queda a mano en el panel). Desde
-otras páginas, `home#claim` abre el mismo modal. No hay apuesta (se sacó el 05/11): después de la cuarta pregunta se
+El mail se pide **una sola vez**, en el paso "Claim your Collector Card" del panel del hero (no es un pop-up:
+WordPress no deja editar lo que va en un pop-up). Aparece solo unos segundos después de la primera respuesta (si la
+persona toca "Not now" no vuelve solo, pero queda a mano en el panel). Desde otras páginas, `home#claim` abre el
+mismo paso en el hero. No hay apuesta (se sacó el 05/11): después de la cuarta pregunta se
 espera el reveal.
 
 ## Reemplazos en el bloque
@@ -29,7 +30,7 @@ espera el reveal.
 
 ## Mails que promete el hero
 
-El modal de reclamo dice "Your Collector Card, now and in your inbox", "An email when each new clue unlocks" y "A
+El paso de reclamo dice "Your Collector Card, now and in your inbox", "An email when each new clue unlocks" y "A
 reminder on reveal day" (sin la de las pistas si ya contestó las cuatro). Se arman como automatización sobre la
 etiqueta `charter-collection-001`:
 
@@ -43,9 +44,10 @@ Quien se suma un miércoles recibe solo los mails que faltan. Ningún mail menci
 
 ## Lo que ActiveCampaign no resuelve
 
-- **Founding Member:** cruzar el mail con la base de socios fundadores necesita la API key, que no puede ir en el
-  navegador. Lo hace el servidor (ver `docs/charter-card-schema.md` y la etapa 6 del plan). Hasta entonces nadie sale
-  como founder, salvo en el preview con `?demo=founder`.
+- **Founding Member:** el reclamo del hero no lo identifica (decidido con el dev, 06/11): todos reclaman como
+  Inaugural Collector. Cruzar el mail con la base de socios fundadores necesita la API key, que no puede ir en el
+  navegador; lo hace el servidor de Mi colección (ver `docs/charter-collection-server.md`) y, cuando responde
+  `founder`, la carta se ajusta sola a Founding Member. En el preview: Mi colección con `?me=founder`.
 
 ## Errores que ve la persona
 

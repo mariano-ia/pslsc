@@ -17,7 +17,8 @@ servidor después sin tocar el bloque.
   hablaba de guardar el nombre: **no se guarda** mientras ese aviso diga lo contrario. Si legal lo cambia, se suma un
   campo `name` a las respuestas y el front lo usa como valor inicial.
 - **Founder:** el cruce del mail con la base de socios fundadores lo hace el servidor (la API key no puede ir en el
-  navegador). El front solo muestra la edición gold cuando la API devuelve `founder`.
+  navegador). El front solo muestra la edición gold cuando la API devuelve `founder`. El reclamo del hero no lo sabe:
+  ahí todos salen Inaugural Collector y la carta pasa a Founding Member cuando Mi colección lo recibe de acá.
 
 ## Reemplazos en el bloque
 
@@ -101,7 +102,7 @@ del mail. Un link nuevo no invalida los anteriores que sigan vigentes.
 |---|---|
 | `answers`, `revealed`, `skipClaim` | El juego del hero. El servidor no los usa |
 | `email` | Al reclamar en el hero, o de `/verify` |
-| `founder` | De `/verify` o `/me` (en el preview, `?demo=founder`) |
+| `founder` | De `/verify` o `/me` (en el preview de Mi colección, `?me=founder`) |
 | `cards` | De `/verify` o `/me`. Si no está y hay `email`, el front asume `["collector", "001"]` |
 | `device` | De `/verify` |
 

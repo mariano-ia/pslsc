@@ -80,7 +80,7 @@
     const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
     // Hero de campaña (solo preview): ?cc=mon|tue|wed|thu|fri|sat simula el día, ?cc=off vuelve a 01-hero,
     // ?cc=end: fin de campaña (01-hero normal + la entrada 01c-coleccion, con el estado del sábado).
-    // ?demo simula el envío del mail (?demo=founder, además, un founding member) y ?reset borra el progreso.
+    // ?demo simula el envío del mail y ?reset borra el progreso.
     // En WordPress se pega un bloque u otro. El estado sale de .local/ (privado, fuera de git).
     const params = new URLSearchParams(location.search);
     const H1_OPTIONS = { 1: 'Four clues. One coach.', 2: 'Guess who’s leading Port St. Lucie.', 3: 'Our first coach is a secret. For now.', 4: 'Who is our first Head Coach?' };

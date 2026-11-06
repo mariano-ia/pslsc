@@ -4,7 +4,7 @@
   El juego se juega acá. Preguntas, pistas, nombre y foto llegan por datos, según la fecha: en este
   archivo y en su JS no va contenido de la carta. Reemplazos en el find-and-replace:
   __COLECCION_API__ (estado), __URL_COACH__ (ficha del DT), __URL_TEAM__ (Soccer Staff) y los __AC_...__.
-  Desde otras páginas, home#claim abre el modal para reclamar la Collector (o la carta, si ya la tiene).
+  Desde otras páginas, home#claim abre en el panel el reclamo de la Collector (o la carta, si ya la tiene).
 -->
 <section class="hcc surface-ink" id="hero" data-cc-state="__COLECCION_API__" data-cc-coach="__URL_COACH__" data-cc-team="__URL_TEAM__"
   data-ac-account="__AC_ACCOUNT__" data-ac-form="__AC_COLLECTION_FORM__"
@@ -36,12 +36,6 @@
   </div>
 
   <psl-photo-capture data-ccg-capture hidden></psl-photo-capture>
-
-  <!-- Reclamar la Collector, la carta reclamada y compartir: un solo modal con tres vistas -->
-  <dialog class="ccg__modal" data-ccg-modal aria-labelledby="ccg-modal-title">
-    <button type="button" class="ccg__x" data-ccg-close aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <div class="ccg__modal-body" data-ccg-modal-body></div>
-  </dialog>
 
   <div class="hcc__divider" role="presentation"></div>
 </section>

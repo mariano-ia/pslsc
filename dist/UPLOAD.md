@@ -87,7 +87,7 @@ no hay que tocar bloques entre lunes y sábado):
 | Lunes de arranque, antes de las 10:00 AM ET | Sacar `01-hero` y pegar `01b-hero-coleccion` en su lugar |
 | Lunes a jueves | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista |
 | Viernes 10:00 AM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
-| Sábado hasta el fin de campaña | Nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector se sigue pudiendo reclamar desde la ficha del DT y Mi colección, que llevan a `home#claim` (abre el modal del hero) |
+| Sábado hasta el fin de campaña | Nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector se sigue pudiendo reclamar desde la ficha del DT y Mi colección, que llevan a `home#claim` (abre el reclamo en el panel del hero, sin pop-up) |
 | Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion`, volver a pegar `01-hero` y pegar `01c-coleccion` **debajo**. Con eso se cierra el reclamo de la Collector |
 | Junto con `01c` (o antes, si se quiere) | Publicar **Mi colección** en `/collection/` (`c01-collection`) y reemplazar `__URL_COLLECTION__` en `01c` y `t01` por esa URL |
 

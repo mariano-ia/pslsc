@@ -12,8 +12,9 @@
  *   - closed: del sábado en adelante. Las preguntas se cierran y no hace falta apretar "Reveal".
  * El progreso queda en localStorage: la colección con login es de la etapa siguiente.
  *
- * Mail: un solo pedido, en un modal, para reclamar la Collector: se abre solo después de la primera respuesta
- * (si la persona no lo cierra con "Not now") y queda a mano en el panel. No hay apuesta: después de la cuarta
+ * Mail: un solo pedido, para reclamar la Collector, en el mismo panel del hero (WordPress no deja editar pop-ups):
+ * el panel pasa solo al reclamo después de la primera respuesta (si la persona no lo cierra con "Not now") y queda a
+ * mano con "Claim my Collector Card". Se reclama como Inaugural Collector; Founding Member se ajusta después. No hay apuesta: después de la cuarta
  * pregunta se espera el reveal del viernes. Sin config de ActiveCampaign valida pero NO envía ni finge éxito;
  * ?demo simula el envío. La etiqueta y el mail con la carta los pone ActiveCampaign.
  *
@@ -55,11 +56,9 @@ function ccgAcConfig(hero) {
   if (!d.acAccount || d.acAccount.startsWith('__') || !d.acForm || d.acForm.startsWith('__')) return null;
   return { account: d.acAccount, form: d.acForm, consent: d.acConsent };
 }
-// Pendiente de servidor: cruzar el mail con la base de founders (la API key de ActiveCampaign no
-// puede ir en el navegador). Hasta entonces nadie sale como founder, salvo con ?demo=founder.
-async function ccgFounderLookup() {
-  return new URLSearchParams(location.search).get('demo') === 'founder' ? { no: 42 } : null;
-}
+// Founding Member: el hero no lo asigna. Hoy no hay forma de saber quién es founder; la carta se reclama como
+// Inaugural Collector y se ajusta a Founding Member más adelante, cuando el servidor de Mi colección lo responda
+// (S.founder llega de /verify o /me). Si ya llegó, el hero muestra la versión gold.
 async function ccgSendLead(hero, { email }) {
   if (new URLSearchParams(location.search).has('demo')) return;
   const ac = ccgAcConfig(hero);
@@ -155,7 +154,7 @@ function ccgResultHTML(D, ok) {
     <div class="ccg__clue"><span>Clue unlocked · ${ccgEsc(D.clueTitle)}</span><p>${ccgEsc(D.clue)}</p></div>`;
 }
 
-function ccgPanelHTML(st, S, state) {
+function ccgPanelHTML(st, S, state, ctx = {}) {
   const days = state.days || [];
   const clues = state.revealed && S.revealed ? 4 : Object.keys(S.answers).length;
   switch (st.t) {
@@ -200,38 +199,33 @@ function ccgPanelHTML(st, S, state) {
       return `<p class="ccg__panel-lead">${ccgEsc(line)}</p>
         <div class="ccg__row"><a class="psl-btn cta-primary" href="${ccgEsc(state.coachUrl)}"><span>Meet the coach</span> <span aria-hidden="true">&rarr;</span></a><a class="psl-btn cta-secondary" href="${ccgEsc(state.teamUrl)}">Meet the staff</a></div>`;
     }
-    default:
-      return '';
-  }
-}
-
-/* Modal: reclamar (claim), la carta de la persona (collector) y compartir (share) */
-function ccgModalHTML(view, S, state, ctx) {
-  switch (view) {
+    // Reclamar la Collector, la carta reclamada y compartir: pasos del mismo panel (en WordPress no se edita un pop-up)
     case 'claim': {
+      const D = st.from !== undefined ? days[st.from] : null;
       const gets = state.revealed
         ? ['Your Collector Card, now and in your inbox', 'Your name and photo on it (they stay on your device)', 'First to know when the next card drops']
         : ['Your Collector Card, now and in your inbox', Object.keys(S.answers).length < 4 && 'An email when each new clue unlocks', 'A reminder on reveal day'].filter(Boolean);
-      return `<div class="ccg__m-grid"><div class="ccg__m-card"><psl-card data-ccg-preview></psl-card></div>
-        <div class="ccg__m-copy"><span class="ccg__kicker">Free · takes 10 seconds</span><h2 id="ccg-modal-title" tabindex="-1">Claim your Collector Card</h2>
+      return `${D ? `<p class="ccg__clue-mini"><b>Clue unlocked · ${ccgEsc(D.clueTitle)}</b> ${ccgEsc(D.clue)}</p>` : ''}
+        <div class="ccg__m-grid"><div class="ccg__m-card"><psl-card data-ccg-preview></psl-card></div>
+        <div class="ccg__m-copy"><span class="ccg__kicker">Free · takes 10 seconds</span><h2 tabindex="-1">Claim your Collector Card</h2>
           <p class="ccg__panel-lead">Your own card in the Charter Collection. We&rsquo;ll email it to you, too.</p>
-          <ul class="ccg__gets">${gets.map((g) => `<li>${g}</li>`).join('')}</ul>
-          <form class="ccg__form" data-form="claim" novalidate>${ccgEmailFields('ccg-claim')}
-            <p class="ccg__err" data-err role="alert" hidden></p>
-            <div class="ccg__row"><button class="psl-btn cta-primary" type="submit">Claim my card</button>${ccgBtn('close', 'Not now')}</div>
-          </form></div></div>`;
+          <ul class="ccg__gets">${gets.map((g) => `<li>${g}</li>`).join('')}</ul></div></div>
+        <form class="ccg__form" data-form="claim" novalidate>${ccgEmailFields('ccg-claim')}
+          <p class="ccg__err" data-err role="alert" hidden></p>
+          <div class="ccg__row"><button class="psl-btn cta-primary" type="submit">Claim my card</button>${ccgBtn('close', 'Not now')}</div>
+        </form>`;
     }
     case 'collector':
       return `<div class="ccg__m-grid"><div class="ccg__m-card"><psl-card flippable data-ccg-collector></psl-card></div>
         <div class="ccg__m-copy"><span class="ccg__kicker">${S.founder ? 'Special edition' : 'Card claimed'}</span>
-          <h2 id="ccg-modal-title" tabindex="-1">${S.founder ? `Founding Member No. ${charterPad(S.founder.no)}` : 'You&rsquo;re an Inaugural Collector'}</h2>
+          <h2 tabindex="-1">${S.founder ? `Founding Member No. ${charterPad(S.founder.no)}` : 'You&rsquo;re an Inaugural Collector'}</h2>
           <p class="ccg__panel-lead">${S.founder ? 'Your Founding Member number makes this card one of a kind.' : 'This one is yours.'} Add your name and a photo, then share it.</p>
-          ${ctx.justClaimed ? `<p class="ccg__mail">Your card is on its way to <b>${ccgEsc(S.email)}</b>.</p>` : ''}
-          <div data-ccg-capture-slot></div>
-          <div class="ccg__row">${ccgBtn('share', 'Share my card', true)}${ccgBtn('close', 'Done')}</div></div></div>`;
+          ${ctx.justClaimed ? `<p class="ccg__mail">Your card is on its way to <b>${ccgEsc(S.email)}</b>.</p>` : ''}</div></div>
+        <div data-ccg-capture-slot></div>
+        <div class="ccg__row">${ccgBtn('share', 'Share my card', true)}${ccgBtn('close', 'Done')}</div>`;
     case 'share':
       return `<div class="ccg__m-grid"><div class="ccg__m-card ccg__m-shot"><canvas data-ccg-shot width="1080" height="1920"></canvas></div>
-        <div class="ccg__m-copy"><span class="ccg__kicker">Share</span><h2 id="ccg-modal-title" tabindex="-1">Share your card</h2>
+        <div class="ccg__m-copy"><span class="ccg__kicker">Share</span><h2 tabindex="-1">Share your card</h2>
           <div class="ccg__seg" role="group" aria-label="Format">
             <button type="button" data-fmt="story" aria-pressed="${ctx.fmt === 'story'}">Story · 9:16</button>
             <button type="button" data-fmt="card" aria-pressed="${ctx.fmt === 'card'}">Card only</button>
@@ -468,6 +462,7 @@ async function initHeroColeccion(root = document) {
   let flashZone = null;
   let spinning = false;   // el viernes, la carta gira grande antes de pasar al hero del coach
   let claimTimer = 0;
+  const pctx = { justClaimed: false, fmt: 'story' };
 
   function paintCard() {
     const card = ccgComposeCard(state, S, null);
@@ -522,7 +517,10 @@ async function initHeroColeccion(root = document) {
     const st = ccgNextStep(S, state, step);
     hero.classList.toggle('hcc--asking', st.t === 'q');   // mobile: carta chica para que entre la pregunta
     hero.classList.toggle('hcc--step', Boolean(step));
-    const html = ccgPanelHTML(st, S, state);
+    hero.classList.toggle('hcc--claiming', ['claim', 'collector', 'share'].includes(st.t));   // con el coach, el reclamo lleva caja
+    hero.append(capture);   // el único <psl-photo-capture> conserva la foto entre pasos: fuera del panel, oculto
+    capture.hidden = true;
+    const html = ccgPanelHTML(st, S, state, pctx);
     if (morph) morphPanel(html); else panel.innerHTML = html;
     bindPanel(st);
     hero.classList.add('is-ready');
@@ -568,12 +566,30 @@ async function initHeroColeccion(root = document) {
       step = { t: 'answered', i: st.i };
       paint(mobile() ? $('.ccg__card-col') : null, true, true);
       if (mobile()) setTimeout(() => goTo(panel, 'center'), reduce ? 0 : 1300);
-      // 3) Sin mail todavía: el modal para reclamar la Collector, una vez que se vio la pista
+      // 3) Sin mail todavía: el panel pasa al reclamo de la Collector (con la pista arriba), una vez que se vio la pista
       if (!S.email && !S.skipClaim) {
         clearTimeout(claimTimer);
-        claimTimer = setTimeout(() => { if (!modal.open && step?.t === 'answered') openModal('claim'); }, reduce ? 800 : (mobile() ? 3000 : 2200));
+        const answered = step;
+        claimTimer = setTimeout(() => {
+          if (step !== answered) return;   // la persona ya siguió por su cuenta
+          openStep({ t: 'claim', from: st.i, back: answered });
+        }, reduce ? 1200 : (mobile() ? 3600 : 2800));
       }
     }, reduce ? 400 : 1100);
+  }
+
+  // Abre un paso del panel (reclamo, carta, compartir) con la misma transición, y lo trae a la vista en mobile
+  function openStep(next) {
+    clearTimeout(claimTimer);
+    step = next;
+    paint(null, true, true);
+    if (mobile()) goTo(panel);
+  }
+  // "Not now" y "Done": vuelve a lo que había antes (la respuesta del día o el estado del hero)
+  function closeStep() {
+    if (step?.t === 'claim' && !S.email) { S.skipClaim = true; charterSave(S); }   // no vuelve a aparecer solo
+    pctx.justClaimed = false;
+    openStep(step?.back || null);
   }
 
   function bindPanel(st) {
@@ -582,12 +598,91 @@ async function initHeroColeccion(root = document) {
     panel.querySelectorAll('[data-act]').forEach((b) => {
       b.addEventListener('click', () => {
         const a = b.dataset.act;
-        if (a === 'claim') { openModal('claim'); return; }
-        if (a === 'mycard') { openModal('collector'); return; }
-        if (a === 'next') { clearTimeout(claimTimer); step = null; paint(panel, true, true); return; }
+        const back = st.t === 'claim' || st.t === 'collector' || st.t === 'share' ? st.back : (step || null);
+        if (a === 'claim') openStep({ t: 'claim', back });
+        if (a === 'mycard') openStep({ t: 'collector', back });
+        if (a === 'next') { clearTimeout(claimTimer); step = null; paint(panel, true, true); }
         if (a === 'reveal') reveal(b);
+        if (a === 'close') closeStep();
+        if (a === 'share') openStep({ t: 'share', back });
+        if (a === 'back') openStep({ t: 'collector', back });
+        if (a === 'share-go') shareNow();
       });
     });
+
+    if (st.t === 'claim') {
+      panel.querySelector('[data-ccg-preview]').data = charterCollectorCard({ ...S, founder: null }, {});
+      const form = panel.querySelector('[data-form="claim"]');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (form.dataset.busy) return;   // doble envío (doble click, Enter repetido)
+        const email = form.elements.email.value.trim();
+        if (!CCG_EMAIL.test(email)) { showError(form, 'Enter a valid email, like name@email.com.'); return; }
+        if (!form.elements.consent.checked) { showError(form, 'Tick the box to agree to receive emails.'); return; }
+        busy(form, true, 'Sending…');
+        try {
+          await ccgSendLead(hero, { email });
+        } catch (err) {
+          busy(form, false);
+          showError(form, err.message);
+          return;
+        }
+        if (email !== S.email) S.founder = null;   // founder lo ajusta después el servidor de Mi colección
+        S.email = email;
+        charterSave(S);
+        pctx.justClaimed = true;
+        openStep({ t: 'collector', back: st.back });
+        say('Card claimed. We’re emailing it to you.');
+      });
+    }
+
+    if (st.t === 'collector') {
+      const collector = panel.querySelector('[data-ccg-collector]');
+      collector.data = charterCollectorCard(S, capture.fan);
+      capture.stage = collector;
+      capture.hidden = false;
+      panel.querySelector('[data-ccg-capture-slot]').append(capture);
+    }
+
+    if (st.t === 'share') {
+      const shot = panel.querySelector('[data-ccg-shot]');
+      const hint = panel.querySelector('[data-ccg-fmt-hint]');
+      const go = panel.querySelector('[data-act="share-go"]');
+      const draw = async () => {
+        go.disabled = true;
+        shot.closest('.ccg__m-shot').dataset.fmt = pctx.fmt;
+        try {
+          await ccgDrawShare(shot, pctx.fmt, S, state, capture.fan);
+          go.disabled = false;
+        } catch (err) {
+          console.error('[charter] no se pudo armar la imagen', err);
+          shareMsg('We could not create your image. Please try again in a moment.');
+        }
+      };
+      panel.querySelectorAll('[data-fmt]').forEach((b) => b.addEventListener('click', () => {
+        pctx.fmt = b.dataset.fmt;
+        panel.querySelectorAll('[data-fmt]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        hint.textContent = pctx.fmt === 'story' ? 'Full screen, for Instagram and TikTok stories.' : 'Just your card, with a transparent background. Works anywhere.';
+        draw();
+      }));
+      draw();
+    }
+  }
+
+  function shareMsg(text) {
+    const m = panel.querySelector('[data-ccg-share-msg]');
+    if (!m) return;
+    m.textContent = text;
+    m.hidden = !text;
+  }
+  async function shareNow() {
+    shareMsg('');
+    try {
+      await ccgShareImage(panel.querySelector('[data-ccg-shot]'), pctx.fmt);
+    } catch (err) {
+      if (err.name === 'AbortError') return;   // canceló el menú de compartir: no es un fallo
+      shareMsg('We could not share your image. Please try again in a moment.');
+    }
   }
 
   function reveal(btn) {
@@ -613,124 +708,8 @@ async function initHeroColeccion(root = document) {
     setTimeout(done, 2200);
   }
 
-  /* Modal: reclamar, la carta y compartir */
-  const modal = $('[data-ccg-modal]');
-  const mbody = $('[data-ccg-modal-body]');
-  const mctx = { justClaimed: false, fmt: 'story' };
-  let mview = null;
-
-  function parkCapture() {   // el único <psl-photo-capture> conserva la foto entre vistas: fuera del modal, oculto
-    hero.append(capture);
-    capture.hidden = true;
-  }
-
-  function openModal(view) {
-    clearTimeout(claimTimer);
-    mview = view;
-    parkCapture();
-    mbody.innerHTML = ccgModalHTML(view, S, state, mctx);
-    bindModal(view);
-    if (!modal.open) modal.showModal();
-    mbody.querySelector('h2')?.focus({ preventScroll: true });
-    mbody.scrollTop = 0;
-  }
-
-  function bindModal(view) {
-    mbody.querySelectorAll('[data-act]').forEach((b) => b.addEventListener('click', () => {
-      const a = b.dataset.act;
-      if (a === 'close') modal.close();
-      if (a === 'share') openModal('share');
-      if (a === 'back') openModal('collector');
-      if (a === 'share-go') shareNow(b);
-    }));
-
-    if (view === 'claim') {
-      mbody.querySelector('[data-ccg-preview]').data = charterCollectorCard({ ...S, founder: null }, {});
-      const form = mbody.querySelector('[data-form="claim"]');
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (form.dataset.busy) return;
-        const email = form.elements.email.value.trim();
-        if (!CCG_EMAIL.test(email)) { showError(form, 'Enter a valid email, like name@email.com.'); return; }
-        if (!form.elements.consent.checked) { showError(form, 'Tick the box to agree to receive emails.'); return; }
-        busy(form, true, 'Sending…');
-        try {
-          await ccgSendLead(hero, { email });
-        } catch (err) {
-          busy(form, false);
-          showError(form, err.message);
-          return;
-        }
-        S.email = email;
-        S.founder = await ccgFounderLookup(email);
-        charterSave(S);
-        mctx.justClaimed = true;
-        openModal('collector');
-        say('Card claimed. We’re emailing it to you.');
-      });
-    }
-
-    if (view === 'collector') {
-      const collector = mbody.querySelector('[data-ccg-collector]');
-      collector.data = charterCollectorCard(S, capture.fan);
-      capture.stage = collector;
-      capture.hidden = false;
-      mbody.querySelector('[data-ccg-capture-slot]').append(capture);
-    }
-
-    if (view === 'share') {
-      const shot = mbody.querySelector('[data-ccg-shot]');
-      const hint = mbody.querySelector('[data-ccg-fmt-hint]');
-      const go = mbody.querySelector('[data-act="share-go"]');
-      const draw = async () => {
-        go.disabled = true;
-        shot.closest('.ccg__m-shot').dataset.fmt = mctx.fmt;
-        try {
-          await ccgDrawShare(shot, mctx.fmt, S, state, capture.fan);
-          go.disabled = false;
-        } catch (err) {
-          console.error('[charter] no se pudo armar la imagen', err);
-          shareMsg('We could not create your image. Please try again in a moment.');
-        }
-      };
-      mbody.querySelectorAll('[data-fmt]').forEach((b) => b.addEventListener('click', () => {
-        mctx.fmt = b.dataset.fmt;
-        mbody.querySelectorAll('[data-fmt]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-        hint.textContent = mctx.fmt === 'story' ? 'Full screen, for Instagram and TikTok stories.' : 'Just your card, with a transparent background. Works anywhere.';
-        draw();
-      }));
-      draw();
-    }
-  }
-
-  function shareMsg(text) {
-    const m = mbody.querySelector('[data-ccg-share-msg]');
-    if (!m) return;
-    m.textContent = text;
-    m.hidden = !text;
-  }
-  async function shareNow() {
-    shareMsg('');
-    try {
-      await ccgShareImage(mbody.querySelector('[data-ccg-shot]'), mctx.fmt);
-    } catch (err) {
-      if (err.name === 'AbortError') return;   // canceló el menú de compartir: no es un fallo
-      shareMsg('We could not share your image. Please try again in a moment.');
-    }
-  }
-
-  $('[data-ccg-close]').addEventListener('click', () => modal.close());
-  modal.addEventListener('click', (e) => { if (e.target === modal) modal.close(); });   // click en el fondo
-  modal.addEventListener('close', () => {
-    // Cerrar el pedido sin dejar el mail = "ahora no": no vuelve a abrirse solo (el panel sigue ofreciéndolo)
-    if (mview === 'claim' && !S.email) { S.skipClaim = true; charterSave(S); }
-    mview = null;
-    mctx.justClaimed = false;
-    parkCapture();
-    paint(null, true);
-  });
   capture.addEventListener('fanchange', (e) => {
-    const collector = mbody.querySelector('[data-ccg-collector]');
+    const collector = panel.querySelector('[data-ccg-collector]');
     if (collector) collector.data = charterCollectorCard(S, e.detail);
   });
   // Baja a lo que sigue del hero, sea cual sea el bloque siguiente en WordPress.
@@ -742,12 +721,16 @@ async function initHeroColeccion(root = document) {
 
   paint();
 
-  // home#claim (desde Mi colección o la ficha del DT): abre el modal. Con la Collector ya reclamada, la muestra.
+  // home#claim (desde Mi colección o la ficha del DT): el panel abre el reclamo. Con la Collector ya reclamada, la muestra.
   function fromHash() {
     if (location.hash !== '#claim') return;
     history.replaceState(null, '', `${location.pathname}${location.search}#hero`);
-    hero.scrollIntoView();
-    openModal(S.email ? 'collector' : 'claim');
+    step = { t: S.email ? 'collector' : 'claim', back: null };
+    paint(null, true);
+    const go = () => goTo(mobile() ? panel : hero);
+    go();
+    // con el coach, la foto va arriba del panel en mobile: cuando termina de cargar, el panel se corre
+    if (hero.classList.contains('hcc--coach') && !photo.complete) photo.addEventListener('load', go, { once: true });
   }
   fromHash();
   addEventListener('hashchange', fromHash);

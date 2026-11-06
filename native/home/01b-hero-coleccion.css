@@ -191,37 +191,22 @@
 .hcc:not(.is-ready) .ccg__card-actions { visibility: hidden; }
 .hcc:not(.is-ready) .ccg__panel { min-height: 300px; }
 
-/* Modal: reclamar la Collector, la carta reclamada y compartir */
-.ccg__modal {
-  width: min(820px, calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 32px); padding: 0; overflow: auto;
-  background: var(--color-ink-2); border: 1px solid var(--color-line-strong); border-radius: 22px; color: var(--color-text);
-}
-.ccg__modal[open] { animation: ccg-modal-in .38s var(--ease-out-soft); }
-.ccg__modal::backdrop { background: rgba(5,5,4,.8); backdrop-filter: blur(4px); }
-@keyframes ccg-modal-in { from { opacity: 0; transform: translateY(18px) scale(.98); } to { opacity: 1; transform: none; } }
-.ccg__x {
-  position: absolute; top: 14px; right: 14px; z-index: 3; display: grid; place-items: center; width: 40px; height: 40px;
-  border: 1px solid var(--color-line-strong); border-radius: 50%; background: var(--color-ink-3); color: var(--color-text);
-  font: 400 24px/1 var(--font-body); cursor: pointer;
-}
-.ccg__x:hover { border-color: var(--color-aqua); color: var(--color-aqua); }
-.ccg__modal-body { padding: clamp(24px, 4vw, 44px); }
-.ccg__m-grid { display: grid; grid-template-columns: minmax(0, 250px) minmax(0, 1fr); gap: clamp(24px, 4vw, 44px); align-items: center; }
+/* Pasos del reclamo en el panel: la Collector, la carta reclamada y compartir */
+.ccg__clue-mini { padding: 10px 14px; border-radius: 10px; background: rgba(170,246,230,.1); border: 1px solid rgba(170,246,230,.35); font: 400 14px/1.4 var(--font-body); color: var(--color-text); }
+.ccg__clue-mini b { display: block; margin-bottom: 2px; font: 800 10px/1.4 var(--font-label); letter-spacing: .14em; text-transform: uppercase; color: var(--color-aqua); }
+.ccg__m-grid { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr); gap: clamp(18px, 2.4vw, 28px); align-items: center; }
 .ccg__m-card psl-card { display: block; }
 .ccg__m-copy { display: grid; gap: 14px; justify-items: start; min-width: 0; }
 .ccg__m-copy > * { margin: 0; }
-.ccg__m-copy h2 { margin: 0; padding-right: 36px; font: 900 clamp(30px, 3.4vw, 44px)/.95 var(--font-display); letter-spacing: .02em; text-transform: uppercase; outline: none; }
-.ccg__m-copy .ccg__form { width: 100%; }
-.ccg__m-copy [data-ccg-capture-slot] { width: 100%; }
 .ccg__mail { padding: 10px 14px; border: 1px solid rgba(170,246,230,.4); border-radius: 12px; background: rgba(170,246,230,.07); font: 400 14px/1.4 var(--font-body); color: var(--color-text-muted); }
 .ccg__mail b { color: var(--color-aqua); font-weight: 600; overflow-wrap: anywhere; }
 .ccg__m-shot { display: grid; place-items: center; }
-.ccg__m-shot canvas { display: block; width: auto; max-width: 100%; height: auto; max-height: min(62vh, 440px); border-radius: 12px; }
+.ccg__m-shot canvas { display: block; width: auto; max-width: 100%; height: auto; max-height: 270px; border-radius: 8px; }
 .ccg__m-shot[data-fmt="card"] canvas { border-radius: 0; }
 .ccg__seg { display: inline-flex; padding: 4px; border: 1px solid var(--color-line-strong); border-radius: var(--radius-pill); background: var(--color-ink-3); }
 .ccg__seg button { padding: 10px 16px; border: 0; border-radius: var(--radius-pill); background: none; cursor: pointer; font: 800 10.5px/1.2 var(--font-label); letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-muted); }
 .ccg__seg button[aria-pressed="true"] { background: var(--color-aqua); color: var(--color-black); }
-.ccg__seg button:focus-visible, .ccg__x:focus-visible { outline: 2px solid var(--color-aqua); outline-offset: 2px; }
+.ccg__seg button:focus-visible { outline: 2px solid var(--color-aqua); outline-offset: 2px; }
 
 /* El panel vive sobre el fondo del hero */
 .hcc .ccg__panel { margin-top: 20px; gap: 14px; background: rgba(19,17,24,.86); }
@@ -249,7 +234,7 @@
 }
 .hcc--coach .hcc__grid { grid-template-columns: minmax(0, 1fr); }
 .hcc--coach .hcc__copy { position: relative; z-index: 1; max-width: 600px; }
-.hcc--coach .ccg__panel { padding: 0; background: none; border: 0; }
+.hcc--coach:not(.hcc--claiming) .ccg__panel { padding: 0; background: none; border: 0; }
 .hcc--coach .ccg__panel-lead { font-size: var(--fs-body-lg); }
 .hcc--coach .hcc__card {
   position: absolute;
@@ -328,10 +313,8 @@
   .hcc--asking .ccg__panel h2 { font-size: 24px; }
 }
 @media (max-width: 640px) {
-  .ccg__modal { width: 100vw; max-height: 100dvh; height: 100dvh; margin: 0; border-radius: 0; border: 0; }
-  .ccg__modal-body { padding: 64px 20px 28px; }
-  .ccg__m-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-  .ccg__m-card { width: min(46vw, 190px); justify-self: center; }
+  .ccg__m-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .ccg__m-card { width: min(44vw, 170px); justify-self: center; }
   .ccg__m-shot { width: auto; }
   .ccg__m-shot canvas { max-height: 46vh; }
   .ccg__m-copy .psl-btn { width: 100%; justify-content: center; }
@@ -347,6 +330,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hcc__kicker, .hcc__title, .hcc__sub, .hcc__divider, .hcc__photo, .hcc__card, .ccg__panel > *, .ccg__opt, .ccg__mark, .ccg__modal[open] { animation: none !important; }
+  .hcc__kicker, .hcc__title, .hcc__sub, .hcc__divider, .hcc__photo, .hcc__card, .ccg__panel > *, .ccg__opt, .ccg__mark { animation: none !important; }
   .hcc__card { transition: none; }
 }
