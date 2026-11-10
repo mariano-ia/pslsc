@@ -1,7 +1,6 @@
 /**
- * Bloque t00 · Soccer Staff. Lee el mismo estado que el hero y, revelado el Head Coach, lo pinta como una tarjeta más
- * del staff (como Front Office) que lleva a su ficha. Sin estado o antes del reveal queda en "To be announced".
- * También muestra el acceso a Mi colección, si la página existe.
+ * Bloque t00 · Soccer Staff. Lee el mismo estado que el hero. Revelado el Head Coach, lo pinta como una tarjeta del
+ * staff (como Front Office) que lleva a su ficha. Antes del reveal la página no está disponible: vuelve a Front Office.
  */
 const tmhEsc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
@@ -20,7 +19,11 @@ async function initSoccerStaff(root = document) {
     return;
   }
   const { profile, card, presentation } = state;
-  if (!profile || !presentation) return;
+  if (!state.revealed || !profile || !presentation) {
+    const front = el.dataset.ccFront;
+    if (front && !front.startsWith('__')) location.replace(front);
+    return;
+  }
 
   const name = [card.first, card.last].filter(Boolean).join(' ');
   const coach = document.createElement('a');
@@ -30,10 +33,8 @@ async function initSoccerStaff(root = document) {
     <div class="scard__bar"><div class="scard__id"><p class="scard__name">${tmhEsc(name)}</p><p class="scard__role">Head Coach</p></div>
       <span class="scard__go" aria-hidden="true">&rarr;</span></div>
     <p class="tmh__summary">${tmhEsc(profile.summary)} <span class="tmh__more">Meet the coach</span></p>`;
-  el.querySelector('[data-tmh-coach]').replaceWith(coach);
-
-  const collection = el.dataset.ccCollection;
-  if (collection && !collection.startsWith('__')) el.querySelector('[data-tmh-cc]').hidden = false;
+  el.querySelector('[data-tmh-grid]').append(coach);
+  el.querySelector('[data-tmh-group]').hidden = false;
 }
 
 export { initSoccerStaff };

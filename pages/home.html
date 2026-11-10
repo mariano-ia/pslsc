@@ -83,7 +83,6 @@
     // ?demo simula el envío del mail y ?reset borra el progreso.
     // En WordPress se pega un bloque u otro. El estado sale de .local/ (privado, fuera de git).
     const params = new URLSearchParams(location.search);
-    const H1_OPTIONS = { 1: 'Four clues. One coach.', 2: 'Guess who’s leading Port St. Lucie.', 3: 'Our first coach is a secret. For now.', 4: 'Who is our first Head Coach?' };
     const cc = params.get('cc') || 'mon';
     const ended = cc === 'end';
     const stateDay = ended ? 'sat' : cc;
@@ -97,9 +96,7 @@
         .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${stateDay}.json`)
         .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${stateDay}`)
         .replaceAll('__URL_COLLECTION__', `collection.html?cc=${stateDay}`)
-        .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${stateDay}`)
-        // Solo preview: ?h1=1..4 prueba otros títulos para el hero de campaña (el del HTML es el 1).
-        .replace('>Four clues. One coach.<', `>${H1_OPTIONS[params.get('h1')] || 'Four clues. One coach.'}<`);
+        .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${stateDay}`);
     }));
     // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.
     // (El sitio es English-only: no hay init de idioma.)
@@ -124,7 +121,7 @@
 
     // Aterrizaje con #ancla desde otra página: los bloques se inyectan DESPUÉS del load, así que
     // el navegador no encontró el ancla — la buscamos ahora (el scroll es suave vía CSS, motion.css).
-    if (location.hash && location.hash !== '#claim') document.getElementById(location.hash.slice(1))?.scrollIntoView();
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
   </script>
 
   <!-- Web components a medida -->

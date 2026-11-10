@@ -16,7 +16,7 @@
 
   <link rel="stylesheet" href="../custom/card/card.css?v=1" />
   <link rel="stylesheet" href="../native/team/t02-front-office.css?v=1" />
-  <link rel="stylesheet" href="../native/team/t00-soccer-staff.css?v=1" />
+  <link rel="stylesheet" href="../native/team/t00-soccer-staff.css?v=2" />
   <link rel="stylesheet" href="../native/_patterns/club-nav.css?v=1" />
 
   <style>
@@ -60,7 +60,7 @@
         .replaceAll('__URL_COLLECTION__', `collection.html?cc=${cc}`);
     }));
     const [{ initSoccerStaff }, { initNewsletter }, { initMotion }] = await Promise.all([
-      import('../native/team/t00-soccer-staff.js?v=1'),
+      import('../native/team/t00-soccer-staff.js?v=2'),
       import('../native/home/09-cierre-footer.js?v=67'),
       import('../native/_patterns/motion.js?v=67'),
     ]);

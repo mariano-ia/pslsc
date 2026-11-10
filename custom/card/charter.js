@@ -35,6 +35,36 @@ function charterSave(S) {
 
 const charterPad = (n) => String(n).padStart(4, '0');
 
+/* ActiveCampaign: POST directo a proc.php, como el newsletter (ver acSubmitDirect en ac-forms.js). Lo usan el hero
+   (form de la Collector) y la ficha del DT (form de la Card No. 001): cada bloque lleva su data-ac-form.
+   ?demo simula el envío. */
+const CHARTER_EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+async function charterSendLead(el, email) {
+  if (new URLSearchParams(location.search).has('demo')) return;
+  const d = el.dataset;
+  const set = (v) => v && !v.startsWith('__');
+  if (!set(d.acAccount) || !set(d.acForm)) {
+    console.error('[charter] Falta configurar ActiveCampaign: el mail NO se envió.');
+    throw new Error('Something went wrong on our end. Nothing was saved, please try again later.');
+  }
+  const body = new FormData();
+  Object.entries({ u: d.acForm, f: d.acForm, s: '', c: '0', m: '0', act: 'sub', v: '2', email }).forEach(([k, v]) => body.append(k, v));
+  if (set(d.acConsent)) body.append(d.acConsent, 'Yes');
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), 15000);
+  let data;
+  try {
+    const res = await fetch(`https://${d.acAccount}.activehosted.com/proc.php?jsonp=true`, { method: 'POST', body, headers: { Accept: 'application/json' }, signal: ctl.signal });
+    data = await res.json();
+  } catch (err) {
+    console.error('[charter] ActiveCampaign no respondió', err);
+    throw new Error('We could not reach our server. Check your connection and try again.');
+  } finally {
+    clearTimeout(timer);
+  }
+  if (data?.action !== 'show_thank_you') throw new Error(data?.data?.message || 'We could not send that, please try again in a moment.');
+}
+
 function charterCollectorCard(S, fan = {}) {
   const f = S.founder;
   const no = f && charterPad(f.no);
@@ -57,4 +87,4 @@ function charterCollectorCard(S, fan = {}) {
   };
 }
 
-export { CHARTER_KEY, CHARTER_CREST, CHARTER_COLLECTOR_PHOTO, CHARTER_ICONS, charterLoad, charterSave, charterPad, charterCollectorCard };
+export { CHARTER_KEY, CHARTER_CREST, CHARTER_COLLECTOR_PHOTO, CHARTER_ICONS, CHARTER_EMAIL, charterLoad, charterSave, charterPad, charterCollectorCard, charterSendLead };

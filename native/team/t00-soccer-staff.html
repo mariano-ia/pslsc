@@ -1,11 +1,11 @@
 <!--
   Bloque t00 · Soccer Staff: el cuerpo técnico. 🟦 A medida. Mismo formato que Front Office (t02): cabecera oscura y
-  las personas en tarjetas sobre claro (usa las tarjetas .scard de t02). Se publica el viernes del reveal, con el
-  Head Coach: antes no existe en el menú ni en la navegación del Club. La carta no va acá (vive en la ficha del DT);
-  abajo, un acceso a Mi colección.
+  las personas en tarjetas sobre claro (usa las tarjetas .scard de t02). No está disponible hasta el reveal: se
+  publica el viernes, con el Head Coach presentado, y si alguien la abre antes vuelve a Front Office. Hoy muestra
+  solo al Head Coach (los asistentes se suman cuando estén). La carta no va acá (vive en la ficha del DT); abajo,
+  la Charter Collection como "Coming soon".
   El contenido del Head Coach llega por datos desde __COLECCION_API__; acá no va nada de él.
-  Reemplazos: __COLECCION_API__, __URL_COACH__ (ficha del DT), __URL_FRONT_OFFICE__, __URL_TEAM__ (esta página)
-  y __URL_COLLECTION__ (Mi colección: sin reemplazar, el acceso no aparece).
+  Reemplazos: __COLECCION_API__, __URL_COACH__ (ficha del DT), __URL_FRONT_OFFICE__ y __URL_TEAM__ (esta página).
 -->
 <section class="staff staff--head surface-ink" id="soccer-staff">
   <div class="psl-container">
@@ -16,29 +16,20 @@
   </div>
 </section>
 
-<section class="staff staff--body surface-paper tmh" data-cc-state="__COLECCION_API__" data-cc-coach="__URL_COACH__" data-cc-collection="__URL_COLLECTION__">
+<section class="staff staff--body surface-paper tmh" data-cc-state="__COLECCION_API__" data-cc-coach="__URL_COACH__" data-cc-front="__URL_FRONT_OFFICE__">
   <div class="psl-container">
-    <div class="staff__group" id="coaching-staff">
+    <div class="staff__group" id="coaching-staff" data-tmh-group hidden>
       <span class="psl-kicker staff__grouplabel">Coaching Staff</span>
-      <div class="staff__grid">
-        <div class="scard scard--tba" data-tmh-coach>
-          <div class="scard__media scard__media--ph"><span class="scard__initials">HC</span></div>
-          <div class="scard__bar"><div class="scard__id"><p class="scard__name">To be announced</p><p class="scard__role">Head Coach</p></div></div>
-        </div>
-        <div class="scard scard--tba">
-          <div class="scard__media scard__media--ph"><span class="scard__initials">AC</span></div>
-          <div class="scard__bar"><div class="scard__id"><p class="scard__name">Coming soon</p><p class="scard__role">Assistant Coaches</p></div></div>
-        </div>
-      </div>
+      <div class="staff__grid" data-tmh-grid></div>
     </div>
 
-    <aside class="tmh__cc" data-tmh-cc hidden aria-labelledby="tmh-cc-title">
+    <aside class="tmh__cc" aria-labelledby="tmh-cc-title">
       <div>
         <span class="psl-kicker">Charter Collection</span>
         <h2 class="tmh__cc-title" id="tmh-cc-title">Every first, a card.</h2>
-        <p class="tmh__cc-lead">Our first Head Coach is Card No. 001 of the Charter Collection. More cards are on the way.</p>
+        <p class="tmh__cc-lead">Our first Head Coach is Card No. 001. Your own collection, with every card that follows, is on the way.</p>
       </div>
-      <a class="psl-btn cta-secondary" href="__URL_COLLECTION__" data-tmh-cc-link><span>My collection</span> <span aria-hidden="true">&rarr;</span></a>
+      <span class="tmh__soon">Coming soon</span>
     </aside>
   </div>
 </section>

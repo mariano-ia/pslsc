@@ -21,7 +21,7 @@
  * Collector Card y progreso en el dispositivo: custom/card/charter.js (compartido con Mi colección).
  * Sin fuente (o si falla) queda la carta genérica de abajo y un aviso: el hero nunca se rompe.
  */
-import { CHARTER_CREST, CHARTER_COLLECTOR_PHOTO, charterLoad, charterSave, charterPad, charterCollectorCard } from '../../custom/card/charter.js';
+import { CHARTER_CREST, CHARTER_COLLECTOR_PHOTO, CHARTER_EMAIL, charterLoad, charterSave, charterPad, charterCollectorCard, charterSendLead } from '../../custom/card/charter.js';
 
 const FALLBACK_CARD = {
   code: 'CC-001',
@@ -47,42 +47,11 @@ const CCG_FULL_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 // Hora de cada pista y del reveal (Etapa 0: la confirma el club). Se usa en todo el copy del hero y del panel.
 const CCG_TIME = '10:00 AM ET';
 const CCG_REVEAL = `Friday at ${CCG_TIME}`;
-const CCG_EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const ccgEsc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
-/* ActiveCampaign: POST directo a proc.php, como el newsletter (ver acSubmitDirect en ac-forms.js). */
-function ccgAcConfig(hero) {
-  const d = hero.dataset;
-  if (!d.acAccount || d.acAccount.startsWith('__') || !d.acForm || d.acForm.startsWith('__')) return null;
-  return { account: d.acAccount, form: d.acForm, consent: d.acConsent };
-}
 // Founding Member: el hero no lo asigna. Hoy no hay forma de saber quién es founder; la carta se reclama como
 // Inaugural Collector y se ajusta a Founding Member más adelante, cuando el servidor de Mi colección lo responda
 // (S.founder llega de /verify o /me). Si ya llegó, el hero muestra la versión gold.
-async function ccgSendLead(hero, { email }) {
-  if (new URLSearchParams(location.search).has('demo')) return;
-  const ac = ccgAcConfig(hero);
-  if (!ac) {
-    console.error('[charter] Falta configurar ActiveCampaign: el mail NO se envió.');
-    throw new Error('Something went wrong on our end. Nothing was saved, please try again later.');
-  }
-  const body = new FormData();
-  Object.entries({ u: ac.form, f: ac.form, s: '', c: '0', m: '0', act: 'sub', v: '2', email }).forEach(([k, v]) => body.append(k, v));
-  if (ac.consent && !ac.consent.startsWith('__')) body.append(ac.consent, 'Yes');
-  const ctl = new AbortController();
-  const timer = setTimeout(() => ctl.abort(), 15000);
-  let data;
-  try {
-    const res = await fetch(`https://${ac.account}.activehosted.com/proc.php?jsonp=true`, { method: 'POST', body, headers: { Accept: 'application/json' }, signal: ctl.signal });
-    data = await res.json();
-  } catch (err) {
-    console.error('[charter] ActiveCampaign no respondió', err);
-    throw new Error('We could not reach our server. Check your connection and try again.');
-  } finally {
-    clearTimeout(timer);
-  }
-  if (data?.action !== 'show_thank_you') throw new Error(data?.data?.message || 'We could not send that, please try again in a moment.');
-}
 
 /* Carta de la persona: la cerrada + lo que destrabó contestando */
 function ccgComposeCard(state, S, flashZone) {
@@ -193,8 +162,8 @@ function ccgPanelHTML(st, S, state, ctx = {}) {
         <div class="ccg__row">${ccgBtn('reveal', 'Reveal card No. 001', true)}</div>`;
     case 'revealed':
     case 'closed': {
-      // Presentado el coach, el hero es de él: conocerlo a él y al staff. La Collector se reclama desde home#claim
-      // (lo usan Mi colección y la ficha del DT) y se ve en Mi colección.
+      // Presentado el coach, el hero es de él: conocerlo a él y al staff. La Collector se reclama solo durante el
+      // juego; la Card No. 001 se pide por mail en la ficha del DT.
       const line = state.profile?.summary || 'The first Head Coach in Port St. Lucie SC history.';
       return `<p class="ccg__panel-lead">${ccgEsc(line)}</p>
         <div class="ccg__row"><a class="psl-btn cta-primary" href="${ccgEsc(state.coachUrl)}"><span>Meet the coach</span> <span aria-hidden="true">&rarr;</span></a><a class="psl-btn cta-secondary" href="${ccgEsc(state.teamUrl)}">Meet the staff</a></div>`;
@@ -617,11 +586,11 @@ async function initHeroColeccion(root = document) {
         e.preventDefault();
         if (form.dataset.busy) return;   // doble envío (doble click, Enter repetido)
         const email = form.elements.email.value.trim();
-        if (!CCG_EMAIL.test(email)) { showError(form, 'Enter a valid email, like name@email.com.'); return; }
+        if (!CHARTER_EMAIL.test(email)) { showError(form, 'Enter a valid email, like name@email.com.'); return; }
         if (!form.elements.consent.checked) { showError(form, 'Tick the box to agree to receive emails.'); return; }
         busy(form, true, 'Sending…');
         try {
-          await ccgSendLead(hero, { email });
+          await charterSendLead(hero, email);
         } catch (err) {
           busy(form, false);
           showError(form, err.message);
@@ -720,20 +689,6 @@ async function initHeroColeccion(root = document) {
   $('[data-ccg-flip]').addEventListener('click', () => cardEl.flip());
 
   paint();
-
-  // home#claim (desde Mi colección o la ficha del DT): el panel abre el reclamo. Con la Collector ya reclamada, la muestra.
-  function fromHash() {
-    if (location.hash !== '#claim') return;
-    history.replaceState(null, '', `${location.pathname}${location.search}#hero`);
-    step = { t: S.email ? 'collector' : 'claim', back: null };
-    paint(null, true);
-    const go = () => goTo(mobile() ? panel : hero);
-    go();
-    // con el coach, la foto va arriba del panel en mobile: cuando termina de cargar, el panel se corre
-    if (hero.classList.contains('hcc--coach') && !photo.complete) photo.addEventListener('load', go, { once: true });
-  }
-  fromHash();
-  addEventListener('hashchange', fromHash);
 }
 
 export { initHeroColeccion };

@@ -87,7 +87,7 @@ no hay que tocar bloques entre lunes y sábado):
 | Lunes de arranque, antes de las 10:00 AM ET | Sacar `01-hero` y pegar `01b-hero-coleccion` en su lugar |
 | Lunes a jueves | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista |
 | Viernes 10:00 AM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
-| Sábado hasta el fin de campaña | Nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector se sigue pudiendo reclamar desde la ficha del DT y Mi colección, que llevan a `home#claim` (abre el reclamo en el panel del hero, sin pop-up) |
+| Sábado hasta el fin de campaña | Nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector ya no se reclama (es del juego); la Card No. 001 se pide por mail en la ficha del DT |
 | Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion`, volver a pegar `01-hero` y pegar `01c-coleccion` **debajo**. Con eso se cierra el reclamo de la Collector |
 | Junto con `01c` (o antes, si se quiere) | Publicar **Mi colección** en `/collection/` (`c01-collection`) y reemplazar `__URL_COLLECTION__` en `01c` y `t01` por esa URL |
 
@@ -113,16 +113,18 @@ publicar así y sumar el servidor después. Contrato del servidor (endpoints, to
   `__URL_FRONT_OFFICE__` y `__URL_TEAM__` (Soccer Staff). En Front Office esa navegación aparece sola cuando
   `__COLECCION_API__` dice que el Head Coach ya se reveló (antes queda oculta): no hay que tocar el bloque el viernes.
 - **Soccer Staff** (`t00-soccer-staff`) tiene el mismo formato que Front Office (cabecera oscura, tarjetas sobre claro;
-  reusa el CSS de `t02`, lo suma `build-blocks.py`). El Head Coach es una tarjeta que lleva a su ficha. Al pie, un acceso
-  a Mi colección (`__URL_COLLECTION__`; sin reemplazar no aparece). La carta no va en esta página.
-- La ficha (`t01-coach`) tiene, al pie, el apartado "Charter Collection · Card No. 001": la carta, y "In your
-  collection" si la persona reclamó su Collector en ese dispositivo o "Claim your Collector Card" (lleva a `home#claim`).
-  Cuando termina la campaña, el estado tiene que mandar `claimOpen: false` para que deje de ofrecer el reclamo.
-  `__URL_COLLECTION__` (Mi colección) agrega el link "See my collection" cuando exista. Front Office
-  (`t02-front-office`) reemplaza a `/staff/` y se puede publicar ya; Soccer Staff y la ficha, desde el viernes del reveal.
+  reusa el CSS de `t02`, lo suma `build-blocks.py`). Por ahora muestra solo al Head Coach, como tarjeta que lleva a su
+  ficha. Al pie, "Every first, a card." como **Coming soon** (sin link: Mi colección todavía no se publica). La carta
+  no va en esta página.
+- La ficha (`t01-coach`) tiene, al pie, el apartado "Charter Collection · Card No. 001": la carta y un form para
+  recibirla por mail (`__AC_CARD_FORM__`, ver `docs/charter-collection-activecampaign.md`). La Collector no se reclama acá.
+- Soccer Staff y la ficha **no están disponibles hasta el reveal**: se publican el viernes y, si alguien las abre antes,
+  vuelven solas a Front Office (`__URL_FRONT_OFFICE__`). Front Office (`t02-front-office`) reemplaza a `/staff/` y se
+  puede publicar ya.
 Reemplazos: `__COLECCION_API__` (URL del estado por fecha), `__URL_COACH__` (permalink de la ficha), `__URL_TEAM__` (equipo, hoy `/staff/`) y, en el hero,
 `__AC_ACCOUNT__`, `__AC_COLLECTION_FORM__` y `__AC_FIELD_CONSENT__` (`field[NN]` del form de
-ActiveCampaign, que además es el que pone la etiqueta). Sin esos datos el form valida, pero no envía. Qué crear en
+ActiveCampaign, que además es el que pone la etiqueta); en la ficha, `__AC_ACCOUNT__`, `__AC_CARD_FORM__` y
+`__AC_FIELD_CONSENT__`. Sin esos datos el form valida, pero no envía. Qué crear en
 ActiveCampaign (form, campos, etiqueta y mails): `docs/charter-collection-activecampaign.md`.
 
 **Recorte de la foto de la Collector (MediaPipe):** correr `tools/fetch-mediapipe.sh`. Baja unos 19 MB a
