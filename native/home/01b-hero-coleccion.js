@@ -114,6 +114,7 @@ function ccgEmailFields(id) {
 
 const CCG_ICON_OK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 const CCG_ICON_MISS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>';
+const CCG_MINE_STEPS = ['claim', 'collector', 'share'];   // pasos en los que la carta grande es la tuya
 const ccgBtn = (act, label, primary) => `<button type="button" class="psl-btn ${primary ? 'cta-primary' : 'cta-secondary'}" data-act="${act}">${label}</button>`;
 
 // La respuesta, en chico: si acertó, el dato y la pista que destrabó. Reemplaza a la pregunta y sus opciones.
@@ -175,21 +176,19 @@ function ccgPanelHTML(st, S, state, ctx = {}) {
         ? ['Your Collector Card, now and in your inbox', 'Your name and photo on it (they stay on your device)', 'First to know when the next card drops']
         : ['Your Collector Card, now and in your inbox', Object.keys(S.answers).length < 4 && 'An email when each new clue unlocks', 'A reminder on reveal day'].filter(Boolean);
       return `${D ? `<p class="ccg__clue-mini"><b>Clue unlocked · ${ccgEsc(D.clueTitle)}</b> ${ccgEsc(D.clue)}</p>` : ''}
-        <div class="ccg__m-grid"><div class="ccg__m-card"><psl-card data-ccg-preview></psl-card></div>
         <div class="ccg__m-copy"><span class="ccg__kicker">Free · takes 10 seconds</span><h2 tabindex="-1">Claim your Collector Card</h2>
           <p class="ccg__panel-lead">Your own card in the Charter Collection. We&rsquo;ll email it to you, too.</p>
-          <ul class="ccg__gets">${gets.map((g) => `<li>${g}</li>`).join('')}</ul></div></div>
+          <ul class="ccg__gets">${gets.map((g) => `<li>${g}</li>`).join('')}</ul></div>
         <form class="ccg__form" data-form="claim" novalidate>${ccgEmailFields('ccg-claim')}
           <p class="ccg__err" data-err role="alert" hidden></p>
           <div class="ccg__row"><button class="psl-btn cta-primary" type="submit">Claim my card</button>${ccgBtn('close', 'Not now')}</div>
         </form>`;
     }
     case 'collector':
-      return `<div class="ccg__m-grid"><div class="ccg__m-card"><psl-card flippable data-ccg-collector></psl-card></div>
-        <div class="ccg__m-copy"><span class="ccg__kicker">${S.founder ? 'Special edition' : 'Card claimed'}</span>
+      return `<div class="ccg__m-copy"><span class="ccg__kicker">${S.founder ? 'Special edition' : 'Card claimed'}</span>
           <h2 tabindex="-1">${S.founder ? `Founding Member No. ${charterPad(S.founder.no)}` : 'You&rsquo;re an Inaugural Collector'}</h2>
           <p class="ccg__panel-lead">${S.founder ? 'Your Founding Member number makes this card one of a kind.' : 'This one is yours.'} Add your name and a photo, then share it.</p>
-          ${ctx.justClaimed ? `<p class="ccg__mail">Your card is on its way to <b>${ccgEsc(S.email)}</b>.</p>` : ''}</div></div>
+          ${ctx.justClaimed ? `<p class="ccg__mail">Your card is on its way to <b>${ccgEsc(S.email)}</b>.</p>` : ''}</div>
         <div data-ccg-capture-slot></div>
         <div class="ccg__row">${ccgBtn('share', 'Share my card', true)}${ccgBtn('close', 'Done')}</div>`;
     case 'share':
@@ -433,10 +432,48 @@ async function initHeroColeccion(root = document) {
   let claimTimer = 0;
   const pctx = { justClaimed: false, fmt: 'story' };
 
-  function paintCard() {
+  // La carta grande del hero es la No. 001. Mientras reclamás, ves tu carta y compartís (pasos claim, collector y
+  // share), ese lugar lo ocupa tu Collector: más grande para encuadrar la foto. Al salir, vuelve la No. 001.
+  let mineShown = false;
+  let swapToken = 0;
+  let swapData = null;   // mientras dura el cambio, lo último que tiene que quedar en la carta (nombre o foto nuevos)
+  const setCard = (data) => { if (swapData) swapData = data; else cardEl.data = data; };
+  function swapCard(data) {
+    const token = ++swapToken;
+    cardEl.flip(false);
+    if (reduce || !hero.classList.contains('is-ready')) { swapData = null; cardEl.data = data; return; }
+    swapData = data;
+    cardEl.getAnimations().forEach((a) => a.cancel());
+    const out = cardEl.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(10px) scale(.94)' }], { duration: 180, easing: 'ease-in', fill: 'forwards' });
+    // El cambio de datos va por timer, no por el fin de la animación: si el navegador no pinta (pestaña de fondo),
+    // la carta igual queda bien.
+    setTimeout(() => {
+      if (token !== swapToken) return;
+      cardEl.data = swapData;
+      swapData = null;
+      out.cancel();   // en el mismo cuadro que arranca la entrada: no queda tapada ni parpadea
+      cardEl.animate([{ opacity: 0, transform: 'translateY(-10px) scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 340, easing: 'cubic-bezier(.2,.7,.2,1)' });
+    }, 180);
+  }
+  const mineCard = (st) => (st.t === 'claim' ? charterCollectorCard({ ...S, founder: null }, {}) : charterCollectorCard(S, capture.fan));
+
+  function paintCard(st) {
+    const mine = Boolean(st) && CCG_MINE_STEPS.includes(st.t);
+    if (mine) {
+      if (mineShown) setCard(mineCard(st)); else swapCard(mineCard(st));
+      mineShown = true;
+      lastCardKey = '';
+      $('[data-ccg-count]').textContent = 'Your Collector Card';
+      return;
+    }
     const card = ccgComposeCard(state, S, null);
     const key = JSON.stringify(card);
-    if (key !== lastCardKey || flashZone) {
+    if (mineShown) {
+      mineShown = false;
+      lastCardKey = key;
+      flashZone = null;
+      swapCard(card);
+    } else if (key !== lastCardKey || flashZone) {
       lastCardKey = key;
       const autoFlip = flashZone === 'career' || flashZone === 'fact';
       cardEl.flip(false);
@@ -472,7 +509,8 @@ async function initHeroColeccion(root = document) {
 
   // focus: true cuando el cambio lo provocó la persona (no al cargar): el foco pasa al título del panel.
   function paint(scrollTarget, focus, morph) {
-    paintCard();
+    const st = ccgNextStep(S, state, step);
+    paintCard(st);
     const shown = state.revealed && S.revealed;
     hero.classList.toggle('hcc--coach', shown && Boolean(state.presentation));
     const copy = ccgHeroCopy(S, state);
@@ -483,10 +521,10 @@ async function initHeroColeccion(root = document) {
     $('[data-cc-sub]').textContent = copy.sub;
     $('[data-cc-sub]').hidden = shown || !copy.sub;
     $('[data-cc-more]').hidden = shown;
-    const st = ccgNextStep(S, state, step);
     hero.classList.toggle('hcc--asking', st.t === 'q');   // mobile: carta chica para que entre la pregunta
     hero.classList.toggle('hcc--step', Boolean(step));
-    hero.classList.toggle('hcc--claiming', ['claim', 'collector', 'share'].includes(st.t));   // con el coach, el reclamo lleva caja
+    hero.classList.toggle('hcc--claiming', CCG_MINE_STEPS.includes(st.t));   // tu carta en el lugar grande; con el coach, el reclamo lleva caja
+    hero.classList.toggle('hcc--sharing', st.t === 'share');
     hero.append(capture);   // el único <psl-photo-capture> conserva la foto entre pasos: fuera del panel, oculto
     capture.hidden = true;
     const html = ccgPanelHTML(st, S, state, pctx);
@@ -552,7 +590,8 @@ async function initHeroColeccion(root = document) {
     clearTimeout(claimTimer);
     step = next;
     paint(null, true, true);
-    if (mobile()) goTo(panel);
+    if (!mobile()) return;
+    goTo(next && ['claim', 'collector'].includes(next.t) ? cardEl.parentElement : panel);
   }
   // "Not now" y "Done": vuelve a lo que había antes (la respuesta del día o el estado del hero)
   function closeStep() {
@@ -580,7 +619,6 @@ async function initHeroColeccion(root = document) {
     });
 
     if (st.t === 'claim') {
-      panel.querySelector('[data-ccg-preview]').data = charterCollectorCard({ ...S, founder: null }, {});
       const form = panel.querySelector('[data-form="claim"]');
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -606,9 +644,7 @@ async function initHeroColeccion(root = document) {
     }
 
     if (st.t === 'collector') {
-      const collector = panel.querySelector('[data-ccg-collector]');
-      collector.data = charterCollectorCard(S, capture.fan);
-      capture.stage = collector;
+      capture.stage = cardEl;   // la cámara se ve adentro de tu carta, en el lugar grande
       capture.hidden = false;
       panel.querySelector('[data-ccg-capture-slot]').append(capture);
     }
@@ -666,20 +702,19 @@ async function initHeroColeccion(root = document) {
       setTimeout(() => hero.classList.remove('hcc--revealing'), 2600);
       say(`Card No. 001 revealed: ${nameEl.textContent}.`);
     };
-    if (reduce) { paintCard(); done(); return; }
+    if (reduce) { paintCard(null); done(); return; }
     // 1) la carta gira y la silueta se apaga; el título sigue siendo el de la semana
     spinning = true;
     btn.disabled = true;
     btn.textContent = 'Revealing…';
-    paintCard();
+    paintCard(null);
     cardEl.reveal();
     // 2) termina el giro (1,3 s), un respiro con la carta revelada, y entra el coach
     setTimeout(done, 2200);
   }
 
   capture.addEventListener('fanchange', (e) => {
-    const collector = panel.querySelector('[data-ccg-collector]');
-    if (collector) collector.data = charterCollectorCard(S, e.detail);
+    if (mineShown && step?.t === 'collector') setCard(charterCollectorCard(S, e.detail));
   });
   // Baja a lo que sigue del hero, sea cual sea el bloque siguiente en WordPress.
   $('[data-cc-more]').addEventListener('click', (e) => {
