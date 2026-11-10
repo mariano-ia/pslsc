@@ -79,6 +79,16 @@ Nav (00) y News (08) no están en la lista: son bloques nativos del template de 
 **Charter Collection (solo durante la campaña):** en Home, `01b-hero-coleccion` se pega **en lugar de** `01-hero`,
 nunca los dos: el juego se juega ahí.
 
+Bloques de la campaña (todos en `dist/blocks/`): `psl-home-01b-hero-coleccion`, `psl-home-01c-coleccion`,
+`psl-team-t02-front-office`, `psl-team-t00-soccer-staff` y `psl-team-t01-coach`. Para recompilar solo esos:
+`python3 tools/build-blocks.py 01b-hero-coleccion 01c-coleccion t02-front-office t00-soccer-staff t01-coach`.
+`psl-team-t03-roster` (Roster) está en pausa: no se publica. `c01-collection` (Mi colección) todavía no se compila
+ni se publica.
+
+Todo lo del DT (nombre, fotos, silueta, preguntas, pistas, ficha) **no está en el repo**: llega por
+`__COLECCION_API__`, un endpoint que responde según la fecha. Contrato, calendario y requisitos (sin caché, hora ET,
+CORS): `docs/charter-collection-state.md`. El contenido real va en un paquete privado aparte, no por GitHub.
+
 Qué se pega cada día en Home (el juego cambia solo según la fecha: lo resuelve el estado de `__COLECCION_API__`,
 no hay que tocar bloques entre lunes y sábado):
 
@@ -89,13 +99,14 @@ no hay que tocar bloques entre lunes y sábado):
 | Viernes 10:00 AM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
 | Sábado hasta el fin de campaña | Nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector ya no se reclama (es del juego); la Card No. 001 se pide por mail en la ficha del DT |
 | Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion`, volver a pegar `01-hero` y pegar `01c-coleccion` **debajo**. Con eso se cierra el reclamo de la Collector |
-| Junto con `01c` (o antes, si se quiere) | Publicar **Mi colección** en `/collection/` (`c01-collection`) y reemplazar `__URL_COLLECTION__` en `01c` y `t01` por esa URL |
+| Más adelante (cuando haya más cartas) | Publicar **Mi colección** en `/collection/` (`c01-collection`) y reemplazar `__URL_COLLECTION__` en `01c` por esa URL. **No va en esta campaña** |
 
 `01c-coleccion` usa el mismo `__COLECCION_API__` (tiene que seguir respondiendo con la carta revelada después de la
-campaña), `__URL_COACH__` y `__URL_COLLECTION__` (Mi colección: mientras esa página no exista, el botón no aparece).
+campaña), `__URL_COACH__` y `__URL_COLLECTION__` (Mi colección: **dejarlo sin reemplazar** por ahora; así el botón no
+aparece).
 Si el estado no responde, el bloque queda oculto.
 
-**Mi colección (`c01-collection`, `/collection/`):** las cartas de la persona, las que faltan como siluetas y el link
+**Mi colección (`c01-collection`, `/collection/`), para más adelante:** las cartas de la persona, las que faltan como siluetas y el link
 para abrirla en otro dispositivo. Reemplazos: `__COLECCION_API__`, `__URL_COACH__` y `__COLLECTION_API__` (el servidor
 del link). Sin `__COLLECTION_API__` la página funciona con lo guardado en el dispositivo y no ofrece el link: se puede
 publicar así y sumar el servidor después. Contrato del servidor (endpoints, tokens, errores):

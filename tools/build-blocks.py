@@ -11,10 +11,11 @@ Cada bloque:
     rompiendo `a && b` -> `a &#038;&#038; b`. En los atributos no entra.)
   - full-bleed sin alignfull  +  franja de autodiagnóstico al pie
 
-Correr:  python3 tools/build-blocks.py
+Correr:  python3 tools/build-blocks.py               (todos)
+         python3 tools/build-blocks.py 01b-hero-coleccion t01-coach   (solo esos: no toca los demás de dist/)
 Requiere las fuentes subseteadas en <scratchpad>/allfonts/ (ver tools/README.md).
 """
-import re, base64, os
+import re, base64, os, sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FONTS_DIR = os.environ.get("PSL_FONTS_DIR", "")  # dir con los .woff2 subseteados (para verificar tamaños)
@@ -227,12 +228,15 @@ def block_js(path):
     src = re.sub(r"document\.addEventListener\('DOMContentLoaded'[^;]*;", "", src)
     return rewrite_assets(src), inits
 
-def boot_js(needs_motion, inits):
-    # cada init(root) se llama por cada .pslsc del DOM, una sola vez (data-psl-booted)
-    calls = (["initMotion(r);"] if needs_motion else []) + [f"{i}(r);" for i in inits]
-    per_root = "".join(calls)
-    body = (f"document.querySelectorAll('.pslsc').forEach(function(r){{"
-            f"if(r.dataset.pslBooted)return;r.dataset.pslBooted='1';{per_root}}});") if per_root else ""
+def boot_js(needs_motion, inits, block_id):
+    # Cada init(root) se llama sobre la raíz de ESTE bloque (data-psl-block), una sola vez (data-psl-ready).
+    # Antes recorría todas las .pslsc de la página y las marcaba con data-psl-booted: con dos bloques con JS en la
+    # misma página (ej. 01-hero + 01c), el primero marcaba también la raíz del segundo y su JS nunca corría.
+    # data-psl-booted sigue marcando "motion ya iniciado" (lo respetan los bloques compilados antes de este cambio).
+    motion = "if(!r.dataset.pslBooted){initMotion(r);}" if needs_motion else ""
+    per_root = motion + "".join(f"{i}(r);" for i in inits)
+    body = (f"document.querySelectorAll('.pslsc[data-psl-block=\"{block_id}\"]').forEach(function(r){{"
+            f"if(r.dataset.pslReady)return;r.dataset.pslReady='1';{per_root}r.dataset.pslBooted='1';}});") if per_root else ""
     return f"""
 function pslVw(){{document.documentElement.style.setProperty('--psl-vw',document.documentElement.clientWidth+'px');}}
 pslVw(); addEventListener('resize',pslVw,{{passive:true}});
@@ -317,7 +321,7 @@ def build_block(page, name):
         if c in COMPONENTS: js_parts.append(component_js(c))
     for code, _ in block_mods:
         js_parts.append(code)
-    js_parts.append(boot_js(needs_motion, block_inits))
+    js_parts.append(boot_js(needs_motion, block_inits, f"{page}/{name}"))
     js = "\n".join(js_parts)
 
     html = rewrite_links(rewrite_assets(html))
@@ -335,7 +339,7 @@ def build_block(page, name):
 {css}
 </style>
 
-<div class="pslsc pslsc--bleed">
+<div class="pslsc pslsc--bleed" data-psl-block="{page}/{name}">
 {html}
 {diag}
 </div>
@@ -348,12 +352,16 @@ if __name__ == "__main__":
     outdir = os.path.join(REPO, "dist", "blocks")
     os.makedirs(outdir, exist_ok=True)
     total = 0
+    only = set(sys.argv[1:])   # nombres de bloque: compila solo esos (ej. los de una campaña) sin regenerar el resto
+    unknown = only - {n for _, n in BLOCKS}
+    if unknown: sys.exit(f"Bloques que no están en BLOCKS: {', '.join(sorted(unknown))}")
     print(f"ASSET_BASE = {ASSET_BASE}")
     print(f"permalinks = {PERMALINKS}\n")
-    for page, name in BLOCKS:
+    todo = [(p, n) for p, n in BLOCKS if not only or n in only]
+    for page, name in todo:
         html = build_block(page, name)
         out = os.path.join(outdir, f"psl-{page}-{name}.html")
         open(out, "w", encoding="utf-8").write(html)
         total += len(html.encode())
         print(f"  {page}/{name:16} {len(html.encode())/1024:6.1f} KB")
-    print(f"\n  {len(BLOCKS)} bloques · {total/1024:.0f} KB en total (sin contar assets hosteados)")
+    print(f"\n  {len(todo)} bloques · {total/1024:.0f} KB en total (sin contar assets hosteados)")

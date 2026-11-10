@@ -294,12 +294,40 @@
     transition: none !important;}
 .pslsc .psl-grain, .pslsc .psl-cursor-glow{display: none !important;}
 .pslsc .nav__inner{transition: none !important;}}
-.pslsc .staff--head .psl-container{padding-block: clamp(64px, 9vw, 120px) clamp(28px, 4vw, 44px);}
-.pslsc .staff__title{margin-top: 12px; max-width: 14ch;}
-.pslsc .staff__intro{margin: 20px 0 0;
-  max-width: 48ch;
-  font: 400 var(--fs-body-lg)/1.6 var(--font-body);
-  color: var(--color-text-muted);}
+.pslsc .clubnav{display: flex;
+  gap: clamp(18px, 3vw, 36px);
+  margin: 0 0 clamp(32px, 5vw, 56px);
+  border-bottom: 1px solid var(--color-line);
+  overflow-x: auto;
+  scrollbar-width: none;}
+.pslsc .clubnav::-webkit-scrollbar{display: none;}
+.pslsc .clubnav a{position: relative;
+  flex: none;
+  padding: 0 0 14px;
+  font: 500 11px/1.3 var(--font-label);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color .2s;}
+.pslsc .clubnav a:hover{color: var(--color-text);}
+.pslsc .clubnav a[aria-current]{color: var(--color-text);}
+.pslsc .clubnav a[aria-current]::after{content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--color-aqua);}
+.pslsc .clubnav a:focus-visible{outline: 2px solid var(--color-aqua); outline-offset: 4px;}
+.pslsc .clubnav[hidden], .pslsc .clubnav [hidden]{display: none;}
+.pslsc .clubhead__kicker{margin: 0; font: 800 var(--fs-kicker)/1.4 var(--font-label); letter-spacing: .18em; text-transform: uppercase; color: var(--color-aqua);}
+.pslsc .clubhead__title{margin: 12px 0 0; font: 900 clamp(64px, 9vw, 136px)/.85 var(--font-display); letter-spacing: var(--ls-display); text-transform: uppercase;}
+.pslsc .clubhead__lead{margin: 18px 0 0; max-width: 54ch; font: 400 var(--fs-body-lg)/1.5 var(--font-body); color: var(--color-text-muted);}
+
+
+@media (max-width: 860px) {.pslsc .clubnav{margin-right: calc(var(--gutter) * -1); padding-right: var(--gutter);}}
+.pslsc .staff--head .psl-container{padding-block: clamp(104px, 13vh, 148px) clamp(40px, 5vw, 64px);}
 .pslsc .staff--body{border-top: 1px solid var(--color-line);}
 .pslsc .staff--body .psl-container{padding-block: clamp(40px, 5vw, 64px) var(--section-pad);}
 .pslsc .staff__group + .staff__group{margin-top: clamp(44px, 6vw, 84px);}
@@ -377,12 +405,13 @@
 @media (prefers-reduced-motion: reduce) {.pslsc .scard__toggle{transition: none;}}
 </style>
 
-<div class="pslsc pslsc--bleed">
-<section class="staff staff--head surface-ink">
+<div class="pslsc pslsc--bleed" data-psl-block="team/t02-front-office">
+<section class="staff staff--head surface-ink" data-cc-state="__COLECCION_API__">
   <div class="psl-container">
-    <span class="psl-kicker">Club</span>
-    <h1 class="psl-h2 staff__title">Front Office</h1>
-    <p class="staff__intro">The people building Port St. Lucie SC, from the executive team to the sporting side.</p>
+    <nav class="clubnav" aria-label="Club" data-clubnav hidden><a href="__URL_FRONT_OFFICE__" aria-current="page">Front Office</a><a href="__URL_TEAM__">Soccer Staff</a></nav>
+    <p class="clubhead__kicker">Club · Leadership</p>
+    <h1 class="clubhead__title">Front Office</h1>
+    <p class="clubhead__lead">The people building Port St. Lucie SC, from the executive team to the sporting side.</p>
   </div>
 </section>
 
@@ -513,4 +542,4 @@
 </div>
 
 <script src="data:text/javascript;charset=utf-8,%0A(function(){%0A  function el(){return document.getElementById('psl-diag');}%0A  window.addEventListener('error',function(e){%0A    var d=el(); if(!d) return;%0A    d.textContent='\u274C El JS del bloque fallo: '+(e.message||'error')+'  ('+(e.lineno||'?')+')';%0A    d.className='psl-diag';%0A  },true);%0A  window.__pslDiag=function(){%0A    var d=el(); if(!d) return;%0A    d.textContent='\u2705 JS OK - ancho util '+document.documentElement.clientWidth+'px';%0A    d.className='psl-diag is-ok';%0A  };%0A})();%0A"></script>
-<script type="module" src="data:text/javascript;charset=utf-8,%0Afunction pslVw(){document.documentElement.style.setProperty('--psl-vw',document.documentElement.clientWidth+'px');}%0ApslVw(); addEventListener('resize',pslVw,{passive:true});%0Afunction pslBoot(){  if(window.__pslDiag) window.__pslDiag(); }%0Aif(document.readyState==='loading') document.addEventListener('DOMContentLoaded',pslBoot); else pslBoot();%0A"></script>
+<script type="module" src="data:text/javascript;charset=utf-8,/**%0A * Bloque t02 · Front Office. Lo único que hace: mostrar la navegación del Club (Front Office · Soccer Staff) una vez%0A * revelado el Head Coach. Antes del reveal Soccer Staff no se publica, así que la navegación queda oculta.%0A */%0Aasync function initFrontOffice(root = document) {%0A  const head = root.querySelector('.staff--head[data-cc-state]');%0A  const nav = head?.querySelector('[data-clubnav]');%0A  const src = head?.dataset.ccState;%0A  if (!nav || !src || src.startsWith('__')) return;%0A  try {%0A    const res = await fetch(src, { cache: 'no-store', headers: { Accept: 'application/json' } });   // cambia por fecha: nunca de caché%0A    if (!res.ok) throw new Error(`HTTP ${res.status}`);%0A    const state = await res.json();%0A    if (state.revealed %26%26 state.profile) nav.hidden = false;%0A  } catch (err) {%0A    console.error('[front-office] no se pudo leer el estado', err);   // sin estado, la navegación queda oculta%0A  }%0A}%0A%0A%0A%0A%0Afunction pslVw(){document.documentElement.style.setProperty('--psl-vw',document.documentElement.clientWidth+'px');}%0ApslVw(); addEventListener('resize',pslVw,{passive:true});%0Afunction pslBoot(){ document.querySelectorAll('.pslsc[data-psl-block=%22team/t02-front-office%22]').forEach(function(r){if(r.dataset.pslReady)return;r.dataset.pslReady='1';initFrontOffice(r);r.dataset.pslBooted='1';}); if(window.__pslDiag) window.__pslDiag(); }%0Aif(document.readyState==='loading') document.addEventListener('DOMContentLoaded',pslBoot); else pslBoot();%0A"></script>

@@ -39,7 +39,7 @@ etiqueta `charter-collection-001`:
 
 | Cuándo | Mail |
 |---|---|
-| Apenas reclama | "Your Collector Card" con la imagen de la Inaugural Collector (una sola imagen para todos: el nombre y la foto quedan en el dispositivo de la persona) y link a Mi colección (`/collection/`). La pantalla le dice "Your card is on its way to …". La imagen sale del preview: Share → "Card only", sin foto ni nombre |
+| Apenas reclama | "Your Collector Card" con la imagen de la Inaugural Collector (una sola imagen para todos: el nombre y la foto quedan en el dispositivo de la persona) y link a la home. Sin link a Mi colección mientras no esté publicada. La pantalla le dice "Your card is on its way to …". La imagen sale del preview: Share → "Card only", sin foto ni nombre |
 | Martes, miércoles y jueves, 10:00 AM ET | "Today's clue is live" con link a la home (no incluye la pista: se ve jugando) |
 | Viernes, 10:00 AM ET | "Card No. 001 is revealed" con link a la home |
 
