@@ -82,8 +82,8 @@ html {
   background: rgba(12, 12, 10, .92);
   box-shadow: 0 1px 24px rgba(0, 0, 0, .34);
 }
-.nav.is-scrolled .nav__inner { height: 58px; }
-.nav__inner { transition: height 280ms var(--ease-out-soft, ease); }
+/* La nav NO cambia de alto al condensarse: está en el flujo, y si se achicaba (antes 70 → 58 px) el contenido subía,
+   el navegador corregía el scroll, volvía a cruzar el umbral y la nav y el escudo temblaban en loop. */
 .nav__links a { position: relative; transition: color 160ms ease; }
 .nav__links a.is-active { color: var(--color-text); }
 .nav__links a.is-active::after {

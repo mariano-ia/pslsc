@@ -47,6 +47,7 @@ const CCG_FULL_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 // Hora de cada pista y del reveal (Etapa 0: la confirma el club). Se usa en todo el copy del hero y del panel.
 const CCG_TIME = '10:00 AM ET';
 const CCG_REVEAL = `Friday at ${CCG_TIME}`;
+const CCG_KICKER = 'First in club history';
 const ccgEsc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
 // Founding Member: el hero no lo asigna. Hoy no hay forma de saber quién es founder; la carta se reclama como
@@ -84,27 +85,42 @@ function ccgNextStep(S, state, step) {
    y es lo que se comparte. Cambian el kicker y la bajada. Nunca revela nada de la carta. */
 function ccgHeroCopy(S, state) {
   const st = ccgNextStep(S, state, null);
-  const kicker = 'Charter Collection · Card No. 001';
+  const kicker = CCG_KICKER;
   const today = CCG_FULL_NAMES[state.day] || '';
   switch (st.t) {
     case 'q': {
       if (st.i < state.day) {
         const left = state.day - st.i;
-        return { kicker, sub: `Joining on ${today}? Catch up first: ${left} question${left > 1 ? 's' : ''} to go before today’s.` };
+        return { kicker, sub: `Joining on ${today}? Catch up first: ${left} quiz question${left > 1 ? 's' : ''} to go before today’s.` };
       }
-      if (st.i === 0) return { kicker, sub: `Card No. 001 is the first Head Coach in club history. Answer one question a day to unlock a clue. Reveal ${CCG_REVEAL}.` };
-      if (st.i === 3) return { kicker, sub: `Last question of the week. Then the full card drops ${CCG_REVEAL}.` };
-      return { kicker, sub: `Day ${st.i + 1} of 4. Today’s question unlocks a new clue.` };
+      if (st.i === 0) return { kicker, sub: `Play the daily quiz, Monday to Thursday: every answer unlocks a clue to Card No. 001. New question every day, full reveal ${CCG_REVEAL}.` };
+      if (st.i === 3) return { kicker, sub: `Last quiz question of the week. Then the full card drops ${CCG_REVEAL}.` };
+      return { kicker, sub: `Daily quiz, day ${st.i + 1} of 4. Today’s answer unlocks a new clue. Full reveal ${CCG_REVEAL}.` };
     }
     case 'wait':
       return Object.keys(S.answers).length === 4
         ? { kicker, sub: `All four clues are in. Card No. 001 drops ${CCG_REVEAL}.` }
-        : { kicker, sub: `Today’s clue is yours. Come back tomorrow for the next question.` };
+        : { kicker, sub: `Today’s clue is yours. A new quiz question drops tomorrow at ${CCG_TIME}. Full reveal ${CCG_REVEAL}.` };
     case 'reveal':
-      return { kicker: 'Charter Collection · Reveal day', sub: 'It’s reveal day. Four clues, one card.' };
+      return { kicker: 'Reveal day', sub: 'Four days, four clues, one card. Time to meet the first Head Coach in club history.' };
     default:
       return { kicker, sub: '' };
   }
+}
+
+/* La semana del quiz, a la vista: qué días ya jugaste, cuál es hoy, cuál viene mañana y el reveal del viernes */
+function ccgTrackHTML(S, state, current) {
+  const short = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+  const items = [0, 1, 2, 3].map((i) => {
+    let cls; let txt;
+    if (S.answers[i] !== undefined) { cls = 'is-done'; txt = 'Done'; }
+    else if (i === current) { cls = 'is-now'; txt = i < state.day ? 'Catch up' : 'Today'; }
+    else if (i <= state.day) { cls = 'is-open'; txt = i === state.day ? 'Today' : 'Open'; }
+    else { cls = 'is-locked'; txt = i === state.day + 1 ? 'Tomorrow' : 'Locked'; }
+    return `<li class="${cls}"><span>${short[i]}</span><b>${txt}</b></li>`;
+  });
+  items.push(`<li class="is-reveal"><span>${short[4]}</span><b>Reveal</b></li>`);
+  return `<ol class="ccg__track" aria-label="This week’s quiz">${items.join('')}</ol>`;
 }
 
 function ccgEmailFields(id) {
@@ -131,9 +147,9 @@ function ccgPanelHTML(st, S, state, ctx = {}) {
     case 'q': {
       const D = days[st.i];
       const head = st.i < state.day
-        ? `<span class="ccg__label">Catching up · ${ccgEsc(D.full)}&rsquo;s question</span>`
-        : `<span class="ccg__kicker">${ccgEsc(D.full)} · Question ${st.i + 1} of 4</span>`;
-      return `${head}<h2 tabindex="-1">${ccgEsc(D.q)}</h2>
+        ? `<span class="ccg__kicker">Daily quiz · Catching up · ${ccgEsc(D.full)}</span>`
+        : `<span class="ccg__kicker">Daily quiz · Question ${st.i + 1} of 4</span>`;
+      return `${ccgTrackHTML(S, state, st.i)}${head}<h2 class="ccg__q" tabindex="-1">${ccgEsc(D.q)}</h2>
         <div class="ccg__opts">${D.opts.map((o, k) => `<button type="button" class="ccg__opt" data-k="${k}"><span>${ccgEsc(o)}</span><i aria-hidden="true">${'ABCD'[k]}</i></button>`).join('')}</div>
         <p class="ccg__label">Right or wrong, you unlock ${st.i < state.day ? `${ccgEsc(D.full)}&rsquo;s` : 'today&rsquo;s'} clue: ${ccgEsc(D.clueTitle)}.</p>`;
     }
@@ -153,7 +169,7 @@ function ccgPanelHTML(st, S, state, ctx = {}) {
         foot = `<div class="ccg__next"><p><span class="ccg__label">${last ? 'Full reveal' : 'Next clue'}</span><b>${day}, ${CCG_TIME}</b></p><span class="ccg__tally">${clues} of 4 clues</span></div>
           <div class="ccg__row">${S.email ? ccgBtn('mycard', 'My Collector Card') : ccgBtn('claim', 'Claim my Collector Card', true)}</div>`;
       }
-      return ccgResultHTML(D, S.answers[i] === D.a) + foot;
+      return ccgTrackHTML(S, state, -1) + ccgResultHTML(D, S.answers[i] === D.a) + foot;
     }
     case 'reveal':
       return `<span class="ccg__kicker">Friday · ${CCG_TIME}</span><h2 tabindex="-1">Card No. 001 is ready.</h2>
@@ -514,7 +530,7 @@ async function initHeroColeccion(root = document) {
     const shown = state.revealed && S.revealed;
     hero.classList.toggle('hcc--coach', shown && Boolean(state.presentation));
     const copy = ccgHeroCopy(S, state);
-    $('[data-cc-kicker]').textContent = shown ? 'Charter Collection · Card No. 001' : copy.kicker;
+    $('[data-cc-kicker]').textContent = shown ? CCG_KICKER : copy.kicker;
     titleEl.textContent = shown ? titleAfter : titleBefore;
     nameEl.textContent = shown ? [state.card.first, state.card.last].filter(Boolean).join(' ') : '';
     nameEl.hidden = !shown;

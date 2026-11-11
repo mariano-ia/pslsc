@@ -13,12 +13,12 @@
 
   <!-- Patrones compartidos -->
   <link rel="stylesheet" href="../native/_patterns/cards.css?v=67" />
-  <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=68" />
 
   <!-- Bloques nativos -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=77" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=79" />
   <link rel="stylesheet" href="../native/home/01-hero.css?v=67" />
-  <link rel="stylesheet" href="../native/home/01b-hero-coleccion.css?v=2" />
+  <link rel="stylesheet" href="../native/home/01b-hero-coleccion.css?v=4" />
   <link rel="stylesheet" href="../native/home/01c-coleccion.css?v=1" />
   <link rel="stylesheet" href="../native/home/02-stats.css?v=67" />
   <link rel="stylesheet" href="../native/home/03-project.css?v=67" />
@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="../native/home/04b-fixtures.css?v=67" />
   <link rel="stylesheet" href="../native/home/05-jersey.css?v=67" />
   <link rel="stylesheet" href="../native/home/06-founders.css?v=67" />
-  <link rel="stylesheet" href="../native/home/07b-school.css?v=1" />
+  <link rel="stylesheet" href="../native/home/07-academy.css?v=67" />
   <link rel="stylesheet" href="../native/home/08-news.css?v=67" />
   <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
 
@@ -58,8 +58,8 @@
   <div data-block="04b-fixtures"></div>
   <div data-block="05-jersey"></div>
   <div data-block="06-founders"></div>
-  <!-- 07-academy oculto: la Soccer School (07b) toma su lugar y usa la misma foto. Acceso a Academy: nav y footer. -->
-  <div data-block="07b-school"></div>
+  <!-- 07b-school oculto por ahora (Martín, 10/11: la School no sale hasta que el club avise). Queda 07-academy, como en el sitio publicado. -->
+  <div data-block="07-academy"></div>
   <div data-block="08-news"></div>
   <div data-block="09-cierre-footer"></div>
 
@@ -71,7 +71,7 @@
   <script type="module">
     const blocks = [
       '00-nav', '01-hero', '02-stats', '03-project', '04-proof', '04b-fixtures',
-      '05-jersey', '06-founders', '07b-school', '08-news', '09-cierre-footer',
+      '05-jersey', '06-founders', '07-academy', '08-news', '09-cierre-footer',
     ];
     // Solo preview: las fuentes se cargan antes de insertar los bloques, así la nav no se mueve al aplicarse.
     const fontsReady = document.fonts ? Promise.all(['400 16px "Proxima Nova"', '600 16px "Proxima Nova"', '700 16px "Proxima Nova"',
@@ -103,11 +103,11 @@
     const [{ initNewsletter }, { initHeroMorph, initHeroVideo }, { initHeroColeccion }, { initColeccionEntry }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
       import('../native/home/09-cierre-footer.js?v=67'),
       import('../native/home/01-hero.js?v=67'),
-      import('../native/home/01b-hero-coleccion.js?v=5'),
+      import('../native/home/01b-hero-coleccion.js?v=7'),
       import('../native/home/01c-coleccion.js?v=1'),
       import('../native/home/04-proof.js?v=67'),
       import('../native/home/03-project.js?v=67'),
-      import('../native/_patterns/motion.js?v=67'),
+      import('../native/_patterns/motion.js?v=68'),
     ]);
     initNewsletter();
     initHeroMorph();

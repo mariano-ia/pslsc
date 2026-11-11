@@ -8,10 +8,10 @@
   <link rel="stylesheet" href="../tokens/fonts.css?v=67" />
   <link rel="stylesheet" href="../tokens/tokens.css?v=69" />
   <link rel="stylesheet" href="../native/_patterns/cards.css?v=67" />
-  <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=68" />
 
   <!-- Nav + footer compartidos (reusan los bloques de Home) -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=77" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=79" />
   <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
 
   <link rel="stylesheet" href="../custom/card/card.css?v=1" />
@@ -62,7 +62,7 @@
     const [{ initSoccerStaff }, { initNewsletter }, { initMotion }] = await Promise.all([
       import('../native/team/t00-soccer-staff.js?v=2'),
       import('../native/home/09-cierre-footer.js?v=67'),
-      import('../native/_patterns/motion.js?v=67'),
+      import('../native/_patterns/motion.js?v=68'),
     ]);
     initSoccerStaff();
     initNewsletter();

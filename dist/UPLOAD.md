@@ -114,8 +114,9 @@ publicar así y sumar el servidor después. Contrato del servidor (endpoints, to
 
 **Club (menú de USL y las páginas):**
 
-- En el menú de USL, el ítem "Staff" pasa a ser **"Club"**, con Front Office (`/front-office/`). **Soccer Staff**
-  (`/soccer-staff/`) se suma al menú recién el viernes del reveal: antes no existe para nadie. Roster está en pausa
+- El menú de USL queda **como está hoy** (Home, Teams, Shop, Youth, Staff, News, Partners, Events): "Staff" sigue
+  llevando a `/staff/`, que redirige a Front Office. **Soccer Staff** (`/soccer-staff/`) se llega desde la navegación
+  de arriba de las páginas del Club, recién desde el viernes del reveal: antes no existe para nadie. Roster está en pausa
   (no se publica ni se enlaza; `t03-roster` queda en el repo).
 - `/staff/` redirige (301) a `/front-office/`. **Antes del lunes de arranque:** Front Office reemplaza a la página
   `/staff/` actual, que hoy muestra al futuro Head Coach como Academy Director. `st01-staff` se retira. Coordinar con
