@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Port St. Lucie SC — Soccer Staff</title>
+
+  <link rel="stylesheet" href="../tokens/fonts.css?v=67" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=69" />
+  <link rel="stylesheet" href="../native/_patterns/cards.css?v=67" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=68" />
+
+  <!-- Nav + footer compartidos (reusan los bloques de Home) -->
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=79" />
+  <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
+
+  <link rel="stylesheet" href="../custom/card/card.css?v=1" />
+  <link rel="stylesheet" href="../native/team/t02-front-office.css?v=1" />
+  <link rel="stylesheet" href="../native/team/t00-soccer-staff.css?v=2" />
+  <link rel="stylesheet" href="../native/_patterns/club-nav.css?v=1" />
+
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--color-ink); }
+    /* Solo preview: los bloques se inyectan después de cargar; sin esto, al aparecer la barra de scroll
+       todo el ancho se corre unos píxeles y la nav salta. En WordPress el contenido ya está al cargar. */
+    body { overflow-y: scroll; }
+    body { font-family: var(--font-body); color: var(--color-text); overflow-x: hidden; }
+    ::selection { background: var(--color-aqua); color: var(--color-black); }
+  </style>
+</head>
+<body>
+  <div data-block="00-nav"></div>
+  <div data-block="t00-soccer-staff"></div>
+  <div data-block="footer"></div>
+
+  <script src="../custom/ac-forms/ac-forms.js?v=1"></script>
+  <script type="module" src="../custom/card/card.js?v=1"></script>
+  <script type="module">
+    // Solo preview: ?cc=mon|...|sat simula el día (estado privado en .local/, fuera de git).
+    const cc = new URLSearchParams(location.search).get('cc') || 'fri';
+    const blocks = [
+      { slot: '00-nav',    path: '../native/home/00-nav.html' },
+      { slot: 't00-soccer-staff', path: '../native/team/t00-soccer-staff.html' },
+      { slot: 'footer',    path: '../native/home/09-cierre-footer.html' },
+    ];
+    // Solo preview: las fuentes se cargan antes de insertar los bloques, así la nav no se mueve al aplicarse.
+    const fontsReady = document.fonts ? Promise.all(['400 16px "Proxima Nova"', '600 16px "Proxima Nova"', '700 16px "Proxima Nova"',
+      '800 16px Druk', '900 16px Druk', '500 16px "Druk Text Wide"', '800 16px "Druk Text Wide"', '800 16px Ferryman']
+      .map((f) => document.fonts.load(f))).catch(() => {}) : Promise.resolve();
+    const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
+    await Promise.all(blocks.map(async ({ slot, path }) => {
+      const html = await fetch(path + bust).then((r) => r.text());
+      await fontsReady;   // el bloque se baja en paralelo con las fuentes y se inserta cuando están
+      document.querySelector(`[data-block="${slot}"]`).innerHTML = html
+        .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${cc}`)
+        .replaceAll('__URL_FRONT_OFFICE__', 'front-office.html')
+        .replaceAll('__URL_ROSTER__', 'roster.html')
+        .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${cc}.json`)
+        .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${cc}`)
+        .replaceAll('__URL_COLLECTION__', `collection.html?cc=${cc}`);
+    }));
+    const [{ initSoccerStaff }, { initNewsletter }, { initMotion }] = await Promise.all([
+      import('../native/team/t00-soccer-staff.js?v=2'),
+      import('../native/home/09-cierre-footer.js?v=67'),
+      import('../native/_patterns/motion.js?v=68'),
+    ]);
+    initSoccerStaff();
+    initNewsletter();
+    initMotion();
+    import('../native/home/00-nav.js?v=4').then((m) => m.initNav());
+  </script>
+</body>
+</html>

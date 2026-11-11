@@ -1,0 +1,40 @@
+<!--
+  Bloque 01b · Hero de campaña — Charter Collection. 🟦 A medida.
+  REEMPLAZA a 01-hero mientras dura la campaña: en WordPress se pega uno u otro, nunca los dos.
+  El juego se juega acá. Preguntas, pistas, nombre y foto llegan por datos, según la fecha: en este
+  archivo y en su JS no va contenido de la carta. Reemplazos en el find-and-replace:
+  __COLECCION_API__ (estado), __URL_COACH__ (ficha del DT), __URL_TEAM__ (Soccer Staff) y los __AC_...__.
+-->
+<section class="hcc surface-ink" id="hero" data-cc-state="__COLECCION_API__" data-cc-coach="__URL_COACH__" data-cc-team="__URL_TEAM__"
+  data-ac-account="__AC_ACCOUNT__" data-ac-form="__AC_COLLECTION_FORM__"
+  data-ac-consent="__AC_FIELD_CONSENT__" aria-labelledby="hcc-title">
+  <div class="hcc__bg" aria-hidden="true"></div>
+
+  <div class="psl-container hcc__grid">
+    <img class="hcc__photo" data-cc-photo alt="" decoding="async">
+    <div class="hcc__copy">
+      <p class="hcc__kicker" data-cc-kicker>First in club history</p>
+      <!-- El título cambia una sola vez: al revelar la carta pasa a data-after. Abajo entra el nombre (llega por datos). -->
+      <h1 class="hcc__title" id="hcc-title" data-cc-title data-after="Meet the first Head Coach in club history.">Our first-ever Head Coach is a secret. For now.</h1>
+      <p class="hcc__name" data-cc-name hidden></p>
+      <p class="hcc__sub" data-cc-sub>Play the daily quiz, Monday to Thursday: every answer unlocks a clue to Card No. 001. New question every day, full reveal Friday at 10:00 AM ET.</p>
+      <div class="ccg__panel" data-ccg-panel>
+        <noscript><p class="ccg__panel-lead">One question a day about the club, Monday to Thursday. Each answer unlocks a clue and a piece of the card. Turn on JavaScript to play.</p></noscript>
+      </div>
+      <p class="ccg__sr" data-ccg-status aria-live="polite"></p>
+      <a href="#project" class="hcc__more" data-cc-more>Keep exploring <span aria-hidden="true">↓</span></a>
+    </div>
+
+    <div class="hcc__card ccg__card-col">
+      <psl-card flippable data-ccg-card></psl-card>
+      <div class="ccg__card-actions">
+        <button type="button" class="ccg__ghost" data-ccg-flip>Flip card</button>
+        <span data-ccg-count></span>
+      </div>
+    </div>
+  </div>
+
+  <psl-photo-capture data-ccg-capture hidden></psl-photo-capture>
+
+  <div class="hcc__divider" role="presentation"></div>
+</section>

@@ -1,0 +1,70 @@
+/* Bloque 01c · Entrada a la Charter Collection (después de la campaña). Chica: no compite con el hero. */
+
+.hce {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  background:
+    radial-gradient(40% 90% at 22% 50%, rgba(170,246,230,.14), transparent 70%),
+    var(--color-ink-2);
+}
+.hce[hidden] { display: none; }
+/* Las franjas de la carta, apenas, detrás de ella */
+.hce::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(122deg, rgba(170,246,230,.05) 0 30px, transparent 30px 96px);
+  -webkit-mask-image: radial-gradient(38% 100% at 22% 50%, #000 20%, transparent 75%);
+  mask-image: radial-gradient(38% 100% at 22% 50%, #000 20%, transparent 75%);
+  pointer-events: none;
+}
+
+.hce__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+  padding-top: clamp(40px, 6vw, 72px);
+  padding-bottom: clamp(40px, 6vw, 72px);
+}
+.hce__card { width: clamp(160px, 15vw, 210px); transform: rotate(-4deg); }
+.hce__card psl-card { display: block; }
+
+.hce__copy { max-width: 560px; }
+.hce__kicker {
+  margin: 0;
+  font: 800 var(--fs-kicker)/1.4 var(--font-label);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--color-aqua);
+}
+.hce__title {
+  margin: 10px 0 0;
+  font: 900 clamp(34px, 4vw, 56px)/.95 var(--font-display);
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+.hce__lead {
+  margin: 14px 0 0;
+  font: 400 var(--fs-body-lg)/1.5 var(--font-body);
+  color: var(--color-text-muted);
+}
+.hce__lead b { color: var(--color-text); font-weight: 600; }
+.hce__ctas { display: flex; flex-wrap: wrap; gap: 12px 16px; margin-top: 22px; }
+.hce__ctas [hidden] { display: none; }
+
+@media (max-width: 860px) {
+  .hce { background: radial-gradient(90% 40% at 50% 26%, rgba(170,246,230,.14), transparent 70%), var(--color-ink-2); }
+  .hce::before {
+    -webkit-mask-image: radial-gradient(80% 40% at 50% 26%, #000 20%, transparent 75%);
+    mask-image: radial-gradient(80% 40% at 50% 26%, #000 20%, transparent 75%);
+  }
+  .hce__grid { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; }
+  .hce__card { width: min(44vw, 180px); }
+  .hce__kicker { font-size: 10px; letter-spacing: .14em; }
+  .hce__ctas { justify-content: center; }
+  .hce__ctas .psl-btn { width: 100%; justify-content: center; }
+}

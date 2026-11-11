@@ -1,0 +1,26 @@
+<!--
+  Bloque 01c · Entrada a la Charter Collection — Home. 🟦 A medida.
+  Va DEBAJO de 01-hero cuando termina la campaña (ya no está 01b-hero-coleccion). La colección queda con una
+  entrada propia y chica: la Card No. 001 revelada, a quién presenta y los links a la ficha y a Mi colección.
+  La carta, el nombre y la línea llegan por datos (__COLECCION_API__, el mismo estado del hero de campaña): en este
+  archivo no va contenido de la carta. Sin estado, o antes del reveal, el bloque queda oculto: nunca se ve roto.
+  Reemplazos: __COLECCION_API__, __URL_COACH__ (ficha del DT) y __URL_COLLECTION__ (Mi colección, etapa 6;
+  mientras no exista, ese botón no se muestra).
+-->
+<section class="hce surface-ink" id="charter-collection" aria-labelledby="hce-title" hidden
+  data-cc-state="__COLECCION_API__" data-cc-coach="__URL_COACH__" data-cc-collection="__URL_COLLECTION__">
+  <div class="psl-container hce__grid">
+    <div class="hce__card">
+      <psl-card flippable data-hce-card></psl-card>
+    </div>
+    <div class="hce__copy">
+      <p class="hce__kicker">Charter Collection · Card No. 001</p>
+      <h2 class="hce__title" id="hce-title">The collection has begun</h2>
+      <p class="hce__lead" data-hce-lead></p>
+      <div class="hce__ctas">
+        <a class="psl-btn cta-primary" href="__URL_COACH__" data-hce-coach><span>Meet the coach</span> <span aria-hidden="true">→</span></a>
+        <a class="psl-btn cta-secondary" href="__URL_COLLECTION__" data-hce-collection hidden>My collection</a>
+      </div>
+    </div>
+  </div>
+</section>

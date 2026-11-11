@@ -2,12 +2,15 @@
   Nav — header compartido a las páginas (Home, Academy, Staff, Sumate/Join Us, Partners, Sede). 🟩 Nativo.
   Diseño adoptado de Home.dc.html: sticky con blur, crest, links, CTA pill.
 
-  Links: ya son rutas reales de WordPress (/home/, /academy/, /staff/, /joinus/, /partners/), no
+  Links: los mismos que la nav del sitio publicado (10/11): Home, Teams, Shop (tienda externa), Youth, Staff,
+  News, Partners, Events y el CTA. Staff sigue llevando a /staff/ (que pasa a redirigir a Front Office).
+  Son rutas reales de WordPress, no
   "archivo.html#ancla" — se pegan tal cual en cualquiera de las páginas. Los que apuntan a "/home/#id"
   (Teams, Shop, News) solo tienen sentido como anclas dentro de Home: en las otras páginas SÍ navegan
   (no hacen scroll local), van a Home y una vez ahí el navegador salta a esa sección.
 
-  Soccer School (frente home-school, ver docs/frentes/home-school/BRIEF.md):
+  Soccer School (frente home-school, ver docs/frentes/home-school/BRIEF.md): OCULTA por ahora (Martín, 10/11: no
+  sale hasta que el club avise). El banderín, el panel y el póster del menú llevan `hidden`; para mostrarlos, sacarlo.
   - Desktop: banderín rojo al final de los links, al lado del CTA (después de Partners). Al pasar el mouse (o con foco de teclado) las letras flamean
     y se abre .nav__panel debajo de la barra, con el póster de la School. En touch, el primer toque abre el panel.
   - Mobile (< 1000px): banderín centrado en la barra + menú hamburguesa (.nav__menu) con los links, el póster
@@ -25,12 +28,13 @@
     <nav class="nav__links" aria-label="Primary">
       <a href="/home/">Home</a>
       <a href="/home/#project">Teams</a>
-      <a href="/home/#jersey">Shop</a>
-      <a href="/academy/">Academy</a>
+      <a href="https://shop.myuniformsoccerlocker.com/clubs/port-st-lucie-sc">Shop</a>
+      <a href="/youth/">Youth</a>
       <a href="/staff/">Staff</a>
-      <a href="/home/#news">News</a>
+      <a href="/news/">News</a>
       <a href="/partners/">Partners</a>
-      <a href="__URL_SCHOOL__" class="nav__school" aria-label="Soccer School">
+      <a href="/events/">Events</a>
+      <a href="__URL_SCHOOL__" class="nav__school" aria-label="Soccer School" hidden>
         <img src="/assets/school/ss-script-aqua.webp" alt="" width="678" height="182" />
         <span class="nav__wave" aria-hidden="true"><span style="--i:0;--y:-0.000em;--s:1.000">S</span><span style="--i:1;--y:-0.013em;--s:1.033">O</span><span style="--i:2;--y:-0.025em;--s:1.063">C</span><span style="--i:3;--y:-0.034em;--s:1.085">C</span><span style="--i:4;--y:-0.039em;--s:1.098">E</span><span style="--i:5;--y:-0.040em;--s:1.099">R</span><span class="nav__sp"> </span><span style="--i:7;--y:-0.028em;--s:1.070">S</span><span style="--i:8;--y:-0.017em;--s:1.042">C</span><span style="--i:9;--y:-0.004em;--s:1.010">H</span><span style="--i:10;--y:0.010em;--s:0.976">O</span><span style="--i:11;--y:0.022em;--s:0.945">O</span><span style="--i:12;--y:0.032em;--s:0.921">L</span><span style="--i:13;--y:0.038em;--s:0.905">.</span></span>
       </a>
@@ -42,7 +46,7 @@
   </div>
 
   <!-- Panel de la School (desktop): se abre al pasar el mouse por el banderín -->
-  <div class="nav__panel">
+  <div class="nav__panel" hidden>
     <img class="nav__panel-photo" src="/assets/school/photo-ball.webp" alt="" width="1280" height="720" loading="lazy" decoding="async" />
     <div class="nav__grain" aria-hidden="true"></div>
     <div class="nav__panel-in">
@@ -61,13 +65,14 @@
     <nav class="nav__menu-links" aria-label="Primary">
       <a href="/home/">Home</a>
       <a href="/home/#project">Teams</a>
-      <a href="/home/#jersey">Shop</a>
-      <a href="/academy/">Academy</a>
+      <a href="https://shop.myuniformsoccerlocker.com/clubs/port-st-lucie-sc">Shop</a>
+      <a href="/youth/">Youth</a>
       <a href="/staff/">Staff</a>
-      <a href="/home/#news">News</a>
+      <a href="/news/">News</a>
       <a href="/partners/">Partners</a>
+      <a href="/events/">Events</a>
     </nav>
-    <a class="nav__menu-poster" href="__URL_SCHOOL__" aria-label="Soccer School — Register now">
+    <a class="nav__menu-poster" href="__URL_SCHOOL__" aria-label="Soccer School — Register now" hidden>
       <img class="nav__panel-photo" src="/assets/school/photo-kids.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async" />
       <span class="nav__grain" aria-hidden="true"></span>
       <span class="nav__panel-in">

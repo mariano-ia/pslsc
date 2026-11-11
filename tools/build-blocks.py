@@ -11,10 +11,11 @@ Cada bloque:
     rompiendo `a && b` -> `a &#038;&#038; b`. En los atributos no entra.)
   - full-bleed sin alignfull  +  franja de autodiagnóstico al pie
 
-Correr:  python3 tools/build-blocks.py
+Correr:  python3 tools/build-blocks.py               (todos)
+         python3 tools/build-blocks.py 01b-hero-coleccion t01-coach   (solo esos: no toca los demás de dist/)
 Requiere las fuentes subseteadas en <scratchpad>/allfonts/ (ver tools/README.md).
 """
-import re, base64, os
+import re, base64, os, sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FONTS_DIR = os.environ.get("PSL_FONTS_DIR", "")  # dir con los .woff2 subseteados (para verificar tamaños)
@@ -34,7 +35,10 @@ PERMALINKS = {
 
 # Bloques a compilar. Nav (00) y News (08) quedan fuera: son nativos del template de USL.
 BLOCKS = [
-    ("home", "01-hero"), ("home", "02-stats"), ("home", "03-project"), ("home", "04-proof"),
+    ("home", "01-hero"),
+    ("home", "01b-hero-coleccion"),   # campaña Charter Collection: se pega EN LUGAR de 01-hero
+    ("home", "01c-coleccion"),        # fin de campaña: va DEBAJO de 01-hero (entrada chica a la colección)
+    ("home", "02-stats"), ("home", "03-project"), ("home", "04-proof"),
     ("home", "04b-fixtures"), ("home", "05-jersey"), ("home", "06-founders"),
     ("home", "07b-school"),   # 07-academy ya no va en la Home (lo reemplaza 07b)
     ("home", "09-cierre-footer"),
@@ -45,6 +49,10 @@ BLOCKS = [
     ("academy", "a01-hero"), ("academy", "a02-pathway"), ("academy", "a03-method"),
     ("academy", "a05-parents"), ("academy", "a06-faq"), ("academy", "a07-tryouts"),
     ("staff", "st01-staff"),
+    ("team", "t02-front-office"),                          # Front Office: reemplaza a /staff/, se puede publicar ya
+    ("team", "t00-soccer-staff"), ("team", "t01-coach"),   # Soccer Staff y ficha del DT: desde el viernes del reveal
+    # ("team", "t03-roster"),                              # Roster: en pausa (Martín, 05/11), no se publica ni se enlaza
+    ("collection", "c01-collection"),                      # Mi colección (/collection): junto con 01c, al terminar la semana del reveal
     ("sede", "v01-hero"), ("sede", "v02-glance"), ("sede", "v03-tour"), ("sede", "v04-matches"),
     ("sede", "v05-tickets"), ("sede", "v06-getting-here"), ("sede", "v07-faq"), ("sede", "v08-home-port"),
 ]
@@ -66,6 +74,8 @@ COMPONENTS = {
     "psl-jersey-viewer":    ["jersey-viewer/jersey-viewer.js"],
     "psl-founder-id":       ["founder-id/founder-id.js"],
     "psl-departures-board": ["departures-board/departures-board.js"],
+    "psl-card":             ["card/card.js"],
+    "psl-photo-capture":    ["card/photo-capture.js"],
 }
 # CSS de cada componente (va junto con su JS; sin esto el componente monta pero queda sin estilar)
 COMPONENT_CSS = {
@@ -74,6 +84,8 @@ COMPONENT_CSS = {
     "psl-jersey-viewer":    "jersey-viewer/jersey-viewer.css",
     "psl-founder-id":       "founder-id/founder-id.css",
     "psl-departures-board": "departures-board/departures-board.css",
+    "psl-card":             "card/card.css",
+    "psl-photo-capture":    "card/photo-capture.css",
 }
 
 def read(p): return open(os.path.join(REPO, p), encoding="utf-8").read()
@@ -94,7 +106,7 @@ def namespace_css(css):
     css = strip_comments(css)
     out, i, n = [], 0, len(css)
     while i < n:
-        m = re.match(r"\s*@(font-face|keyframes|-webkit-keyframes|media|supports)([^{]*)\{", css[i:])
+        m = re.match(r"\s*@(font-face|keyframes|-webkit-keyframes|media|supports|container)([^{]*)\{", css[i:])
         if m:
             at = m.group(1); head = css[i:i + m.end()]
             depth, j = 1, i + m.end()
@@ -190,6 +202,18 @@ REPORTER = """
 """
 
 # ─────────────────────────────────────────────────────────────── JS propio de bloque
+def inline_imports(src, path, seen):
+    """`import { a, b } from './rel.js';` (ruta relativa, sin alias) -> el código del módulo, sin sus exports.
+       WordPress no puede importar módulos: lo compartido (ej. custom/card/charter.js) va dentro de cada bloque."""
+    def repl(m):
+        rel = os.path.relpath(os.path.normpath(os.path.join(os.path.dirname(os.path.join(REPO, path)),
+                                                            m.group(2).split("?")[0])), REPO)
+        if rel in seen: return ""
+        seen.add(rel)
+        dep = inline_imports(read(rel), rel, seen)
+        return re.sub(r"export\s+\{[^}]+\};", "", dep)
+    return re.sub(r"import\s+\{([^}]+)\}\s+from\s+'(\.[^']+)';\n?", repl, src)
+
 def block_js(path):
     """JS de un bloque que NO es web component (scramble del hero, scrubbing de la timeline,
        linterna de proof, forms). Saca el `export` y el auto-init de DOMContentLoaded (el boot lo
@@ -200,15 +224,19 @@ def block_js(path):
     m = re.search(r"export\s*\{([^}]+)\}", src)
     inits = [n.strip() for n in m.group(1).split(",") if n.strip()] if m else []
     src = re.sub(r"export\s+\{[^}]+\};", "", src)
+    src = inline_imports(src, path, set())
     src = re.sub(r"document\.addEventListener\('DOMContentLoaded'[^;]*;", "", src)
     return rewrite_assets(src), inits
 
-def boot_js(needs_motion, inits):
-    # cada init(root) se llama por cada .pslsc del DOM, una sola vez (data-psl-booted)
-    calls = (["initMotion(r);"] if needs_motion else []) + [f"{i}(r);" for i in inits]
-    per_root = "".join(calls)
-    body = (f"document.querySelectorAll('.pslsc').forEach(function(r){{"
-            f"if(r.dataset.pslBooted)return;r.dataset.pslBooted='1';{per_root}}});") if per_root else ""
+def boot_js(needs_motion, inits, block_id):
+    # Cada init(root) se llama sobre la raíz de ESTE bloque (data-psl-block), una sola vez (data-psl-ready).
+    # Antes recorría todas las .pslsc de la página y las marcaba con data-psl-booted: con dos bloques con JS en la
+    # misma página (ej. 01-hero + 01c), el primero marcaba también la raíz del segundo y su JS nunca corría.
+    # data-psl-booted sigue marcando "motion ya iniciado" (lo respetan los bloques compilados antes de este cambio).
+    motion = "if(!r.dataset.pslBooted){initMotion(r);}" if needs_motion else ""
+    per_root = motion + "".join(f"{i}(r);" for i in inits)
+    body = (f"document.querySelectorAll('.pslsc[data-psl-block=\"{block_id}\"]').forEach(function(r){{"
+            f"if(r.dataset.pslReady)return;r.dataset.pslReady='1';{per_root}r.dataset.pslBooted='1';}});") if per_root else ""
     return f"""
 function pslVw(){{document.documentElement.style.setProperty('--psl-vw',document.documentElement.clientWidth+'px');}}
 pslVw(); addEventListener('resize',pslVw,{{passive:true}});
@@ -257,6 +285,8 @@ def build_block(page, name):
     live = re.sub(r"<!--.*?-->", " ", html, flags=re.S)
     comps = sorted(set(re.findall(r"<(psl-[a-z-]+)", live)))
     uses_pcard = bool(re.search(r"\bpcard\b", live))
+    uses_clubnav = bool(re.search(r"\bclubnav\b", live))   # navegación común del Club (t00–t03)
+    uses_scard = bool(re.search(r"\bscard\b", live)) and name != "t02-front-office"   # Soccer Staff usa las tarjetas de Front Office
     uses_ptl   = bool(re.search(r"\bptl\b", live)) and name != "03-project"
     needs_motion = bool(re.search(r"data-(reveal|parallax|tilt|spotlight|magnetic|countdown)", live))
 
@@ -264,6 +294,8 @@ def build_block(page, name):
     # Algunos bloques no tienen CSS propio (ej. a02-pathway reusa .ptl de 03-project).
     css_files = ["tokens/tokens.css", "native/_patterns/motion.css"]
     if uses_pcard: css_files.append("native/_patterns/cards.css")
+    if uses_clubnav: css_files.append("native/_patterns/club-nav.css")
+    if uses_scard: css_files.append("native/team/t02-front-office.css")
     if uses_ptl:   css_files.append("native/home/03-project.css")
     own_css = f"native/{src_page}/{name}.css"
     if os.path.exists(os.path.join(REPO, own_css)): css_files.append(own_css)
@@ -289,7 +321,7 @@ def build_block(page, name):
         if c in COMPONENTS: js_parts.append(component_js(c))
     for code, _ in block_mods:
         js_parts.append(code)
-    js_parts.append(boot_js(needs_motion, block_inits))
+    js_parts.append(boot_js(needs_motion, block_inits, f"{page}/{name}"))
     js = "\n".join(js_parts)
 
     html = rewrite_links(rewrite_assets(html))
@@ -307,7 +339,7 @@ def build_block(page, name):
 {css}
 </style>
 
-<div class="pslsc pslsc--bleed">
+<div class="pslsc pslsc--bleed" data-psl-block="{page}/{name}">
 {html}
 {diag}
 </div>
@@ -320,12 +352,16 @@ if __name__ == "__main__":
     outdir = os.path.join(REPO, "dist", "blocks")
     os.makedirs(outdir, exist_ok=True)
     total = 0
+    only = set(sys.argv[1:])   # nombres de bloque: compila solo esos (ej. los de una campaña) sin regenerar el resto
+    unknown = only - {n for _, n in BLOCKS}
+    if unknown: sys.exit(f"Bloques que no están en BLOCKS: {', '.join(sorted(unknown))}")
     print(f"ASSET_BASE = {ASSET_BASE}")
     print(f"permalinks = {PERMALINKS}\n")
-    for page, name in BLOCKS:
+    todo = [(p, n) for p, n in BLOCKS if not only or n in only]
+    for page, name in todo:
         html = build_block(page, name)
         out = os.path.join(outdir, f"psl-{page}-{name}.html")
         open(out, "w", encoding="utf-8").write(html)
         total += len(html.encode())
         print(f"  {page}/{name:16} {len(html.encode())/1024:6.1f} KB")
-    print(f"\n  {len(BLOCKS)} bloques · {total/1024:.0f} KB en total (sin contar assets hosteados)")
+    print(f"\n  {len(todo)} bloques · {total/1024:.0f} KB en total (sin contar assets hosteados)")

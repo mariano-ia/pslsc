@@ -76,6 +76,76 @@ Qué bloque va en qué página:
 
 Nav (00) y News (08) no están en la lista: son bloques nativos del template de USL.
 
+**Charter Collection (solo durante la campaña):** en Home, `01b-hero-coleccion` se pega **en lugar de** `01-hero`,
+nunca los dos: el juego se juega ahí.
+
+Bloques de la campaña (todos en `dist/blocks/`): `psl-home-01b-hero-coleccion`, `psl-home-01c-coleccion`,
+`psl-team-t02-front-office`, `psl-team-t00-soccer-staff` y `psl-team-t01-coach`. Para recompilar solo esos:
+`python3 tools/build-blocks.py 01b-hero-coleccion 01c-coleccion t02-front-office t00-soccer-staff t01-coach`.
+`psl-team-t03-roster` (Roster) está en pausa: no se publica. `c01-collection` (Mi colección) todavía no se compila
+ni se publica.
+
+Todo lo del DT (nombre, fotos, silueta, preguntas, pistas, ficha) **no está en el repo**: llega por
+`__COLECCION_API__`, un endpoint que responde según la fecha. Contrato, calendario y requisitos (sin caché, hora ET,
+CORS): `docs/charter-collection-state.md`. El contenido real va en un paquete privado aparte, no por GitHub.
+
+Qué se pega cada día en Home (el juego cambia solo según la fecha: lo resuelve el estado de `__COLECCION_API__`,
+no hay que tocar bloques entre lunes y sábado):
+
+| Cuándo | Home |
+|---|---|
+| Lunes de arranque, antes de las 10:00 AM ET | Sacar `01-hero` y pegar `01b-hero-coleccion` en su lugar |
+| Lunes a jueves | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista |
+| Viernes 10:00 AM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
+| Sábado hasta el fin de campaña | Nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector ya no se reclama (es del juego); la Card No. 001 se pide por mail en la ficha del DT |
+| Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion`, volver a pegar `01-hero` y pegar `01c-coleccion` **debajo**. Con eso se cierra el reclamo de la Collector |
+| Más adelante (cuando haya más cartas) | Publicar **Mi colección** en `/collection/` (`c01-collection`) y reemplazar `__URL_COLLECTION__` en `01c` por esa URL. **No va en esta campaña** |
+
+`01c-coleccion` usa el mismo `__COLECCION_API__` (tiene que seguir respondiendo con la carta revelada después de la
+campaña), `__URL_COACH__` y `__URL_COLLECTION__` (Mi colección: **dejarlo sin reemplazar** por ahora; así el botón no
+aparece).
+Si el estado no responde, el bloque queda oculto.
+
+**Mi colección (`c01-collection`, `/collection/`), para más adelante:** las cartas de la persona, las que faltan como siluetas y el link
+para abrirla en otro dispositivo. Reemplazos: `__COLECCION_API__`, `__URL_COACH__` y `__COLLECTION_API__` (el servidor
+del link). Sin `__COLLECTION_API__` la página funciona con lo guardado en el dispositivo y no ofrece el link: se puede
+publicar así y sumar el servidor después. Contrato del servidor (endpoints, tokens, errores):
+`docs/charter-collection-server.md`. Usa el recorte de MediaPipe igual que el hero (la persona puede sumar su foto ahí).
+
+**Club (menú de USL y las páginas):**
+
+- El menú de USL queda **como está hoy** (Home, Teams, Shop, Youth, Staff, News, Partners, Events): "Staff" sigue
+  llevando a `/staff/`, que redirige a Front Office. **Soccer Staff** (`/soccer-staff/`) se llega desde la navegación
+  de arriba de las páginas del Club, recién desde el viernes del reveal: antes no existe para nadie. Roster está en pausa
+  (no se publica ni se enlaza; `t03-roster` queda en el repo).
+- `/staff/` redirige (301) a `/front-office/`. **Antes del lunes de arranque:** Front Office reemplaza a la página
+  `/staff/` actual, que hoy muestra al futuro Head Coach como Academy Director. `st01-staff` se retira. Coordinar con
+  marketing.
+- Cada página del Club y la ficha llevan arriba la misma navegación ("Front Office · Soccer Staff"). Reemplazos:
+  `__URL_FRONT_OFFICE__` y `__URL_TEAM__` (Soccer Staff). En Front Office esa navegación aparece sola cuando
+  `__COLECCION_API__` dice que el Head Coach ya se reveló (antes queda oculta): no hay que tocar el bloque el viernes.
+- **Soccer Staff** (`t00-soccer-staff`) tiene el mismo formato que Front Office (cabecera oscura, tarjetas sobre claro;
+  reusa el CSS de `t02`, lo suma `build-blocks.py`). Por ahora muestra solo al Head Coach, como tarjeta que lleva a su
+  ficha. Al pie, "Every first, a card." como **Coming soon** (sin link: Mi colección todavía no se publica). La carta
+  no va en esta página.
+- La ficha (`t01-coach`) tiene, al pie, el apartado "Charter Collection · Card No. 001": la carta y un form para
+  recibirla por mail (`__AC_CARD_FORM__`, ver `docs/charter-collection-activecampaign.md`). La Collector no se reclama acá.
+- Soccer Staff y la ficha **no están disponibles hasta el reveal**: se publican el viernes y, si alguien las abre antes,
+  vuelven solas a Front Office (`__URL_FRONT_OFFICE__`). Front Office (`t02-front-office`) reemplaza a `/staff/` y se
+  puede publicar ya.
+Reemplazos: `__COLECCION_API__` (URL del estado por fecha), `__URL_COACH__` (permalink de la ficha), `__URL_TEAM__` (equipo, hoy `/staff/`) y, en el hero,
+`__AC_ACCOUNT__`, `__AC_COLLECTION_FORM__` y `__AC_FIELD_CONSENT__` (`field[NN]` del form de
+ActiveCampaign, que además es el que pone la etiqueta); en la ficha, `__AC_ACCOUNT__`, `__AC_CARD_FORM__` y
+`__AC_FIELD_CONSENT__`. Sin esos datos el form valida, pero no envía. Qué crear en
+ActiveCampaign (form, campos, etiqueta y mails): `docs/charter-collection-activecampaign.md`.
+
+**Recorte de la foto de la Collector (MediaPipe):** correr `tools/fetch-mediapipe.sh`. Baja unos 19 MB a
+`assets/vendor/mediapipe/`, que no van al repo, y esa carpeta se sube junto con el resto de `assets/` a `ASSET_BASE`.
+WordPress no deja subir `.mjs`, `.wasm` ni `.tflite` por defecto, así que hay que habilitar esos tipos o subirlos por
+FTP. El servidor tiene que mandar `application/wasm` para el `.wasm` y `text/javascript` para el `.mjs`. Si
+`ASSET_BASE` es otro dominio, además tiene que mandar `Access-Control-Allow-Origin` (también lo necesita la imagen
+para compartir). Si falta algo de esto, el recorte no corre y la carta usa la foto entera: no se rompe.
+
 ---
 
 ## ⚠️ La trampa de WordPress (por qué el JS va como lo va)

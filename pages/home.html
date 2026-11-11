@@ -13,22 +13,26 @@
 
   <!-- Patrones compartidos -->
   <link rel="stylesheet" href="../native/_patterns/cards.css?v=67" />
-  <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=68" />
 
   <!-- Bloques nativos -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=77" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=79" />
   <link rel="stylesheet" href="../native/home/01-hero.css?v=67" />
+  <link rel="stylesheet" href="../native/home/01b-hero-coleccion.css?v=4" />
+  <link rel="stylesheet" href="../native/home/01c-coleccion.css?v=1" />
   <link rel="stylesheet" href="../native/home/02-stats.css?v=67" />
   <link rel="stylesheet" href="../native/home/03-project.css?v=67" />
   <link rel="stylesheet" href="../native/home/04-proof.css?v=67" />
   <link rel="stylesheet" href="../native/home/04b-fixtures.css?v=67" />
   <link rel="stylesheet" href="../native/home/05-jersey.css?v=67" />
   <link rel="stylesheet" href="../native/home/06-founders.css?v=67" />
-  <link rel="stylesheet" href="../native/home/07b-school.css?v=1" />
+  <link rel="stylesheet" href="../native/home/07-academy.css?v=67" />
   <link rel="stylesheet" href="../native/home/08-news.css?v=67" />
   <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
 
   <!-- Piezas a medida -->
+  <link rel="stylesheet" href="../custom/card/card.css?v=1" />
+  <link rel="stylesheet" href="../custom/card/photo-capture.css?v=1" />
   <link rel="stylesheet" href="../custom/live-counter/live-counter.css?v=67" />
   <link rel="stylesheet" href="../custom/jersey-viewer/jersey-viewer.css?v=67" />
   <link rel="stylesheet" href="../custom/departures-board/departures-board.css?v=68" />
@@ -37,6 +41,9 @@
 
   <style>
     html, body { margin: 0; padding: 0; background: var(--color-ink); }
+    /* Solo preview: los bloques se inyectan después de cargar; sin esto, al aparecer la barra de scroll
+       todo el ancho se corre unos píxeles y la nav salta. En WordPress el contenido ya está al cargar. */
+    body { overflow-y: scroll; }
     body { font-family: var(--font-body); color: var(--color-text); overflow-x: hidden; }
     ::selection { background: var(--color-aqua); color: var(--color-black); }
   </style>
@@ -44,14 +51,15 @@
 <body>
   <div data-block="00-nav"></div>
   <div data-block="01-hero"></div>
+  <div data-block="01c-coleccion"></div>
   <div data-block="02-stats"></div>
   <div data-block="03-project"></div>
   <div data-block="04-proof"></div>
   <div data-block="04b-fixtures"></div>
   <div data-block="05-jersey"></div>
   <div data-block="06-founders"></div>
-  <!-- 07-academy oculto: la Soccer School (07b) toma su lugar y usa la misma foto. Acceso a Academy: nav y footer. -->
-  <div data-block="07b-school"></div>
+  <!-- 07b-school oculto por ahora (Martín, 10/11: la School no sale hasta que el club avise). Queda 07-academy, como en el sitio publicado. -->
+  <div data-block="07-academy"></div>
   <div data-block="08-news"></div>
   <div data-block="09-cierre-footer"></div>
 
@@ -63,25 +71,49 @@
   <script type="module">
     const blocks = [
       '00-nav', '01-hero', '02-stats', '03-project', '04-proof', '04b-fixtures',
-      '05-jersey', '06-founders', '07b-school', '08-news', '09-cierre-footer',
+      '05-jersey', '06-founders', '07-academy', '08-news', '09-cierre-footer',
     ];
+    // Solo preview: las fuentes se cargan antes de insertar los bloques, así la nav no se mueve al aplicarse.
+    const fontsReady = document.fonts ? Promise.all(['400 16px "Proxima Nova"', '600 16px "Proxima Nova"', '700 16px "Proxima Nova"',
+      '800 16px Druk', '900 16px Druk', '500 16px "Druk Text Wide"', '800 16px "Druk Text Wide"', '800 16px Ferryman']
+      .map((f) => document.fonts.load(f))).catch(() => {}) : Promise.resolve();
     const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
+    // Hero de campaña (solo preview): ?cc=mon|tue|wed|thu|fri|sat simula el día, ?cc=off vuelve a 01-hero,
+    // ?cc=end: fin de campaña (01-hero normal + la entrada 01c-coleccion, con el estado del sábado).
+    // ?demo simula el envío del mail y ?reset borra el progreso.
+    // En WordPress se pega un bloque u otro. El estado sale de .local/ (privado, fuera de git).
+    const params = new URLSearchParams(location.search);
+    const cc = params.get('cc') || 'mon';
+    const ended = cc === 'end';
+    const stateDay = ended ? 'sat' : cc;
+    if (ended) blocks.splice(2, 0, '01c-coleccion');
+    if (params.has('reset')) { try { localStorage.removeItem('pslsc-charter-001'); } catch (err) { /* sin storage */ } }
     await Promise.all(blocks.map(async (name) => {
-      const html = await fetch(`../native/home/${name}.html${bust}`).then((r) => r.text());
-      document.querySelector(`[data-block="${name}"]`).innerHTML = html;
+      const file = name === '01-hero' && cc !== 'off' && !ended ? '01b-hero-coleccion' : name;
+      const html = await fetch(`../native/home/${file}.html${bust}`).then((r) => r.text());
+      await fontsReady;   // el bloque se baja en paralelo con las fuentes y se inserta cuando están
+      document.querySelector(`[data-block="${name}"]`).innerHTML = html
+        .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${stateDay}.json`)
+        .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${stateDay}`)
+        .replaceAll('__URL_COLLECTION__', `collection.html?cc=${stateDay}`)
+        .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${stateDay}`);
     }));
     // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.
     // (El sitio es English-only: no hay init de idioma.)
-    const [{ initNewsletter }, { initHeroMorph, initHeroVideo }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
+    const [{ initNewsletter }, { initHeroMorph, initHeroVideo }, { initHeroColeccion }, { initColeccionEntry }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
       import('../native/home/09-cierre-footer.js?v=67'),
       import('../native/home/01-hero.js?v=67'),
+      import('../native/home/01b-hero-coleccion.js?v=7'),
+      import('../native/home/01c-coleccion.js?v=1'),
       import('../native/home/04-proof.js?v=67'),
       import('../native/home/03-project.js?v=67'),
-      import('../native/_patterns/motion.js?v=67'),
+      import('../native/_patterns/motion.js?v=68'),
     ]);
     initNewsletter();
     initHeroMorph();
     initHeroVideo();   // video del hero diferido (01-hero.js): sin esto queda solo el poster
+    initHeroColeccion();
+    initColeccionEntry();
     initProofTimeline();
     initProjectTimeline();
     initMotion();   // activa reveal, parallax, nav reactiva, grano, cursor — tras inyectar los bloques
@@ -93,6 +125,8 @@
   </script>
 
   <!-- Web components a medida -->
+  <script type="module" src="../custom/card/card.js?v=1"></script>
+  <script type="module" src="../custom/card/photo-capture.js?v=1"></script>
   <script type="module" src="../custom/live-counter/live-counter.js?v=70"></script>
   <script type="module" src="../custom/jersey-viewer/jersey-viewer.js?v=67"></script>
   <script type="module" src="../custom/departures-board/departures-board.js?v=68"></script>

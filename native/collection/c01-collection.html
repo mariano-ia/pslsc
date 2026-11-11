@@ -1,0 +1,24 @@
+<!--
+  Bloque c01 · Mi colección (/collection). 🟦 A medida. Se publica junto con 01c, cuando termina la semana del reveal.
+  Las cartas de la persona: la Collector (o Founding Member) arriba, y abajo las cartas numeradas (Card No. 001 y las
+  que faltan, como siluetas). Sin cartas: estado vacío que manda a jugar. Con "Send me my link" la colección se abre
+  en otro dispositivo (magic link: pedido, enviado, link vencido). Contrato del servidor: docs/charter-collection-server.md.
+  Mientras no haya servidor (__COLLECTION_API__ sin reemplazar), la colección vive en el dispositivo y no se ofrece
+  el link. La carta llega por datos (__COLECCION_API__): en este archivo no va contenido de la carta.
+  Reemplazos: __COLECCION_API__, __COLLECTION_API__, __URL_COACH__ y el link a la home (permalink).
+-->
+<section class="cco surface-ink" id="collection" aria-labelledby="cco-title"
+  data-cc-state="__COLECCION_API__" data-cc-api="__COLLECTION_API__" data-cc-home="home.html#hero" data-cc-coach="__URL_COACH__">
+  <div class="psl-container cco__wrap">
+    <header class="cco__head">
+      <p class="cco__kicker">Charter Collection</p>
+      <h1 class="cco__title" id="cco-title">My collection</h1>
+    </header>
+    <div class="cco__view" data-cco-view>
+      <p class="cco__lead">Loading your collection&hellip;</p>
+      <noscript><p class="cco__lead">Turn on JavaScript to see your collection.</p></noscript>
+    </div>
+    <p class="cco__sr" data-cco-status aria-live="polite"></p>
+    <psl-photo-capture data-cco-capture hidden></psl-photo-capture>
+  </div>
+</section>

@@ -39,9 +39,11 @@
   width: auto;
   display: block;
   margin-top: 3px;
-  transition: height 280ms var(--ease-out-soft, ease);
+  transform-origin: left top;
+  transition: transform 280ms var(--ease-out-soft, ease);
 }
-.nav.is-scrolled .nav__crest { height: 66px; }
+/* Se achica con transform (no con height): no cambia el ancho, así los links no se corren al condensarse */
+.nav.is-scrolled .nav__crest { transform: scale(.623); }   /* 106 → 66 px */
 
 .nav__wordmark { display: flex; align-items: center; line-height: 1; }
 .nav__name { font: 800 16px/1 var(--font-display); letter-spacing: var(--ls-display); }
@@ -277,7 +279,7 @@
 }
 @media (max-width: 560px) {
   .nav__crest { height: 72px; }
-  .nav.is-scrolled .nav__crest { height: 50px; }
+  .nav.is-scrolled .nav__crest { transform: scale(.694); }   /* 72 → 50 px */
 }
 /* con el menú abierto la página de atrás no scrollea */
 html.nav-menu-open { overflow: hidden; }
@@ -287,3 +289,5 @@ html.nav-menu-open { overflow: hidden; }
   .nav__school, .nav__panel, .nav__burger span { transition: none; }
 }
 
+/* Soccer School oculta por ahora (ver 00-nav.html): el banderín, el panel y el póster llevan [hidden] */
+.nav [hidden] { display: none !important; }
