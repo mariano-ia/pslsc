@@ -343,12 +343,43 @@
   border: 1px solid var(--color-paper-line);
   border-radius: var(--radius-md);
   overflow: hidden;}
-.pslsc .scard[open]{box-shadow: 0 16px 30px rgba(18, 17, 13, .08);}
-.pslsc .scard__summary{display: block;
-  cursor: pointer;
-  list-style: none;}
-.pslsc .scard__summary::-webkit-details-marker{display: none;}
-.pslsc .scard__summary:focus-visible{outline: 2px solid var(--color-aqua-deep); outline-offset: 2px;}
+.pslsc .scard--flip{background: none; border: 0; border-radius: 0; overflow: visible; perspective: 1800px;}
+.pslsc .scard__inner{position: relative;
+  transform-style: preserve-3d;
+  transition: transform .7s cubic-bezier(.2, .7, .2, 1);}
+.pslsc .scard--flip.is-flipped .scard__inner{transform: rotateY(180deg);}
+.pslsc .scard__face{background: var(--color-paper-card);
+  border: 1px solid var(--color-paper-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;}
+.pslsc .scard__front{cursor: pointer; transition: box-shadow .2s;}
+.pslsc .scard__front:hover{box-shadow: 0 16px 30px rgba(18, 17, 13, .08);}
+.pslsc .scard__back{position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  transform: rotateY(180deg);
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  box-shadow: 0 16px 30px rgba(18, 17, 13, .14);}
+.pslsc .scard__back .scard__bar{flex: none; padding-top: 20px; border-bottom: 1px solid var(--color-line);}
+.pslsc .scard__back .scard__name{color: var(--color-text);}
+.pslsc .scard__back .scard__role{color: var(--color-aqua);}
+.pslsc .scard__back .scard__bio{flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 18px 17px 28px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(170, 246, 230, .35) transparent;
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 28px), transparent);
+  mask-image: linear-gradient(180deg, #000 calc(100% - 28px), transparent);}
+.pslsc .scard__back .scard__bio p{margin: 0; font-size: 15px; line-height: 1.55; color: var(--color-text-muted);}
+.pslsc .staff__grid:has(.scard--flip){align-items: stretch;}
+.pslsc .scard__inner{height: 100%;}
+.pslsc .scard__front{display: flex; flex-direction: column; height: 100%;}
+.pslsc .scard__front .scard__bar{flex: 1;}
 .pslsc .scard__media{display: block;
   width: 100%;
   height: auto;                     
@@ -379,20 +410,31 @@
   color: var(--color-aqua-deep);}
 .pslsc .scard__toggle{position: relative;
   flex: none;
-  width: 24px;
-  height: 24px;
-  transition: transform .2s ease;}
+  width: 34px;
+  height: 34px;
+  margin: -5px -5px -5px 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-on-paper);
+  transition: transform .2s ease, background .2s ease;}
 .pslsc .scard__toggle::before, .pslsc .scard__toggle::after{content: "";
   position: absolute;
-  left: 3px;
-  right: 3px;
+  left: 9px;
+  right: 9px;
   top: 50%;
   height: 2px;
   margin-top: -1px;
   border-radius: 2px;
-  background: var(--color-text-on-paper);}
+  background: currentColor;}
 .pslsc .scard__toggle::after{transform: rotate(90deg);}
-.pslsc .scard[open] .scard__toggle{transform: rotate(45deg);}
+.pslsc .scard__front:hover .scard__toggle{background: rgba(18, 17, 13, .06);}
+.pslsc .scard__toggle:focus-visible{outline: 2px solid var(--color-aqua-deep); outline-offset: 2px;}
+.pslsc .scard__back .scard__toggle{color: var(--color-text); transform: rotate(45deg);}
+.pslsc .scard__back .scard__toggle:hover{background: rgba(255, 255, 255, .08);}
+.pslsc .scard__back .scard__toggle:focus-visible{outline-color: var(--color-aqua);}
 .pslsc .scard__bio{display: grid;
   gap: 12px;
   padding: 0 17px 20px;}
@@ -400,7 +442,7 @@
   color: var(--color-text-on-paper-muted);}
 
 
-@media (prefers-reduced-motion: reduce) {.pslsc .scard__toggle{transition: none;}}
+@media (prefers-reduced-motion: reduce) {.pslsc .scard__toggle, .pslsc .scard__inner{transition: none;}}
 </style>
 
 <div class="pslsc pslsc--bleed" data-psl-block="team/t02-front-office">
@@ -419,92 +461,147 @@
       <span class="psl-kicker staff__grouplabel">Executive Leadership</span>
       <div class="staff__grid">
 
-        <details class="scard">
-          <summary class="scard__summary">
-            <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/gustavo-suarez.webp" alt="Gustavo Suárez" width="900" height="1125" loading="lazy" decoding="async" />
-            <div class="scard__bar">
-              <div class="scard__id">
-                <p class="scard__name">Gustavo Suárez</p>
-                <p class="scard__role">Founder &amp; CEO</p>
+        <article class="scard scard--flip">
+          <div class="scard__inner">
+            <div class="scard__face scard__front">
+              <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/gustavo-suarez.webp" alt="Gustavo Suárez" width="900" height="1125" loading="lazy" decoding="async" />
+              <div class="scard__bar">
+                <div class="scard__id">
+                  <p class="scard__name">Gustavo Suárez</p>
+                  <p class="scard__role">Founder &amp; CEO</p>
+                </div>
+                <button type="button" class="scard__toggle" data-scard-flip aria-expanded="false" aria-label="About Gustavo Suárez"></button>
               </div>
-              <span class="scard__toggle" aria-hidden="true"></span>
             </div>
-          </summary>
-          <div class="scard__bio">
-            <p>Entrepreneur and investor with over 20 years of experience leading sports, real estate, and business ventures across Latin America and the United States. Founder and CEO of Port Saint Lucie SC, he spearheads the creation of an ecosystem that connects sports, real estate, and community development in Florida.</p>
-            <p>With a deep connection to sports and hands-on experience managing teams and athletic organizations, he combines human leadership, strategic vision, and an unshakable belief that sports can transform lives and drive progress.</p>
+            <div class="scard__face scard__back" inert>
+              <div class="scard__bar">
+                <div class="scard__id">
+                  <p class="scard__name">Gustavo Suárez</p>
+                  <p class="scard__role">Founder &amp; CEO</p>
+                </div>
+                <button type="button" class="scard__toggle" data-scard-flip aria-label="Back to the photo of Gustavo Suárez"></button>
+              </div>
+              <div class="scard__bio">
+                <p>Entrepreneur and investor with over 20 years of experience leading sports, real estate, and business ventures across Latin America and the United States. Founder and CEO of Port Saint Lucie SC, he spearheads the creation of an ecosystem that connects sports, real estate, and community development in Florida.</p>
+                <p>With a deep connection to sports and hands-on experience managing teams and athletic organizations, he combines human leadership, strategic vision, and an unshakable belief that sports can transform lives and drive progress.</p>
+              </div>
+            </div>
           </div>
-        </details>
+        </article>
 
-        <details class="scard">
-          <summary class="scard__summary">
-            <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/agostina-galimberti.webp" alt="Agostina Galimberti" width="900" height="1125" loading="lazy" decoding="async" />
-            <div class="scard__bar">
-              <div class="scard__id">
-                <p class="scard__name">Agostina Galimberti</p>
-                <p class="scard__role">President | Co-Founder</p>
+        <article class="scard scard--flip">
+          <div class="scard__inner">
+            <div class="scard__face scard__front">
+              <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/agostina-galimberti.webp" alt="Agostina Galimberti" width="900" height="1125" loading="lazy" decoding="async" />
+              <div class="scard__bar">
+                <div class="scard__id">
+                  <p class="scard__name">Agostina Galimberti</p>
+                  <p class="scard__role">President | Co-Founder</p>
+                </div>
+                <button type="button" class="scard__toggle" data-scard-flip aria-expanded="false" aria-label="About Agostina Galimberti"></button>
               </div>
-              <span class="scard__toggle" aria-hidden="true"></span>
             </div>
-          </summary>
-          <div class="scard__bio">
-            <p>Argentinian entrepreneur based in Florida, with experience in sports innovation, technology, and international business development. Co-founder of Port Saint Lucie SC and founder of a sports technology project, she leads the club's strategic growth in the United States and builds partnerships with institutions, brands, and investors.</p>
-            <p>A former field hockey player in Argentina, Australia, and Europe, she continues the legacy of her mother, a former player for the Argentine National Hockey Team. Her athletic background shaped her discipline, resilience, and leadership — values she now applies to every project she drives.</p>
-            <p>Her work blends global vision, creative thinking, and bold execution, integrating sports, real estate, and technology with a lasting social and community impact.</p>
+            <div class="scard__face scard__back" inert>
+              <div class="scard__bar">
+                <div class="scard__id">
+                  <p class="scard__name">Agostina Galimberti</p>
+                  <p class="scard__role">President | Co-Founder</p>
+                </div>
+                <button type="button" class="scard__toggle" data-scard-flip aria-label="Back to the photo of Agostina Galimberti"></button>
+              </div>
+              <div class="scard__bio">
+                <p>Argentinian entrepreneur based in Florida, with experience in sports innovation, technology, and international business development. Co-founder of Port Saint Lucie SC and founder of a sports technology project, she leads the club's strategic growth in the United States and builds partnerships with institutions, brands, and investors.</p>
+                <p>A former field hockey player in Argentina, Australia, and Europe, she continues the legacy of her mother, a former player for the Argentine National Hockey Team. Her athletic background shaped her discipline, resilience, and leadership — values she now applies to every project she drives.</p>
+                <p>Her work blends global vision, creative thinking, and bold execution, integrating sports, real estate, and technology with a lasting social and community impact.</p>
+              </div>
+            </div>
           </div>
-        </details>
+        </article>
 
-        <details class="scard">
-          <summary class="scard__summary">
-            <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/paulo-suarez.webp" alt="Paulo Suárez" width="900" height="1125" loading="lazy" decoding="async" />
-            <div class="scard__bar">
-              <div class="scard__id">
-                <p class="scard__name">Paulo Suárez</p>
-                <p class="scard__role">Co-Founder | Managing Partner USA</p>
+        <article class="scard scard--flip">
+          <div class="scard__inner">
+            <div class="scard__face scard__front">
+              <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/paulo-suarez.webp" alt="Paulo Suárez" width="900" height="1125" loading="lazy" decoding="async" />
+              <div class="scard__bar">
+                <div class="scard__id">
+                  <p class="scard__name">Paulo Suárez</p>
+                  <p class="scard__role">Co-Founder | Managing Partner USA</p>
+                </div>
+                <button type="button" class="scard__toggle" data-scard-flip aria-expanded="false" aria-label="About Paulo Suárez"></button>
               </div>
-              <span class="scard__toggle" aria-hidden="true"></span>
             </div>
-          </summary>
-          <div class="scard__bio">
-            <p>Entrepreneur with broad experience in business development, human leadership, infrastructure, and sports. Co-founder and Managing Partner of Port Saint Lucie SC, and founder of a sports technology project, he leads the club's expansion in the United States and contributes his expertise in construction, team management, and investment oversight within the family business group.</p>
-            <p>Currently managing a service franchise in Florida, he combines strategic vision, people-focused leadership, and strong execution — bridging sports, real estate, and business development into one integrated ecosystem.</p>
+            <div class="scard__face scard__back" inert>
+              <div class="scard__bar">
+                <div class="scard__id">
+                  <p class="scard__name">Paulo Suárez</p>
+                  <p class="scard__role">Co-Founder | Managing Partner USA</p>
+                </div>
+                <button type="button" class="scard__toggle" data-scard-flip aria-label="Back to the photo of Paulo Suárez"></button>
+              </div>
+              <div class="scard__bio">
+                <p>Entrepreneur with broad experience in business development, human leadership, infrastructure, and sports. Co-founder and Managing Partner of Port Saint Lucie SC, and founder of a sports technology project, he leads the club's expansion in the United States and contributes his expertise in construction, team management, and investment oversight within the family business group.</p>
+                <p>Currently managing a service franchise in Florida, he combines strategic vision, people-focused leadership, and strong execution — bridging sports, real estate, and business development into one integrated ecosystem.</p>
+              </div>
+            </div>
           </div>
-        </details>
+        </article>
 
-        <details class="scard">
-          <summary class="scard__summary">
-            <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/diego-delledonne.webp" alt="Diego Delledonne" width="900" height="1125" loading="lazy" decoding="async" />
-            <div class="scard__bar">
-              <div class="scard__id">
-                <p class="scard__name">Diego Delledonne</p>
-                <p class="scard__role">Chief Operating Officer</p>
+        <article class="scard scard--flip">
+          <div class="scard__inner">
+            <div class="scard__face scard__front">
+              <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/diego-delledonne.webp" alt="Diego Delledonne" width="900" height="1125" loading="lazy" decoding="async" />
+              <div class="scard__bar">
+                <div class="scard__id">
+                  <p class="scard__name">Diego Delledonne</p>
+                  <p class="scard__role">Chief Operating Officer</p>
+                </div>
+                <button type="button" class="scard__toggle" data-scard-flip aria-expanded="false" aria-label="About Diego Delledonne"></button>
               </div>
-              <span class="scard__toggle" aria-hidden="true"></span>
             </div>
-          </summary>
-          <div class="scard__bio">
-            <p>Soccer executive with more than a decade of experience leading the professional first division at San Lorenzo de Almagro, one of Argentina's traditional top five clubs. From 2013 to 2023, he oversaw the department that bridges sport, business, and people — coordinating first-team operations, managing transfers, and strengthening institutional relationships.</p>
-            <p>He represented San Lorenzo de Almagro before FIFA at the 2014 Club World Cup and played a pivotal role in the professionalization and stabilization of the soccer department during challenging times. Recognized for his strategic vision and people-centered leadership, Diego believes true success in soccer lies in building sustainable processes, fostering credibility, and achieving balance between sporting performance and institutional growth.</p>
+            <div class="scard__face scard__back" inert>
+              <div class="scard__bar">
+                <div class="scard__id">
+                  <p class="scard__name">Diego Delledonne</p>
+                  <p class="scard__role">Chief Operating Officer</p>
+                </div>
+                <button type="button" class="scard__toggle" data-scard-flip aria-label="Back to the photo of Diego Delledonne"></button>
+              </div>
+              <div class="scard__bio">
+                <p>Soccer executive with more than a decade of experience leading the professional first division at San Lorenzo de Almagro, one of Argentina's traditional top five clubs. From 2013 to 2023, he oversaw the department that bridges sport, business, and people — coordinating first-team operations, managing transfers, and strengthening institutional relationships.</p>
+                <p>He represented San Lorenzo de Almagro before FIFA at the 2014 Club World Cup and played a pivotal role in the professionalization and stabilization of the soccer department during challenging times. Recognized for his strategic vision and people-centered leadership, Diego believes true success in soccer lies in building sustainable processes, fostering credibility, and achieving balance between sporting performance and institutional growth.</p>
+              </div>
+            </div>
           </div>
-        </details>
+        </article>
 
-        <details class="scard">
-          <summary class="scard__summary">
-            <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/sean-mcdaniel.webp" alt="Sean McDaniel" width="900" height="1125" loading="lazy" decoding="async" />
-            <div class="scard__bar">
-              <div class="scard__id">
-                <p class="scard__name">Sean McDaniel</p>
-                <p class="scard__role">Chief Revenue Officer</p>
+        <article class="scard scard--flip">
+          <div class="scard__inner">
+            <div class="scard__face scard__front">
+              <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/sean-mcdaniel.webp" alt="Sean McDaniel" width="900" height="1125" loading="lazy" decoding="async" />
+              <div class="scard__bar">
+                <div class="scard__id">
+                  <p class="scard__name">Sean McDaniel</p>
+                  <p class="scard__role">Chief Revenue Officer</p>
+                </div>
+                <button type="button" class="scard__toggle" data-scard-flip aria-expanded="false" aria-label="About Sean McDaniel"></button>
               </div>
-              <span class="scard__toggle" aria-hidden="true"></span>
             </div>
-          </summary>
-          <div class="scard__bio">
-            <p>Sean McDaniel is an experienced sports executive with more than 15 years in professional soccer management, operations, and commercial strategy. He previously served as President and General Manager of Chattanooga Red Wolves SC, where he played a key role in launching the club's professional program and driving significant revenue growth.</p>
-            <p>He also contributed to operations for the FIFA Club World Cup 2025, gaining experience in high-level international event management and coordinating with key stakeholders to ensure operational excellence.</p>
-            <p>At Port St. Lucie SC, McDaniel leads the club's commercial strategy, focusing on partnerships, revenue development, and building a sustainable business model that supports the club's long-term vision.</p>
+            <div class="scard__face scard__back" inert>
+              <div class="scard__bar">
+                <div class="scard__id">
+                  <p class="scard__name">Sean McDaniel</p>
+                  <p class="scard__role">Chief Revenue Officer</p>
+                </div>
+                <button type="button" class="scard__toggle" data-scard-flip aria-label="Back to the photo of Sean McDaniel"></button>
+              </div>
+              <div class="scard__bio">
+                <p>Sean McDaniel is an experienced sports executive with more than 15 years in professional soccer management, operations, and commercial strategy. He previously served as President and General Manager of Chattanooga Red Wolves SC, where he played a key role in launching the club's professional program and driving significant revenue growth.</p>
+                <p>He also contributed to operations for the FIFA Club World Cup 2025, gaining experience in high-level international event management and coordinating with key stakeholders to ensure operational excellence.</p>
+                <p>At Port St. Lucie SC, McDaniel leads the club's commercial strategy, focusing on partnerships, revenue development, and building a sustainable business model that supports the club's long-term vision.</p>
+              </div>
+            </div>
           </div>
-        </details>
+        </article>
 
       </div>
     </div>
@@ -513,23 +610,34 @@
       <span class="psl-kicker staff__grouplabel">Sporting Leadership</span>
       <div class="staff__grid">
 
-        <details class="scard">
-          <summary class="scard__summary">
-            <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/bernardo-romeo.webp" alt="Bernardo Romeo" width="900" height="1125" loading="lazy" decoding="async" />
-            <div class="scard__bar">
-              <div class="scard__id">
-                <p class="scard__name">Bernardo Romeo</p>
-                <p class="scard__role">Sporting Director</p>
+        <article class="scard scard--flip">
+          <div class="scard__inner">
+            <div class="scard__face scard__front">
+              <img class="scard__media" src="__PSL_ASSET_BASE__/assets/staff/bernardo-romeo.webp" alt="Bernardo Romeo" width="900" height="1125" loading="lazy" decoding="async" />
+              <div class="scard__bar">
+                <div class="scard__id">
+                  <p class="scard__name">Bernardo Romeo</p>
+                  <p class="scard__role">Sporting Director</p>
+                </div>
+                <button type="button" class="scard__toggle" data-scard-flip aria-expanded="false" aria-label="About Bernardo Romeo"></button>
               </div>
-              <span class="scard__toggle" aria-hidden="true"></span>
             </div>
-          </summary>
-          <div class="scard__bio">
-            <p>Former professional soccer player and experienced executive with proven leadership in club management and national team structures. After a successful playing career in Argentina and Europe — including stints at Hamburger SV in Germany and RCD Mallorca and CA Osasuna in Spain — Romeo transitioned into sporting management roles at the highest level.</p>
-            <p>He served as Sporting Director at San Lorenzo de Almagro, where he was part of the leadership team that guided the club to multiple titles, including its first CONMEBOL Libertadores. He later played a key role within Argentina's national team structures, particularly at the youth level, contributing to talent identification, player development pathways, and the strengthening of competitive environments.</p>
-            <p>With experience supporting elite player development — including within the generation that featured Lionel Messi — Romeo brings a deep understanding of long-term sporting structure and high-performance standards.</p>
+            <div class="scard__face scard__back" inert>
+              <div class="scard__bar">
+                <div class="scard__id">
+                  <p class="scard__name">Bernardo Romeo</p>
+                  <p class="scard__role">Sporting Director</p>
+                </div>
+                <button type="button" class="scard__toggle" data-scard-flip aria-label="Back to the photo of Bernardo Romeo"></button>
+              </div>
+              <div class="scard__bio">
+                <p>Former professional soccer player and experienced executive with proven leadership in club management and national team structures. After a successful playing career in Argentina and Europe — including stints at Hamburger SV in Germany and RCD Mallorca and CA Osasuna in Spain — Romeo transitioned into sporting management roles at the highest level.</p>
+                <p>He served as Sporting Director at San Lorenzo de Almagro, where he was part of the leadership team that guided the club to multiple titles, including its first CONMEBOL Libertadores. He later played a key role within Argentina's national team structures, particularly at the youth level, contributing to talent identification, player development pathways, and the strengthening of competitive environments.</p>
+                <p>With experience supporting elite player development — including within the generation that featured Lionel Messi — Romeo brings a deep understanding of long-term sporting structure and high-performance standards.</p>
+              </div>
+            </div>
           </div>
-        </details>
+        </article>
 
       </div>
     </div>
@@ -540,4 +648,4 @@
 </div>
 
 <script src="data:text/javascript;charset=utf-8,%0A(function(){%0A  function el(){return document.getElementById('psl-diag');}%0A  window.addEventListener('error',function(e){%0A    var d=el(); if(!d) return;%0A    d.textContent='\u274C El JS del bloque fallo: '+(e.message||'error')+'  ('+(e.lineno||'?')+')';%0A    d.className='psl-diag';%0A  },true);%0A  window.__pslDiag=function(){%0A    var d=el(); if(!d) return;%0A    d.textContent='\u2705 JS OK - ancho util '+document.documentElement.clientWidth+'px';%0A    d.className='psl-diag is-ok';%0A  };%0A})();%0A"></script>
-<script type="module" src="data:text/javascript;charset=utf-8,/**%0A * Bloque t02 · Front Office. Lo único que hace: mostrar la navegación del Club (Front Office · Soccer Staff) una vez%0A * revelado el Head Coach. Antes del reveal Soccer Staff no se publica, así que la navegación queda oculta.%0A */%0Aasync function initFrontOffice(root = document) {%0A  const head = root.querySelector('.staff--head[data-cc-state]');%0A  const nav = head?.querySelector('[data-clubnav]');%0A  const src = head?.dataset.ccState;%0A  if (!nav || !src || src.startsWith('__')) return;%0A  try {%0A    const res = await fetch(src, { cache: 'no-store', headers: { Accept: 'application/json' } });   // cambia por fecha: nunca de caché%0A    if (!res.ok) throw new Error(`HTTP ${res.status}`);%0A    const state = await res.json();%0A    if (state.revealed %26%26 state.profile) nav.hidden = false;%0A  } catch (err) {%0A    console.error('[front-office] no se pudo leer el estado', err);   // sin estado, la navegación queda oculta%0A  }%0A}%0A%0A%0A%0A%0Afunction pslVw(){document.documentElement.style.setProperty('--psl-vw',document.documentElement.clientWidth+'px');}%0ApslVw(); addEventListener('resize',pslVw,{passive:true});%0Afunction pslBoot(){ document.querySelectorAll('.pslsc[data-psl-block=%22team/t02-front-office%22]').forEach(function(r){if(r.dataset.pslReady)return;r.dataset.pslReady='1';initFrontOffice(r);r.dataset.pslBooted='1';}); if(window.__pslDiag) window.__pslDiag(); }%0Aif(document.readyState==='loading') document.addEventListener('DOMContentLoaded',pslBoot); else pslBoot();%0A"></script>
+<script type="module" src="data:text/javascript;charset=utf-8,/**%0A * Bloque t02 · Front Office. Da vuelta las tarjetas (bio atrás) y muestra la navegación del Club (Front Office · Soccer Staff) una vez%0A * revelado el Head Coach. Antes del reveal Soccer Staff no se publica, así que la navegación queda oculta.%0A */%0A/* Flip de las tarjetas: el %22+%22 (o un click en la foto) muestra la bio atrás; la %22x%22 o Esc vuelven a la foto.%0A   El lado que no se ve queda inert (ni foco ni lector de pantalla). */%0Afunction fofBindFlip(root) {%0A  root.querySelectorAll('.scard--flip').forEach((card) =%3E {%0A    if (card.dataset.flipBound) return;%0A    card.dataset.flipBound = '1';%0A    const front = card.querySelector('.scard__front');%0A    const back = card.querySelector('.scard__back');%0A    const [openBtn, closeBtn] = card.querySelectorAll('[data-scard-flip]');%0A    const set = (on) =%3E {%0A      card.classList.toggle('is-flipped', on);%0A      front.inert = on;%0A      back.inert = !on;%0A      openBtn.setAttribute('aria-expanded', String(on));%0A      if (on) back.querySelector('.scard__bio').scrollTop = 0;%0A      (on ? closeBtn : openBtn).focus({ preventScroll: true });%0A    };%0A    front.addEventListener('click', () =%3E set(true));%0A    closeBtn.addEventListener('click', () =%3E set(false));%0A    card.addEventListener('keydown', (e) =%3E { if (e.key === 'Escape' %26%26 card.classList.contains('is-flipped')) set(false); });%0A  });%0A}%0A%0Aasync function initFrontOffice(root = document) {%0A  fofBindFlip(root);%0A  const head = root.querySelector('.staff--head[data-cc-state]');%0A  const nav = head?.querySelector('[data-clubnav]');%0A  const src = head?.dataset.ccState;%0A  if (!nav || !src || src.startsWith('__')) return;%0A  try {%0A    const res = await fetch(src, { cache: 'no-store', headers: { Accept: 'application/json' } });   // cambia por fecha: nunca de caché%0A    if (!res.ok) throw new Error(`HTTP ${res.status}`);%0A    const state = await res.json();%0A    if (state.revealed %26%26 state.profile) nav.hidden = false;%0A  } catch (err) {%0A    console.error('[front-office] no se pudo leer el estado', err);   // sin estado, la navegación queda oculta%0A  }%0A}%0A%0A%0A%0A%0Afunction pslVw(){document.documentElement.style.setProperty('--psl-vw',document.documentElement.clientWidth+'px');}%0ApslVw(); addEventListener('resize',pslVw,{passive:true});%0Afunction pslBoot(){ document.querySelectorAll('.pslsc[data-psl-block=%22team/t02-front-office%22]').forEach(function(r){if(r.dataset.pslReady)return;r.dataset.pslReady='1';initFrontOffice(r);r.dataset.pslBooted='1';}); if(window.__pslDiag) window.__pslDiag(); }%0Aif(document.readyState==='loading') document.addEventListener('DOMContentLoaded',pslBoot); else pslBoot();%0A"></script>

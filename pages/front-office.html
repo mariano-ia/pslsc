@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="../native/home/00-nav.css?v=79" />
   <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
 
-  <link rel="stylesheet" href="../native/team/t02-front-office.css?v=1" />
+  <link rel="stylesheet" href="../native/team/t02-front-office.css?v=4" />
 
   <link rel="stylesheet" href="../native/_patterns/club-nav.css?v=1" />
 
@@ -57,7 +57,7 @@
         .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${cc}`);
     }));
     const [{ initFrontOffice }, { initNewsletter }, { initMotion }] = await Promise.all([
-      import('../native/team/t02-front-office.js?v=1'),
+      import('../native/team/t02-front-office.js?v=2'),
       import('../native/home/09-cierre-footer.js?v=67'),
       import('../native/_patterns/motion.js?v=68'),
     ]);
