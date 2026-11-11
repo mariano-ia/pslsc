@@ -286,7 +286,10 @@ def build_block(page, name):
     comps = sorted(set(re.findall(r"<(psl-[a-z-]+)", live)))
     uses_pcard = bool(re.search(r"\bpcard\b", live))
     uses_clubnav = bool(re.search(r"\bclubnav\b", live))   # navegación común del Club (t00–t03)
-    uses_scard = bool(re.search(r"\bscard\b", live)) and name != "t02-front-office"   # Soccer Staff usa las tarjetas de Front Office
+    # Soccer Staff usa las tarjetas de Front Office; su tarjeta la arma el JS, así que se busca también ahí
+    own_js_path = os.path.join(REPO, f"native/{src_page}/{name}.js")
+    own_js_src = read(f"native/{src_page}/{name}.js") if os.path.exists(own_js_path) else ""
+    uses_scard = bool(re.search(r"\bscard\b", live + own_js_src)) and name != "t02-front-office"
     uses_ptl   = bool(re.search(r"\bptl\b", live)) and name != "03-project"
     needs_motion = bool(re.search(r"data-(reveal|parallax|tilt|spotlight|magnetic|countdown)", live))
 
