@@ -37,7 +37,7 @@ Office (para mostrar la navegación del Club), Soccer Staff y la ficha.
   "card": { },           // la carta a mostrar: cerrada de lunes a jueves, revelada desde el viernes
   "shell": { },          // solo el viernes: la carta cerrada (de ahí arranca quien todavía no apretó "Reveal")
   "days": [ ],           // una entrada por día liberado (lunes a jueves), en orden
-  "presentation": { "src": "https://…/foto-presentacion.webp", "alt": "…" },   // desde el viernes
+  "presentation": { "src": "https://…/foto-presentacion.webp", "staff": "https://…/foto-staff.webp", "alt": "…" },   // desde el viernes
   "profile": { }         // desde el viernes: la ficha del Head Coach
 }
 ```
@@ -45,6 +45,8 @@ Office (para mostrar la navegación del Club), Soccer Staff y la ficha.
 - **`card` y `shell`**: datos de `<psl-card>`, con el esquema de `docs/charter-card-schema.md`. La carta cerrada lleva
   la silueta (una imagen: también es secreta hasta el lunes, así que su URL tiene que servirse desde el backend o un
   lugar no público, no desde `assets/` del repo).
+- **`presentation`**: `src` es la foto del hero (desde el viernes) y `staff`, la de la tarjeta del Head Coach en Soccer
+  Staff. `staff` es opcional: si falta, Soccer Staff usa `src`. Las dos son recortes sin fondo (PNG o WebP con alfa).
 - **`days[i]`**:
 
   | Campo | Qué es |
@@ -77,7 +79,7 @@ Office (para mostrar la navegación del Club), Soccer Staff y la ficha.
   `max-age` de pocos segundos). Un CDN que cachee la respuesta del lunes rompe el martes.
 - **Hora ET** del servidor, no del navegador: la persona no puede adelantar el reloj para ver la pista de mañana.
 - **CORS**: si el endpoint está en otro dominio que el sitio, `Access-Control-Allow-Origin` con el dominio del sitio.
-- **Imágenes** (`presentation.src`, silueta, foto de la carta): URLs absolutas, con el mismo cuidado de fecha que el
+- **Imágenes** (`presentation.src`, `presentation.staff`, silueta, foto de la carta): URLs absolutas, con el mismo cuidado de fecha que el
   JSON. Si están en otro dominio y se usan en la imagen para compartir, también necesitan CORS.
 - **Errores**: si el endpoint falla, el hero muestra "The game could not load" con "Try again", y `01c`, Soccer Staff,
   la ficha y la navegación del Club se quedan ocultos. Nada se ve roto, pero nada se ve.
