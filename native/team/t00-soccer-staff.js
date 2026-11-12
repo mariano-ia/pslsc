@@ -1,6 +1,7 @@
 /**
  * Bloque t00 · Soccer Staff. Lee el mismo estado que el hero. Revelado el Head Coach, lo pinta como una tarjeta del
- * staff (como Front Office) que lleva a su ficha. Antes del reveal la página no está disponible: vuelve a Front Office.
+ * staff (como Front Office) que lleva a su ficha. La foto es presentation.staff (más seria que la del hero); si no viene,
+ * usa la del hero (presentation.src). Antes del reveal la página no está disponible: vuelve a Front Office.
  */
 const tmhEsc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
@@ -29,7 +30,7 @@ async function initSoccerStaff(root = document) {
   const coach = document.createElement('a');
   coach.className = 'scard scard--link';
   coach.href = el.dataset.ccCoach;
-  coach.innerHTML = `<div class="scard__media tmh__media"><img src="${tmhEsc(presentation.src)}" alt="${tmhEsc(presentation.alt || name)}" decoding="async"></div>
+  coach.innerHTML = `<div class="scard__media tmh__media"><img src="${tmhEsc(presentation.staff || presentation.src)}" alt="${tmhEsc(presentation.alt || name)}" decoding="async"></div>
     <div class="scard__bar"><div class="scard__id"><p class="scard__name">${tmhEsc(name)}</p><p class="scard__role">Head Coach</p></div>
       <span class="scard__go" aria-hidden="true">&rarr;</span></div>
     <p class="tmh__summary">${tmhEsc(profile.summary)} <span class="tmh__more">Meet the coach</span></p>`;
