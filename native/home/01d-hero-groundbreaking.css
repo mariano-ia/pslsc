@@ -1,0 +1,130 @@
+/* Bloque 01d · Hero Groundbreaking
+   Estética "Mezcla" (aprobada): casa del club (negro, pills, tipografías del club) y el evento entra con su logo y
+   el verde mar del estadio en la cuenta regresiva (ver docs/frentes/groundbreaking/BRIEF.md). */
+.gbh {
+  --gb-sea:  #0F3B3A;
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  background: var(--color-ink);
+  color: var(--color-text);
+  border-bottom: 3px solid var(--color-aqua);
+}
+
+/* Fondo: la aérea al atardecer (último cuadro de la intro del micrositio) con una deriva de cámara muy lenta. */
+.gbh__bg { position: absolute; inset: 0; overflow: hidden; }
+.gbh__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.gbh__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(12,12,10,.78) 0%, rgba(12,12,10,.3) 50%, rgba(12,12,10,0) 72%),
+    linear-gradient(180deg, rgba(12,12,10,.55) 0%, rgba(12,12,10,.05) 30%, rgba(12,12,10,.6) 70%, var(--color-ink) 100%);
+}
+
+.gbh__in {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 40px 56px;
+  padding-top: 120px;
+  padding-bottom: clamp(40px, 6vw, 72px);
+}
+.gbh__logo { width: auto; height: clamp(52px, 5.4vw, 76px); margin-bottom: 30px; }
+.gbh__k {
+  font: 500 var(--fs-kicker)/1.4 var(--font-label);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--color-aqua);
+}
+.gbh__h {
+  margin-top: 18px;
+  font: 800 clamp(50px, 6.6vw, 104px)/0.94 var(--font-hero);
+  letter-spacing: -.01em;
+  max-width: 14ch;
+  text-wrap: balance;
+}
+.gbh__h em { font-style: normal; color: var(--color-aqua); }
+.gbh__sub {
+  margin-top: 26px;
+  max-width: 44ch;
+  font: 400 var(--fs-body-lg)/1.55 var(--font-body);
+  color: rgba(244,241,234,.82);
+}
+.gbh__ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+
+/* Cuenta regresiva: caja verde mar con 4 módulos, números Druk en aquamarine (como en el micrositio). */
+.gbh__cd {
+  padding: 16px 16px 6px;
+  border-radius: 8px;
+  background: var(--gb-sea);
+  box-shadow: 0 0 0 1px rgba(170,246,230,.25);
+}
+.gbh__cd[hidden] { display: none; }
+.gbh__cd-k {
+  display: block;
+  margin-bottom: 4px;
+  padding-left: 6px;
+  font: 500 var(--fs-kicker)/1 var(--font-label);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(244,241,234,.72);
+}
+.gbh__cd-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.gbh__cd-n {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 92px;
+  padding: 10px 10px 13px;
+}
+.gbh__cd-n + .gbh__cd-n { border-left: 1px solid rgba(170,246,230,.18); }
+.gbh__cd-n b {
+  font: 800 clamp(44px, 4.6vw, 64px)/.9 var(--font-display);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-aqua);
+}
+.gbh__cd-n span {
+  font: 500 10px/1 var(--font-label);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(244,241,234,.7);
+}
+
+@media (max-width: 899px) {
+  .gbh { min-height: 0; }
+  /* Vertical: la aérea ocupa solo la franja de arriba (entera, sin zoom de más) y se funde al negro. */
+  .gbh__bg { bottom: auto; height: min(46vh, 400px); }
+  .gbh__img { object-position: 46% 50%; }
+  .gbh__scrim { bottom: auto; height: min(46vh, 400px);
+    background: linear-gradient(180deg, rgba(12,12,10,.35) 0%, rgba(12,12,10,0) 22%, rgba(12,12,10,.55) 68%, var(--color-ink) 100%);
+  }
+  .gbh__in { grid-template-columns: 1fr; gap: 32px; padding-top: min(27vh, 230px); }
+  .gbh__logo { margin-bottom: 22px; }
+  .gbh__h { max-width: 9ch; }
+  .gbh__ctas .psl-btn { flex: 1 1 100%; justify-content: center; }
+  .gbh__cd-n { min-width: 0; padding: 10px 4px 11px; }
+  .gbh__cd-n b { font-size: 40px; }
+}
+
+/* Movimiento: deriva lenta del fondo y entrada en cascada. Nada con reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .gbh__img { animation: gbh-drift 44s ease-in-out infinite alternate; transform-origin: 62% 40%; }
+  .gbh__copy > *, .gbh__cd { animation: gbh-in .9s var(--ease-out-soft) backwards; }
+  .gbh__k   { animation-delay: .08s; }
+  .gbh__h   { animation-delay: .16s; }
+  .gbh__sub { animation-delay: .28s; }
+  .gbh__ctas { animation-delay: .38s; }
+  .gbh__cd  { animation-delay: .5s; }
+}
+@keyframes gbh-drift { from { transform: scale(1); } to { transform: scale(1.07) translate(-1%, .6%); } }
+@keyframes gbh-in { from { opacity: 0; transform: translateY(18px); } }

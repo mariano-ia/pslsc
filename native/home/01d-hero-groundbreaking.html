@@ -1,0 +1,40 @@
+<!--
+  Bloque 01d · Hero Groundbreaking — Home. 🟩 Nativo.
+  Banner principal de la primera palada del estadio (sábado 12/12/2026, 10 AM ET): se pega EN LUGAR de 01-hero
+  (o de 01b) mientras dure la campaña. Después del 12/12 se saca (el micrositio pasa a modo recap).
+  Estética "Mezcla": la casa del club (negro, pills) y el evento entra con su logo y el verde mar en la cuenta regresiva.
+  Alternativa a 01e-banner-groundbreaking: se usa uno u otro. Con este hero, el banner de Juani (01c) va debajo de 02-stats.
+  Link del micrositio: __URL_GROUNDBREAKING__ (placeholder, se reemplaza con los otros tokens, ver dist/UPLOAD.md §2).
+  Cuenta regresiva: 01d-hero-groundbreaking.js (initGbCountdown). Sin JS la tira no aparece y queda la fecha del kicker.
+-->
+<section class="gbh" id="hero" aria-labelledby="gbh-title">
+  <div class="gbh__bg" aria-hidden="true">
+    <img class="gbh__img" src="/assets/groundbreaking/aerial-dusk.webp"
+         srcset="/assets/groundbreaking/aerial-dusk-960.webp 960w, /assets/groundbreaking/aerial-dusk.webp 1920w" sizes="100vw"
+         alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
+  </div>
+  <div class="gbh__scrim" aria-hidden="true"></div>
+
+  <div class="psl-container gbh__in">
+    <div class="gbh__copy">
+      <img class="gbh__logo" src="/assets/groundbreaking/logo-aqua.svg" alt="Groundbreaking · Port St. Lucie Stadium" width="941" height="330" />
+      <p class="gbh__k">Saturday, December 12 · 10 AM · US-1 &amp; Walton Rd</p>
+      <h1 class="gbh__h" id="gbh-title">Our home <em>breaks ground.</em></h1>
+      <p class="gbh__sub">On December 12 the first shovel goes in where our stadium will rise. Be part of it from the very first day.</p>
+      <div class="gbh__ctas">
+        <a href="__URL_GROUNDBREAKING__#postcards" class="psl-btn cta-primary"><span>Get your free postcard</span> <span aria-hidden="true">→</span></a>
+        <a href="__URL_GROUNDBREAKING__" class="psl-btn cta-secondary">Visit the groundbreaking site</a>
+      </div>
+    </div>
+
+    <div class="gbh__cd" data-gb-countdown="2026-12-12T10:00:00-05:00" hidden>
+      <span class="gbh__cd-k">Until the first shovel</span>
+      <div class="gbh__cd-row" role="timer" aria-label="Time left until the groundbreaking">
+        <div class="gbh__cd-n"><b data-u="d">00</b><span>Days</span></div>
+        <div class="gbh__cd-n"><b data-u="h">00</b><span>Hrs</span></div>
+        <div class="gbh__cd-n"><b data-u="m">00</b><span>Min</span></div>
+        <div class="gbh__cd-n"><b data-u="s">00</b><span>Sec</span></div>
+      </div>
+    </div>
+  </div>
+</section>

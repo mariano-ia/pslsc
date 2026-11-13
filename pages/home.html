@@ -20,9 +20,10 @@
   <link rel="stylesheet" href="../native/home/01-hero.css?v=67" />
   <link rel="stylesheet" href="../native/home/01b-hero-coleccion.css?v=4" />
   <link rel="stylesheet" href="../native/home/01c-coleccion.css?v=1" />
+  <link rel="stylesheet" href="../native/home/01d-hero-groundbreaking.css?v=3" />
+  <link rel="stylesheet" href="../native/home/01e-banner-groundbreaking.css?v=3" />
   <link rel="stylesheet" href="../native/home/02-stats.css?v=67" />
   <link rel="stylesheet" href="../native/home/03-project.css?v=67" />
-  <link rel="stylesheet" href="../native/home/04-proof.css?v=67" />
   <link rel="stylesheet" href="../native/home/04b-fixtures.css?v=67" />
   <link rel="stylesheet" href="../native/home/05-jersey.css?v=67" />
   <link rel="stylesheet" href="../native/home/06-founders.css?v=67" />
@@ -51,10 +52,11 @@
 <body>
   <div data-block="00-nav"></div>
   <div data-block="01-hero"></div>
-  <div data-block="01c-coleccion"></div>
   <div data-block="02-stats"></div>
+  <div data-block="01e-banner-groundbreaking"></div>
+  <div data-block="01c-coleccion"></div>
   <div data-block="03-project"></div>
-  <div data-block="04-proof"></div>
+  <!-- 04-proof (reveal del render + timeline de obra) sale de la Home: ahora el estadio lo cuenta Groundbreaking (Martín, 13/11). -->
   <div data-block="04b-fixtures"></div>
   <div data-block="05-jersey"></div>
   <div data-block="06-founders"></div>
@@ -70,7 +72,7 @@
   <script src="../custom/ac-forms/ac-forms.js?v=1"></script>
   <script type="module">
     const blocks = [
-      '00-nav', '01-hero', '02-stats', '03-project', '04-proof', '04b-fixtures',
+      '00-nav', '01-hero', '02-stats', '03-project', '04b-fixtures',
       '05-jersey', '06-founders', '07-academy', '08-news', '09-cierre-footer',
     ];
     // Solo preview: las fuentes se cargan antes de insertar los bloques, así la nav no se mueve al aplicarse.
@@ -83,29 +85,43 @@
     // ?demo simula el envío del mail y ?reset borra el progreso.
     // En WordPress se pega un bloque u otro. El estado sale de .local/ (privado, fuera de git).
     const params = new URLSearchParams(location.search);
-    const cc = params.get('cc') || 'mon';
+    // Primera palada (solo preview). Juani (Charter Collection) y Groundbreaking se cruzan: uno va de hero y el otro
+    // de banner. Orden: hero, números (02-stats) y el banner tercero.
+    //   ?gb=banner  hero de Juani (01b, por defecto en sábado: la foto del coach) + banner 01e-banner-groundbreaking.
+    //   ?hero=gb    hero 01d-hero-groundbreaking + banner de Juani (01c-coleccion, la Card No. 001 revelada).
+    const gbHero = params.get('hero') === 'gb';
+    const gbBanner = !gbHero && params.get('gb') === 'banner';
+    const URL_GROUNDBREAKING = 'https://groundbreaking-eight.vercel.app/';   // micrositio (hoy en Vercel; en WP, __URL_GROUNDBREAKING__)
+    const cc = params.get('cc') || (gbHero || gbBanner ? 'sat' : 'mon');
     const ended = cc === 'end';
     const stateDay = ended ? 'sat' : cc;
-    if (ended) blocks.splice(2, 0, '01c-coleccion');
+    // Banner debajo de los números (02-stats), antes de 03-project.
+    const below = [];
+    if (gbBanner) below.push('01e-banner-groundbreaking');
+    if (gbHero || ended) below.push('01c-coleccion');
+    blocks.splice(blocks.indexOf('02-stats') + 1, 0, ...below);
     if (params.has('reset')) { try { localStorage.removeItem('pslsc-charter-001'); } catch (err) { /* sin storage */ } }
     await Promise.all(blocks.map(async (name) => {
-      const file = name === '01-hero' && cc !== 'off' && !ended ? '01b-hero-coleccion' : name;
+      const file = name === '01-hero' && gbHero ? '01d-hero-groundbreaking'
+        : name === '01-hero' && cc !== 'off' && !ended ? '01b-hero-coleccion' : name;
       const html = await fetch(`../native/home/${file}.html${bust}`).then((r) => r.text());
       await fontsReady;   // el bloque se baja en paralelo con las fuentes y se inserta cuando están
       document.querySelector(`[data-block="${name}"]`).innerHTML = html
         .replaceAll('__COLECCION_API__', `/.local/coleccion/state-${stateDay}.json`)
         .replaceAll('__URL_COACH__', `team-head-coach.html?cc=${stateDay}`)
         .replaceAll('__URL_COLLECTION__', `collection.html?cc=${stateDay}`)
-        .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${stateDay}`);
+        .replaceAll('__URL_TEAM__', `soccer-staff.html?cc=${stateDay}`)
+        .replaceAll('__URL_GROUNDBREAKING__', URL_GROUNDBREAKING);
     }));
     // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.
     // (El sitio es English-only: no hay init de idioma.)
-    const [{ initNewsletter }, { initHeroMorph, initHeroVideo }, { initHeroColeccion }, { initColeccionEntry }, { initProofTimeline }, { initProjectTimeline }, { initMotion }] = await Promise.all([
+    const [{ initNewsletter }, { initHeroMorph, initHeroVideo }, { initHeroColeccion }, { initColeccionEntry }, { initGbCountdown }, { initGbBanner }, { initProjectTimeline }, { initMotion }] = await Promise.all([
       import('../native/home/09-cierre-footer.js?v=67'),
       import('../native/home/01-hero.js?v=67'),
       import('../native/home/01b-hero-coleccion.js?v=7'),
       import('../native/home/01c-coleccion.js?v=1'),
-      import('../native/home/04-proof.js?v=67'),
+      import('../native/home/01d-hero-groundbreaking.js?v=1'),
+      import('../native/home/01e-banner-groundbreaking.js?v=1'),
       import('../native/home/03-project.js?v=67'),
       import('../native/_patterns/motion.js?v=68'),
     ]);
@@ -114,7 +130,8 @@
     initHeroVideo();   // video del hero diferido (01-hero.js): sin esto queda solo el poster
     initHeroColeccion();
     initColeccionEntry();
-    initProofTimeline();
+    initGbCountdown();
+    initGbBanner();
     initProjectTimeline();
     initMotion();   // activa reveal, parallax, nav reactiva, grano, cursor — tras inyectar los bloques
     import('../native/home/00-nav.js?v=4').then((m) => m.initNav());   // hamburguesa + banderín de la School

@@ -37,7 +37,9 @@ PERMALINKS = {
 BLOCKS = [
     ("home", "01-hero"),
     ("home", "01b-hero-coleccion"),   # campaña Charter Collection: se pega EN LUGAR de 01-hero
-    ("home", "01c-coleccion"),        # fin de campaña: va DEBAJO de 01-hero (entrada chica a la colección)
+    ("home", "01c-coleccion"),        # fin de campaña / con hero 01d: va DEBAJO de 02-stats (entrada chica a la colección)
+    ("home", "01d-hero-groundbreaking"),  # primera palada (hasta el 12/12): se pega EN LUGAR de 01-hero / 01b
+    ("home", "01e-banner-groundbreaking"),  # primera palada, alternativa a 01d: va DEBAJO de 02-stats
     ("home", "02-stats"), ("home", "03-project"), ("home", "04-proof"),
     ("home", "04b-fixtures"), ("home", "05-jersey"), ("home", "06-founders"),
     ("home", "07b-school"),   # 07-academy ya no va en la Home (lo reemplaza 07b)
