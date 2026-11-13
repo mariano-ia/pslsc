@@ -39,14 +39,18 @@ const FALLBACK_CARD = {
   back: {
     name: 'No. 001',
     bio: [['Role', 'Head Coach'], ['Country', null], ['Joined', '2026'], ['Last club', null]],
-    table: { locked: true, unlock: 'Unlocks Tuesday' },
-    fact: { locked: true, unlock: 'Unlocks Thursday' },
+    table: { locked: true, unlock: 'Unlocks Saturday' },
+    fact: { locked: true, unlock: 'Unlocks Monday' },
   },
 };
-const CCG_FULL_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-// Hora de cada pista y del reveal (Etapa 0: la confirma el club). Se usa en todo el copy del hero y del panel.
+// Calendario de la campaña (13/11/2026): una pregunta por día de viernes a lunes a las 10:00 AM ET y el reveal el
+// lunes a la 1:00 PM ET. Índices 0–3 = días del quiz, 4 = día del reveal. Se usa en todo el copy del hero y del panel.
+const CCG_FULL_NAMES = ['Friday', 'Saturday', 'Sunday', 'Monday', 'Monday'];
+const CCG_SHORT_NAMES = ['Fri', 'Sat', 'Sun', 'Mon', 'Mon'];
 const CCG_TIME = '10:00 AM ET';
-const CCG_REVEAL = `Friday at ${CCG_TIME}`;
+const CCG_REVEAL_DAY = CCG_FULL_NAMES[4];
+const CCG_REVEAL_TIME = '1:00 PM ET';
+const CCG_REVEAL = `${CCG_REVEAL_DAY} at ${CCG_REVEAL_TIME}`;
 const CCG_KICKER = 'First in club history';
 const ccgEsc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
@@ -93,8 +97,8 @@ function ccgHeroCopy(S, state) {
         const left = state.day - st.i;
         return { kicker, sub: `Joining on ${today}? Catch up first: ${left} quiz question${left > 1 ? 's' : ''} to go before today’s.` };
       }
-      if (st.i === 0) return { kicker, sub: `Play the daily quiz, Monday to Thursday: every answer unlocks a clue to Card No. 001. New question every day, full reveal ${CCG_REVEAL}.` };
-      if (st.i === 3) return { kicker, sub: `Last quiz question of the week. Then the full card drops ${CCG_REVEAL}.` };
+      if (st.i === 0) return { kicker, sub: `Play the daily quiz, ${CCG_FULL_NAMES[0]} to ${CCG_FULL_NAMES[3]}: every answer unlocks a clue to Card No. 001. New question every day, full reveal ${CCG_REVEAL}.` };
+      if (st.i === 3) return { kicker, sub: `Last quiz question. Then the full card drops today at ${CCG_REVEAL_TIME}.` };
       return { kicker, sub: `Daily quiz, day ${st.i + 1} of 4. Today’s answer unlocks a new clue. Full reveal ${CCG_REVEAL}.` };
     }
     case 'wait':
@@ -108,9 +112,9 @@ function ccgHeroCopy(S, state) {
   }
 }
 
-/* La semana del quiz, a la vista: qué días ya jugaste, cuál es hoy, cuál viene mañana y el reveal del viernes */
+/* Los días del quiz, a la vista: qué días ya jugaste, cuál es hoy, cuál viene mañana y el reveal */
 function ccgTrackHTML(S, state, current) {
-  const short = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+  const short = CCG_SHORT_NAMES;
   const items = [0, 1, 2, 3].map((i) => {
     let cls; let txt;
     if (S.answers[i] !== undefined) { cls = 'is-done'; txt = 'Done'; }
@@ -120,7 +124,7 @@ function ccgTrackHTML(S, state, current) {
     return `<li class="${cls}"><span>${short[i]}</span><b>${txt}</b></li>`;
   });
   items.push(`<li class="is-reveal"><span>${short[4]}</span><b>Reveal</b></li>`);
-  return `<ol class="ccg__track" aria-label="This week’s quiz">${items.join('')}</ol>`;
+  return `<ol class="ccg__track" aria-label="The daily quiz">${items.join('')}</ol>`;
 }
 
 function ccgEmailFields(id) {
@@ -163,19 +167,19 @@ function ccgPanelHTML(st, S, state, ctx = {}) {
       let foot;
       if (next.t === 'q') foot = `<div class="ccg__row">${ccgBtn('next', 'Next question <span aria-hidden="true">&rarr;</span>', true)}</div>`;
       else {
-        // Con las cuatro pistas, lo que sigue es el reveal del viernes
+        // Con las cuatro pistas, lo que sigue es el reveal
         const last = clues === 4 || state.day >= 3;
-        const day = last ? 'Friday' : (CCG_FULL_NAMES[state.day + 1] || 'Friday');
-        foot = `<div class="ccg__next"><p><span class="ccg__label">${last ? 'Full reveal' : 'Next clue'}</span><b>${day}, ${CCG_TIME}</b></p><span class="ccg__tally">${clues} of 4 clues</span></div>
+        const when = last ? `${CCG_REVEAL_DAY}, ${CCG_REVEAL_TIME}` : `${CCG_FULL_NAMES[state.day + 1] || CCG_REVEAL_DAY}, ${CCG_TIME}`;
+        foot = `<div class="ccg__next"><p><span class="ccg__label">${last ? 'Full reveal' : 'Next clue'}</span><b>${when}</b></p><span class="ccg__tally">${clues} of 4 clues</span></div>
           <div class="ccg__row">${S.email ? ccgBtn('mycard', 'My Collector Card') : ccgBtn('claim', 'Claim my Collector Card', true)}</div>`;
       }
       return ccgTrackHTML(S, state, -1) + ccgResultHTML(D, S.answers[i] === D.a) + foot;
     }
     case 'reveal':
-      return `<span class="ccg__kicker">Friday · ${CCG_TIME}</span><h2 tabindex="-1">Card No. 001 is ready.</h2>
+      return `<span class="ccg__kicker">${CCG_REVEAL_DAY} · ${CCG_REVEAL_TIME}</span><h2 tabindex="-1">Card No. 001 is ready.</h2>
         <p class="ccg__panel-lead">${clues
           ? `${clues} of 4 clues unlocked. Time to see who it is.`
-          : 'Missed the clues this week? No problem: the card is ready for everyone.'}</p>
+          : 'Missed the clues? No problem: the card is ready for everyone.'}</p>
         <div class="ccg__row">${ccgBtn('reveal', 'Reveal card No. 001', true)}</div>`;
     case 'revealed':
     case 'closed': {

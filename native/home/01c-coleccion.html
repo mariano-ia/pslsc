@@ -1,25 +1,34 @@
 <!--
-  Bloque 01c · Entrada a la Charter Collection — Home. 🟦 A medida.
-  Va DEBAJO de 02-stats (hero → números → banner) cuando termina la campaña (ya no está 01b-hero-coleccion). La colección queda con una
-  entrada propia y chica: la Card No. 001 revelada, a quién presenta y los links a la ficha y a Mi colección.
-  La carta, el nombre y la línea llegan por datos (__COLECCION_API__, el mismo estado del hero de campaña): en este
-  archivo no va contenido de la carta. Sin estado, o antes del reveal, el bloque queda oculto: nunca se ve roto.
-  Reemplazos: __COLECCION_API__, __URL_COACH__ (ficha del DT) y __URL_COLLECTION__ (Mi colección, etapa 6;
-  mientras no exista, ese botón no se muestra).
+  Bloque 01c · Presentación del Head Coach — Home. 🟦 A medida.
+  Va DEBAJO de 02-stats (hero → números → banner) cuando ya no está 01b-hero-coleccion: con el hero de Groundbreaking
+  (01d) o al terminar la campaña. Es el hero revelado de 01b en formato banner: la foto del coach con su Card No. 001
+  al lado, el mismo título y los links a la ficha y al staff. El foco es conocerlo a él; la colección todavía no
+  está disponible, así que el bloque no habla de ella.
+  Nombre, foto, línea y carta llegan por datos (__COLECCION_API__, el mismo estado del hero de campaña): en este
+  archivo no va contenido del coach. Sin estado, o antes del reveal, el bloque queda oculto: nunca se ve roto.
+  Reemplazos: __COLECCION_API__, __URL_COACH__ (ficha del DT) y __URL_TEAM__ (Soccer Staff).
 -->
-<section class="hce surface-ink" id="charter-collection" aria-labelledby="hce-title" hidden
-  data-cc-state="__COLECCION_API__" data-cc-coach="__URL_COACH__" data-cc-collection="__URL_COLLECTION__">
+<section class="hce surface-ink" id="head-coach" aria-labelledby="hce-title" hidden
+  data-cc-state="__COLECCION_API__" data-cc-coach="__URL_COACH__" data-cc-team="__URL_TEAM__">
+  <div class="hce__bg" aria-hidden="true"></div>
   <div class="psl-container hce__grid">
-    <div class="hce__card">
-      <psl-card flippable data-hce-card></psl-card>
+    <div class="hce__head">
+      <p class="hce__kicker">First in club history</p>
+      <h2 class="hce__title" id="hce-title">Meet the first Head Coach in club history.</h2>
+      <p class="hce__name" data-hce-name></p>
     </div>
-    <div class="hce__copy">
-      <p class="hce__kicker">Charter Collection · Card No. 001</p>
-      <h2 class="hce__title" id="hce-title">The collection has begun</h2>
+    <div class="hce__media">
+      <img class="hce__photo" data-hce-photo alt="" loading="lazy" decoding="async">
+      <div class="hce__card">
+        <psl-card flippable data-hce-card></psl-card>
+        <span class="hce__card-no">Card No. 001</span>
+      </div>
+    </div>
+    <div class="hce__foot">
       <p class="hce__lead" data-hce-lead></p>
       <div class="hce__ctas">
         <a class="psl-btn cta-primary" href="__URL_COACH__" data-hce-coach><span>Meet the coach</span> <span aria-hidden="true">→</span></a>
-        <a class="psl-btn cta-secondary" href="__URL_COLLECTION__" data-hce-collection hidden>My collection</a>
+        <a class="psl-btn cta-secondary" href="__URL_TEAM__" data-hce-team>Meet the staff</a>
       </div>
     </div>
   </div>

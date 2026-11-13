@@ -16,29 +16,34 @@ Los ejemplos con el contenido real de la Card No. 001 no están acá: van en el 
 
 | Desde | `day` | `revealed` | `closed` | Qué se suma |
 |---|---|---|---|---|
-| Lunes 10:00 AM ET | `0` | `false` | — | `days[0]` (pregunta y pista del lunes) |
-| Martes 10:00 AM ET | `1` | `false` | — | `days[1]` |
-| Miércoles 10:00 AM ET | `2` | `false` | — | `days[2]` |
-| Jueves 10:00 AM ET | `3` | `false` | — | `days[3]` |
-| Viernes 10:00 AM ET (reveal) | `4` | `true` | — | `card` pasa a la revelada, `shell` (la cerrada), `presentation` y `profile` |
-| Sábado 00:00 ET en adelante | `5` | `true` | `true` | Igual que el viernes, sin `shell`. Las preguntas se cierran |
+| Viernes 13/11 10:00 AM ET | `0` | `false` | — | `days[0]` (pregunta y pista del viernes) |
+| Sábado 14/11 10:00 AM ET | `1` | `false` | — | `days[1]` |
+| Domingo 15/11 10:00 AM ET | `2` | `false` | — | `days[2]` |
+| Lunes 16/11 10:00 AM ET | `3` | `false` | — | `days[3]` |
+| Lunes 16/11 1:00 PM ET (reveal) | `4` | `true` | — | `card` pasa a la revelada, `shell` (la cerrada), `presentation` y `profile` |
+| Martes 17/11 00:00 ET en adelante | `5` | `true` | `true` | Igual que el reveal, sin `shell`. Las preguntas se cierran |
 
-Antes del lunes 10:00 AM ET el endpoint puede responder `404` o el JSON del lunes sin `days` (el hero muestra un aviso
-y no se rompe). Después del fin de campaña **tiene que seguir respondiendo como el sábado**: lo usan `01c`, Front
+Los mocks del paquete privado conservan los nombres del calendario anterior: `state-mon` = viernes, `state-tue` = sábado,
+`state-wed` = domingo, `state-thu` = lunes 10 AM, `state-fri` = reveal, `state-sat` = martes en adelante. En cada día,
+`full` es `"Friday"`, `"Saturday"`, `"Sunday"` y `"Monday"`; en la carta cerrada los candados dicen
+`"Unlocks Saturday"` (trayectoria) y `"Unlocks Monday"` (el dato).
+
+Antes del viernes 10:00 AM ET el endpoint puede responder `404` o el JSON del primer día sin `days` (el hero muestra un
+aviso y no se rompe). Después del fin de campaña **tiene que seguir respondiendo como el martes**: lo usan `01c`, Front
 Office (para mostrar la navegación del Club), Soccer Staff y la ficha.
 
 ## Campos
 
 ```jsonc
 {
-  "day": 0,              // 0 = lunes … 3 = jueves, 4 = viernes, 5 = sábado en adelante
-  "revealed": false,     // true desde el viernes 10:00 AM ET
-  "closed": true,        // solo desde el sábado (si no, se omite)
-  "card": { },           // la carta a mostrar: cerrada de lunes a jueves, revelada desde el viernes
-  "shell": { },          // solo el viernes: la carta cerrada (de ahí arranca quien todavía no apretó "Reveal")
-  "days": [ ],           // una entrada por día liberado (lunes a jueves), en orden
-  "presentation": { "src": "https://…/foto-presentacion.webp", "staff": "https://…/foto-staff.webp", "alt": "…" },   // desde el viernes
-  "profile": { }         // desde el viernes: la ficha del Head Coach
+  "day": 0,              // 0 = viernes … 3 = lunes 10 AM, 4 = lunes 1 PM (reveal), 5 = martes en adelante
+  "revealed": false,     // true desde el lunes 1:00 PM ET
+  "closed": true,        // solo desde el martes (si no, se omite)
+  "card": { },           // la carta a mostrar: cerrada hasta el lunes 10 AM, revelada desde el reveal
+  "shell": { },          // solo el lunes del reveal: la carta cerrada (de ahí arranca quien todavía no apretó "Reveal")
+  "days": [ ],           // una entrada por día liberado (viernes a lunes), en orden
+  "presentation": { "src": "https://…/foto-presentacion.webp", "staff": "https://…/foto-staff.webp", "alt": "…" },   // desde el reveal
+  "profile": { }         // desde el reveal: la ficha del Head Coach
 }
 ```
 
