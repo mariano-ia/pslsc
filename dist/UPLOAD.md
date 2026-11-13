@@ -91,16 +91,16 @@ Todo lo del DT (nombre, fotos, silueta, preguntas, pistas, ficha) **no está en 
 CORS): `docs/charter-collection-state.md`. El contenido real va en un paquete privado aparte, no por GitHub.
 
 Qué se pega cada día en Home (el juego cambia solo según la fecha: lo resuelve el estado de `__COLECCION_API__`,
-no hay que tocar bloques entre lunes y sábado):
+no hay que tocar bloques entre el viernes 13 y el martes 17 de noviembre):
 
 | Cuándo | Home |
 |---|---|
-| Lunes de arranque, antes de las 10:00 AM ET | Sacar `01-hero` y pegar `01b-hero-coleccion` en su lugar |
-| Lunes a jueves | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista |
-| Viernes 10:00 AM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
-| Sábado hasta el fin de campaña | Nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector ya no se reclama (es del juego); la Card No. 001 se pide por mail en la ficha del DT |
-| Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion`, volver a pegar `01-hero` y pegar `01c-coleccion` **debajo de `02-stats`**. Con eso se cierra el reclamo de la Collector |
-| Más adelante (cuando haya más cartas) | Publicar **Mi colección** en `/collection/` (`c01-collection`) y reemplazar `__URL_COLLECTION__` en `01c` por esa URL. **No va en esta campaña** |
+| Viernes 13, antes de las 10:00 AM ET | Sacar `01-hero` y pegar `01b-hero-coleccion` en su lugar |
+| Viernes 13 a lunes 16 | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista (cuatro preguntas) |
+| Lunes 16, 1:00 PM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
+| Martes 17 en adelante | Pasar a la combinación B de Groundbreaking (abajo). Sin Groundbreaking, nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector ya no se reclama (es del juego); la Card No. 001 se pide por mail en la ficha del DT |
+| Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion` (o `01d`), volver a pegar `01-hero` y dejar `01c-coleccion` **debajo de `02-stats`**. Con eso se cierra el reclamo de la Collector |
+| Más adelante (cuando haya más cartas) | Publicar **Mi colección** en `/collection/` (`c01-collection`). **No va en esta campaña** |
 
 **Groundbreaking (primera palada, hasta el sábado 12/12/2026) y Juani conviven en Home.** Uno va de hero y el otro de
 banner. Orden en Home: **hero → `02-stats` (los números) → banner** (el banner va tercero, antes de `03-project`).
@@ -119,9 +119,9 @@ Para recompilar solo esos: `python3 tools/build-blocks.py 01d-hero-groundbreakin
 
 **`04-proof` ya no va en Home** (el estadio ahora lo cuenta Groundbreaking): si está pegado, sacarlo.
 
-`01c-coleccion` usa el mismo `__COLECCION_API__` (tiene que seguir respondiendo con la carta revelada después de la
-campaña), `__URL_COACH__` y `__URL_COLLECTION__` (Mi colección: **dejarlo sin reemplazar** por ahora; así el botón no
-aparece).
+`01c-coleccion` es la presentación del Head Coach en formato banner (foto, Card No. 001, "Meet the coach" y "Meet the
+staff"): no habla de la colección. Usa el mismo `__COLECCION_API__` (tiene que seguir respondiendo con la carta
+revelada después de la campaña), `__URL_COACH__` y `__URL_TEAM__` (Soccer Staff).
 Si el estado no responde, el bloque queda oculto.
 
 **Mi colección (`c01-collection`, `/collection/`), para más adelante:** las cartas de la persona, las que faltan como siluetas y el link

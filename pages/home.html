@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="../native/home/00-nav.css?v=79" />
   <link rel="stylesheet" href="../native/home/01-hero.css?v=67" />
   <link rel="stylesheet" href="../native/home/01b-hero-coleccion.css?v=4" />
-  <link rel="stylesheet" href="../native/home/01c-coleccion.css?v=1" />
+  <link rel="stylesheet" href="../native/home/01c-coleccion.css?v=2" />
   <link rel="stylesheet" href="../native/home/01d-hero-groundbreaking.css?v=3" />
   <link rel="stylesheet" href="../native/home/01e-banner-groundbreaking.css?v=3" />
   <link rel="stylesheet" href="../native/home/02-stats.css?v=67" />
@@ -88,7 +88,7 @@
     // Primera palada (solo preview). Juani (Charter Collection) y Groundbreaking se cruzan: uno va de hero y el otro
     // de banner. Orden: hero, números (02-stats) y el banner tercero.
     //   ?gb=banner  hero de Juani (01b, por defecto en sábado: la foto del coach) + banner 01e-banner-groundbreaking.
-    //   ?hero=gb    hero 01d-hero-groundbreaking + banner de Juani (01c-coleccion, la Card No. 001 revelada).
+    //   ?hero=gb    hero 01d-hero-groundbreaking + banner de Juani (01c-coleccion, la presentación del coach).
     const gbHero = params.get('hero') === 'gb';
     const gbBanner = !gbHero && params.get('gb') === 'banner';
     const URL_GROUNDBREAKING = 'https://groundbreaking-eight.vercel.app/';   // micrositio (hoy en Vercel; en WP, __URL_GROUNDBREAKING__)
@@ -119,7 +119,7 @@
       import('../native/home/09-cierre-footer.js?v=67'),
       import('../native/home/01-hero.js?v=67'),
       import('../native/home/01b-hero-coleccion.js?v=7'),
-      import('../native/home/01c-coleccion.js?v=1'),
+      import('../native/home/01c-coleccion.js?v=2'),
       import('../native/home/01d-hero-groundbreaking.js?v=1'),
       import('../native/home/01e-banner-groundbreaking.js?v=1'),
       import('../native/home/03-project.js?v=67'),

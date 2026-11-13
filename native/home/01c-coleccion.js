@@ -1,10 +1,8 @@
 /**
- * Bloque 01c · Entrada a la Charter Collection (después de la campaña).
- * Lee el mismo estado que el hero de campaña y muestra la Card No. 001 revelada. Si el estado no llega, o la carta
- * todavía no está revelada, la sección sigue oculta: el bloque nunca se ve roto ni adelanta nada.
+ * Bloque 01c · Presentación del Head Coach (banner debajo de 02-stats, cuando ya no está el hero de campaña).
+ * Lee el mismo estado que 01b y arma la presentación con lo revelado: nombre, foto, línea y Card No. 001. Si el estado
+ * no llega, o la carta todavía no está revelada, la sección sigue oculta: el bloque nunca se ve roto ni adelanta nada.
  */
-const hceEsc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
-
 async function initColeccionEntry(root = document) {
   const section = root.querySelector('.hce');
   if (!section) return;
@@ -17,24 +15,32 @@ async function initColeccionEntry(root = document) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     state = await res.json();
   } catch (err) {
-    console.error('[charter] no se pudo leer el estado de la colección', err);
+    console.error('[charter] no se pudo leer el estado del coach', err);
     return;
   }
   if (!state?.revealed || !state.card) return;   // antes del reveal no se muestra nada
 
   await customElements.whenDefined('psl-card');
   const { card } = state;
+  const name = [card.first, card.last].filter(Boolean).join(' ');
   section.querySelector('[data-hce-card]').data = card;
-  section.querySelector('[data-hce-lead]').innerHTML =
-    `Our first Head Coach, <b>${hceEsc(`${card.first} ${card.last}`)}</b>, opens the Charter Collection. ` +
-    'New cards drop as the 2027 squad comes together.';
+  section.querySelector('[data-hce-name]').textContent = name;
+  section.querySelector('[data-hce-lead]').textContent =
+    state.profile?.summary || 'The first Head Coach in Port St. Lucie SC history.';
 
-  const coach = section.dataset.ccCoach;
-  const coachLink = section.querySelector('[data-hce-coach]');
-  if (!coach || coach.startsWith('__')) coachLink.hidden = true;
-  const collection = section.dataset.ccCollection;
-  // Mi colección (etapa 6): el botón aparece solo cuando la página existe y su URL está reemplazada.
-  if (collection && !collection.startsWith('__')) section.querySelector('[data-hce-collection]').hidden = false;
+  const photo = section.querySelector('[data-hce-photo]');
+  if (state.presentation?.src) {
+    photo.src = state.presentation.src;
+    photo.alt = state.presentation.alt || name;
+  } else {
+    section.classList.add('hce--nophoto');
+  }
+
+  // Un link sin su URL reemplazada no se muestra (en vez de llevar a una página rota)
+  [['ccCoach', '[data-hce-coach]'], ['ccTeam', '[data-hce-team]']].forEach(([key, sel]) => {
+    const url = section.dataset[key];
+    if (!url || url.startsWith('__')) section.querySelector(sel).hidden = true;
+  });
 
   section.hidden = false;
 }

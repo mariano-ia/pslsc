@@ -1,70 +1,145 @@
-/* Bloque 01c · Entrada a la Charter Collection (después de la campaña). Chica: no compite con el hero. */
+/* Bloque 01c · Presentación del Head Coach (banner debajo de 02-stats). El hero revelado de 01b en chico: la misma
+   noche del set de la carta, el mismo título y la foto del coach con su carta al lado. */
 
 .hce {
   position: relative;
   overflow: hidden;
-  border-top: 1px solid var(--color-line);
   border-bottom: 1px solid var(--color-line);
-  background:
-    radial-gradient(40% 90% at 22% 50%, rgba(170,246,230,.14), transparent 70%),
-    var(--color-ink-2);
+  background: var(--color-ink);
 }
 .hce[hidden] { display: none; }
-/* Las franjas de la carta, apenas, detrás de ella */
-.hce::before {
+
+/* Fondo: igual que 01b (resplandor verde, franjas aqua y halftone), concentrado detrás de la foto */
+.hce__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(45% 80% at 76% 55%, rgba(170,246,230,.18), transparent 72%),
+    radial-gradient(80% 100% at 76% 55%, #123A34 0%, transparent 70%);
+}
+.hce__bg::before,
+.hce__bg::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(122deg, rgba(170,246,230,.05) 0 30px, transparent 30px 96px);
-  -webkit-mask-image: radial-gradient(38% 100% at 22% 50%, #000 20%, transparent 75%);
-  mask-image: radial-gradient(38% 100% at 22% 50%, #000 20%, transparent 75%);
-  pointer-events: none;
+  -webkit-mask-image: radial-gradient(55% 90% at 76% 55%, #000 15%, transparent 75%);
+  mask-image: radial-gradient(55% 90% at 76% 55%, #000 15%, transparent 75%);
 }
+.hce__bg::before { background: repeating-linear-gradient(122deg, rgba(170,246,230,.07) 0 34px, transparent 34px 110px); }
+.hce__bg::after { background: radial-gradient(circle, rgba(170,246,230,.3) 1.5px, transparent 2px) 0 0 / 16px 16px; opacity: .5; }
 
+/* Desktop: texto a la izquierda (arriba el título, abajo la línea y los botones) y la foto a la derecha, a sangre
+   abajo, con la carta sobre su borde. */
 .hce__grid {
   position: relative;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: clamp(28px, 5vw, 72px);
-  align-items: center;
-  padding-top: clamp(40px, 6vw, 72px);
-  padding-bottom: clamp(40px, 6vw, 72px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, .9fr);
+  grid-template-areas: "head media" "foot media";
+  grid-template-rows: auto 1fr;
+  column-gap: clamp(32px, 4vw, 64px);
+  min-height: clamp(520px, 40vw, 600px);
 }
-.hce__card { width: clamp(160px, 15vw, 210px); transform: rotate(-4deg); }
-.hce__card psl-card { display: block; }
+.hce__head { grid-area: head; align-self: end; padding-top: clamp(56px, 6vw, 88px); max-width: 620px; }
+.hce__foot { grid-area: foot; padding-bottom: clamp(56px, 6vw, 88px); max-width: 620px; }
+.hce__media { grid-area: media; position: relative; min-height: 100%; }
 
-.hce__copy { max-width: 560px; }
 .hce__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: .7em;
   margin: 0;
-  font: 800 var(--fs-kicker)/1.4 var(--font-label);
-  letter-spacing: .18em;
+  padding: 8px 2px 7px;
+  border-block: 3px double var(--color-aqua);
+  font: 800 clamp(12px, 1vw, 15px)/1.2 var(--font-label);
+  letter-spacing: .24em;
   text-transform: uppercase;
   color: var(--color-aqua);
 }
+.hce__kicker::before,
+.hce__kicker::after { content: "★"; font-size: .9em; letter-spacing: 0; color: var(--color-white); }
 .hce__title {
-  margin: 10px 0 0;
-  font: 900 clamp(34px, 4vw, 56px)/.95 var(--font-display);
-  letter-spacing: .02em;
+  margin: 18px 0 0;
+  font: 800 clamp(36px, 3.8vw, 58px)/.98 var(--font-hero);
+  letter-spacing: -.01em;
+  text-wrap: balance;
+}
+.hce__name {
+  margin: 14px 0 0;
+  font: 900 clamp(28px, 2.6vw, 40px)/.95 var(--font-display);
+  letter-spacing: .03em;
   text-transform: uppercase;
+  color: var(--color-aqua);
 }
 .hce__lead {
-  margin: 14px 0 0;
+  margin: 16px 0 0;
+  max-width: 52ch;
   font: 400 var(--fs-body-lg)/1.5 var(--font-body);
   color: var(--color-text-muted);
 }
-.hce__lead b { color: var(--color-text); font-weight: 600; }
-.hce__ctas { display: flex; flex-wrap: wrap; gap: 12px 16px; margin-top: 22px; }
+.hce__ctas { display: flex; flex-wrap: wrap; gap: 12px 16px; margin-top: 24px; }
 .hce__ctas [hidden] { display: none; }
 
+.hce__photo {
+  position: absolute;
+  right: 4%;
+  bottom: 0;
+  height: 96%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: right bottom;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18%), linear-gradient(0deg, transparent 0, #000 12%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent 0, #000 18%), linear-gradient(0deg, transparent 0, #000 12%);
+  mask-composite: intersect;
+}
+.hce__card {
+  position: absolute;
+  right: 0;
+  bottom: clamp(24px, 3vw, 44px);
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: clamp(150px, 13vw, 196px);
+}
+.hce__card psl-card { display: block; width: 100%; }
+.hce__card-no { font: 400 11px/1 var(--font-body); color: var(--color-text-muted); }
+/* Sin foto (la fuente no la trae): la carta sola, más grande y al centro */
+.hce--nophoto .hce__photo { display: none; }
+.hce--nophoto .hce__card { right: 50%; bottom: 50%; transform: translate(50%, 50%) rotate(-4deg); width: clamp(180px, 16vw, 230px); }
+
+/* Mobile: título, la foto (a la cintura) con la carta sobre su borde y debajo la línea y los botones */
 @media (max-width: 860px) {
-  .hce { background: radial-gradient(90% 40% at 50% 26%, rgba(170,246,230,.14), transparent 70%), var(--color-ink-2); }
-  .hce::before {
-    -webkit-mask-image: radial-gradient(80% 40% at 50% 26%, #000 20%, transparent 75%);
-    mask-image: radial-gradient(80% 40% at 50% 26%, #000 20%, transparent 75%);
+  .hce__bg { background:
+    radial-gradient(90% 30% at 50% 48%, rgba(170,246,230,.18), transparent 72%),
+    radial-gradient(120% 45% at 50% 48%, #123A34 0%, transparent 70%); }
+  .hce__bg::before,
+  .hce__bg::after {
+    -webkit-mask-image: radial-gradient(90% 30% at 50% 48%, #000 15%, transparent 75%);
+    mask-image: radial-gradient(90% 30% at 50% 48%, #000 15%, transparent 75%);
   }
-  .hce__grid { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; }
-  .hce__card { width: min(44vw, 180px); }
-  .hce__kicker { font-size: 10px; letter-spacing: .14em; }
-  .hce__ctas { justify-content: center; }
-  .hce__ctas .psl-btn { width: 100%; justify-content: center; }
+  .hce__grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "media" "foot"; grid-template-rows: none; min-height: 0; }
+  .hce__head { padding-top: 48px; }
+  .hce__kicker { font-size: 11px; letter-spacing: .18em; }
+  .hce__title { font-size: clamp(32px, 9.4vw, 44px); }
+  .hce__name { font-size: clamp(24px, 7.4vw, 32px); }
+  .hce__media { min-height: 0; display: flex; justify-content: space-between; align-items: flex-end; margin-top: 18px; }
+  .hce__photo {
+    position: relative;
+    right: auto;
+    width: min(78vw, 320px);
+    height: min(40vh, 330px);
+    max-width: 100%;
+    object-fit: cover;
+    object-position: 50% 0;
+    -webkit-mask-image: linear-gradient(0deg, transparent 0, #000 22%);
+    mask-image: linear-gradient(0deg, transparent 0, #000 22%);
+  }
+  .hce__card { position: absolute; right: 0; bottom: 0; width: min(36vw, 150px); }
+  .hce__foot { padding-bottom: 48px; }
+  .hce__lead { margin-top: 18px; font-size: 16px; }
+  .hce__ctas .psl-btn { flex: 1 1 100%; justify-content: center; }
+  .hce--nophoto .hce__media { justify-content: center; }
+  .hce--nophoto .hce__card { position: relative; right: auto; bottom: auto; transform: rotate(-4deg); width: min(52vw, 210px); margin: 8px 0; }
 }
