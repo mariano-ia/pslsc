@@ -33,7 +33,7 @@ sin usar que el `.gitignore` excluye (`anchor-white.png`, `360_shirt.mp4`, etc.)
 ### 2. Rellenar 5 tokens (find-and-replace)
 
 Los bloques en `dist/blocks/` traen 5 placeholders a propósito. Cuando tengas las URLs reales,
-hacé un **find-and-replace** de estos 5 tokens (en los archivos de `dist/blocks/`, o directamente
+hacé un **find-and-replace** de estos 6 tokens (en los archivos de `dist/blocks/`, o directamente
 en los bloques ya pegados en WordPress). Son únicos y greppables:
 
 | Token (buscar) | Reemplazar por (ejemplo) | Qué es |
@@ -43,6 +43,7 @@ en los bloques ya pegados en WordPress). Son únicos y greppables:
 | `__URL_SUMATE__` | `/become-a-founder/` | Permalink de la página de Founders |
 | `__URL_PARTNERS__` | `/partners/` | Permalink de Partners |
 | `__URL_SCHOOL__` | `https://…` (**a definir**) | Sitio de la Soccer School: botón "Register now" de `home/07b-school` y link del footer |
+| `__URL_GROUNDBREAKING__` | `https://groundbreaking-eight.vercel.app/` (hoy; **dominio final a definir**) | Micrositio de la primera palada: `home/01d-hero-groundbreaking` (también con el ancla `#postcards`), `home/01e-banner-groundbreaking` y el link "Explore the build" de `home/03-project` y `partners/p02-opportunity`. **Con barra final.** |
 
 `__PSL_ASSET_BASE__` aparece en cada bloque (fuentes + imágenes); los `__URL_*__` solo en los bloques
 que enlazan a otras páginas (nav-CTAs, footer). Ningún bloque queda sin al menos el asset base.
@@ -69,7 +70,7 @@ Qué bloque va en qué página:
 
 | Página WP | Bloques (en orden) |
 |---|---|
-| Home | 01-hero · 02-stats · 03-project · 04-proof · 04b-fixtures · 05-jersey · 06-founders · 07-academy · 09-cierre-footer |
+| Home | 01-hero · 02-stats · 03-project · 04b-fixtures · 05-jersey · 06-founders · 07-academy · 09-cierre-footer |
 | Become a Founder | s01-hero · s02-benefits · s03-plans · s05-faq · s06-cta |
 | Partners | p01-hero · p01b-partners · p02-opportunity · p03-value · p04-traction · p05-contact |
 | Academy | a01-hero · a02-pathway · a03-method · a05-parents · a06-faq · a07-tryouts |
@@ -98,8 +99,25 @@ no hay que tocar bloques entre lunes y sábado):
 | Lunes a jueves | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista |
 | Viernes 10:00 AM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
 | Sábado hasta el fin de campaña | Nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector ya no se reclama (es del juego); la Card No. 001 se pide por mail en la ficha del DT |
-| Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion`, volver a pegar `01-hero` y pegar `01c-coleccion` **debajo**. Con eso se cierra el reclamo de la Collector |
+| Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion`, volver a pegar `01-hero` y pegar `01c-coleccion` **debajo de `02-stats`**. Con eso se cierra el reclamo de la Collector |
 | Más adelante (cuando haya más cartas) | Publicar **Mi colección** en `/collection/` (`c01-collection`) y reemplazar `__URL_COLLECTION__` en `01c` por esa URL. **No va en esta campaña** |
+
+**Groundbreaking (primera palada, hasta el sábado 12/12/2026) y Juani conviven en Home.** Uno va de hero y el otro de
+banner. Orden en Home: **hero → `02-stats` (los números) → banner** (el banner va tercero, antes de `03-project`).
+Dos combinaciones:
+
+| Combinación | Hero (en lugar de `01-hero`) | Banner (debajo de `02-stats`) |
+|---|---|---|
+| A · Juani arriba | `01b-hero-coleccion` | `01e-banner-groundbreaking` |
+| B · Groundbreaking arriba | `01d-hero-groundbreaking` | `01c-coleccion` |
+
+Para pasar de una a otra se cambian los dos bloques de lugar, nada más (no hay que tocar código). Nunca dos heroes ni
+dos banners juntos. `01e` lleva el video de la intro del micrositio (corre una vez y queda la foto aérea).
+Todo usa `assets/groundbreaking/` (incluye `banner-intro-720.mp4`, 3 MB) y `__URL_GROUNDBREAKING__`.
+Después del 12/12 se sacan `01d`/`01e` y Juani vuelve a su esquema de siempre.
+Para recompilar solo esos: `python3 tools/build-blocks.py 01d-hero-groundbreaking 01e-banner-groundbreaking`.
+
+**`04-proof` ya no va en Home** (el estadio ahora lo cuenta Groundbreaking): si está pegado, sacarlo.
 
 `01c-coleccion` usa el mismo `__COLECCION_API__` (tiene que seguir respondiendo con la carta revelada después de la
 campaña), `__URL_COACH__` y `__URL_COLLECTION__` (Mi colección: **dejarlo sin reemplazar** por ahora; así el botón no

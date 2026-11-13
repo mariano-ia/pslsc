@@ -65,7 +65,8 @@
     const bust = `?t=${Date.now()}`;   // cache-buster solo-preview para los HTML de bloque
     await Promise.all(blocks.map(async ({ slot, path }) => {
       const html = await fetch(path + bust).then((r) => r.text());
-      document.querySelector(`[data-block="${slot}"]`).innerHTML = html;
+      document.querySelector(`[data-block="${slot}"]`).innerHTML = html
+        .replaceAll('__URL_GROUNDBREAKING__', 'https://groundbreaking-eight.vercel.app/');   // micrositio (en WP, el token)
     }));
     // p05: form de contacto · footer: newsletter · 03-project: timeline de P02 · motion: reveals + nav
     const [{ initHeroVideo }, { initPartnerContact }, { initNewsletter }, { initProjectTimeline }, { initMotion }] = await Promise.all([

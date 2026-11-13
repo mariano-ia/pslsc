@@ -1,0 +1,31 @@
+<!--
+  Bloque 01e · Banner Groundbreaking — Home. 🟩 Nativo.
+  Banner bajo para la primera palada del estadio (sábado 12/12/2026, 10 AM ET). Va DEBAJO de 02-stats (hero → números →
+  banner), como 01c con la Charter Collection, cuando NO está el hero 01d-hero-groundbreaking: nunca los dos.
+  Después del 12/12 se saca (el micrositio pasa a modo recap).
+  Fondo: la intro del micrositio (del terreno al estadio, 18 s, sin audio). Corre UNA vez cuando el banner se ve y
+  queda fija la aérea (el poster es ese mismo cuadro final). Con reduced motion, sin JS o si el video falla: la foto.
+  Link del micrositio: __URL_GROUNDBREAKING__ (placeholder, ver dist/UPLOAD.md §2).
+  Cuenta regresiva y video: 01e-banner-groundbreaking.js (initGbCountdown + initGbBanner).
+-->
+<section class="gbb" id="groundbreaking" aria-labelledby="gbb-title" data-gb-banner>
+  <img class="gbb__poster" src="/assets/groundbreaking/aerial-dusk.webp"
+       srcset="/assets/groundbreaking/aerial-dusk-960.webp 960w, /assets/groundbreaking/aerial-dusk.webp 1920w" sizes="100vw"
+       alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+  <video class="gbb__vid" data-gb-video="/assets/groundbreaking/banner-intro-720.mp4" muted playsinline preload="none" aria-hidden="true"></video>
+  <div class="gbb__scrim" aria-hidden="true"></div>
+
+  <div class="psl-container gbb__in">
+    <div class="gbb__top">
+      <img class="gbb__logo" src="/assets/groundbreaking/logo-aqua.svg" alt="Groundbreaking · Port St. Lucie Stadium" width="941" height="330" loading="lazy" />
+      <p class="gbb__k">Sat, Dec 12 · 10 AM<span class="gbb__sep"> · </span><span class="gbb__place">US-1 &amp; Walton Rd</span></p>
+    </div>
+    <h2 class="gbb__h" id="gbb-title">Our home breaks ground December 12.</h2>
+    <div class="gbb__row">
+      <div class="gbb__cd" data-gb-countdown="2026-12-12T10:00:00-05:00" role="timer" aria-label="Time left until the groundbreaking" hidden>
+        <span><b data-u="d">00</b>days</span><span><b data-u="h">00</b>hrs</span><span><b data-u="m">00</b>min</span>
+      </div>
+      <a href="__URL_GROUNDBREAKING__" class="psl-btn cta-primary gbb__go"><span>Visit the groundbreaking site</span> <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
