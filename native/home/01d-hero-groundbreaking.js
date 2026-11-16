@@ -1,6 +1,12 @@
-/* Bloque 01d · Hero Groundbreaking — cuenta regresiva al 12/12 (10 AM ET, fecha en data-gb-countdown).
-   Escribe días/horas/minutos/segundos y muestra la tira (sin JS queda oculta). En cero se queda en 00
-   y la tira pasa a .is-zero (para ese día el bloque ya se habrá sacado de la Home). */
+/* Bloque 01d · Hero Groundbreaking — cuenta regresiva al 12/12 (10 AM ET, fecha en data-gb-countdown) y la intro del
+   micrositio de fondo (la misma del banner 01e, que importa este archivo).
+   Cuenta regresiva: escribe días/horas/minutos/segundos y muestra la tira (sin JS queda oculta). En cero se queda en
+   00 y la tira pasa a .is-zero (para ese día el bloque ya se habrá sacado de la Home).
+   Video ([data-gb-video], dentro de su <section>): nace sin src. Se precarga cuando la sección está cerca (300 px),
+   arranca cuando se ve la mitad, se pausa si sale de pantalla y, al terminar, se funde a la foto fija (la foto ES el
+   cuadro final de la intro: no hay salto). No vuelve a arrancar. data-gb-video-hd (opcional): versión 1080 para
+   pantallas de 1100 px o más. Con reduced motion ni se baja; si el autoplay está bloqueado, prueba en el primer toque
+   y, si no, queda la foto. Nunca pantalla negra. */
 function initGbCountdown(root = document) {
   root.querySelectorAll('[data-gb-countdown]').forEach((el) => {
     if (el.dataset.gbBound) return;
@@ -25,4 +31,44 @@ function initGbCountdown(root = document) {
   });
 }
 
-export { initGbCountdown };
+function initGbVideo(root = document) {
+  root.querySelectorAll('[data-gb-video]').forEach((vid) => {
+    if (vid.dataset.gbBound) return;
+    vid.dataset.gbBound = '1';
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const box = vid.closest('section') || vid.parentElement;
+
+    let loaded = false;
+    let done = false;
+    const load = () => {
+      if (loaded) return;
+      loaded = true;
+      const hd = vid.dataset.gbVideoHd && window.matchMedia('(min-width: 1100px)').matches;
+      vid.preload = 'auto';
+      vid.src = hd ? vid.dataset.gbVideoHd : vid.dataset.gbVideo;
+    };
+    const play = () => {
+      if (done) return;
+      load();
+      vid.muted = true;
+      const p = vid.play();
+      // Bloqueado por el navegador (no una pausa nuestra): prueba en el primer toque.
+      if (p && typeof p.catch === 'function') {
+        p.catch((err) => { if (err && err.name === 'NotAllowedError') window.addEventListener('pointerdown', play, { once: true }); });
+      }
+    };
+    // La clase sale del evento y no de la promesa de play(): si una pausa interrumpe esa promesa, el video
+    // igual arranca después y tiene que verse.
+    vid.addEventListener('playing', () => vid.classList.add('is-playing'));
+    vid.addEventListener('ended', () => { done = true; vid.classList.add('is-done'); });
+
+    if (!('IntersectionObserver' in window)) { play(); return; }
+    new IntersectionObserver((en) => { if (en[0].isIntersecting) load(); }, { rootMargin: '300px 0px' }).observe(box);
+    new IntersectionObserver((en) => {
+      if (en[0].isIntersecting) play();
+      else if (loaded && !done) vid.pause();
+    }, { threshold: 0.5 }).observe(box);
+  });
+}
+
+export { initGbCountdown, initGbVideo };

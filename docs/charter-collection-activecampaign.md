@@ -1,7 +1,7 @@
 # Charter Collection · ActiveCampaign (hero `01b-hero-coleccion` y ficha del DT `t01-coach`)
 
 Lo que tiene que existir en ActiveCampaign para que se guarden los mails: el de la Collector (hero, durante el juego)
-y el de la Card No. 001 (ficha del DT, desde el viernes). Sin esto el form valida, pero
+y el de la Card No. 001 (ficha del DT, desde el reveal del lunes 30/11). Sin esto el form valida, pero
 **no envía** y le dice a la persona que no se guardó nada (nunca finge éxito). En el preview, `?demo` simula el envío.
 
 ## Qué hay que crear (lo hace quien administra ActiveCampaign)
@@ -40,10 +40,11 @@ etiqueta `charter-collection-001`:
 | Cuándo | Mail |
 |---|---|
 | Apenas reclama | "Your Collector Card" con la imagen de la Inaugural Collector (una sola imagen para todos: el nombre y la foto quedan en el dispositivo de la persona) y link a la home. Sin link a Mi colección mientras no esté publicada. La pantalla le dice "Your card is on its way to …". La imagen sale del preview: Share → "Card only", sin foto ni nombre |
-| Martes, miércoles y jueves, 10:00 AM ET | "Today's clue is live" con link a la home (no incluye la pista: se ve jugando) |
-| Viernes, 10:00 AM ET | "Card No. 001 is revealed" con link a la home |
+| Sábado 28, domingo 29 y lunes 30/11, 10:00 AM ET | "Today's clue is live" con link a la home (no incluye la pista: se ve jugando) |
+| Lunes 30/11, 1:00 PM ET | "Card No. 001 is revealed" con link a la home |
 
-Quien se suma un miércoles recibe solo los mails que faltan. Ningún mail menciona el nombre del DT antes del viernes.
+Quien se suma el domingo recibe solo los mails que faltan. Ningún mail menciona el nombre del DT antes del reveal del
+lunes 30/11 a la 1:00 PM ET.
 
 ## Mail de la ficha del DT
 
