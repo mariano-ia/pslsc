@@ -20,14 +20,14 @@
   <link rel="stylesheet" href="../native/home/01-hero.css?v=67" />
   <link rel="stylesheet" href="../native/home/01b-hero-coleccion.css?v=4" />
   <link rel="stylesheet" href="../native/home/01c-coleccion.css?v=2" />
-  <link rel="stylesheet" href="../native/home/01d-hero-groundbreaking.css?v=3" />
+  <link rel="stylesheet" href="../native/home/01d-hero-groundbreaking.css?v=4" />
   <link rel="stylesheet" href="../native/home/01e-banner-groundbreaking.css?v=3" />
   <link rel="stylesheet" href="../native/home/02-stats.css?v=67" />
   <link rel="stylesheet" href="../native/home/03-project.css?v=67" />
   <link rel="stylesheet" href="../native/home/04b-fixtures.css?v=67" />
   <link rel="stylesheet" href="../native/home/05-jersey.css?v=67" />
   <link rel="stylesheet" href="../native/home/06-founders.css?v=67" />
-  <link rel="stylesheet" href="../native/home/07-academy.css?v=67" />
+  <link rel="stylesheet" href="../native/home/07b-school.css?v=2" />
   <link rel="stylesheet" href="../native/home/08-news.css?v=67" />
   <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=68" />
 
@@ -60,8 +60,8 @@
   <div data-block="04b-fixtures"></div>
   <div data-block="05-jersey"></div>
   <div data-block="06-founders"></div>
-  <!-- 07b-school oculto por ahora (Martín, 10/11: la School no sale hasta que el club avise). Queda 07-academy, como en el sitio publicado. -->
-  <div data-block="07-academy"></div>
+  <!-- La Soccer School vuelve a la Home en lugar de 07-academy (Martín, 16/11). -->
+  <div data-block="07b-school"></div>
   <div data-block="08-news"></div>
   <div data-block="09-cierre-footer"></div>
 
@@ -73,7 +73,7 @@
   <script type="module">
     const blocks = [
       '00-nav', '01-hero', '02-stats', '03-project', '04b-fixtures',
-      '05-jersey', '06-founders', '07-academy', '08-news', '09-cierre-footer',
+      '05-jersey', '06-founders', '07b-school', '08-news', '09-cierre-footer',
     ];
     // Solo preview: las fuentes se cargan antes de insertar los bloques, así la nav no se mueve al aplicarse.
     const fontsReady = document.fonts ? Promise.all(['400 16px "Proxima Nova"', '600 16px "Proxima Nova"', '700 16px "Proxima Nova"',
@@ -89,7 +89,10 @@
     // de banner. Orden: hero, números (02-stats) y el banner tercero.
     //   ?gb=banner  hero de Juani (01b, por defecto en sábado: la foto del coach) + banner 01e-banner-groundbreaking.
     //   ?hero=gb    hero 01d-hero-groundbreaking + banner de Juani (01c-coleccion, la presentación del coach).
-    const gbHero = params.get('hero') === 'gb';
+    //   Sin parámetros: antes de la campaña (hasta el jueves 26/11) — hero 01d-hero-groundbreaking solo, sin la Charter Collection.
+    //   ?cc=mon|…|sat muestra el juego (01b), como antes.
+    const pre = !params.has('cc') && !params.has('hero') && !params.has('gb');
+    const gbHero = pre || params.get('hero') === 'gb';
     const gbBanner = !gbHero && params.get('gb') === 'banner';
     const URL_GROUNDBREAKING = 'https://groundbreaking-eight.vercel.app/';   // micrositio (hoy en Vercel; en WP, __URL_GROUNDBREAKING__)
     const cc = params.get('cc') || (gbHero || gbBanner ? 'sat' : 'mon');
@@ -98,7 +101,7 @@
     // Banner debajo de los números (02-stats), antes de 03-project.
     const below = [];
     if (gbBanner) below.push('01e-banner-groundbreaking');
-    if (gbHero || ended) below.push('01c-coleccion');
+    if ((gbHero && !pre) || ended) below.push('01c-coleccion');
     blocks.splice(blocks.indexOf('02-stats') + 1, 0, ...below);
     if (params.has('reset')) { try { localStorage.removeItem('pslsc-charter-001'); } catch (err) { /* sin storage */ } }
     await Promise.all(blocks.map(async (name) => {
@@ -115,13 +118,12 @@
     }));
     // Init de los scripts nativos que dependen del DOM ya inyectado + sistema de motion.
     // (El sitio es English-only: no hay init de idioma.)
-    const [{ initNewsletter }, { initHeroMorph, initHeroVideo }, { initHeroColeccion }, { initColeccionEntry }, { initGbCountdown }, { initGbBanner }, { initProjectTimeline }, { initMotion }] = await Promise.all([
+    const [{ initNewsletter }, { initHeroMorph, initHeroVideo }, { initHeroColeccion }, { initColeccionEntry }, { initGbCountdown, initGbVideo }, { initProjectTimeline }, { initMotion }] = await Promise.all([
       import('../native/home/09-cierre-footer.js?v=67'),
       import('../native/home/01-hero.js?v=67'),
       import('../native/home/01b-hero-coleccion.js?v=7'),
       import('../native/home/01c-coleccion.js?v=2'),
-      import('../native/home/01d-hero-groundbreaking.js?v=1'),
-      import('../native/home/01e-banner-groundbreaking.js?v=1'),
+      import('../native/home/01d-hero-groundbreaking.js?v=3'),
       import('../native/home/03-project.js?v=67'),
       import('../native/_patterns/motion.js?v=68'),
     ]);
@@ -131,7 +133,7 @@
     initHeroColeccion();
     initColeccionEntry();
     initGbCountdown();
-    initGbBanner();
+    initGbVideo();   // intro de fondo del hero 01d o del banner 01e (la que esté)
     initProjectTimeline();
     initMotion();   // activa reveal, parallax, nav reactiva, grano, cursor — tras inyectar los bloques
     import('../native/home/00-nav.js?v=4').then((m) => m.initNav());   // hamburguesa + banderín de la School

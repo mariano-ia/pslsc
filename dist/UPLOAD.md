@@ -70,7 +70,7 @@ Qué bloque va en qué página:
 
 | Página WP | Bloques (en orden) |
 |---|---|
-| Home | 01-hero · 02-stats · 03-project · 04b-fixtures · 05-jersey · 06-founders · 07-academy · 09-cierre-footer |
+| Home | 01-hero · 02-stats · 03-project · 04b-fixtures · 05-jersey · 06-founders · 07b-school · 09-cierre-footer (`07b-school` reemplaza a `07-academy`: sacar Academy de la Home y pegar la School en su lugar) |
 | Become a Founder | s01-hero · s02-benefits · s03-plans · s05-faq · s06-cta |
 | Partners | p01-hero · p01b-partners · p02-opportunity · p03-value · p04-traction · p05-contact |
 | Academy | a01-hero · a02-pathway · a03-method · a05-parents · a06-faq · a07-tryouts |
@@ -91,14 +91,16 @@ Todo lo del DT (nombre, fotos, silueta, preguntas, pistas, ficha) **no está en 
 CORS): `docs/charter-collection-state.md`. El contenido real va en un paquete privado aparte, no por GitHub.
 
 Qué se pega cada día en Home (el juego cambia solo según la fecha: lo resuelve el estado de `__COLECCION_API__`,
-no hay que tocar bloques entre el viernes 13 y el martes 17 de noviembre):
+no hay que tocar bloques entre el viernes 27 de noviembre y el martes 1 de diciembre). Calendario actualizado el
+16/11: el reveal es el **lunes 30 de noviembre a la 1:00 PM ET** (13 hs de Miami):
 
 | Cuándo | Home |
 |---|---|
-| Viernes 13, antes de las 10:00 AM ET | Sacar `01-hero` y pegar `01b-hero-coleccion` en su lugar |
-| Viernes 13 a lunes 16 | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista (cuatro preguntas) |
-| Lunes 16, 1:00 PM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
-| Martes 17 en adelante | Pasar a la combinación B de Groundbreaking (abajo). Sin Groundbreaking, nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector ya no se reclama (es del juego); la Card No. 001 se pide por mail en la ficha del DT |
+| Hasta el jueves 26 | Hero de Groundbreaking solo: `01d-hero-groundbreaking` en lugar de `01-hero`, sin `01e` ni `01c` (la Charter Collection todavía no aparece en Home) |
+| Viernes 27, antes de las 10:00 AM ET | Sacar `01d-hero-groundbreaking`, pegar `01b-hero-coleccion` en su lugar y sumar `01e-banner-groundbreaking` debajo de `02-stats` (combinación A, abajo) |
+| Viernes 27 a lunes 30 | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista (cuatro preguntas) |
+| Lunes 30, 1:00 PM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
+| Martes 1/12 en adelante | Pasar a la combinación B de Groundbreaking (abajo). Sin Groundbreaking, nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector ya no se reclama (es del juego); la Card No. 001 se pide por mail en la ficha del DT |
 | Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion` (o `01d`), volver a pegar `01-hero` y dejar `01c-coleccion` **debajo de `02-stats`**. Con eso se cierra el reclamo de la Collector |
 | Más adelante (cuando haya más cartas) | Publicar **Mi colección** en `/collection/` (`c01-collection`). **No va en esta campaña** |
 
@@ -113,7 +115,7 @@ Dos combinaciones:
 
 Para pasar de una a otra se cambian los dos bloques de lugar, nada más (no hay que tocar código). Nunca dos heroes ni
 dos banners juntos. `01e` lleva el video de la intro del micrositio (corre una vez y queda la foto aérea).
-Todo usa `assets/groundbreaking/` (incluye `banner-intro-720.mp4`, 3 MB) y `__URL_GROUNDBREAKING__`.
+Todo usa `assets/groundbreaking/` (incluye los videos de la intro: `banner-intro-720.mp4`, 3 MB, para el banner y el hero en mobile, e `intro-1080.mp4`, 5,7 MB, para el hero desde 1100 px) y `__URL_GROUNDBREAKING__`.
 Después del 12/12 se sacan `01d`/`01e` y Juani vuelve a su esquema de siempre.
 Para recompilar solo esos: `python3 tools/build-blocks.py 01d-hero-groundbreaking 01e-banner-groundbreaking`.
 

@@ -16,12 +16,12 @@ Los ejemplos con el contenido real de la Card No. 001 no están acá: van en el 
 
 | Desde | `day` | `revealed` | `closed` | Qué se suma |
 |---|---|---|---|---|
-| Viernes 13/11 10:00 AM ET | `0` | `false` | — | `days[0]` (pregunta y pista del viernes) |
-| Sábado 14/11 10:00 AM ET | `1` | `false` | — | `days[1]` |
-| Domingo 15/11 10:00 AM ET | `2` | `false` | — | `days[2]` |
-| Lunes 16/11 10:00 AM ET | `3` | `false` | — | `days[3]` |
-| Lunes 16/11 1:00 PM ET (reveal) | `4` | `true` | — | `card` pasa a la revelada, `shell` (la cerrada), `presentation` y `profile` |
-| Martes 17/11 00:00 ET en adelante | `5` | `true` | `true` | Igual que el reveal, sin `shell`. Las preguntas se cierran |
+| Viernes 27/11 10:00 AM ET | `0` | `false` | — | `days[0]` (pregunta y pista del viernes) |
+| Sábado 28/11 10:00 AM ET | `1` | `false` | — | `days[1]` |
+| Domingo 29/11 10:00 AM ET | `2` | `false` | — | `days[2]` |
+| Lunes 30/11 10:00 AM ET | `3` | `false` | — | `days[3]` |
+| Lunes 30/11 1:00 PM ET (reveal) | `4` | `true` | — | `card` pasa a la revelada, `shell` (la cerrada), `presentation` y `profile` |
+| Martes 1/12 00:00 ET en adelante | `5` | `true` | `true` | Igual que el reveal, sin `shell`. Las preguntas se cierran |
 
 Los mocks del paquete privado conservan los nombres del calendario anterior: `state-mon` = viernes, `state-tue` = sábado,
 `state-wed` = domingo, `state-thu` = lunes 10 AM, `state-fri` = reveal, `state-sat` = martes en adelante. En cada día,

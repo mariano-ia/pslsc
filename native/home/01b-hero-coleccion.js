@@ -43,7 +43,7 @@ const FALLBACK_CARD = {
     fact: { locked: true, unlock: 'Unlocks Monday' },
   },
 };
-// Calendario de la campaña (13/11/2026): una pregunta por día de viernes a lunes a las 10:00 AM ET y el reveal el
+// Calendario de la campaña (viernes 27 a lunes 30/11/2026): una pregunta por día de viernes a lunes a las 10:00 AM ET y el reveal el
 // lunes a la 1:00 PM ET. Índices 0–3 = días del quiz, 4 = día del reveal. Se usa en todo el copy del hero y del panel.
 const CCG_FULL_NAMES = ['Friday', 'Saturday', 'Sunday', 'Monday', 'Monday'];
 const CCG_SHORT_NAMES = ['Fri', 'Sat', 'Sun', 'Mon', 'Mon'];
