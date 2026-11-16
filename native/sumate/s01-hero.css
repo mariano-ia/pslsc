@@ -44,6 +44,10 @@
   z-index: 1;
   width: 100%;   /* fija el ancho para alinear al gutter (igual que el hero de Home) */
   padding-bottom: clamp(40px, 6vw, 72px);
+  /* aire bajo la nav sticky: el escudo cuelga ~40px por debajo de la barra. Con pantallas bajas el
+     copy ocupa más que el 82vh y, sin esto, el eyebrow quedaba tapado por el escudo. Si el copy
+     entra en el alto, no cambia nada (el contenido sigue alineado abajo). */
+  padding-top: clamp(64px, 7vw, 96px);
 }
 
 .sumate-hero__eyebrow {

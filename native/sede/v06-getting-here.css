@@ -1,0 +1,33 @@
+/* Bloque V06 · Cómo llegar — Sede 2027 */
+
+.venue-route { padding: var(--section-pad) 0; }
+.venue-route__title { margin-bottom: clamp(30px, 4vw, 48px); }
+
+.venue-route__kicker {
+  font: 500 var(--fs-kicker)/1.4 var(--font-label); letter-spacing: var(--ls-kicker);
+  text-transform: uppercase; color: var(--color-sand-deep);
+}
+
+.venue-route__grid { display: flex; flex-direction: column; gap: 22px; }
+
+.venue-route__map { border-radius: var(--radius-md); overflow: hidden; background: #E8E2D4; box-shadow: inset 0 0 0 1px #DCD6CA; }
+.venue-route__map svg { width: 100%; height: auto; }
+
+.venue-route__addr { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.venue-route__street { font: 700 17px/1.35 var(--font-body); }
+.venue-route__maps { background: var(--color-ink); color: var(--color-white); }
+.venue-route__maps:hover { background: #2A2A26; }
+
+.venue-route__cards { align-self: stretch; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 8px; }
+.venue-route__card { display: flex; flex-direction: column; gap: 8px; padding: 18px 16px; border-radius: var(--radius-md); background: var(--color-paper-card); }
+.venue-route__card span { font: 500 9px/1.3 var(--font-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--color-sand-deep); }
+.venue-route__card b { font: 800 22px/1 var(--font-display); letter-spacing: var(--ls-display); }
+.venue-route__card p { font-size: 14px; line-height: 1.45; color: var(--color-text-on-paper-muted); }
+
+@media (max-width: 380px) {
+  .venue-route__cards { grid-template-columns: 1fr; }
+}
+@media (min-width: 900px) {
+  .venue-route__grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 56px; align-items: start; }
+  .venue-route__cards { gap: 12px; }
+}

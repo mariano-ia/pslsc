@@ -1,0 +1,29 @@
+<!--
+  Bloque V08 · Home port — Sede 2027. 🟩 Nativo, sin JS.
+  ÚNICO bloque de la página con la identidad del estadio propio: verde mar, aquamarine, render y
+  señalética en Druk Text Wide. Lleva al micrositio del Groundbreaking.
+  Confirmados: 6,000 asientos y apertura a principios de 2028.
+  HANDOFF: el 38% de avance de obra es FICTICIO (ver native/sede/DATOS.md).
+  HANDOFF: "Visit the stadium site" queda deshabilitado hasta que el sitio del Groundbreaking esté online.
+  Para activarlo: cambiar el <span> por <a href="URL del micrositio"> (mismas clases) y borrar la nota.
+-->
+<section class="venue-port" id="home-port">
+  <div class="venue-port__bg" aria-hidden="true"></div>
+  <div class="psl-container venue-port__inner">
+    <span class="venue-port__sign" data-reveal>
+      <b><img src="/assets/brand/anchor-black.webp" alt="" width="17" height="16" loading="lazy" decoding="async" />Home port</b>
+      <span>Walton &amp; One · Port St. Lucie</span>
+    </span>
+    <h2 class="venue-port__title" data-reveal data-reveal-delay="90">Meanwhile, <em>home</em> is rising.</h2>
+    <p class="venue-port__lead" data-reveal data-reveal-delay="160">Our stadium is under construction in Port St. Lucie. Follow every stage of the build until we&rsquo;re home for good.</p>
+    <dl class="venue-port__facts" data-reveal-group="70">
+      <div data-reveal><dt>Seats</dt><dd class="tnum">6,000</dd></div>
+      <div data-reveal><dt>Expected<br>opening</dt><dd class="tnum">2028</dd></div>
+      <div data-reveal><dt>Construction</dt><dd class="tnum">38%</dd></div>
+    </dl>
+    <div class="venue-port__cta" data-reveal>
+      <span class="psl-btn cta-primary is-disabled" role="link" aria-disabled="true"><span>Visit the stadium site</span> <span aria-hidden="true">→</span></span>
+      <p class="venue-port__note">The stadium site goes live with the groundbreaking.</p>
+    </div>
+  </div>
+</section>

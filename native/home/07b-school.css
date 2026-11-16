@@ -1,0 +1,135 @@
+/* Bloque 07b · Soccer School — póster de la campaña + cinta de categorías */
+
+.school { background: var(--color-ink); }
+
+/* ── Póster: foto en movimiento con grano, lockup, título en onda, botón rojo ── */
+.school__poster {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(640px, 55.5vw, 800px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+}
+.school__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 44% 35%;
+}
+.school__poster::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(12,12,10,.35) 0, rgba(12,12,10,.2) 35%, rgba(12,12,10,.75) 100%);
+}
+.school__grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .22;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.school__in {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 1.3vw, 18px);
+  padding: 72px var(--gutter);
+  text-align: center;
+}
+.school__lockup { width: clamp(132px, 14.6vw, 210px); height: auto; }
+
+/* Título condensado "en onda": cada letra con su desplazamiento y scaleY (Druk Heavy comprimido
+   hasta tener licencia web de Druk XCond). Flamea despacio: 3,2 s, infinito. */
+.school__title {
+  margin: 0;
+  font: 800 clamp(100px, 13.6vw, 196px)/.8 var(--font-display);
+  color: var(--color-aqua);
+  text-transform: uppercase;
+}
+.school__wave { display: block; white-space: nowrap; }
+.school__wave--2 { margin-top: .07em; }
+.school__wave span {
+  display: inline-block;
+  margin: 0 -.05em;
+  transform-origin: 50% 55%;
+  transform: translateY(var(--y)) scale(.8, var(--s));
+  animation: school-flag 3.2s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -.16s);
+}
+.school__wave .school__sp { width: .2em; }
+@keyframes school-flag {
+  0%, 100% { transform: translateY(.05em) scale(.8, .9); }
+  50%      { transform: translateY(-.05em) scale(.8, 1.14); }
+}
+
+.school__lead {
+  max-width: 720px;
+  margin: 0;
+  font: 700 clamp(13px, 1.2vw, 17px)/1.35 var(--font-body);
+  letter-spacing: .01em;
+  text-transform: uppercase;
+}
+
+/* Botón de la School: rojo, corte en diagonal a la derecha, ancla blanca al lado */
+.school__cta { display: flex; align-items: center; gap: clamp(12px, 1.1vw, 16px); }
+.school__cta img { width: clamp(24px, 1.8vw, 26px); height: auto; }
+.school__btn {
+  display: inline-flex;
+  align-items: center;
+  height: clamp(36px, 2.9vw, 42px);
+  padding: 0 clamp(26px, 2.1vw, 30px) 0 clamp(16px, 1.4vw, 20px);
+  background: var(--color-school-red);
+  color: var(--color-white);
+  text-decoration: none;
+  font: 700 clamp(13px, 1.05vw, 15px)/1 var(--font-body);
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-radius: 3px 0 0 3px;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+  transition: filter var(--dur-fast) ease;
+}
+.school__btn:hover { filter: brightness(1.1); }
+.school__btn:focus-visible { outline: 2px solid var(--color-aqua); outline-offset: 4px; }
+
+/* ── Cinta roja: "Learn. Play. Enjoy." + edades + las 4 categorías, corre sola (26 s) ── */
+.school__ticker {
+  display: flex;
+  overflow: hidden;
+  height: clamp(52px, 4.3vw, 62px);
+  background: var(--color-school-red);
+}
+.school__ticker-row {
+  flex: none;
+  display: flex;
+  margin: 0;
+  list-style: none;
+  align-items: center;
+  gap: clamp(24px, 2.4vw, 34px);
+  padding-left: clamp(24px, 2.4vw, 34px);
+  animation: school-tick 26s linear infinite;
+}
+.school__ticker-row li {
+  font: 800 clamp(24px, 2.1vw, 30px)/1 var(--font-display);
+  letter-spacing: .02em;
+  color: var(--color-aqua);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.school__ticker-row img { width: 22px; height: auto; }
+@keyframes school-tick { to { transform: translateX(-100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .school__wave span, .school__ticker-row { animation: none; }
+  .school__btn { transition: none; }
+}

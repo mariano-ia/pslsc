@@ -1,0 +1,76 @@
+<!--
+  Bloque V04 · Partidos — Sede 2027. 🟩 Nativo + JS (v04-matches.js).
+  "Departures. Every matchday.": próximo partido de local + lista con pestañas (Upcoming / Home / Results).
+  Las pestañas filtran las filas por data-home; "Results" muestra el vacío hasta que se juegue la primera fecha.
+  Sin JS: se ve la lista completa (Upcoming).
+  Local = rombo arena (sede temporal) · visitante = círculo gris.
+  HANDOFF: rivales, fechas, horarios y estadios son FICTICIOS (ver native/sede/DATOS.md).
+  HANDOFF: "Add to calendar" y "Full schedule" no tienen destino todavía.
+-->
+<section class="venue-matches surface-paper" id="matches">
+  <div class="psl-container">
+    <span class="psl-kicker" data-reveal>USL League One · 2027</span>
+    <h2 class="psl-h2 venue-matches__title" data-reveal data-reveal-delay="90">Departures. Every matchday.</h2>
+
+    <div class="venue-matches__grid">
+      <article class="venue-next" data-reveal>
+        <div class="venue-next__head"><span>Next home match</span><small>Matchday 1</small></div>
+        <div class="venue-next__vs">
+          <div class="venue-next__team">
+            <img src="/assets/brand/crest-aqua.webp" alt="" width="54" height="58" loading="lazy" decoding="async" />
+            Port St. Lucie SC
+          </div>
+          <div class="venue-next__when"><small>Sat · Mar 13</small><b class="tnum">7:30 PM</b></div>
+          <div class="venue-next__team">
+            <span class="venue-next__opp" aria-hidden="true">GCU</span>   <!-- HANDOFF: escudo del rival en assets/crests/ -->
+            Gulf Coast United
+          </div>
+        </div>
+        <p class="venue-next__where"><span class="venue-matches__dia" aria-hidden="true"></span>Treasure Coast Field · Fort Pierce, FL</p>
+        <div class="venue-next__ctas">
+          <a href="#tickets" class="psl-btn cta-primary"><span>Tickets</span> <span aria-hidden="true">→</span></a>
+          <a href="#" class="psl-btn cta-secondary"><span>Add to calendar</span></a>
+        </div>
+      </article>
+
+      <div class="venue-matches__list-wrap" data-reveal data-reveal-delay="120">
+        <div class="venue-matches__tabs" aria-label="Matches">
+          <button type="button" class="venue-matches__tab is-on" aria-pressed="true" data-filter="upcoming">Upcoming</button>
+          <button type="button" class="venue-matches__tab" aria-pressed="false" data-filter="home">Home</button>
+          <button type="button" class="venue-matches__tab" aria-pressed="false" data-filter="results">Results</button>
+        </div>
+
+        <ul class="venue-matches__list">
+          <li class="venue-match" data-home="true">
+            <div class="venue-match__date">Sat<b class="tnum">13</b>Mar</div>
+            <div class="venue-match__info"><b>vs Gulf Coast United</b><span><span class="venue-matches__dia" aria-hidden="true"></span>Treasure Coast Field · 7:30 PM</span></div>
+            <span class="venue-match__tag is-home">Home</span>
+          </li>
+          <li class="venue-match" data-home="false">
+            <div class="venue-match__date">Sat<b class="tnum">20</b>Mar</div>
+            <div class="venue-match__info"><b>@ Carolina Harbor FC</b><span><span class="venue-matches__dot" aria-hidden="true"></span>Harbor Park · 7:00 PM</span></div>
+            <span class="venue-match__tag">Away</span>
+          </li>
+          <li class="venue-match" data-home="true">
+            <div class="venue-match__date">Sat<b class="tnum">03</b>Apr</div>
+            <div class="venue-match__info"><b>vs Bayou City SC</b><span><span class="venue-matches__dia" aria-hidden="true"></span>Treasure Coast Field · 7:30 PM</span></div>
+            <span class="venue-match__tag is-home">Home</span>
+          </li>
+          <li class="venue-match" data-home="false">
+            <div class="venue-match__date">Wed<b class="tnum">07</b>Apr</div>
+            <div class="venue-match__info"><b>@ Lakeshore FC</b><span><span class="venue-matches__dot" aria-hidden="true"></span>Lakeshore Stadium · 8:00 PM</span></div>
+            <span class="venue-match__tag">Away</span>
+          </li>
+          <li class="venue-match" data-home="true">
+            <div class="venue-match__date">Sat<b class="tnum">17</b>Apr</div>
+            <div class="venue-match__info"><b>vs Pine Valley SC</b><span><span class="venue-matches__dia" aria-hidden="true"></span>Treasure Coast Field · 7:30 PM</span></div>
+            <span class="venue-match__tag is-home">Home</span>
+          </li>
+        </ul>
+
+        <div class="venue-matches__empty" hidden><b>No results yet.</b><span>The first whistle blows in March 2027.</span></div>
+        <a href="#" class="venue-matches__more">Full schedule →</a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,76 @@
+/* Bloque V04 · Partidos — Sede 2027 */
+
+.venue-matches { padding: var(--section-pad) 0; }
+.venue-matches__title { margin-bottom: clamp(32px, 4vw, 48px); }
+
+/* código de sede: rombo = sede temporal · círculo gris = estadio rival */
+.venue-matches__dia { display: inline-block; flex: none; width: 9px; height: 9px; background: var(--color-sand-deep); transform: rotate(45deg); }
+.venue-matches__dot { display: inline-block; flex: none; width: 8px; height: 8px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px #8C836E; }
+
+.venue-matches__grid { display: flex; flex-direction: column; gap: 32px; }
+
+/* ---------- próximo partido ---------- */
+.venue-next {
+  display: flex; flex-direction: column; gap: 22px; padding: 24px 20px;
+  border-radius: var(--radius-md); background: var(--color-ink); color: var(--color-text);
+}
+.venue-next__head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.venue-next__head span { font: 500 var(--fs-label)/1.3 var(--font-label); letter-spacing: .16em; text-transform: uppercase; color: var(--color-sand); }
+.venue-next__head small { font-size: 12px; color: var(--color-text-faint); }
+.venue-next__vs { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 12px; }
+.venue-next__team { display: flex; flex-direction: column; align-items: center; gap: 8px; font: 600 13px/1.2 var(--font-body); text-align: center; }
+.venue-next__team img { width: auto; height: 58px; }
+.venue-next__opp {
+  width: 50px; height: 58px; border-radius: 8px; background: #1E1E1B; box-shadow: inset 0 0 0 1px var(--color-line-strong);
+  display: flex; align-items: center; justify-content: center; font: 800 16px/1 var(--font-display); color: var(--color-sand);
+}
+.venue-next__when { text-align: center; }
+.venue-next__when small { display: block; font: 500 9.5px/1 var(--font-label); letter-spacing: .14em; text-transform: uppercase; color: var(--color-text-muted); }
+.venue-next__when b { display: block; margin-top: 8px; font: 900 40px/.9 var(--font-display); }
+.venue-next__where { display: flex; justify-content: center; align-items: center; gap: 9px; font: 600 13px/1.3 var(--font-body); color: var(--color-sand); }
+.venue-next__where .venue-matches__dia { background: var(--color-sand); }
+.venue-next__ctas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.venue-next__ctas .psl-btn { justify-content: center; padding-inline: 10px; font-size: 12px; letter-spacing: .03em; white-space: nowrap; }
+.venue-next .cta-secondary { color: var(--color-text); border-color: rgba(244,241,234,.28); }   /* la tarjeta es oscura dentro de una sección clara */
+
+/* ---------- lista ---------- */
+.venue-matches__tabs { display: flex; gap: 4px; border-bottom: 2px solid #DCD6CA; }
+.venue-matches__tab {
+  min-height: 48px; padding: 0 16px; margin-bottom: -2px;
+  background: none; border: 0; border-bottom: 3px solid transparent; cursor: pointer;
+  font: 700 14px/1 var(--font-body); color: #6E6757;
+}
+.venue-matches__tab:hover { color: var(--color-text-on-paper); }
+.venue-matches__tab.is-on { color: var(--color-text-on-paper); border-bottom-color: var(--color-text-on-paper); }
+
+.venue-matches__list[hidden], .venue-match[hidden], .venue-matches__empty[hidden] { display: none; }
+.venue-match {
+  display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 14px; align-items: center;
+  padding: 14px 0; border-bottom: 1px solid #DCD6CA;
+}
+.venue-match__date {
+  display: flex; flex-direction: column; align-items: center;
+  font: 500 8.5px/1.1 var(--font-label); letter-spacing: .1em; text-transform: uppercase; color: #6E6757;
+}
+.venue-match__date b { margin: 2px 0; font: 900 28px/1 var(--font-display); color: var(--color-text-on-paper); }
+.venue-match__info b { display: block; font: 700 15.5px/1.25 var(--font-body); }
+.venue-match__info span { display: flex; align-items: center; gap: 8px; margin-top: 5px; font-size: 13px; color: #6E6757; }
+.venue-match__tag {
+  padding: 7px 9px; border-radius: var(--radius-pill); box-shadow: inset 0 0 0 1.5px #B9AE95;
+  font: 800 8.5px/1 var(--font-label); letter-spacing: .12em; text-transform: uppercase; color: #6E6757;
+}
+.venue-match__tag.is-home { background: var(--color-sand); box-shadow: none; color: var(--color-ink); }
+
+.venue-matches__empty { margin-top: 18px; padding: 34px 18px; border: 1.5px dashed #B9AE95; border-radius: var(--radius-md); text-align: center; }
+.venue-matches__empty b { display: block; font: 800 26px/1 var(--font-display); letter-spacing: var(--ls-display); }
+.venue-matches__empty span { display: block; margin-top: 8px; font-size: 14px; color: #6E6757; }
+
+.venue-matches__more {
+  display: inline-flex; color: var(--color-text-on-paper); text-decoration: none; margin-top: 22px; padding-bottom: 6px; border-bottom: 2px solid currentColor;
+  font: 800 11px/1 var(--font-label); letter-spacing: .1em; text-transform: uppercase;
+}
+
+@media (min-width: 900px) {
+  .venue-matches__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 72px; align-items: start; }
+  .venue-next { padding: 30px 28px; }
+}

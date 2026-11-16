@@ -1,0 +1,30 @@
+/* Bloque V02 · De un vistazo — Sede 2027 */
+
+.venue-glance { padding-top: var(--section-pad); }
+
+.venue-glance__kicker {
+  font: 500 var(--fs-kicker)/1.4 var(--font-label); letter-spacing: var(--ls-kicker);
+  text-transform: uppercase; color: var(--color-sand);
+}
+
+.venue-glance__grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px;
+  margin-top: clamp(32px, 4vw, 48px);
+  background: var(--color-line); border: 1px solid var(--color-line);
+  border-radius: var(--radius-md); overflow: hidden;
+}
+/* dt/dd invertidos visualmente: el número arriba, la etiqueta abajo (en el DOM la etiqueta va primero) */
+.venue-glance__item {
+  display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 10px;
+  padding: clamp(22px, 2.4vw, 30px) clamp(18px, 2vw, 26px);
+  background: var(--color-ink);
+}
+.venue-glance__item dd { font: 900 clamp(42px, 4.6vw, 60px)/.9 var(--font-display); color: var(--color-sand); }
+.venue-glance__item dt {
+  font: 500 9.5px/1.35 var(--font-label); letter-spacing: var(--ls-label);
+  text-transform: uppercase; color: var(--color-text-muted);
+}
+
+@media (min-width: 900px) {
+  .venue-glance__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}

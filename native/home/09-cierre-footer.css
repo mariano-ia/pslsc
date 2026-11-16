@@ -173,6 +173,14 @@
 .footer__col-title { font: 500 10px/1 var(--font-mono); letter-spacing: .16em; color: var(--color-text-faint); text-transform: uppercase; }
 .footer__col a { font: 400 14px/1 var(--font-body); color: var(--color-text-muted); text-decoration: none; }
 .footer__col a:hover { color: var(--color-text); }
+/* Soccer School: etiqueta "5–13" en el rojo de la School, con el corte en diagonal del botón "Register now" */
+.footer__col a.footer__school { display: inline-flex; align-items: center; gap: 9px; }
+.footer__school i {
+  padding: 5px 12px 5px 7px;
+  background: var(--color-school-red); color: var(--color-white);
+  font: 700 10px/1 var(--font-body); font-style: normal; letter-spacing: .06em;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+}
 
 /* Redes: fila de íconos circulares, monocromos, en currentColor; hover aqua */
 .footer__social { display: flex; gap: 10px; flex-wrap: wrap; }

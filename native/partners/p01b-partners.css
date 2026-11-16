@@ -28,8 +28,20 @@
 .ppartners__logo--adidas { height: clamp(44px, 4.3vw, 62px); }
 .ppartners__logo--vixon  { height: clamp(18px, 1.8vw, 26px); }
 .ppartners__logo--ayonic { height: clamp(62px, 5.8vw, 84px); }
+.ppartners__logo--hps    { height: clamp(44px, 4.2vw, 60px); }
 
-@media (max-width: 700px) {
+/* Con cuatro logos la fila no entra al lado del kicker por debajo de ~900px: el kicker pasa arriba.
+   En mobile tampoco entran en una sola fila sin achicarlos de más: grilla de 2×2. */
+@media (max-width: 900px) {
   .ppartners .psl-container { flex-direction: column; align-items: flex-start; }
   .ppartners__list { width: 100%; justify-content: space-between; }
+}
+@media (max-width: 520px) {
+  .ppartners__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    justify-items: start;
+    gap: 36px 28px;
+  }
 }

@@ -30,10 +30,10 @@ sin usar que el `.gitignore` excluye (`anchor-white.png`, `360_shirt.mp4`, etc.)
 > **Mismo dominio, importante.** Los `<script type="module">` y los `@font-face` cross-origin exigen
 > cabecera `Access-Control-Allow-Origin`. Hosteando bajo el dominio de WP no hay que configurar nada.
 
-### 2. Rellenar 4 tokens (find-and-replace)
+### 2. Rellenar 5 tokens (find-and-replace)
 
-Los bloques en `dist/blocks/` traen 4 placeholders a propósito. Cuando tengas las URLs reales,
-hacé un **find-and-replace** de estos 4 tokens (en los archivos de `dist/blocks/`, o directamente
+Los bloques en `dist/blocks/` traen 5 placeholders a propósito. Cuando tengas las URLs reales,
+hacé un **find-and-replace** de estos 6 tokens (en los archivos de `dist/blocks/`, o directamente
 en los bloques ya pegados en WordPress). Son únicos y greppables:
 
 | Token (buscar) | Reemplazar por (ejemplo) | Qué es |
@@ -42,6 +42,8 @@ en los bloques ya pegados en WordPress). Son únicos y greppables:
 | `__URL_HOME__` | `/` | Permalink de Home |
 | `__URL_SUMATE__` | `/become-a-founder/` | Permalink de la página de Founders |
 | `__URL_PARTNERS__` | `/partners/` | Permalink de Partners |
+| `__URL_SCHOOL__` | `https://…` (**a definir**) | Sitio de la Soccer School: botón "Register now" de `home/07b-school` y link del footer |
+| `__URL_GROUNDBREAKING__` | `https://groundbreaking-eight.vercel.app/` (hoy; **dominio final a definir**) | Micrositio de la primera palada: `home/01d-hero-groundbreaking` (también con el ancla `#postcards`), `home/01e-banner-groundbreaking` y el link "Explore the build" de `home/03-project` y `partners/p02-opportunity`. **Con barra final.** |
 
 `__PSL_ASSET_BASE__` aparece en cada bloque (fuentes + imágenes); los `__URL_*__` solo en los bloques
 que enlazan a otras páginas (nav-CTAs, footer). Ningún bloque queda sin al menos el asset base.
@@ -68,12 +70,101 @@ Qué bloque va en qué página:
 
 | Página WP | Bloques (en orden) |
 |---|---|
-| Home | 01-hero · 02-stats · 03-project · 04-proof · 04b-fixtures · 05-jersey · 06-founders · 07-academy · 09-cierre-footer |
+| Home | 01-hero · 02-stats · 03-project · 04b-fixtures · 05-jersey · 06-founders · 07b-school · 09-cierre-footer (`07b-school` reemplaza a `07-academy`: sacar Academy de la Home y pegar la School en su lugar) |
 | Become a Founder | s01-hero · s02-benefits · s03-plans · s05-faq · s06-cta |
 | Partners | p01-hero · p01b-partners · p02-opportunity · p03-value · p04-traction · p05-contact |
 | Academy | a01-hero · a02-pathway · a03-method · a05-parents · a06-faq · a07-tryouts |
 
 Nav (00) y News (08) no están en la lista: son bloques nativos del template de USL.
+
+**Charter Collection (solo durante la campaña):** en Home, `01b-hero-coleccion` se pega **en lugar de** `01-hero`,
+nunca los dos: el juego se juega ahí.
+
+Bloques de la campaña (todos en `dist/blocks/`): `psl-home-01b-hero-coleccion`, `psl-home-01c-coleccion`,
+`psl-team-t02-front-office`, `psl-team-t00-soccer-staff` y `psl-team-t01-coach`. Para recompilar solo esos:
+`python3 tools/build-blocks.py 01b-hero-coleccion 01c-coleccion t02-front-office t00-soccer-staff t01-coach`.
+`psl-team-t03-roster` (Roster) está en pausa: no se publica. `c01-collection` (Mi colección) todavía no se compila
+ni se publica.
+
+Todo lo del DT (nombre, fotos, silueta, preguntas, pistas, ficha) **no está en el repo**: llega por
+`__COLECCION_API__`, un endpoint que responde según la fecha. Contrato, calendario y requisitos (sin caché, hora ET,
+CORS): `docs/charter-collection-state.md`. El contenido real va en un paquete privado aparte, no por GitHub.
+
+Qué se pega cada día en Home (el juego cambia solo según la fecha: lo resuelve el estado de `__COLECCION_API__`,
+no hay que tocar bloques entre el viernes 27 de noviembre y el martes 1 de diciembre). Calendario actualizado el
+16/11: el reveal es el **lunes 30 de noviembre a la 1:00 PM ET** (13 hs de Miami):
+
+| Cuándo | Home |
+|---|---|
+| Hasta el jueves 26 | Hero de Groundbreaking solo: `01d-hero-groundbreaking` en lugar de `01-hero`, sin `01e` ni `01c` (la Charter Collection todavía no aparece en Home) |
+| Viernes 27, antes de las 10:00 AM ET | Sacar `01d-hero-groundbreaking`, pegar `01b-hero-coleccion` en su lugar y sumar `01e-banner-groundbreaking` debajo de `02-stats` (combinación A, abajo) |
+| Viernes 27 a lunes 30 | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista (cuatro preguntas) |
+| Lunes 30, 1:00 PM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
+| Martes 1/12 en adelante | Pasar a la combinación B de Groundbreaking (abajo). Sin Groundbreaking, nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector ya no se reclama (es del juego); la Card No. 001 se pide por mail en la ficha del DT |
+| Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion` (o `01d`), volver a pegar `01-hero` y dejar `01c-coleccion` **debajo de `02-stats`**. Con eso se cierra el reclamo de la Collector |
+| Más adelante (cuando haya más cartas) | Publicar **Mi colección** en `/collection/` (`c01-collection`). **No va en esta campaña** |
+
+**Groundbreaking (primera palada, hasta el sábado 12/12/2026) y Juani conviven en Home.** Uno va de hero y el otro de
+banner. Orden en Home: **hero → `02-stats` (los números) → banner** (el banner va tercero, antes de `03-project`).
+Dos combinaciones:
+
+| Combinación | Hero (en lugar de `01-hero`) | Banner (debajo de `02-stats`) |
+|---|---|---|
+| A · Juani arriba | `01b-hero-coleccion` | `01e-banner-groundbreaking` |
+| B · Groundbreaking arriba | `01d-hero-groundbreaking` | `01c-coleccion` |
+
+Para pasar de una a otra se cambian los dos bloques de lugar, nada más (no hay que tocar código). Nunca dos heroes ni
+dos banners juntos. `01e` lleva el video de la intro del micrositio (corre una vez y queda la foto aérea).
+Todo usa `assets/groundbreaking/` (incluye los videos de la intro: `banner-intro-720.mp4`, 3 MB, para el banner y el hero en mobile, e `intro-1080.mp4`, 5,7 MB, para el hero desde 1100 px) y `__URL_GROUNDBREAKING__`.
+Después del 12/12 se sacan `01d`/`01e` y Juani vuelve a su esquema de siempre.
+Para recompilar solo esos: `python3 tools/build-blocks.py 01d-hero-groundbreaking 01e-banner-groundbreaking`.
+
+**`04-proof` ya no va en Home** (el estadio ahora lo cuenta Groundbreaking): si está pegado, sacarlo.
+
+`01c-coleccion` es la presentación del Head Coach en formato banner (foto, Card No. 001, "Meet the coach" y "Meet the
+staff"): no habla de la colección. Usa el mismo `__COLECCION_API__` (tiene que seguir respondiendo con la carta
+revelada después de la campaña), `__URL_COACH__` y `__URL_TEAM__` (Soccer Staff).
+Si el estado no responde, el bloque queda oculto.
+
+**Mi colección (`c01-collection`, `/collection/`), para más adelante:** las cartas de la persona, las que faltan como siluetas y el link
+para abrirla en otro dispositivo. Reemplazos: `__COLECCION_API__`, `__URL_COACH__` y `__COLLECTION_API__` (el servidor
+del link). Sin `__COLLECTION_API__` la página funciona con lo guardado en el dispositivo y no ofrece el link: se puede
+publicar así y sumar el servidor después. Contrato del servidor (endpoints, tokens, errores):
+`docs/charter-collection-server.md`. Usa el recorte de MediaPipe igual que el hero (la persona puede sumar su foto ahí).
+
+**Club (menú de USL y las páginas):**
+
+- El menú de USL queda **como está hoy** (Home, Teams, Shop, Youth, Staff, News, Partners, Events): "Staff" sigue
+  llevando a `/staff/`, que redirige a Front Office. **Soccer Staff** (`/soccer-staff/`) se llega desde la navegación
+  de arriba de las páginas del Club, recién desde el viernes del reveal: antes no existe para nadie. Roster está en pausa
+  (no se publica ni se enlaza; `t03-roster` queda en el repo).
+- `/staff/` redirige (301) a `/front-office/`. **Antes del lunes de arranque:** Front Office reemplaza a la página
+  `/staff/` actual, que hoy muestra al futuro Head Coach como Academy Director. `st01-staff` se retira. Coordinar con
+  marketing.
+- Cada página del Club y la ficha llevan arriba la misma navegación ("Front Office · Soccer Staff"). Reemplazos:
+  `__URL_FRONT_OFFICE__` y `__URL_TEAM__` (Soccer Staff). En Front Office esa navegación aparece sola cuando
+  `__COLECCION_API__` dice que el Head Coach ya se reveló (antes queda oculta): no hay que tocar el bloque el viernes.
+- **Soccer Staff** (`t00-soccer-staff`) tiene el mismo formato que Front Office (cabecera oscura, tarjetas sobre claro;
+  reusa el CSS de `t02`, lo suma `build-blocks.py`). Por ahora muestra solo al Head Coach, como tarjeta que lleva a su
+  ficha. Al pie, "Every first, a card." como **Coming soon** (sin link: Mi colección todavía no se publica). La carta
+  no va en esta página.
+- La ficha (`t01-coach`) tiene, al pie, el apartado "Charter Collection · Card No. 001": la carta y un form para
+  recibirla por mail (`__AC_CARD_FORM__`, ver `docs/charter-collection-activecampaign.md`). La Collector no se reclama acá.
+- Soccer Staff y la ficha **no están disponibles hasta el reveal**: se publican el viernes y, si alguien las abre antes,
+  vuelven solas a Front Office (`__URL_FRONT_OFFICE__`). Front Office (`t02-front-office`) reemplaza a `/staff/` y se
+  puede publicar ya.
+Reemplazos: `__COLECCION_API__` (URL del estado por fecha), `__URL_COACH__` (permalink de la ficha), `__URL_TEAM__` (equipo, hoy `/staff/`) y, en el hero,
+`__AC_ACCOUNT__`, `__AC_COLLECTION_FORM__` y `__AC_FIELD_CONSENT__` (`field[NN]` del form de
+ActiveCampaign, que además es el que pone la etiqueta); en la ficha, `__AC_ACCOUNT__`, `__AC_CARD_FORM__` y
+`__AC_FIELD_CONSENT__`. Sin esos datos el form valida, pero no envía. Qué crear en
+ActiveCampaign (form, campos, etiqueta y mails): `docs/charter-collection-activecampaign.md`.
+
+**Recorte de la foto de la Collector (MediaPipe):** correr `tools/fetch-mediapipe.sh`. Baja unos 19 MB a
+`assets/vendor/mediapipe/`, que no van al repo, y esa carpeta se sube junto con el resto de `assets/` a `ASSET_BASE`.
+WordPress no deja subir `.mjs`, `.wasm` ni `.tflite` por defecto, así que hay que habilitar esos tipos o subirlos por
+FTP. El servidor tiene que mandar `application/wasm` para el `.wasm` y `text/javascript` para el `.mjs`. Si
+`ASSET_BASE` es otro dominio, además tiene que mandar `Access-Control-Allow-Origin` (también lo necesita la imagen
+para compartir). Si falta algo de esto, el recorte no corre y la carta usa la foto entera: no se rompe.
 
 ---
 

@@ -42,3 +42,6 @@ __pycache__/
 
 # brainstorming companion (mockups locales)
 .superpowers/
+
+# MediaPipe alojado por nosotros: lo baja tools/fetch-mediapipe.sh (~19 MB), no va al repo
+assets/vendor/mediapipe/

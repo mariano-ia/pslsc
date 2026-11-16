@@ -127,8 +127,10 @@ son self-hosted. Formatos:
   ~120px de lado, recortados al alpha). Bajados del sitio oficial de cada club y **guardados en el
   repo** — el bloque Matchday no linkea imágenes de terceros. Al sumar un rival nuevo: mismo formato,
   nombre en kebab-case, y referenciarlo desde `MATCHES` en `custom/fixtures/fixtures.js`.
-- **Logos de partners** `assets/partners/`: `adidas.webp`, `vixon.webp`, `ayonic.webp` (blanco
-  monocromo con alpha, recortados al alpha) para la franja P01b de Partners. Los originales a color
+- **Logos de partners** `assets/partners/`: `adidas.webp`, `vixon.webp`, `ayonic.webp`, `hps.webp`
+  (blanco monocromo con alpha, recortados al alpha) para la franja P01b de Partners. En `hps.webp`
+  (Helping People Succeed) se sacó el sol en degradé del emblema: en blanco monocromo quedaba como
+  una mancha gris. Los originales a color
   (SVG/PNG) están en `docs/partners-logos/`. Al sumar un partner: mismo formato, un `<li>` en
   `native/partners/p01b-partners.html` y su alto en el CSS para que pese igual que el resto.
 - **Fotos**: `assets/images/pslsc_academy.webp` (foto academia), `assets/images/luka-card.webp`
@@ -165,7 +167,7 @@ está documentado en su `.js`. **Nav (00) y News (08) son del template de USL** 
 
 | # | Bloque | Superficie | Qué es / a implementar |
 |---|---|---|---|
-| 00 | Nav (crest + CTA "Become a Founder") | ink | **Del template.** Sticky. |
+| 00 | Nav (crest + CTA "Become a Founder") | ink | **Del template.** Sticky. Suma el banderín de la Soccer School — ver "Nav · banderín Soccer School" abajo. |
 | 01 | Hero + video + efecto "born" | ink | Video de fondo `hero.mp4`. La última palabra del título hace scramble (`01-hero.js`). |
 | 02 | Stats band | ink | `<psl-live-counter variant="stats">` — ver §7. |
 | 03 | The project (timeline horizontal que se dibuja con el scroll) | paper | HTML + `03-project.js`. |
@@ -173,7 +175,8 @@ está documentado en su `.js`. **Nav (00) y News (08) son del template de USL** 
 | 04b | **Divider** (ex Matchday) | ink | Sólo una línea. El módulo Matchday está archivado — ver §7. |
 | 05 | Jersey / Shop | ink | `<psl-jersey-viewer>` (360°) + CTA "Buy now" a la tienda externa (ver `external/`). |
 | 06 | **Founders** | paper | `<psl-founder-id>` (boarding pass con cámara) + `<psl-departures-board>` (tablero split-flap) + CTA. |
-| 07 | Academy (teaser) | ink | Foto real + copy + CTA a la página Academy. HTML puro. |
+| 07 | ~~Academy (teaser)~~ | — | **Sale de la Home** (sacarlo también en WP): lo reemplaza 07b, que usa la misma foto. Academy sigue en la nav y el footer. El bloque queda en el repo. |
+| 07b | **Soccer School** | ink | Póster de la campaña (foto + título en onda + "Register now") y cinta de categorías. HTML + CSS, sin JS. Link `__URL_SCHOOL__`. |
 | 08 | News ("From the build") | paper | **Del template.** |
 | 09 | Newsletter + Footer | ink | Form de suscripción (`09-cierre-footer.js`) — ver §7. |
 
@@ -204,6 +207,35 @@ una tarjeta no estira a las vecinas. Fotos en `assets/staff/*.webp` (6, del mism
 la página, pegar el bloque compilado y **agregar "Staff" al menú del template de USL** (la nav no
 sale de estos bloques). Contenido (nombres/roles/bios) tomado del sitio en producción.
 
+### SEDE 2027 (`pages/temporarystadium.html`) — estadio temporal · EN DESARROLLO (rama `feature/sede-2027`)
+V01 hero (video provisorio + boarding ticket) · V02 de un vistazo · V03 recorrido (6 capítulos, `v03-tour.js`) ·
+V04 partidos (pestañas, `v04-matches.js`) · V05 entradas (plano por zonas, `v05-tickets.js`) · V06 cómo llegar ·
+V07 FAQ (`<details>`, sin JS) · V08 "Home port" (único bloque con la identidad del estadio propio).
+**Los datos de la sede son ficticios** hasta que el club la confirme: lista completa en `native/sede/DATOS.md`
+y marcados con `HANDOFF:` en cada bloque. Código de sede: rombo arena = sede temporal · círculo aquamarine =
+estadio propio (tokens `--color-sand`, `--color-sand-deep`, `--color-sea`). **Página oculta**: permalink
+`/temporarystadium/`, sin ítem en la nav ni links desde el sitio; solo se llega con el link directo (en WP: sin
+menú y con noindex).
+
+### Nav · banderín Soccer School (`native/home/00-nav.*`)
+En el prototipo, "Soccer School" entra a la barra después de Partners, al lado del CTA:
+- **Desktop**: al pasar el mouse (o con foco de teclado) las letras flamean y se abre un panel debajo de la barra
+  con el póster de la School y "Register now". Es solo CSS (`:has()`); en touch, el primer toque abre el panel
+  (`00-nav.js`).
+- **Mobile (< 1000px)**: banderín centrado en la barra + menú hamburguesa con los links, el póster de la School y
+  el CTA.
+- Respeta "reducir movimiento" (sin flameo ni transiciones).
+
+**HANDOFF (WP)**: la nav real es la del template de USL, que ya se reestiliza desde `docs/header-additional-css.css`.
+Para llevar el banderín:
+1. En el menú de WordPress, agregar el ítem "Soccer School" después de Partners, con link a la School y la clase
+   CSS `psl-school` (opción "Clases CSS" del ítem de menú).
+2. Pasar los estilos del banderín y del panel de `00-nav.css` al CSS adicional del header, apuntando a
+   `#menu-main-menu > li.psl-school > a` en lugar de `.nav__school`.
+3. El lockup del banderín, las letras en onda y el panel son markup que el menú de WP no genera: hace falta un
+   script chico en el header que los inyecte (mismo markup que `00-nav.html`). El menú mobile ya lo trae el
+   template; el póster va al final de ese menú.
+
 ### Navegación entre páginas
 El **nav y el footer** (00 / 09) van iguales en todas las páginas. Sus links usan `archivo.html#ancla`;
 el compilador los reescribe a los permalinks reales de WordPress (find-and-replace de `__URL_*__`,
@@ -216,12 +248,22 @@ ver `dist/UPLOAD.md`). Los anclas dentro de la misma página (ej. `#join`) funci
 Todos son `customElements.define` (API nativa del navegador). Se insertan como una etiqueta HTML.
 Hoy corren con datos demo; **conectar el endpoint real reemplazando la función de datos indicada**.
 
+> ⚠️ **El contador de producción NO es el del repo (2026-10).** En WordPress (Santi) la variante
+> `sponsor` ya trae Monthly Impressions, Monthly Reach y Deposits Captured reales; en este repo esas
+> tres siguen en `_demoData()`. **No pegar el contador compilado desde el repo encima del de WP** (se
+> perderían los datos reales). Los cambios de texto del cierre de Founding Members hay que aplicarlos
+> a mano en la versión de WP:
+> - Label de la métrica `founders` en `stats` (Home) y `sponsor` (Partners): "Founding Members" → **"Members"**.
+>   La key del dato sigue siendo `founders`; cada depósito individual cuenta como un miembro.
+> - Toast de la Home: "+1 Founding member" → **"+1 Member"**.
+> - (Opcional) valor de respaldo de `founders` si el Sheet no responde: 974 → 1027.
+
 - **`<psl-live-counter variant="stats|fan|reservation|sponsor">`** — banda de métricas.
   Contrato: `GET /api/live-counter?scope=…`. Schema completo en `custom/live-counter/live-counter.config.js`.
   Reemplazar `_demoData()` por `fetch(this.config.endpoint)`. Las métricas enteras hacen count-up 0→valor
   al entrar en viewport. La línea "Updated in real time" es opt-in por variante (`showUpdated: true`);
   `stats` y `sponsor` la tienen apagada, igual que el pie `note`.
-  **Variante `sponsor` (P04, actualizada 2026-08-27)**: Founding Members · Monthly Impressions
+  **Variante `sponsor` (P04, actualizada 2026-08-27)**: Members (antes Founding Members, 2026-10) · Monthly Impressions
   (1.100.000) · Monthly Reach (240.000) · Deposits Captured — ese orden lo pidió el cliente.
   Las 4 son fotos de un momento — ninguna pide
   serie histórica. Salieron del contrato `lastJoined` (para sponsor) y `founderGrowthPercent`: ese
@@ -316,7 +358,7 @@ python3 -m http.server 4321
 ```
 Al editar CSS/JS, subir el `?v=N` en `pages/*.html` para saltear el caché del navegador.
 > ⚠️ **No alcanza con el `?v=` de la página.** Un componente puede importar otro archivo con su
-> propio cache-buster — hoy `live-counter.js` hace `import … from './live-counter.config.js?v=7'`.
+> propio cache-buster — hoy `live-counter.js` hace `import … from './live-counter.config.js?v=9'`.
 > Si editás ese config y sólo subís el de la página, el navegador sigue sirviendo la config vieja:
 > el cambio está en el archivo pero no se ve en pantalla. Subí **los dos**. (Pasó el 2026-08-27.)
 > Al verificar un cambio, recargá con caché tibia, no sólo en una ventana nueva.

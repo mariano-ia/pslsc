@@ -1,0 +1,35 @@
+<!--
+  Bloque t00 · Soccer Staff: el cuerpo técnico. 🟦 A medida. Mismo formato que Front Office (t02): cabecera oscura y
+  las personas en tarjetas sobre claro (usa las tarjetas .scard de t02). No está disponible hasta el reveal: se
+  publica el viernes, con el Head Coach presentado, y si alguien la abre antes vuelve a Front Office. Hoy muestra
+  solo al Head Coach (los asistentes se suman cuando estén). La carta no va acá (vive en la ficha del DT); abajo,
+  la Charter Collection como "Coming soon".
+  El contenido del Head Coach llega por datos desde __COLECCION_API__; acá no va nada de él.
+  Reemplazos: __COLECCION_API__, __URL_COACH__ (ficha del DT), __URL_FRONT_OFFICE__ y __URL_TEAM__ (esta página).
+-->
+<section class="staff staff--head surface-ink" id="soccer-staff">
+  <div class="psl-container">
+    <nav class="clubnav" aria-label="Club"><a href="__URL_FRONT_OFFICE__">Front Office</a><a href="__URL_TEAM__" aria-current="page">Soccer Staff</a></nav>
+    <p class="clubhead__kicker">Club · First Team</p>
+    <h1 class="clubhead__title">Soccer Staff</h1>
+    <p class="clubhead__lead">The coaching staff of the first professional team in Port St. Lucie history. More names are on the way.</p>
+  </div>
+</section>
+
+<section class="staff staff--body surface-paper tmh" data-cc-state="__COLECCION_API__" data-cc-coach="__URL_COACH__" data-cc-front="__URL_FRONT_OFFICE__">
+  <div class="psl-container">
+    <div class="staff__group" id="coaching-staff" data-tmh-group hidden>
+      <span class="psl-kicker staff__grouplabel">Coaching Staff</span>
+      <div class="staff__grid" data-tmh-grid></div>
+    </div>
+
+    <aside class="tmh__cc" aria-labelledby="tmh-cc-title">
+      <div>
+        <span class="psl-kicker">Charter Collection</span>
+        <h2 class="tmh__cc-title" id="tmh-cc-title">Every first, a card.</h2>
+        <p class="tmh__cc-lead">Our first Head Coach is Card No. 001. Your own collection, with every card that follows, is on the way.</p>
+      </div>
+      <span class="tmh__soon">Coming soon</span>
+    </aside>
+  </div>
+</section>

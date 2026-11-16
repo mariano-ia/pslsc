@@ -23,7 +23,13 @@
  * (no auto-click); acciones bloqueadas durante el share; cancel del share ≠ fallo real.
  *
  * El pase DIY recibe un ASIENTO aleatorio al capturar (sabor boarding pass, no es número de
- * fundador real); el número de fundador REAL se reclama en Sumate (CTA del bloque).
+ * fundador real).
+ *
+ * CIERRE DE FOUNDING MEMBERS (2026-10): el pase pasó de "pase de fundador" a pase de la temporada
+ * 2027 (CLASS OF 2027 · CLASS: SUPPORTER · GET ON BOARD FOR 2027 · FUTURE MEMBER). Pedido de
+ * comunicación: es una experiencia gratuita y abierta a cualquier hincha, para compartir en
+ * redes; no se presenta como acreditación oficial ni como beneficio de Founding Members o de
+ * quienes compraron un Ticket Deposit.
  *
  * HANDOFF (WP): este componente usa la CÁMARA. Si el bloque va en <iframe>, el iframe NECESITA el
  * atributo allow="camera" (si no, el navegador la bloquea) y servirse por HTTPS. No hay endpoint
@@ -50,7 +56,7 @@ const PRIVACY_PARAS = [
   'If you choose to download or share your Founder Boarding Pass, the resulting image is saved or shared only through the options, applications, services, and destination you select using your own device. Your use of those device controls or third-party services may be subject to their separate terms and privacy practices.',
   'Port St. Lucie SC does not automatically publish or post your Founder Boarding Pass; any download or sharing is initiated and controlled by you through your own device. Port St. Lucie SC does not retain a copy of your photo or generated Founder Boarding Pass.',
 ];
-const CAPTION = "I'm boarding Flight PSL·2027 — claiming my spot as a founding member of Port St. Lucie SC, the Treasure Coast's first pro club. #PSLSC #FoundingClass";
+const CAPTION = "I'm on board for 2027! ⚓ #PSLSC";
 
 class PSLFounderID extends HTMLElement {
   connectedCallback() {
@@ -99,7 +105,7 @@ class PSLFounderID extends HTMLElement {
           <div class="fid__head">
             <img class="fid__crest" src="${CREST_SRC}" alt="" width="34" height="36" />
             <span class="fid__head-club">Port St. Lucie SC</span>
-            <span class="fid__head-type">Boarding pass · Founding class</span>
+            <span class="fid__head-type">Boarding pass · Class of 2027</span>
           </div>
           <div class="fid__photo">
             ${m === 'live'
@@ -131,7 +137,7 @@ class PSLFounderID extends HTMLElement {
             </div>
             <div class="fid__field">
               <span class="fid__label">Class</span>
-              <span class="fid__value">${isYou ? 'Founding' : 'First fan'}</span>
+              <span class="fid__value">${isYou ? 'Supporter' : 'First fan'}</span>
             </div>
           </div>
 
@@ -398,7 +404,7 @@ class PSLFounderID extends HTMLElement {
     ctx.fillText('PORT ST. LUCIE SC', PAD + crestW + 28, 138);
     ctx.fillStyle = 'rgba(12,12,10,.62)';
     ctx.font = '500 24px "Druk Text Wide", sans-serif';
-    ctx.fillText('BOARDING PASS · FOUNDING CLASS', PAD + crestW + 28, 176);
+    ctx.fillText('BOARDING PASS · CLASS OF 2027', PAD + crestW + 28, 176);
     ctx.letterSpacing = '0px';
 
     // foto CUADRADA, igual que en la tarjeta. La ventana era apaisada (936x680) y recortaba una
@@ -431,7 +437,7 @@ class PSLFounderID extends HTMLElement {
       ctx.fillText(t, x, y);
       ctx.letterSpacing = '0px';
     };
-    const name = (isYou ? (this._name.trim() || 'FUTURE FOUNDER') : 'LUCA').toUpperCase();
+    const name = (isYou ? (this._name.trim() || 'FUTURE MEMBER') : 'LUCA').toUpperCase();
     // El numero de asiento manda: medimos cuanto sube sobre su baseline y recien ahi colocamos las
     // etiquetas, 26px mas arriba. Con Y fijas, Druk a 120px trepaba hasta la etiqueta y la tapaba.
     const seatText = isYou ? this._seat : '#0001';
@@ -454,7 +460,7 @@ class PSLFounderID extends HTMLElement {
     const cols = [
       ['FLIGHT', 'PSL·2027', PAD],
       ['DEPARTS', 'FIRST WHISTLE', 430],
-      ['CLASS', isYou ? 'FOUNDING' : 'FIRST FAN', 810],
+      ['CLASS', isYou ? 'SUPPORTER' : 'FIRST FAN', 810],
     ];
     cols.forEach(([l, v, x]) => {
       label(l, x, Y_COL_LABEL);
@@ -484,7 +490,7 @@ class PSLFounderID extends HTMLElement {
     ctx.fillStyle = 'rgba(12,12,10,.6)';
     ctx.font = '500 22px "Druk Text Wide", sans-serif';
     ctx.letterSpacing = '4px';
-    ctx.fillText(isYou ? 'CLAIM YOUR FOUNDING NUMBER' : 'FIRST FAN · CLUB MASCOT', PAD, Y_TEAR + 82);
+    ctx.fillText(isYou ? 'GET ON BOARD FOR 2027' : 'FIRST FAN · CLUB MASCOT', PAD, Y_TEAR + 82);
     ctx.fillStyle = 'rgba(12,12,10,.5)';
     ctx.font = '500 20px "Druk Text Wide", sans-serif';
     // Est. 2025 = año de marca, único en todo el sitio (ver la timeline en native/home/03-project.html)

@@ -8,14 +8,14 @@
   <!-- Fuentes de marca -->
   <link rel="stylesheet" href="../tokens/fonts.css?v=67" />
   <!-- Tokens -->
-  <link rel="stylesheet" href="../tokens/tokens.css?v=67" />
+  <link rel="stylesheet" href="../tokens/tokens.css?v=69" />
 
   <!-- Patrones compartidos -->
   <link rel="stylesheet" href="../native/_patterns/cards.css?v=67" />
-  <link rel="stylesheet" href="../native/_patterns/motion.css?v=67" />
+  <link rel="stylesheet" href="../native/_patterns/motion.css?v=68" />
 
   <!-- Nav + footer compartidos (reusan los bloques de Home) -->
-  <link rel="stylesheet" href="../native/home/00-nav.css?v=67" />
+  <link rel="stylesheet" href="../native/home/00-nav.css?v=79" />
   <link rel="stylesheet" href="../native/home/09-cierre-footer.css?v=67" />
 
   <!-- Bloques Academy -->
@@ -43,6 +43,10 @@
   <div data-block="a07-tryouts"></div>
   <div data-block="footer"></div>
 
+  <!-- ac-forms.js: funciones globales (acInstallResultHooks, …) que llaman los forms de AC
+       (newsletter del footer, contacto, tryouts). En WordPress las carga el sitio; acá hay que
+       cargarlas antes del init o el script se corta y no arrancan video, timelines ni reveal. -->
+  <script src="../custom/ac-forms/ac-forms.js?v=1"></script>
   <script type="module">
     // Nav y footer se toman de los bloques compartidos de Home; el resto son bloques de /academy.
     const blocks = [
@@ -68,13 +72,14 @@
       import('../native/home/03-project.js?v=67'),
       import('../native/academy/a07-tryouts.js?v=67'),
       import('../native/home/09-cierre-footer.js?v=67'),
-      import('../native/_patterns/motion.js?v=67'),
+      import('../native/_patterns/motion.js?v=68'),
     ]);
     initHeroVideo();   // video del hero diferido (a01-hero.js)
     initProjectTimeline();
     initTryouts();
     initNewsletter();
     initMotion();
+    import('../native/home/00-nav.js?v=4').then((m) => m.initNav());   // hamburguesa + banderín de la School
 
     // Aterrizaje con #ancla desde otra página (ej. Home → academy.html#tryouts): los bloques se
     // inyectan DESPUÉS del load, así que buscamos el ancla ahora (scroll suave vía CSS, motion.css).

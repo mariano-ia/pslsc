@@ -174,7 +174,9 @@ function initNavScroll() {
   }
   const update = () => {
     const st = window.scrollY;
-    nav.classList.toggle('is-scrolled', st > 8);
+    // con margen (entra a los 24 px, sale debajo de 4): cerca del umbral la nav no titila
+    if (st > 24) nav.classList.add('is-scrolled');
+    else if (st < 4) nav.classList.remove('is-scrolled');
     const max = html.scrollHeight - window.innerHeight;
     bar.style.transform = `scaleX(${(max > 0 ? st / max : 0).toFixed(4)})`;
   };

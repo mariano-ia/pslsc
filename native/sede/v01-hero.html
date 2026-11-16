@@ -1,0 +1,62 @@
+<!--
+  Bloque V01 · Hero — Sede 2027 (estadio temporal). 🟩 Nativo.
+  Metáfora náutica: "Voyage PSL·2027". La sede temporal es el "First port of call" y el estadio propio
+  (Walton & One) es el "Home port". El boarding ticket hace de itinerario.
+  Código de sede (se repite en toda la página): rombo arena = sede temporal · círculo aquamarine = estadio propio.
+  HANDOFF: nombre, ciudad y fecha de la sede son FICTICIOS (ver native/sede/DATOS.md).
+  HANDOFF: el video es PROVISORIO (obra del estadio propio, hero-v2.mp4). Cuando llegue el drone de la sede,
+  cambiar video + poster y sacar la etiqueta "Reference footage".
+-->
+<section class="venue-hero surface-ink" id="top">
+  <!-- Poster como <img> (LCP) + video diferido: mismo patrón que el hero de Sumate (ver v01-hero.js). -->
+  <div class="venue-hero__bg" aria-hidden="true">
+    <img class="venue-hero__poster" data-hero-poster src="/assets/videos/hero-poster-v2.webp" alt="" width="1280" height="720"
+         fetchpriority="high" decoding="async" />
+    <video class="venue-hero__video" data-hero-video="/assets/videos/hero-v2.mp4" loop muted playsinline preload="none"></video>
+  </div>
+  <div class="venue-hero__scrim" aria-hidden="true"></div>
+  <p class="venue-hero__ref"><span aria-hidden="true"></span>Reference footage · venue drone video to come</p>
+
+  <div class="psl-container venue-hero__inner">
+    <div class="venue-hero__copy">
+      <span class="venue-hero__kicker">Voyage PSL·2027 · First port of call</span>
+      <h1 class="venue-hero__title">Our first port on the way <em>home.</em></h1>
+      <p class="venue-hero__lead">From March 2027, Port St. Lucie SC plays its home matches at <b>Treasure Coast Field</b>
+        while our own stadium rises at Walton &amp; One. The journey starts here.</p>
+      <div class="venue-hero__ctas">
+        <a href="#matches" class="psl-btn cta-primary"><span>See matches</span></a>
+        <a href="#tickets" class="psl-btn cta-secondary"><span>Tickets</span> <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="venue-ticket" role="group" aria-label="Boarding ticket: first port of call and home port">
+      <div class="venue-ticket__head">
+        <span>Boarding ticket · Voyage PSL·2027</span>
+        <span class="venue-ticket__flap" aria-label="2027"><span>2</span><span>0</span><span>2</span><span>7</span></span>
+      </div>
+      <div class="venue-ticket__leg">
+        <div class="venue-ticket__rail"><span class="venue-ticket__dia"></span><span class="venue-ticket__line"></span></div>
+        <div>
+          <span class="venue-ticket__k">First port of call · Temporary home</span>
+          <p class="venue-ticket__name">Treasure Coast Field</p>
+          <p class="venue-ticket__meta">Fort Pierce, FL · from March 2027</p>
+          <span class="venue-ticket__status is-now"><i aria-hidden="true"></i>Now boarding</span>
+        </div>
+      </div>
+      <div class="venue-ticket__perf" aria-hidden="true"></div>
+      <div class="venue-ticket__leg venue-ticket__leg--final">
+        <div class="venue-ticket__rail"><span class="venue-ticket__ring"></span></div>
+        <div>
+          <span class="venue-ticket__k">Home port · Our stadium</span>
+          <p class="venue-ticket__name">Walton &amp; One</p>
+          <p class="venue-ticket__meta">Port St. Lucie, FL · opening early 2028</p>
+          <span class="venue-ticket__status is-soon">Under construction</span>
+        </div>
+      </div>
+      <div class="venue-ticket__foot"><span>Passenger · You</span><span>Class · 2027 season</span></div>
+    </div>
+  </div>
+
+  <!-- franja de sede: arena (temporal) → aquamarine (propio) -->
+  <span class="venue-hero__rule" aria-hidden="true"></span>
+</section>

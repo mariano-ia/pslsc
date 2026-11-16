@@ -1,0 +1,105 @@
+<!--
+  Bloque V03 · Recorrido — Sede 2027. 🟩 Nativo + JS (v03-tour.js).
+  Seis capítulos del recorrido aéreo. Cada botón de capítulo cambia la placa, la barra de progreso y la
+  ficha "Good to know"; si el video está corriendo, salta al segundo del capítulo (data-start).
+  Sin JS: se ve el capítulo 01 y el resto de la lista.
+  HANDOFF: el video es PROVISORIO (obra del estadio propio). Con el drone de la sede: cambiar
+  data-tour-video + poster y cargar el segundo de inicio de cada capítulo en data-start.
+  HANDOFF: el contenido de las seis fichas es FICTICIO (ver native/sede/DATOS.md).
+-->
+<section class="venue-tour" id="tour">
+  <div class="psl-container venue-tour__inner">
+    <header class="venue-tour__head">
+      <span class="venue-tour__kicker" data-reveal>Six chapters from above</span>
+      <h2 class="psl-h2" data-reveal data-reveal-delay="90">Tour it before matchday.</h2>
+      <p class="venue-tour__lead" data-reveal data-reveal-delay="160">Drone footage by the club&rsquo;s marketing team. Pick a chapter and press play.</p>
+    </header>
+
+    <div class="venue-tour__main">
+      <div class="venue-tour__screen" data-reveal>
+        <img class="venue-tour__poster" src="/assets/videos/hero-poster-v2.webp" alt="" width="1280" height="720" loading="lazy" decoding="async" />
+        <video class="venue-tour__video" data-tour-video="/assets/videos/hero-v2.mp4" muted playsinline preload="none" aria-hidden="true"></video>
+        <span class="venue-tour__plate"><b data-tour-num>01</b><span data-tour-plate>Aerial view</span></span>
+        <button type="button" class="venue-tour__play" data-tour-play aria-label="Play chapter">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg>
+        </button>
+        <span class="venue-tour__ref">Reference footage</span>
+        <span class="venue-tour__prog"><i data-tour-prog style="width:17%"></i></span>
+      </div>
+
+      <!-- Fichas: una por capítulo, en el mismo orden que los botones. La activa es la que no tiene hidden. -->
+      <div class="venue-tour__know" data-tour-info>
+        <h3>Aerial view</h3>
+        <p>The whole venue from above, and what surrounds it.</p>
+        <span class="venue-tour__kicker">Good to know</span>
+        <ul>
+          <li>5,200 seats around a natural-grass pitch</li>
+          <li>On the Fort Pierce waterfront, 25 minutes from Port St. Lucie</li>
+          <li>Main entrance at Gate A, off Harbor Rd</li>
+        </ul>
+      </div>
+      <div class="venue-tour__know" data-tour-info hidden>
+        <h3>Arrival &amp; gates</h3>
+        <p>Where to enter, and the walk in from parking.</p>
+        <span class="venue-tour__kicker">Good to know</span>
+        <ul>
+          <li>Gate A for season tickets, Gate C for families</li>
+          <li>A 5-minute walk from Lot B</li>
+          <li>Clear-bag check at every gate</li>
+        </ul>
+      </div>
+      <div class="venue-tour__know" data-tour-info hidden>
+        <h3>The stands</h3>
+        <p>How the match looks from every section.</p>
+        <span class="venue-tour__kicker">Good to know</span>
+        <ul>
+          <li>Main stand covered, both ends open</li>
+          <li>Best view: sections 104 to 106, midfield</li>
+          <li>Supporters end behind the north goal</li>
+        </ul>
+      </div>
+      <div class="venue-tour__know" data-tour-info hidden>
+        <h3>The pitch</h3>
+        <p>The field, at grass level.</p>
+        <span class="venue-tour__kicker">Good to know</span>
+        <ul>
+          <li>Natural Bermuda grass</li>
+          <li>110 &times; 70 yards</li>
+          <li>Lit for night matches since 2019</li>
+        </ul>
+      </div>
+      <div class="venue-tour__know" data-tour-info hidden>
+        <h3>Food &amp; services</h3>
+        <p>Concessions, restrooms and the club shop.</p>
+        <span class="venue-tour__kicker">Good to know</span>
+        <ul>
+          <li>8 food stands from Treasure Coast vendors</li>
+          <li>Restrooms at every corner of the concourse</li>
+          <li>Club shop next to Gate A</li>
+        </ul>
+      </div>
+      <div class="venue-tour__know" data-tour-info hidden>
+        <h3>Family zone</h3>
+        <p>Everything planned for coming with kids.</p>
+        <span class="venue-tour__kicker">Good to know</span>
+        <ul>
+          <li>Bounce zone and penalty challenge</li>
+          <li>Family seating in sections 110 to 112</li>
+          <li>Meet Luca on matchday</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="venue-tour__side">
+      <div class="venue-tour__chaps" aria-label="Tour chapters">
+        <button type="button" class="venue-tour__chap is-on" aria-pressed="true" data-start="0"><i>01</i>Aerial view</button>
+        <button type="button" class="venue-tour__chap" aria-pressed="false" data-start="0"><i>02</i>Arrival &amp; gates</button>
+        <button type="button" class="venue-tour__chap" aria-pressed="false" data-start="0"><i>03</i>The stands</button>
+        <button type="button" class="venue-tour__chap" aria-pressed="false" data-start="0"><i>04</i>The pitch</button>
+        <button type="button" class="venue-tour__chap" aria-pressed="false" data-start="0"><i>05</i>Food &amp; services</button>
+        <button type="button" class="venue-tour__chap" aria-pressed="false" data-start="0"><i>06</i>Family zone</button>
+      </div>
+      <button type="button" class="psl-btn cta-secondary venue-tour__full" data-tour-full><span>Watch the full tour</span></button>
+    </div>
+  </div>
+</section>
