@@ -325,7 +325,9 @@ Hoy corren con datos demo; **conectar el endpoint real reemplazando la función 
 > ⚠️ Los tres formularios hoy **fingen éxito** (validan y muestran un mensaje, pero no mandan nada).
 > **Hay que cablearlos antes de lanzar** o se pierden los leads.
 
-- **Newsletter** (Home 09 / footer): `native/home/09-cierre-footer.js` → `POST { email }` al endpoint de suscripción.
+- **Newsletter** (Home 09 / footer): `native/home/09-cierre-footer.js` → hoy va por el form 8 de ActiveCampaign
+  (proxy oculto, ver el comentario del `.js`). Pide **Full name + Email**: el form 8 de AC tiene que tener el
+  campo estándar "Full Name" (`fullname`); si no lo tiene, el mail se suscribe igual pero el nombre no se guarda.
 - **Contacto Partners** (P05): `native/partners/p05-contact.js` → `POST /api/partner-contact { name, company, email, message }`.
   (El botón "Download the partner deck" se sacó por pedido del cliente, 2026-08-25 — está en el
   historial de git si vuelve. El CTA del hero "Request the partner deck" sigue bajando al form.)

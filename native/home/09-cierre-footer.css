@@ -30,16 +30,15 @@
   color: var(--color-text-muted);
 }
 .newsletter__form {
+  /* Columna: Full name, Email y el botón uno abajo del otro, todos al mismo ancho (el del consent) */
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  max-width: 480px;
+  max-width: 440px;
   margin: 32px auto 0;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 .newsletter__input {
-  flex: 1;
-  min-width: 220px;
+  width: 100%;
   background: var(--color-ink-3);
   border: 1px solid var(--color-line-strong);
   color: var(--color-text);
@@ -50,7 +49,8 @@
 }
 .newsletter__input::placeholder { color: var(--color-text-faint); }
 .newsletter__input:focus { border-color: var(--color-aqua); }
-.newsletter__btn { padding: 15px 26px; font-size: 14px; }
+/* min-height = alto de los inputs (15px de texto + 30 de padding + 2 de borde): apilados, se nota si difieren */
+.newsletter__btn { width: 100%; min-height: 47px; justify-content: center; padding: 15px 26px; font-size: 14px; }
 .newsletter__consent {
   margin: 14px auto 0;
   max-width: 440px;
