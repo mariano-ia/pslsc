@@ -1,7 +1,7 @@
 /**
  * Newsletter — bloque 09. Envía por proxy a un form de ActiveCampaign (id 8) pegado en la misma
  * página vía embed simple (`<div class="_form_8"></div>` + `<script src=".../embed.php?id=8">`):
- * llenamos su input oculto y disparamos su submit real en vez de un POST propio.
+ * llenamos sus inputs ocultos (Full Name + Email, ver AC_FIELD_MAP) y enviamos ese form.
  *
  * Reemplaza al proxy de WPForms (id 14346) que usaba este mismo bloque — el cliente migró el
  * newsletter del footer a ActiveCampaign. Mismo patrón (form visible propio -> proxy oculto de
@@ -23,6 +23,12 @@
 const AC_FORM_CLASS = '_form_8';
 const AC_WAIT_TIMEOUT = 10000;
 const AC_SUBMIT_TIMEOUT = 15000;
+/* Nuestro campo -> campo del form de AC. Los dos son campos estándar de AC (no dependen de un
+   field[NN] custom). El form 8 de AC tiene que tener "Full Name" además de "Email". */
+const AC_FIELD_MAP = {
+  fullName: 'fullname',
+  email: 'email',
+};
 
 function findAcForm() {
   return document.querySelector(`form.${AC_FORM_CLASS}`);
@@ -110,9 +116,19 @@ function initNewsletter(root = document) {
     );
 
     try {
-      emailInput.value = form.elements.email.value;
-      emailInput.dispatchEvent(new Event('input', { bubbles: true }));
-      emailInput.dispatchEvent(new Event('change', { bubbles: true }));
+      Object.entries(AC_FIELD_MAP).forEach(([name, acName]) => {
+        const source = form.elements[name];
+        const target = acForm.querySelector(`[name="${acName}"]`);
+        if (!source) return;
+        if (!target) {
+          // El mail sale igual: no rompemos la suscripción porque al form de AC le falte un campo.
+          console.warn(`[newsletter] el form de ActiveCampaign (form.${AC_FORM_CLASS}) no tiene el campo "${acName}": ese dato no se guarda`);
+          return;
+        }
+        target.value = source.value.trim();
+        target.dispatchEvent(new Event('input', { bubbles: true }));
+        target.dispatchEvent(new Event('change', { bubbles: true }));
+      });
       // Posteamos nosotros a proc.php en vez de apretar el boton de AC: su submit inyecta un
       // <script> a activehosted.com y en iPhone con bloqueo de contenido ese <script> nunca
       // entra, asi que el envio no salia y caiamos al timeout. Ver acSubmitDirect().
