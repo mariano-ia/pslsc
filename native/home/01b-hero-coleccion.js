@@ -311,14 +311,22 @@ function ccgPanelHTML(st, S, state, ctx = {}) {
     // Reclamar la Collector, la carta reclamada y compartir: pasos del mismo panel (en WordPress no se edita un pop-up)
     case 'claim': {
       const D = st.from !== undefined ? days[st.from] : null;
-      const gets = state.revealed
-        ? ['Your Collector Card, now and in your inbox', 'Your name and photo on it (they stay on your device)', 'First to know when the next card drops']
-        : ['Your Collector Card, now and in your inbox', ccgClues(S, state) < 4 && 'An email when each new clue unlocks', 'A reminder on reveal day'].filter(Boolean);
+      // Inscripto en el challenge: ya dio su mail, la reclama con un toque. El mail con la carta es opcional (permiso
+      // de mails, marcado si lo dio al inscribirse).
+      const entered = Boolean(S.entry);
+      let gets;
+      if (entered) gets = ['Your Collector Card, in one tap', 'Your name and photo on it (they stay on your device)', 'Ready to share in your stories'];
+      else if (state.revealed) gets = ['Your Collector Card, now and in your inbox', 'Your name and photo on it (they stay on your device)', 'First to know when the next card drops'];
+      else gets = ['Your Collector Card, now and in your inbox', ccgClues(S, state) < 4 && 'An email when each new clue unlocks', 'A reminder on reveal day'].filter(Boolean);
+      const fields = entered
+        ? `<p class="ccg__as">Claiming as <b>${ccgEsc(S.entry.email)}</b></p>
+          <label class="ccg__consent"><input type="checkbox" name="consent"${S.entry.marketing ? ' checked' : ''}><span>Email me my card, plus Charter Collection and club news. Optional, unsubscribe anytime.</span></label>`
+        : ccgEmailFields('ccg-claim');
       return `${D ? `<p class="ccg__clue-mini"><b>Clue unlocked · ${ccgEsc(D.clueTitle)}</b> ${ccgEsc(D.clue)}</p>` : ''}
-        <div class="ccg__m-copy"><span class="ccg__kicker">Free · takes 10 seconds</span><h2 tabindex="-1">Claim your Collector Card</h2>
-          <p class="ccg__panel-lead">Your own card in the Charter Collection. We&rsquo;ll email it to you, too.</p>
+        <div class="ccg__m-copy"><span class="ccg__kicker">Free · ${entered ? 'one tap' : 'takes 10 seconds'}</span><h2 tabindex="-1">Claim your Collector Card</h2>
+          <p class="ccg__panel-lead">Your own card in the Charter Collection.${entered ? '' : ' We&rsquo;ll email it to you, too.'}</p>
           <ul class="ccg__gets">${gets.map((g) => `<li>${g}</li>`).join('')}</ul></div>
-        <form class="ccg__form" data-form="claim" novalidate>${ccgEmailFields('ccg-claim', S.entry?.email || '')}
+        <form class="ccg__form" data-form="claim" novalidate>${fields}
           <p class="ccg__err" data-err role="alert" hidden></p>
           <div class="ccg__row"><button class="psl-btn cta-primary" type="submit">Claim my card</button>${ccgBtn('close', 'Not now')}</div>
         </form>`;
@@ -738,8 +746,8 @@ async function initHeroColeccion(root = document) {
       step = { t: 'answered', i: st.i };
       paint(mobile() ? $('.ccg__card-col') : null, true, true);
       if (mobile()) setTimeout(() => goTo(panel, 'center'), reduce ? 0 : 1300);
-      // 3) Sin mail todavía (ni inscripción): el panel pasa al reclamo de la Collector, una vez que se vio la pista
-      if (!S.email && !S.entry && !S.skipClaim) {
+      // 3) Sin la Collector todavía: el panel pasa al reclamo (con un toque si ya se inscribió), una vez que se vio la pista
+      if (!S.email && !S.skipClaim) {
         clearTimeout(claimTimer);
         const answered = step;
         claimTimer = setTimeout(() => {
@@ -804,23 +812,29 @@ async function initHeroColeccion(root = document) {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (form.dataset.busy) return;   // doble envío (doble click, Enter repetido)
-        const email = form.elements.email.value.trim();
-        if (!CHARTER_EMAIL.test(email)) { showError(form, 'Enter a valid email, like name@email.com.'); return; }
-        if (!form.elements.consent.checked) { showError(form, 'Tick the box to agree to receive emails.'); return; }
-        busy(form, true, 'Sending…');
-        try {
-          await charterSendLead(hero, email);
-        } catch (err) {
-          busy(form, false);
-          showError(form, err.message);
-          return;
+        // Inscripto: el mail es el de la inscripción y el envío por mail es opcional. Si no, mail y permiso obligatorios.
+        const entered = Boolean(S.entry);
+        const email = entered ? S.entry.email : form.elements.email.value.trim();
+        const mail = entered ? form.elements.consent.checked : true;
+        if (!entered && !CHARTER_EMAIL.test(email)) { showError(form, 'Enter a valid email, like name@email.com.'); return; }
+        if (!entered && !form.elements.consent.checked) { showError(form, 'Tick the box to agree to receive emails.'); return; }
+        if (mail) {
+          busy(form, true, 'Sending…');
+          try {
+            await charterSendLead(hero, email);
+          } catch (err) {
+            busy(form, false);
+            showError(form, err.message);
+            return;
+          }
+          if (entered) S.entry.marketing = true;
         }
         if (email !== S.email) S.founder = null;   // founder lo ajusta después el servidor de Mi colección
         S.email = email;
         charterSave(S);
-        pctx.justClaimed = true;
+        pctx.justClaimed = mail;
         openStep({ t: 'collector', back: st.back });
-        say('Card claimed. We’re emailing it to you.');
+        say(mail ? 'Card claimed. We’re emailing it to you.' : 'Card claimed.');
       });
     }
 

@@ -81,3 +81,8 @@ Al cierre, con la planilla:
 - Hasta el cierre no dice si la respuesta es correcta: muestra "Answer received" y la pista.
 - Sin `__CHALLENGE_API__` configurado no deja inscribirse (lo dice en pantalla y en la consola). `?demo` simula el envío.
 - El progreso queda en el navegador (`pslsc-charter-001`): el registro de verdad es el del servidor.
+- El mail de la inscripción queda guardado en ese navegador: los días siguientes la persona contesta sin volver a
+  escribirlo. Desde otro dispositivo se inscribe de nuevo con el mismo mail y el servidor junta sus respuestas.
+- Collector Card: quien se inscribió la reclama con un toque, con el mail de la inscripción (el envío de la carta por
+  mail es opcional y usa ActiveCampaign solo si marca el permiso). Quien juega sin inscribirse la reclama con mail y
+  permiso, como antes. Se puede reclamar hasta el reveal (lunes 1:00 PM ET).

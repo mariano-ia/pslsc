@@ -91,11 +91,31 @@
     //   ?hero=gb    hero 01d-hero-groundbreaking + banner de Juani (01c-coleccion, la presentación del coach).
     //   Sin parámetros: antes de la campaña (hasta el jueves 26/11) — hero 01d-hero-groundbreaking solo, sin la Charter Collection.
     //   ?cc=mon|…|sat muestra el juego (01b), como antes.
-    const pre = !params.has('cc') && !params.has('hero') && !params.has('gb');
+    // ?step=… (solo preview): cada paso del Coach Reveal Challenge en un link propio. Fija el día y deja el progreso
+    // del juego como quedaría en ese punto, así cada link se ve igual sin importar lo que se jugó antes.
+    const ENTRY = { email: 'fan@example.com', marketing: false, at: '2026-11-27T15:00:00.000Z' };
+    const STEPS = {
+      enter: { cc: 'mon', S: {} },
+      question: { cc: 'mon', S: { entry: ENTRY } },
+      answered: { cc: 'mon', S: { entry: ENTRY, answers: { 0: 1 }, sent: { 0: true }, skipClaim: true } },
+      q2: { cc: 'tue', S: { entry: ENTRY, answers: { 0: 1 }, sent: { 0: true }, skipClaim: true } },
+      q3: { cc: 'wed', S: { entry: ENTRY, answers: { 0: 1, 1: 1 }, sent: { 0: true, 1: true }, skipClaim: true } },
+      done: { cc: 'wed', S: { entry: ENTRY, answers: { 0: 1, 1: 1, 2: 2 }, sent: { 0: true, 1: true, 2: true }, skipClaim: true } },
+      monday: { cc: 'thu', S: { entry: ENTRY, answers: { 0: 1, 1: 1, 2: 2 }, sent: { 0: true, 1: true, 2: true }, skipClaim: true } },
+      results: { cc: 'noon', S: { entry: ENTRY, answers: { 0: 1, 1: 1, 2: 2 }, sent: { 0: true, 1: true, 2: true }, skipClaim: true } },
+      reveal: { cc: 'fri', S: { entry: ENTRY, answers: { 0: 1, 1: 1, 2: 2 }, sent: { 0: true, 1: true, 2: true }, skipClaim: true } },
+      coach: { cc: 'sat', S: { entry: ENTRY, answers: { 0: 1, 1: 1, 2: 2 }, sent: { 0: true, 1: true, 2: true }, skipClaim: true, revealed: true } },
+      fun: { cc: 'mon', S: { skipEntry: true } },
+      claim: { cc: 'mon', S: { entry: ENTRY, answers: { 0: 1 }, sent: { 0: true } } },
+      'claim-fun': { cc: 'mon', S: { skipEntry: true, answers: { 0: 1 } } },
+    };
+    const STEP = STEPS[params.get('step')];
+    if (STEP) { try { localStorage.setItem('pslsc-charter-001', JSON.stringify(STEP.S)); } catch (err) { /* sin storage */ } }
+    const pre = !STEP && !params.has('cc') && !params.has('hero') && !params.has('gb');
     const gbHero = pre || params.get('hero') === 'gb';
     const gbBanner = !gbHero && params.get('gb') === 'banner';
     const URL_GROUNDBREAKING = 'https://groundbreaking-eight.vercel.app/';   // micrositio (hoy en Vercel; en WP, __URL_GROUNDBREAKING__)
-    const cc = params.get('cc') || (gbHero || gbBanner ? 'sat' : 'mon');
+    const cc = STEP?.cc || params.get('cc') || (gbHero || gbBanner ? 'sat' : 'mon');
     const ended = cc === 'end';
     const stateDay = ended ? 'sat' : cc;
     // Banner debajo de los números (02-stats), antes de 03-project.

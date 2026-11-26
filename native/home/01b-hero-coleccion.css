@@ -374,6 +374,9 @@
   border: 1px solid var(--color-line-strong); border-radius: 12px; background: var(--color-ink-3); }
 .ccg__prizes b { font: 900 24px/1 var(--font-display); letter-spacing: .02em; text-transform: uppercase; color: var(--color-aqua); }
 .ccg__prizes span { font: 400 14.5px/1.35 var(--font-body); color: var(--color-text); }
+.ccg__as { margin: 0; padding: 12px 14px; border-radius: 12px; background: var(--color-ink-3); border: 1px solid var(--color-line-strong);
+  font: 400 14.5px/1.4 var(--font-body); color: var(--color-text-muted); overflow-wrap: anywhere; }
+.ccg__as b { color: var(--color-text); font-weight: 600; }
 .ccg__fine { margin: 0; font: 400 12.5px/1.45 var(--font-body); color: var(--color-text-faint); }
 .ccg__consent .ccg__link { font-size: inherit; color: var(--color-text); }
 .ccg__summary { margin: 0; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(170,246,230,.35); background: rgba(170,246,230,.08);
