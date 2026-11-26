@@ -109,10 +109,10 @@ function ccoEmptyHTML(S, state, ctx) {
     lead = 'Card No. 001 is out. Claim your free Collector Card on the home page and Card No. 001 starts your collection.';
     cta = `<a class="psl-btn cta-primary" href="${ccoEsc(ctx.home)}"><span>Claim your card</span> <span aria-hidden="true">&rarr;</span></a>`;
   } else if (answered) {
-    lead = `You&rsquo;ve answered ${answered} of 4. Claim your free Collector Card on the home page and Card No. 001 starts your collection.`;
+    lead = `You&rsquo;ve answered ${Math.min(answered, 3)} of 3. Claim your free Collector Card on the home page and Card No. 001 starts your collection.`;
     cta = `<a class="psl-btn cta-primary" href="${ccoEsc(ctx.home)}"><span>Keep playing</span> <span aria-hidden="true">&rarr;</span></a>`;
   } else {
-    lead = 'One question a day, four clues, one card. Play on the home page, claim your free Collector Card and Card No. 001 starts your collection.';
+    lead = 'Three questions, four clues, one card. Play on the home page, claim your free Collector Card and Card No. 001 starts your collection.';
     cta = `<a class="psl-btn cta-primary" href="${ccoEsc(ctx.home)}"><span>Play this week&rsquo;s card</span> <span aria-hidden="true">&rarr;</span></a>`;
   }
   return `<div class="cco__empty">

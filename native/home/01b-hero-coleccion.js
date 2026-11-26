@@ -5,14 +5,21 @@
  *   { day: 0..5, revealed, closed, card, shell?, days: [...], presentation?, profile? }
  *   - card: carta para mostrar. De lunes a jueves es la cerrada; desde el viernes, la revelada.
  *   - shell: el viernes, la carta cerrada (de ahí arranca quien todavía no apretó "Reveal").
- *   - days[i]: { full, zone, clueTitle, q, opts, a, fact, clue, unlock }. El juego aplica `unlock`
- *     a la carta cuando la persona contesta esa pregunta. Acertar no suma nada: destraba igual.
+ *   - days[i]: { full, zone, clueTitle, q?, opts?, a?, fact?, clue, unlock }. El juego aplica `unlock`
+ *     a la carta cuando la persona contesta esa pregunta. Un día sin `q` (el lunes) es una pista libre: se destraba
+ *     sola al publicarse. `a` y `fact` delatan la respuesta: la fuente los manda recién al cierre del challenge.
  *   - presentation: { src, alt }, foto de presentación. Pasado el reveal el protagonista es la persona:
  *     el hero muestra la foto y la carta queda como accesorio chico.
  *   - closed: del sábado en adelante. Las preguntas se cierran y no hace falta apretar "Reveal".
  * El progreso queda en localStorage: la colección con login es de la etapa siguiente.
  *
- * Mail: un solo pedido, para reclamar la Collector, en el mismo panel del hero (WordPress no deja editar pop-ups):
+ * Coach Reveal Challenge (bases oficiales en el <dialog> del HTML): tres preguntas oficiales, viernes a domingo.
+ * Para competir por los premios la persona se inscribe antes de la primera (mail, 18+ y Florida, acepta las bases);
+ * cada respuesta se manda a __CHALLENGE_API__ con ese mail y la registra el servidor con su hora: los ganadores los
+ * calcula el servidor (docs/charter-collection-challenge.md). Quien no se inscribe juega igual, solo por las pistas.
+ * Hasta el cierre (lunes 12:00 PM ET) no se muestra si la respuesta es correcta: solo cuenta la primera.
+ *
+ * Mail de la Collector: un solo pedido, para reclamarla, en el mismo panel del hero (WordPress no deja editar pop-ups):
  * el panel pasa solo al reclamo después de la primera respuesta (si la persona no lo cierra con "Not now") y queda a
  * mano con "Claim my Collector Card". Se reclama como Inaugural Collector; Founding Member se ajusta después. No hay apuesta: después de la cuarta
  * pregunta se espera el reveal del viernes. Sin config de ActiveCampaign valida pero NO envía ni finge éxito;
@@ -52,7 +59,53 @@ const CCG_REVEAL_DAY = CCG_FULL_NAMES[4];
 const CCG_REVEAL_TIME = '1:00 PM ET';
 const CCG_REVEAL = `${CCG_REVEAL_DAY} at ${CCG_REVEAL_TIME}`;
 const CCG_KICKER = 'First in club history';
+// Coach Reveal Challenge. El cierre de las bases: lunes 30/11/2026 a las 12:00 PM ET. El servidor es el que manda
+// (rechaza lo que llega tarde); esto solo evita ofrecer la inscripción cuando ya no corre.
+const CCG_DEADLINE = Date.parse('2026-11-30T12:00:00-05:00');
+const CCG_DEADLINE_TEXT = 'Monday at 12:00 PM ET';
+const CCG_RESULTS_BY = 'Thursday, December 3';
+const CCG_PRIZES = [
+  ['1st', 'Two general admission tickets to our first home match of the 2027 season'],
+  ['2nd', 'A jersey signed by the Head Coach'],
+  ['3rd', 'A PSLSC umbrella and scarf set'],
+];
 const ccgEsc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+const ccgIsQ = (D) => Boolean(D && D.q);
+// Número oficial de la pregunta (1, 2, 3): las bases las numeran sin contar el día de pista libre.
+const ccgQNum = (state, i) => (state.days || []).slice(0, i + 1).filter(ccgIsQ).length;
+const ccgQTotal = 3;
+// Pistas destrabadas: las preguntas contestadas más los días de pista libre ya publicados.
+const ccgClues = (S, state) => (state.days || []).filter((D, i) => !ccgIsQ(D) || S.answers[i] !== undefined).length;
+const ccgOpen = (state) => !state.revealed && !state.closed && !state.challengeClosed && Date.now() < CCG_DEADLINE;
+// Al cierre la fuente suma `a` a cada pregunta: recién ahí se puede decir cuántas acertó.
+const ccgResultsReady = (state) => (state.days || []).some((D) => ccgIsQ(D) && D.a !== undefined);
+
+/* Registro del challenge: una llamada por respuesta, con el mail de la inscripción. El servidor guarda la hora en que
+   la recibe y si es la primera de ese mail para esa pregunta. ?demo simula el envío. */
+async function ccgSubmitAnswer(hero, body) {
+  if (new URLSearchParams(location.search).has('demo')) return { ok: true, first: true };
+  const api = hero.dataset.challengeApi;
+  if (!api || api.startsWith('__')) {
+    console.error('[charter] Falta __CHALLENGE_API__: la respuesta NO se registró.');
+    throw new Error('Entries are not open right now. Please try again later.');
+  }
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), 15000);
+  let res;
+  let data = null;
+  try {
+    res = await fetch(api, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body), signal: ctl.signal, cache: 'no-store' });
+    data = await res.json().catch(() => null);
+  } catch (err) {
+    console.error('[charter] el registro del challenge no respondió', err);
+    throw new Error('We could not reach our server. Check your connection and try again.');
+  } finally {
+    clearTimeout(timer);
+  }
+  if (!res.ok || !data?.ok) throw new Error(data?.message || 'We could not save your answer. Please try again in a moment.');
+  return data;
+}
 
 // Founding Member: el hero no lo asigna. Hoy no hay forma de saber quién es founder; la carta se reclama como
 // Inaugural Collector y se ajusta a Founding Member más adelante, cuando el servidor de Mi colección lo responda
@@ -63,7 +116,7 @@ function ccgComposeCard(state, S, flashZone) {
   if (state.revealed && S.revealed) return state.card;
   const card = JSON.parse(JSON.stringify(state.shell || state.card));
   (state.days || []).forEach((day, i) => {
-    if (S.answers[i] === undefined || !day.unlock) return;
+    if ((ccgIsQ(day) && S.answers[i] === undefined) || !day.unlock) return;
     const u = day.unlock;
     const isNew = flashZone === day.zone;
     if (u.flag) card.flag = u.flag;
@@ -81,7 +134,12 @@ function ccgNextStep(S, state, step) {
   if (state.closed) return { t: 'closed' };
   if (state.revealed) return { t: S.revealed ? 'revealed' : 'reveal' };
   const days = state.days || [];
-  for (let i = 0; i < days.length; i++) if (S.answers[i] === undefined) return { t: 'q', i };
+  for (let i = 0; i < days.length; i++) {
+    if (!ccgIsQ(days[i]) || S.answers[i] !== undefined) continue;
+    // Antes de la primera respuesta, la inscripción al challenge (una vez: inscripto o "solo por las pistas")
+    if (!S.entry && !S.skipEntry && ccgOpen(state)) return { t: 'enter' };
+    return { t: 'q', i };
+  }
   return { t: 'wait' };
 }
 
@@ -90,23 +148,31 @@ function ccgNextStep(S, state, step) {
 function ccgHeroCopy(S, state) {
   const st = ccgNextStep(S, state, null);
   const kicker = CCG_KICKER;
-  const today = CCG_FULL_NAMES[state.day] || '';
   switch (st.t) {
+    case 'enter':
+      return { kicker, sub: `Three questions about the club, ${CCG_FULL_NAMES[0]} to ${CCG_FULL_NAMES[2]}. Every answer unlocks a clue to Card No. 001, and the first three fans to get all three right win prizes. Full reveal ${CCG_REVEAL}.` };
     case 'q': {
-      if (st.i < state.day) {
-        const left = state.day - st.i;
-        return { kicker, sub: `Joining on ${today}? Catch up first: ${left} quiz question${left > 1 ? 's' : ''} to go before today’s.` };
+      const n = ccgQNum(state, st.i);
+      const today = (state.days || []).slice(0, state.day + 1).filter(ccgIsQ).length;
+      if (state.day >= 3) {   // lunes: ya no hay pregunta nueva, solo la pista libre
+        const left = ccgQTotal - n + 1;
+        return { kicker, sub: `Joining on ${CCG_FULL_NAMES[3]}? Catch up first: ${left} question${left > 1 ? 's' : ''} to go, then today’s free clue.` };
       }
-      if (st.i === 0) return { kicker, sub: `Play the daily quiz, ${CCG_FULL_NAMES[0]} to ${CCG_FULL_NAMES[3]}: every answer unlocks a clue to Card No. 001. New question every day, full reveal ${CCG_REVEAL}.` };
-      if (st.i === 3) return { kicker, sub: `Last quiz question. Then the full card drops today at ${CCG_REVEAL_TIME}.` };
-      return { kicker, sub: `Daily quiz, day ${st.i + 1} of 4. Today’s answer unlocks a new clue. Full reveal ${CCG_REVEAL}.` };
+      if (n < today) {
+        const left = today - n + 1;
+        return { kicker, sub: `Joining on ${CCG_FULL_NAMES[state.day]}? Catch up first: ${left} question${left > 1 ? 's' : ''} to go.` };
+      }
+      if (n === ccgQTotal) return { kicker, sub: `Last question. The final clue drops ${CCG_FULL_NAMES[3]} at ${CCG_TIME}, the full card at ${CCG_REVEAL_TIME}.` };
+      return { kicker, sub: `Question ${n} of ${ccgQTotal}. Today’s answer unlocks a new clue. Full reveal ${CCG_REVEAL}.` };
     }
-    case 'wait':
-      return Object.keys(S.answers).length === 4
-        ? { kicker, sub: `All four clues are in. Card No. 001 drops ${CCG_REVEAL}.` }
-        : { kicker, sub: `Today’s clue is yours. A new quiz question drops tomorrow at ${CCG_TIME}. Full reveal ${CCG_REVEAL}.` };
+    case 'wait': {
+      const clues = ccgClues(S, state);
+      if (clues === 4) return { kicker, sub: `All four clues are in. Card No. 001 drops ${CCG_REVEAL}.` };
+      if (state.day >= 2) return { kicker, sub: `All three answers are in. The final clue drops ${CCG_FULL_NAMES[3]} at ${CCG_TIME}, the full card at ${CCG_REVEAL_TIME}.` };
+      return { kicker, sub: `Today’s clue is yours. A new question drops tomorrow at ${CCG_TIME}. Full reveal ${CCG_REVEAL}.` };
+    }
     case 'reveal':
-      return { kicker: 'Reveal day', sub: 'Four days, four clues, one card. Time to meet the first Head Coach in club history.' };
+      return { kicker: 'Reveal day', sub: 'Three questions, four clues, one card. Time to meet the first Head Coach in club history.' };
     default:
       return { kicker, sub: '' };
   }
@@ -117,19 +183,22 @@ function ccgTrackHTML(S, state, current) {
   const short = CCG_SHORT_NAMES;
   const items = [0, 1, 2, 3].map((i) => {
     let cls; let txt;
-    if (S.answers[i] !== undefined) { cls = 'is-done'; txt = 'Done'; }
+    const D = (state.days || [])[i];
+    if (D && !ccgIsQ(D)) { cls = 'is-done'; txt = 'Clue'; }   // pista libre ya publicada
+    else if (S.answers[i] !== undefined) { cls = 'is-done'; txt = 'Done'; }
     else if (i === current) { cls = 'is-now'; txt = i < state.day ? 'Catch up' : 'Today'; }
     else if (i <= state.day) { cls = 'is-open'; txt = i === state.day ? 'Today' : 'Open'; }
-    else { cls = 'is-locked'; txt = i === state.day + 1 ? 'Tomorrow' : 'Locked'; }
+    else { cls = 'is-locked'; txt = i === state.day + 1 ? 'Tomorrow' : (i === 3 ? 'Last clue' : 'Locked'); }
     return `<li class="${cls}"><span>${short[i]}</span><b>${txt}</b></li>`;
   });
   items.push(`<li class="is-reveal"><span>${short[4]}</span><b>Reveal</b></li>`);
-  return `<ol class="ccg__track" aria-label="The daily quiz">${items.join('')}</ol>`;
+  return `<ol class="ccg__track" aria-label="Coach Reveal Challenge days">${items.join('')}</ol>`;
 }
 
-function ccgEmailFields(id) {
-  return `<div class="ccg__field"><label for="${id}-em">Email</label><input type="email" id="${id}-em" name="email" autocomplete="email" placeholder="you@email.com" required></div>
-    <label class="ccg__consent"><input type="checkbox" name="consent" required><span>I agree to receive emails from Port St. Lucie SC about the Charter Collection and club news. Unsubscribe anytime.</span></label>`;
+function ccgEmailFields(id, value = '', consent = true) {
+  const email = `<div class="ccg__field"><label for="${id}-em">Email</label><input type="email" id="${id}-em" name="email" autocomplete="email" placeholder="you@email.com" value="${ccgEsc(value)}" required></div>`;
+  return consent ? `${email}
+    <label class="ccg__consent"><input type="checkbox" name="consent" required><span>I agree to receive emails from Port St. Lucie SC about the Charter Collection and club news. Unsubscribe anytime.</span></label>` : email;
 }
 
 const CCG_ICON_OK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
@@ -137,30 +206,80 @@ const CCG_ICON_MISS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 const CCG_MINE_STEPS = ['claim', 'collector', 'share'];   // pasos en los que la carta grande es la tuya
 const ccgBtn = (act, label, primary) => `<button type="button" class="psl-btn ${primary ? 'cta-primary' : 'cta-secondary'}" data-act="${act}">${label}</button>`;
 
-// La respuesta, en chico: si acertó, el dato y la pista que destrabó. Reemplaza a la pregunta y sus opciones.
-function ccgResultHTML(D, ok) {
-  return `<div class="ccg__res ${ok ? 'is-ok' : 'is-miss'}"><span class="ccg__mark" aria-hidden="true">${ok ? CCG_ICON_OK : CCG_ICON_MISS}</span>
-      <div><h2 tabindex="-1">${ok ? 'That&rsquo;s right.' : 'Not quite.'}</h2><p>${ccgEsc(D.fact)}</p></div></div>
-    <div class="ccg__clue"><span>Clue unlocked · ${ccgEsc(D.clueTitle)}</span><p>${ccgEsc(D.clue)}</p></div>`;
+// La respuesta, en chico, y la pista que destrabó. Reemplaza a la pregunta y sus opciones. Hasta el cierre del
+// challenge no dice si es correcta (ni el dato, que la delata): solo que quedó registrada.
+function ccgResultHTML(D, S, i, state) {
+  const clue = `<div class="ccg__clue"><span>Clue unlocked · ${ccgEsc(D.clueTitle)}</span><p>${ccgEsc(D.clue)}</p></div>`;
+  if (!ccgIsQ(D)) return `<span class="ccg__kicker">${ccgEsc(D.full)} · Free clue</span>${clue}`;
+  const pick = D.opts?.[S.answers[i]];
+  if (D.a !== undefined) {
+    const ok = S.answers[i] === D.a;
+    return `<div class="ccg__res ${ok ? 'is-ok' : 'is-miss'}"><span class="ccg__mark" aria-hidden="true">${ok ? CCG_ICON_OK : CCG_ICON_MISS}</span>
+        <div><h2 tabindex="-1">${ok ? 'That&rsquo;s right.' : 'Not quite.'}</h2><p>${ccgEsc(D.fact)}</p></div></div>${clue}`;
+  }
+  const sent = S.sent?.[i];
+  const lead = sent
+    ? `Your answer is in: <b>${ccgEsc(pick)}</b>. Only your first answer counts. Results after the challenge closes, ${CCG_DEADLINE_TEXT}.`
+    : `You picked <b>${ccgEsc(pick)}</b>. Playing for the clues, not entered in the challenge.`;
+  return `<div class="ccg__res is-in"><span class="ccg__mark" aria-hidden="true">${CCG_ICON_OK}</span>
+      <div><h2 tabindex="-1">${sent ? 'Answer received.' : 'Answer saved.'}</h2><p>${lead}</p></div></div>${clue}`;
 }
+
+// Resumen del challenge para quien se inscribió, cuando la fuente ya trae las respuestas correctas (después del cierre)
+function ccgChallengeSummary(S, state) {
+  if (!S.entry || !ccgResultsReady(state)) return '';
+  const qs = (state.days || []).map((D, i) => [D, i]).filter(([D]) => ccgIsQ(D));
+  const sent = qs.filter(([, i]) => S.sent?.[i]);
+  if (!sent.length) return '';
+  const right = sent.filter(([D, i]) => S.answers[i] === D.a).length;
+  const all = right === ccgQTotal;
+  return `<p class="ccg__summary"><b>Coach Reveal Challenge · ${right} of ${ccgQTotal} right.</b> ${all
+    ? `You completed the set. If you were among the first three, we&rsquo;ll email you by ${CCG_RESULTS_BY}.`
+    : `Thanks for playing. Winners are notified by email by ${CCG_RESULTS_BY}.`}</p>`;
+}
+
+// Premios del challenge (también en el diálogo de las bases)
+const ccgPrizesHTML = () => `<ol class="ccg__prizes">${CCG_PRIZES.map(([place, prize]) => `<li><b>${place}</b><span>${prize}</span></li>`).join('')}</ol>`;
+const ccgRulesLink = (label = 'Official Rules') => `<a href="#official-rules" class="ccg__link" data-rules>${label}</a>`;
 
 function ccgPanelHTML(st, S, state, ctx = {}) {
   const days = state.days || [];
-  const clues = state.revealed && S.revealed ? 4 : Object.keys(S.answers).length;
+  const clues = state.revealed && S.revealed ? 4 : ccgClues(S, state);
   switch (st.t) {
     case 'q': {
       const D = days[st.i];
+      const n = ccgQNum(state, st.i);
       const head = st.i < state.day
-        ? `<span class="ccg__kicker">Daily quiz · Catching up · ${ccgEsc(D.full)}</span>`
-        : `<span class="ccg__kicker">Daily quiz · Question ${st.i + 1} of 4</span>`;
+        ? `<span class="ccg__kicker">Question ${n} of ${ccgQTotal} · Catching up · ${ccgEsc(D.full)}</span>`
+        : `<span class="ccg__kicker">Coach Reveal Challenge · Question ${n} of ${ccgQTotal}</span>`;
+      const entered = S.entry && ccgOpen(state);
+      let note;
+      if (entered) note = `<p class="ccg__label">Only your first answer counts. Either way, it unlocks a clue: ${ccgEsc(D.clueTitle)}.</p>`;
+      else if (ccgOpen(state)) note = `<p class="ccg__label">Playing for the clues. Every answer unlocks one: ${ccgEsc(D.clueTitle)}.</p><div class="ccg__row">${ccgBtn('enter', 'Enter the challenge for prizes')}</div>`;
+      else note = `<p class="ccg__label">${S.entry ? `The challenge closed ${CCG_DEADLINE_TEXT}. ` : ''}Every answer still unlocks a clue: ${ccgEsc(D.clueTitle)}.</p>`;
       return `${ccgTrackHTML(S, state, st.i)}${head}<h2 class="ccg__q" tabindex="-1">${ccgEsc(D.q)}</h2>
         <div class="ccg__opts">${D.opts.map((o, k) => `<button type="button" class="ccg__opt" data-k="${k}"><span>${ccgEsc(o)}</span><i aria-hidden="true">${'ABCD'[k]}</i></button>`).join('')}</div>
-        <p class="ccg__label">Right or wrong, you unlock ${st.i < state.day ? `${ccgEsc(D.full)}&rsquo;s` : 'today&rsquo;s'} clue: ${ccgEsc(D.clueTitle)}.</p>`;
+        <p class="ccg__err" data-err role="alert" hidden></p>${note}`;
     }
+    // Inscripción al Coach Reveal Challenge, antes de la primera pregunta
+    case 'enter':
+      return `<span class="ccg__kicker">Coach Reveal Challenge</span><h2 tabindex="-1">Three questions. Three prizes.</h2>
+        <p class="ccg__panel-lead">Get all three right by ${CCG_DEADLINE_TEXT}. The first three fans to complete the set win.</p>
+        ${ccgPrizesHTML()}
+        <form class="ccg__form" data-form="enter" novalidate>${ccgEmailFields('ccg-enter', S.email || '', false)}
+          <label class="ccg__consent"><input type="checkbox" name="eligible" required><span>I&rsquo;m 18 or older and a Florida resident.</span></label>
+          <label class="ccg__consent"><input type="checkbox" name="rules" required><span>I agree to the ${ccgRulesLink()}.</span></label>
+          <label class="ccg__consent"><input type="checkbox" name="consent"><span>Also send me Charter Collection and club news by email. Optional, unsubscribe anytime.</span></label>
+          <p class="ccg__err" data-err role="alert" hidden></p>
+          <div class="ccg__row"><button class="psl-btn cta-primary" type="submit">Enter and play</button>${ccgBtn('skip', 'Just play for the clues')}</div>
+          <p class="ccg__fine">No purchase or ticket deposit necessary. Use this same email for every answer.</p>
+        </form>`;
     // Recién contestada (answered) o volviendo más tarde el mismo día (wait): la respuesta y la pista, y abajo lo que sigue.
     case 'answered':
     case 'wait': {
-      const i = st.t === 'answered' ? st.i : Math.max(...Object.keys(S.answers).map(Number));
+      // La última pista destrabada: la respuesta recién dada o, al volver, el último día publicado que ya tenés
+      const got = days.map((D, k) => k).filter((k) => !ccgIsQ(days[k]) || S.answers[k] !== undefined);
+      const i = st.t === 'answered' ? st.i : Math.max(...got);
       const D = days[i];
       if (!D) return '';
       const next = ccgNextStep(S, state, null);
@@ -168,38 +287,38 @@ function ccgPanelHTML(st, S, state, ctx = {}) {
       if (next.t === 'q') foot = `<div class="ccg__row">${ccgBtn('next', 'Next question <span aria-hidden="true">&rarr;</span>', true)}</div>`;
       else {
         // Con las cuatro pistas, lo que sigue es el reveal
-        const last = clues === 4 || state.day >= 3;
+        const last = clues === 4 || state.day >= 2;
         const when = last ? `${CCG_REVEAL_DAY}, ${CCG_REVEAL_TIME}` : `${CCG_FULL_NAMES[state.day + 1] || CCG_REVEAL_DAY}, ${CCG_TIME}`;
-        foot = `<div class="ccg__next"><p><span class="ccg__label">${last ? 'Full reveal' : 'Next clue'}</span><b>${when}</b></p><span class="ccg__tally">${clues} of 4 clues</span></div>
-          <div class="ccg__row">${S.email ? ccgBtn('mycard', 'My Collector Card') : ccgBtn('claim', 'Claim my Collector Card', true)}</div>`;
+        foot = `<div class="ccg__next"><p><span class="ccg__label">${last ? 'Full reveal' : 'Next question'}</span><b>${when}</b></p><span class="ccg__tally">${clues} of 4 clues</span></div>
+          <div class="ccg__row">${S.email ? ccgBtn('mycard', 'My Collector Card') : ccgBtn('claim', 'Claim my Collector Card', true)}${!S.entry && ccgOpen(state) ? ccgBtn('enter', 'Enter the challenge') : ''}</div>`;
       }
-      return ccgTrackHTML(S, state, -1) + ccgResultHTML(D, S.answers[i] === D.a) + foot;
+      return ccgTrackHTML(S, state, -1) + ccgResultHTML(D, S, i, state) + foot + ccgChallengeSummary(S, state);
     }
     case 'reveal':
       return `<span class="ccg__kicker">${CCG_REVEAL_DAY} · ${CCG_REVEAL_TIME}</span><h2 tabindex="-1">Card No. 001 is ready.</h2>
         <p class="ccg__panel-lead">${clues
           ? `${clues} of 4 clues unlocked. Time to see who it is.`
           : 'Missed the clues? No problem: the card is ready for everyone.'}</p>
-        <div class="ccg__row">${ccgBtn('reveal', 'Reveal card No. 001', true)}</div>`;
+        <div class="ccg__row">${ccgBtn('reveal', 'Reveal card No. 001', true)}</div>${ccgChallengeSummary(S, state)}`;
     case 'revealed':
     case 'closed': {
       // Presentado el coach, el hero es de él: conocerlo a él y al staff. La Collector se reclama solo durante el
       // juego; la Card No. 001 se pide por mail en la ficha del DT.
       const line = state.profile?.summary || 'The first Head Coach in Port St. Lucie SC history.';
       return `<p class="ccg__panel-lead">${ccgEsc(line)}</p>
-        <div class="ccg__row"><a class="psl-btn cta-primary" href="${ccgEsc(state.coachUrl)}"><span>Meet the coach</span> <span aria-hidden="true">&rarr;</span></a><a class="psl-btn cta-secondary" href="${ccgEsc(state.teamUrl)}">Meet the staff</a></div>`;
+        <div class="ccg__row"><a class="psl-btn cta-primary" href="${ccgEsc(state.coachUrl)}"><span>Meet the coach</span> <span aria-hidden="true">&rarr;</span></a><a class="psl-btn cta-secondary" href="${ccgEsc(state.teamUrl)}">Meet the staff</a></div>${ccgChallengeSummary(S, state)}`;
     }
     // Reclamar la Collector, la carta reclamada y compartir: pasos del mismo panel (en WordPress no se edita un pop-up)
     case 'claim': {
       const D = st.from !== undefined ? days[st.from] : null;
       const gets = state.revealed
         ? ['Your Collector Card, now and in your inbox', 'Your name and photo on it (they stay on your device)', 'First to know when the next card drops']
-        : ['Your Collector Card, now and in your inbox', Object.keys(S.answers).length < 4 && 'An email when each new clue unlocks', 'A reminder on reveal day'].filter(Boolean);
+        : ['Your Collector Card, now and in your inbox', ccgClues(S, state) < 4 && 'An email when each new clue unlocks', 'A reminder on reveal day'].filter(Boolean);
       return `${D ? `<p class="ccg__clue-mini"><b>Clue unlocked · ${ccgEsc(D.clueTitle)}</b> ${ccgEsc(D.clue)}</p>` : ''}
         <div class="ccg__m-copy"><span class="ccg__kicker">Free · takes 10 seconds</span><h2 tabindex="-1">Claim your Collector Card</h2>
           <p class="ccg__panel-lead">Your own card in the Charter Collection. We&rsquo;ll email it to you, too.</p>
           <ul class="ccg__gets">${gets.map((g) => `<li>${g}</li>`).join('')}</ul></div>
-        <form class="ccg__form" data-form="claim" novalidate>${ccgEmailFields('ccg-claim')}
+        <form class="ccg__form" data-form="claim" novalidate>${ccgEmailFields('ccg-claim', S.entry?.email || '')}
           <p class="ccg__err" data-err role="alert" hidden></p>
           <div class="ccg__row"><button class="psl-btn cta-primary" type="submit">Claim my card</button>${ccgBtn('close', 'Not now')}</div>
         </form>`;
@@ -444,6 +563,7 @@ async function initHeroColeccion(root = document) {
   Object.keys(S.answers).forEach((k) => { if (!state.days?.[k]) delete S.answers[k]; });
   if (!state.revealed) S.revealed = false;
   if (state.closed) S.revealed = true;
+  S.sent = S.sent || {};
 
   let step = null;
   let lastCardKey = '';
@@ -501,7 +621,7 @@ async function initHeroColeccion(root = document) {
       if (autoFlip) requestAnimationFrame(() => requestAnimationFrame(() => cardEl.flip(true)));
       flashZone = null;
     }
-    const clues = state.revealed && S.revealed ? 'Card No. 001' : `${Object.keys(S.answers).length} of 4 clues`;
+    const clues = state.revealed && S.revealed ? 'Card No. 001' : `${ccgClues(S, state)} of 4 clues`;
     $('[data-ccg-count]').textContent = clues;
   }
 
@@ -541,7 +661,7 @@ async function initHeroColeccion(root = document) {
     $('[data-cc-sub]').textContent = copy.sub;
     $('[data-cc-sub]').hidden = shown || !copy.sub;
     $('[data-cc-more]').hidden = shown;
-    hero.classList.toggle('hcc--asking', st.t === 'q');   // mobile: carta chica para que entre la pregunta
+    hero.classList.toggle('hcc--asking', st.t === 'q' || st.t === 'enter');   // mobile: carta chica para que entre la pregunta
     hero.classList.toggle('hcc--step', Boolean(step));
     hero.classList.toggle('hcc--claiming', CCG_MINE_STEPS.includes(st.t));   // tu carta en el lugar grande; con el coach, el reclamo lleva caja
     hero.classList.toggle('hcc--sharing', st.t === 'share');
@@ -567,24 +687,49 @@ async function initHeroColeccion(root = document) {
     submit.disabled = on;
   }
 
-  function answer(st, btn) {
+  async function answer(st, btn) {
     if (panel.dataset.judging) return;
     const D = state.days[st.i];
     const k = Number(btn.dataset.k);
-    const ok = k === D.a;
+    const opts = [...panel.querySelectorAll('.ccg__opt')];
+    const err = panel.querySelector('[data-err]');
+    panel.dataset.judging = '1';
+    opts.forEach((o) => { o.disabled = true; });
+    btn.classList.add('is-picked');
+    err.hidden = true;
+    // Inscripto y con el challenge abierto: la respuesta va al registro antes de darla por contestada. Si falla, se
+    // puede volver a elegir (no llegó, así que no es la primera).
+    let first = true;
+    if (S.entry && ccgOpen(state)) {
+      const lbl = btn.querySelector('i');
+      const was = lbl.innerHTML;
+      lbl.textContent = 'Sending';
+      try {
+        const res = await ccgSubmitAnswer(hero, {
+          email: S.entry.email, question: ccgQNum(state, st.i), day: st.i, option: k, answer: D.opts[k],
+          eligible: { adult: true, floridaResident: true, rulesAccepted: true }, marketing: Boolean(S.entry.marketing),
+          clientTime: new Date().toISOString(),
+        });
+        first = res.first !== false;
+        S.sent[st.i] = true;
+      } catch (e) {
+        delete panel.dataset.judging;
+        opts.forEach((o) => { o.disabled = false; });
+        btn.classList.remove('is-picked');
+        lbl.innerHTML = was;
+        err.textContent = e.message;
+        err.hidden = false;
+        return;
+      }
+      lbl.innerHTML = was;
+    }
     S.answers[st.i] = k;
     charterSave(S);
-    // 1) Correcta o incorrecta, sobre las opciones mismas
-    panel.dataset.judging = '1';
+    // 1) La elegida queda marcada; el resto se apaga. No se dice si es correcta hasta el cierre.
     panel.classList.add('is-judged');
-    panel.querySelectorAll('.ccg__opt').forEach((o) => {
-      o.disabled = true;
-      const right = Number(o.dataset.k) === D.a;
-      if (right) o.classList.add('is-right');
-      if (o === btn) o.classList.add(ok ? 'is-hit' : 'is-wrong');
-      if (o === btn || right) o.querySelector('i').innerHTML = right ? CCG_ICON_OK : CCG_ICON_MISS;
-    });
-    say(`${ok ? 'That’s right.' : 'Not quite.'} Clue unlocked, ${D.clueTitle}: ${D.clue}`);
+    btn.querySelector('i').innerHTML = CCG_ICON_OK;
+    say(`${S.sent[st.i] ? 'Answer received.' : 'Answer saved.'} Clue unlocked, ${D.clueTitle}: ${D.clue}`);
+    if (!first) console.info('[charter] ya había una respuesta de este mail para esta pregunta: cuenta la primera.');
     // 2) Se van la pregunta y las opciones, queda la respuesta en chico con la pista, y la carta la destraba
     setTimeout(() => {
       delete panel.dataset.judging;
@@ -593,8 +738,8 @@ async function initHeroColeccion(root = document) {
       step = { t: 'answered', i: st.i };
       paint(mobile() ? $('.ccg__card-col') : null, true, true);
       if (mobile()) setTimeout(() => goTo(panel, 'center'), reduce ? 0 : 1300);
-      // 3) Sin mail todavía: el panel pasa al reclamo de la Collector (con la pista arriba), una vez que se vio la pista
-      if (!S.email && !S.skipClaim) {
+      // 3) Sin mail todavía (ni inscripción): el panel pasa al reclamo de la Collector, una vez que se vio la pista
+      if (!S.email && !S.entry && !S.skipClaim) {
         clearTimeout(claimTimer);
         const answered = step;
         claimTimer = setTimeout(() => {
@@ -602,7 +747,21 @@ async function initHeroColeccion(root = document) {
           openStep({ t: 'claim', from: st.i, back: answered });
         }, reduce ? 1200 : (mobile() ? 3600 : 2800));
       }
-    }, reduce ? 400 : 1100);
+    }, reduce ? 400 : 900);
+  }
+
+  // Inscripción tardía: las respuestas que la persona ya dio solo por las pistas se mandan ahora, en orden.
+  async function sendPending() {
+    const pending = (state.days || []).map((D, i) => [D, i]).filter(([D, i]) => ccgIsQ(D) && S.answers[i] !== undefined && !S.sent[i]);
+    for (const [D, i] of pending) {
+      await ccgSubmitAnswer(hero, {
+        email: S.entry.email, question: ccgQNum(state, i), day: i, option: S.answers[i], answer: D.opts[S.answers[i]],
+        eligible: { adult: true, floridaResident: true, rulesAccepted: true }, marketing: Boolean(S.entry.marketing),
+        clientTime: new Date().toISOString(),
+      });
+      S.sent[i] = true;
+      charterSave(S);
+    }
   }
 
   // Abre un paso del panel (reclamo, carta, compartir) con la misma transición, y lo trae a la vista en mobile
@@ -628,6 +787,8 @@ async function initHeroColeccion(root = document) {
         const a = b.dataset.act;
         const back = st.t === 'claim' || st.t === 'collector' || st.t === 'share' ? st.back : (step || null);
         if (a === 'claim') openStep({ t: 'claim', back });
+        if (a === 'enter') { S.skipEntry = false; charterSave(S); openStep({ t: 'enter', back: step }); }
+        if (a === 'skip') { S.skipEntry = true; charterSave(S); clearTimeout(claimTimer); step = null; paint(panel, true, true); }
         if (a === 'mycard') openStep({ t: 'collector', back });
         if (a === 'next') { clearTimeout(claimTimer); step = null; paint(panel, true, true); }
         if (a === 'reveal') reveal(b);
@@ -660,6 +821,42 @@ async function initHeroColeccion(root = document) {
         pctx.justClaimed = true;
         openStep({ t: 'collector', back: st.back });
         say('Card claimed. We’re emailing it to you.');
+      });
+    }
+
+    if (st.t === 'enter') {
+      const form = panel.querySelector('[data-form="enter"]');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (form.dataset.busy) return;
+        const email = form.elements.email.value.trim();
+        if (!CHARTER_EMAIL.test(email)) { showError(form, 'Enter a valid email, like name@email.com.'); return; }
+        if (!form.elements.eligible.checked) { showError(form, 'The challenge is open to Florida residents 18 or older.'); return; }
+        if (!form.elements.rules.checked) { showError(form, 'Tick the box to agree to the Official Rules.'); return; }
+        if (!ccgOpen(state)) { showError(form, `The challenge closed ${CCG_DEADLINE_TEXT}. You can still play for the clues.`); return; }
+        const api = hero.dataset.challengeApi;
+        if ((!api || api.startsWith('__')) && !new URLSearchParams(location.search).has('demo')) {
+          console.error('[charter] Falta __CHALLENGE_API__: no se puede inscribir.');
+          showError(form, 'Entries are not open right now. Please try again later.');
+          return;
+        }
+        const marketing = form.elements.consent.checked;
+        busy(form, true, 'Entering…');
+        S.entry = { email, marketing, at: new Date().toISOString() };
+        S.skipEntry = false;
+        charterSave(S);
+        try {
+          await sendPending();
+        } catch (err) {
+          busy(form, false);
+          showError(form, err.message);
+          return;
+        }
+        // El permiso de mails es aparte de la inscripción: si ActiveCampaign falla, la persona igual queda inscripta.
+        if (marketing) charterSendLead(hero, email).catch((err) => console.warn('[charter] no se pudo sumar a la lista', err));
+        step = null;
+        paint(panel, true, true);
+        say('You’re in. Only your first answer to each question counts.');
       });
     }
 
@@ -742,6 +939,28 @@ async function initHeroColeccion(root = document) {
     window.scrollTo({ top: hero.getBoundingClientRect().bottom + window.scrollY - 64, behavior: reduce ? 'auto' : 'smooth' });
   });
   $('[data-ccg-flip]').addEventListener('click', () => cardEl.flip());
+
+  // Bases oficiales y premios: un <dialog> en el bloque. Se abre desde cualquier [data-rules] o con #official-rules
+  // (el link que se usa en Instagram), sin salir de la home.
+  const rules = $('[data-ccg-rules]');
+  const openRules = () => { if (rules && !rules.open) rules.showModal(); };
+  hero.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-rules]')) return;
+    e.preventDefault();
+    openRules();
+  });
+  rules?.addEventListener('click', (e) => {
+    if (e.target === rules || e.target.closest('[data-rules-close]')) rules.close();   // click afuera o en "Close"
+  });
+  rules?.addEventListener('close', () => {
+    if (location.hash === '#official-rules') history.replaceState(null, '', location.pathname + location.search);
+  });
+  const fromHash = () => { if (location.hash === '#official-rules') openRules(); };
+  addEventListener('hashchange', fromHash);
+  fromHash();
+
+  // Inscripción que quedó a medias (se cortó al mandar respuestas viejas): se reintenta sola al volver.
+  if (S.entry && ccgOpen(state)) sendPending().catch((err) => console.warn('[charter] quedan respuestas sin registrar', err));
 
   paint();
 }

@@ -14,12 +14,15 @@ Los ejemplos con el contenido real de la Card No. 001 no están acá: van en el 
 
 ## Calendario
 
+Premios y registro de respuestas del Coach Reveal Challenge: `docs/charter-collection-challenge.md`.
+
 | Desde | `day` | `revealed` | `closed` | Qué se suma |
 |---|---|---|---|---|
 | Viernes 27/11 10:00 AM ET | `0` | `false` | — | `days[0]` (pregunta y pista del viernes) |
 | Sábado 28/11 10:00 AM ET | `1` | `false` | — | `days[1]` |
 | Domingo 29/11 10:00 AM ET | `2` | `false` | — | `days[2]` |
-| Lunes 30/11 10:00 AM ET | `3` | `false` | — | `days[3]` |
+| Lunes 30/11 10:00 AM ET | `3` | `false` | — | `days[3]`: pista libre, sin pregunta (las bases tienen 3 preguntas oficiales) |
+| Lunes 30/11 12:00 PM ET (cierre del challenge) | `3` | `false` | — | Las preguntas suman `a` y `fact`; opcional `challengeClosed: true` |
 | Lunes 30/11 1:00 PM ET (reveal) | `4` | `true` | — | `card` pasa a la revelada, `shell` (la cerrada), `presentation` y `profile` |
 | Martes 1/12 00:00 ET en adelante | `5` | `true` | `true` | Igual que el reveal, sin `shell`. Las preguntas se cierran |
 
@@ -59,10 +62,10 @@ Office (para mostrar la navegación del Club), Soccer Staff y la ficha.
   | `full` | Nombre del día en inglés (`"Monday"`) |
   | `zone` | Qué parte de la carta destraba: `"nation"`, `"career"`, `"stamp"` o `"fact"` |
   | `clueTitle` | Título corto de la pista (`"Nationality"`) |
-  | `q` | La pregunta (sobre el club, en inglés) |
+  | `q` | La pregunta (sobre el club, en inglés). Sin `q` (con `opts`, `a` y `fact`) el día es una pista libre: se destraba sola |
   | `opts` | Las 4 opciones (array de textos) |
-  | `a` | Índice de la correcta (0–3). Acertar no da nada: la pista se destraba igual |
-  | `fact` | El dato que se muestra al contestar (una línea) |
+  | `a` | Índice de la correcta (0–3). **Solo desde el cierre del challenge (lunes 12:00 PM ET)**: antes se lee en la red. La pista se destraba acierte o no |
+  | `fact` | El dato de la respuesta (una línea). **Solo desde el cierre**, igual que `a`: delata la correcta |
   | `clue` | La pista sobre el DT |
   | `unlock` | Lo que se aplica a la carta cerrada al contestar: `flag`, `bio`, `table`, `stamp` o `fact` (mismos formatos que en `docs/charter-card-schema.md`) |
 

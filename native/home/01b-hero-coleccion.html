@@ -3,9 +3,12 @@
   REEMPLAZA a 01-hero mientras dura la campaña: en WordPress se pega uno u otro, nunca los dos.
   El juego se juega acá. Preguntas, pistas, nombre y foto llegan por datos, según la fecha: en este
   archivo y en su JS no va contenido de la carta. Reemplazos en el find-and-replace:
-  __COLECCION_API__ (estado), __URL_COACH__ (ficha del DT), __URL_TEAM__ (Soccer Staff) y los __AC_...__.
+  __COLECCION_API__ (estado), __URL_COACH__ (ficha del DT), __URL_TEAM__ (Soccer Staff), __CHALLENGE_API__
+  (registro de respuestas del Coach Reveal Challenge, ver docs/charter-collection-challenge.md) y los __AC_...__.
+  Las bases oficiales del challenge van completas en el <dialog> de abajo: se abren con #official-rules.
 -->
 <section class="hcc surface-ink" id="hero" data-cc-state="__COLECCION_API__" data-cc-coach="__URL_COACH__" data-cc-team="__URL_TEAM__"
+  data-challenge-api="__CHALLENGE_API__"
   data-ac-account="__AC_ACCOUNT__" data-ac-form="__AC_COLLECTION_FORM__"
   data-ac-consent="__AC_FIELD_CONSENT__" aria-labelledby="hcc-title">
   <div class="hcc__bg" aria-hidden="true"></div>
@@ -17,11 +20,12 @@
       <!-- El título cambia una sola vez: al revelar la carta pasa a data-after. Abajo entra el nombre (llega por datos). -->
       <h1 class="hcc__title" id="hcc-title" data-cc-title data-after="Meet the first Head Coach in club history.">Our first-ever Head Coach is a secret. For now.</h1>
       <p class="hcc__name" data-cc-name hidden></p>
-      <p class="hcc__sub" data-cc-sub>Play the daily quiz, Friday to Monday: every answer unlocks a clue to Card No. 001. New question every day, full reveal Monday at 1:00 PM ET.</p>
+      <p class="hcc__sub" data-cc-sub>Three questions about the club, Friday to Sunday. Every answer unlocks a clue to Card No. 001, and the first three fans to get all three right win prizes. Full reveal Monday at 1:00 PM ET.</p>
       <div class="ccg__panel" data-ccg-panel>
-        <noscript><p class="ccg__panel-lead">One question a day about the club, Friday to Monday. Each answer unlocks a clue and a piece of the card. Turn on JavaScript to play.</p></noscript>
+        <noscript><p class="ccg__panel-lead">One question a day about the club, Friday to Sunday. Each answer unlocks a clue and a piece of the card. Turn on JavaScript to play.</p></noscript>
       </div>
       <p class="ccg__sr" data-ccg-status aria-live="polite"></p>
+      <p class="ccg__legal">Coach Reveal Challenge: prizes for the first three fans to answer all three questions right. No purchase necessary. Florida residents 18+. <a href="#official-rules" class="ccg__link" data-rules>Prizes &amp; Official Rules</a></p>
       <a href="#project" class="hcc__more" data-cc-more>Keep exploring <span aria-hidden="true">↓</span></a>
     </div>
 
@@ -35,6 +39,44 @@
   </div>
 
   <psl-photo-capture data-ccg-capture hidden></psl-photo-capture>
+
+  <!-- Bases oficiales del Coach Reveal Challenge (texto del club, tal cual) y premios -->
+  <dialog class="ccg__rules" id="official-rules" data-ccg-rules aria-labelledby="ccg-rules-title">
+    <div class="ccg__rules-in">
+      <div class="ccg__rules-head">
+        <p class="ccg__kicker">Coach Reveal Challenge</p>
+        <button type="button" class="ccg__rules-x" data-rules-close aria-label="Close">&times;</button>
+      </div>
+      <h2 id="ccg-rules-title">Prizes &amp; Official Rules</h2>
+      <ol class="ccg__prizes">
+        <li><b>1st</b><span>Two general admission tickets to Port St. Lucie SC&rsquo;s first home match of the 2027 season. No purchase or season ticket deposit is required to claim or use the first-place tickets.</span></li>
+        <li><b>2nd</b><span>One jersey signed by the head coach.</span></li>
+        <li><b>3rd</b><span>One PSLSC-branded umbrella and scarf set.</span></li>
+      </ol>
+      <div class="ccg__rules-body">
+        <p>Submit one answer per official question using the entry form on the Coach Reveal Challenge page at portstluciesc.com. Only your first answer to each question counts. To qualify, you must correctly answer every official question by Monday, November 30, 2026, at 12:00 p.m. EST (noon). The Club will rank eligible entrants by the date and time recorded by the website entry form when it received the answer that completed each entrant&rsquo;s set of three correct answers. The first three eligible entrants to complete the set will win. If two completion times display the same timestamp, the form&rsquo;s recorded submission order determines who finished first. No random drawing will be held.</p>
+        <h3>Port St. Lucie SC Coach Reveal Challenge - Official Rules</h3>
+        <h4>1. Sponsor and Eligibility</h4>
+        <p>The Coach Reveal Challenge (the &ldquo;Challenge&rdquo;) is sponsored by Port St. Lucie SC (the &ldquo;Club&rdquo;), 900 SE Federal Hwy, 4th Floor, Stuart, FL 34994. The Challenge is open to Florida residents who are at least 18 years old at the time of entry. Employees of the Club and USL, their immediate family members, and members of their households are not eligible. <b>No purchase or ticket deposit is necessary to enter or win.</b></p>
+        <h4>2. Questions and Entry</h4>
+        <p>The Club will post 3 numbered official questions, one at a time, on portstluciesc.com, where these Official Rules will also be available. Instagram is used only to promote the Challenge. Answers submitted through Instagram comments, direct messages, email, or any channel other than the designated entry form will not count.</p>
+        <p>Submit a separate answer to each official question via the entry form on the Coach Reveal Challenge page at portstluciesc.com. Enter the same email address on the form for every submission so the Club can match your answers. Each question opens when it is posted and remains open through Monday, November 30, 2026, at 12:00 p.m. EST (noon). Only your first answer to each question counts. Answers received before the applicable question is posted, after the closing deadline, or through another channel will not count.</p>
+        <h4>3. Winner Selection</h4>
+        <p>The first three eligible entrants to answer every official question correctly will win. The Club will rank eligible entrants by the date and time recorded by the website entry form when it received the answer that completed each entrant&rsquo;s set of three correct answers. If two completion times display the same timestamp, the form&rsquo;s recorded submission order determines who finished first.</p>
+        <p><b>There are three winners total, not three per question.</b> If fewer than three eligible entrants answer every official question correctly, fewer than three prizes will be awarded. No random drawing will be held.</p>
+        <h4>4. Prizes</h4>
+        <p>Each verified winner will receive exactly one prize. First, second, and third place are determined by recorded completion order under Section 3, and the prizes for those placements are listed below.</p>
+        <ol>
+          <li><b>First place:</b> Two general admission tickets to Port St. Lucie SC&rsquo;s first home match of the 2027 season. <b>No purchase or season ticket deposit is required to claim or use the first-place tickets.</b></li>
+          <li><b>Second place:</b> One jersey signed by the head coach.</li>
+          <li><b>Third place:</b> One PSLSC-branded umbrella and scarf set.</li>
+        </ol>
+        <h4>5. Winner Notification and Verification</h4>
+        <p>The Club will notify potential winners at the email address provided on the entry form within 72 hours after the Challenge closes(by Thursday, December 3, 2026 at 12:00 p.m. EST (noon)). Each potential winner must respond within 48 hours after notification and verify eligibility before receiving a prize. If a potential winner is ineligible, declines the prize, or does not respond within the stated time, the Club will contact the next eligible entrant who answered every official question correctly, in recorded completion order, if any.</p>
+      </div>
+      <div class="ccg__row"><button type="button" class="psl-btn cta-secondary" data-rules-close>Close</button></div>
+    </div>
+  </dialog>
 
   <div class="hcc__divider" role="presentation"></div>
 </section>

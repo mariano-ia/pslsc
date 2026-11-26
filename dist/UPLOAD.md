@@ -98,7 +98,8 @@ no hay que tocar bloques entre el viernes 27 de noviembre y el martes 1 de dicie
 |---|---|
 | Hasta el jueves 26 | Hero de Groundbreaking solo: `01d-hero-groundbreaking` en lugar de `01-hero`, sin `01e` ni `01c` (la Charter Collection todavía no aparece en Home) |
 | Viernes 27, antes de las 10:00 AM ET | Sacar `01d-hero-groundbreaking`, pegar `01b-hero-coleccion` en su lugar y sumar `01e-banner-groundbreaking` debajo de `02-stats` (combinación A, abajo) |
-| Viernes 27 a lunes 30 | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista (cuatro preguntas) |
+| Viernes 27 a lunes 30 | Nada: cada día a las 10:00 AM ET el estado libera la pregunta y la pista (tres preguntas oficiales, viernes a domingo; el lunes, pista libre) |
+| Lunes 30, 12:00 PM ET | Cierre del Coach Reveal Challenge: el registro deja de aceptar respuestas y el estado suma las correctas |
 | Lunes 30, 1:00 PM ET (reveal) | Nada en Home. Publicar Soccer Staff (`t00-soccer-staff`) y la ficha del Head Coach (`t01-coach`) |
 | Martes 1/12 en adelante | Pasar a la combinación B de Groundbreaking (abajo). Sin Groundbreaking, nada: el hero pasa solo a la foto del coach, sin preguntas (botones "Meet the coach" y "Meet the staff"). La Collector ya no se reclama (es del juego); la Card No. 001 se pide por mail en la ficha del DT |
 | Fin de campaña (fecha que define el club) | Sacar `01b-hero-coleccion` (o `01d`), volver a pegar `01-hero` y dejar `01c-coleccion` **debajo de `02-stats`**. Con eso se cierra el reclamo de la Collector |
@@ -153,7 +154,12 @@ publicar así y sumar el servidor después. Contrato del servidor (endpoints, to
 - Soccer Staff y la ficha **no están disponibles hasta el reveal**: se publican el viernes y, si alguien las abre antes,
   vuelven solas a Front Office (`__URL_FRONT_OFFICE__`). Front Office (`t02-front-office`) reemplaza a `/staff/` y se
   puede publicar ya.
-Reemplazos: `__COLECCION_API__` (URL del estado por fecha), `__URL_COACH__` (permalink de la ficha), `__URL_TEAM__` (equipo, hoy `/staff/`) y, en el hero,
+**Coach Reveal Challenge (premios):** el hero trae los premios y las bases oficiales completas (diálogo que se abre con
+`portstluciesc.com/#official-rules`, el link para Instagram). Cada respuesta de quien se inscribe va a
+`__CHALLENGE_API__`, un registro con la hora del servidor del que salen los ganadores. Contrato y regla de ranking:
+`docs/charter-collection-challenge.md`. Sin ese endpoint nadie se puede inscribir (se juega igual, sin premios).
+
+Reemplazos: `__COLECCION_API__` (URL del estado por fecha), `__CHALLENGE_API__` (registro del challenge), `__URL_COACH__` (permalink de la ficha), `__URL_TEAM__` (equipo, hoy `/staff/`) y, en el hero,
 `__AC_ACCOUNT__`, `__AC_COLLECTION_FORM__` y `__AC_FIELD_CONSENT__` (`field[NN]` del form de
 ActiveCampaign, que además es el que pone la etiqueta); en la ficha, `__AC_ACCOUNT__`, `__AC_CARD_FORM__` y
 `__AC_FIELD_CONSENT__`. Sin esos datos el form valida, pero no envía. Qué crear en
