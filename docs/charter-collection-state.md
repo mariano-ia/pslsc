@@ -6,7 +6,7 @@ campaña (`01c-coleccion`), Front Office (`t02-front-office`), Soccer Staff (`t0
 Coach (`t01-coach`). En todos el placeholder es `__COLECCION_API__` (la URL completa del endpoint).
 
 **La regla de oro: el JSON trae solo lo liberado a esa hora.** El repo es público y los bloques no tienen nada del
-DT: nombre, foto, silueta, pistas y ficha llegan únicamente por este endpoint, el día que corresponde. Si el endpoint
+DT: nombre, fotos, pistas y ficha llegan únicamente por este endpoint, el día que corresponde. Si el endpoint
 manda de más (por ejemplo, la ficha un miércoles), se filtra: el front no lo esconde.
 
 Los ejemplos con el contenido real de la Card No. 001 no están acá: van en el paquete privado que se entrega aparte
@@ -51,8 +51,8 @@ Office (para mostrar la navegación del Club), Soccer Staff y la ficha.
 ```
 
 - **`card` y `shell`**: datos de `<psl-card>`, con el esquema de `docs/charter-card-schema.md`. La carta cerrada lleva
-  la silueta (una imagen: también es secreta hasta el lunes, así que su URL tiene que servirse desde el backend o un
-  lugar no público, no desde `assets/` del repo).
+  la silueta. La silueta es pública desde el viernes 27/11 y está en el repo: `assets/cards/cc-001-silhouette.webp`
+  (en `figure.src`, como URL absoluta: `ASSET_BASE/assets/cards/cc-001-silhouette.webp` o donde se haya subido).
 - **`presentation`**: `src` es la foto del hero (desde el viernes) y `staff`, la de la tarjeta del Head Coach en Soccer
   Staff. `staff` es opcional: si falta, Soccer Staff usa `src`. Las dos son recortes sin fondo (PNG o WebP con alfa).
 - **`days[i]`**:
@@ -87,8 +87,8 @@ Office (para mostrar la navegación del Club), Soccer Staff y la ficha.
   `max-age` de pocos segundos). Un CDN que cachee la respuesta del lunes rompe el martes.
 - **Hora ET** del servidor, no del navegador: la persona no puede adelantar el reloj para ver la pista de mañana.
 - **CORS**: si el endpoint está en otro dominio que el sitio, `Access-Control-Allow-Origin` con el dominio del sitio.
-- **Imágenes** (`presentation.src`, `presentation.staff`, silueta, foto de la carta): URLs absolutas, con el mismo cuidado de fecha que el
-  JSON. Si están en otro dominio y se usan en la imagen para compartir, también necesitan CORS.
+- **Imágenes** (`presentation.src`, `presentation.staff`, silueta, foto de la carta): URLs absolutas. Las del DT (todas menos la
+  silueta), con el mismo cuidado de fecha que el JSON. Si están en otro dominio y se usan en la imagen para compartir, también necesitan CORS.
 - **Errores**: si el endpoint falla, el hero muestra "The game could not load" con "Try again", y `01c`, Soccer Staff,
   la ficha y la navegación del Club se quedan ocultos. Nada se ve roto, pero nada se ve.
 

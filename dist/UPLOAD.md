@@ -86,8 +86,10 @@ Bloques de la campaña (todos en `dist/blocks/`): `psl-home-01b-hero-coleccion`,
 `psl-team-t03-roster` (Roster) está en pausa: no se publica. `c01-collection` (Mi colección) todavía no se compila
 ni se publica.
 
-Todo lo del DT (nombre, fotos, silueta, preguntas, pistas, ficha) **no está en el repo**: llega por
-`__COLECCION_API__`, un endpoint que responde según la fecha. Contrato, calendario y requisitos (sin caché, hora ET,
+Todo lo del DT (nombre, fotos, preguntas, pistas, ficha) **no está en el repo**: llega por
+`__COLECCION_API__`, un endpoint que responde según la fecha. La excepción es la silueta de la carta cerrada
+(`assets/cards/cc-001-silhouette.webp`): es pública desde el viernes 27/11 y el estado la referencia en `card.figure.src`
+con URL absoluta. Contrato, calendario y requisitos (sin caché, hora ET,
 CORS): `docs/charter-collection-state.md`. El contenido real va en un paquete privado aparte, no por GitHub.
 
 Qué se pega cada día en Home (el juego cambia solo según la fecha: lo resuelve el estado de `__COLECCION_API__`,
